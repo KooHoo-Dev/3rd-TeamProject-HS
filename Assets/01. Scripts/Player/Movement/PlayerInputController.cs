@@ -49,22 +49,22 @@ namespace WeGotOne
 
         private void HandleGrab()
         {
-            if (SimpleInput.GetKey(Key.LeftShift))
+            if (SimpleInput.GetKey(Key.S))
             {
                 leftForearm.Grab();
             }
 
-            if (SimpleInput.GetKeyUp(Key.LeftShift))
+            if (SimpleInput.GetKeyUp(Key.S))
             {
                 leftForearm.Release();
             }
 
-            if (SimpleInput.GetKey(Key.RightShift))
+            if (SimpleInput.GetKey(Key.F))
             {
                 rightForearm.Grab();
             }
 
-            if (SimpleInput.GetKeyUp(Key.RightShift))
+            if (SimpleInput.GetKeyUp(Key.F))
             {
                 rightForearm.Release();
             }
