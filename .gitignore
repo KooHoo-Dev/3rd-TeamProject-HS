@@ -104,3 +104,8 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# Rider 설정
+.idea/
+.idea/projectSettingsUpdater.xml
+.idea/workspace.xml
