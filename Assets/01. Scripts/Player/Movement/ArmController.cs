@@ -28,6 +28,7 @@ namespace WeGotOne
     [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D), typeof(HingeJoint2D))]
     public class ArmController : MonoBehaviour
     {
+        public Vector2 InputDirection => inputDirection;
         // 기본적으로 사용할 힘
         [SerializeField] private float defaultForce = 20f;
         
@@ -43,8 +44,8 @@ namespace WeGotOne
         private Vector2 inputDirection;
 
         // Hand에서 받아와서 타겟이랑 잡은 상태인지 판단하기. 추가힘 쓸때 사용함
-        private Rigidbody2D grabbedTarget;
-        private bool isGrabbing;
+        [SerializeField] private Rigidbody2D grabbedTarget;
+        [SerializeField] private bool isGrabbing;
         
         private void Awake()
         {
