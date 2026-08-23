@@ -15,13 +15,13 @@ namespace Study_Inventory
         [field:SerializeField] public Image Content { get; private set; }
 
         private RectTransform rectTransform;
-        private InventoryItem item;
+        private ItemScriptableObject item;
 
         public bool IsEmpty => (item == null);
         // 위와 아래는 동일합니다
         //public bool IsEmpty { get { return item == null; } }
 
-        public InventoryItem Item => item;
+        public ItemScriptableObject Item => item;
         // 위의 표현은 Item을 호출하면 멤버변수 item을 반환하겠다는
         // 람다식 표현입니다. 읽기 전용으로 반환되어서 Set은 불가합니다.
 
@@ -39,7 +39,7 @@ namespace Study_Inventory
         /// Null을 허용하는 함수입니다. Null 전달시 슬롯이 비워집니다.
         /// </summary>
         /// <param name="inputItem"></param>
-        public void SetItem(InventoryItem inputItem)
+        public void SetItem(ItemScriptableObject inputItem)
         {
             // inputItem은 Null이 들어오거나, 실제 InventoryItem 객체가 들어옵니다
             item = inputItem;

@@ -19,7 +19,7 @@ namespace Study_Inventory
             public TradeType            TradeType;
             public InventorySlot        Start;
             public InventorySlot        End;
-            public InventoryItem        Item;
+            public ItemScriptableObject        Item;
         }
 
         // 원래는 묶어서(클래스화 해서) 쓰는것이 좋습니다

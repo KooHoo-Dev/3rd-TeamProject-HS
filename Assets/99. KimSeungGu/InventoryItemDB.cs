@@ -6,10 +6,10 @@ namespace Study_Inventory
 {
     public class InventoryItemDB : SingletonBase<InventoryItemDB>
     {
-        public InventoryItem[] items;
+        public ItemScriptableObject[] items;
 
-        private Dictionary<int, InventoryItem> itemDic 
-            = new Dictionary<int, InventoryItem>();
+        private Dictionary<int, ItemScriptableObject> itemDic 
+            = new Dictionary<int, ItemScriptableObject>();
 
         private const int DEFAULT_ITEM_KEY = 0;
 
@@ -28,7 +28,7 @@ namespace Study_Inventory
             // 초기화 시점에 items배열을 순회하면서 딕셔너리에 등록한다
             for(int i = 0; i < items.Length; ++i)
             {
-                InventoryItem item = items[i];
+                ItemScriptableObject item = items[i];
                 
                 if (itemDic.ContainsKey(item.Key))
                 {
@@ -42,7 +42,7 @@ namespace Study_Inventory
 
         // 견본(ScriptableObject 참조변수)를 반환하는 함수입니다.
         // - 지금은 단순 참조로 충분하므로 불필요한 인스턴스 생성을 피합니다.
-        public InventoryItem GetItem(int id)
+        public ItemScriptableObject GetItem(int id)
         {
             if(itemDic.ContainsKey(id) == false)
             {

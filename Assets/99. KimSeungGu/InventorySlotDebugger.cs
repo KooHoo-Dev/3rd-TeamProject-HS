@@ -6,7 +6,7 @@ namespace Study_Inventory
     public class InventorySlotDebugger : MonoBehaviour
     {
         public InventorySlot Slot;
-        public InventoryItem TestItem;
+        public ItemScriptableObject TestItem;
 
         private void Start()
         {
