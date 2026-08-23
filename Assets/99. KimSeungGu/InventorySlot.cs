@@ -1,3 +1,5 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +15,10 @@ namespace Study_Inventory
         //  위치를 설정하는 기능도 필요합니다
 
         [field:SerializeField] public Image Content { get; private set; }
-
+        [field:SerializeField] public TMP_Text ItemCountText { get; private set; }
+        
+        public int ItemCount;
+        
         private RectTransform rectTransform;
         private ItemScriptableObject item;
 
@@ -35,6 +40,12 @@ namespace Study_Inventory
             // as : 타입을 캐스팅하는 키워드입니다. 
         }
 
+        public void CountTextUpdate()
+        {
+            ItemCount++;
+            ItemCountText.text = ItemCount.ToString();
+        }
+        
         /// <summary>
         /// Null을 허용하는 함수입니다. Null 전달시 슬롯이 비워집니다.
         /// </summary>
@@ -48,11 +59,13 @@ namespace Study_Inventory
             {
                 Content.sprite = null;      // 이미지의 sprite를 비워준다
                 Content.enabled = false;    // 이미지의 활성화를 off한다.
+                ItemCountText.enabled = false;
             }
             else // item이 있는 경우
             {
                 Content.sprite = item.Icon; // 이미지의 sprite를 item.Icon으로 설정
                 Content.enabled = true;     // 이미지의 활성화를 on한다.
+                ItemCountText.enabled = true;
             }
         }
 
@@ -62,7 +75,6 @@ namespace Study_Inventory
         {
             rectTransform.anchoredPosition = inputPosition;
         }
-
     }
 }
 

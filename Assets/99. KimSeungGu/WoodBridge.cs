@@ -16,8 +16,6 @@ namespace Study_Inventory
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            Debug.Log(other.gameObject.name);
-            
             ItemScriptableObject item = other.GetComponent<Fish>().ThisItem;
             
             InventorySlot[,] grid = targetInventory.SlotGrid;
@@ -33,6 +31,13 @@ namespace Study_Inventory
                         if (grid[i,j].IsEmpty)
                         {
                             grid[i, j].SetItem(db.GetItem(item.Key));
+                            grid[i, j].CountTextUpdate();
+                            other.gameObject.SetActive(false);
+                            return;
+                        }
+                        if(grid[i,j].Item.Name==item.Name)
+                        {
+                            grid[i, j].CountTextUpdate();
                             other.gameObject.SetActive(false);
                             return;
                         }
