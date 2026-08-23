@@ -9,6 +9,8 @@ namespace WeGotOne
         private const float ArrowHeadLength = 0.22f;
         private const float ArrowHeadWidth = 0.12f;
         private const float ZeroDirectionRadius = 0.08f;
+        
+        // 디버그 선 끄고 싶으면 false 로 변경할 것
         private static bool isDrawInputDirection = true;
 
         [DrawGizmo(GizmoType.Selected | GizmoType.NonSelected)]
