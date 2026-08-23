@@ -7,9 +7,6 @@ namespace WeGotOne
     {
         private FishMovement fishMovement;
         
-        [SerializeField]
-        private Transform patrolPoint;
-        
         private void Awake()
         {
             fishMovement = GetComponent<FishMovement>();
