@@ -36,7 +36,7 @@ namespace WeGotOne
 
         private void HandleMovement()
         {
-            Vector2 moveInput = SimpleInput.GetMoveAxisRaw();
+            Vector2 moveInput = GetMoveAxisRaw();
 
             if (moveInput == Vector2.zero)
             {
@@ -45,6 +45,42 @@ namespace WeGotOne
             }
 
             SetArmDirections(moveInput);
+        }
+
+        private float GetAxisHorizontalRaw()
+        {
+            float axis = 0.0f;
+
+            if (Keyboard.current.rightArrowKey.isPressed) 
+                axis += 1.0f;
+
+            if (Keyboard.current.leftArrowKey.isPressed) 
+                axis -= 1.0f;
+
+            return axis;
+        }
+        
+        public Vector2 GetMoveAxisRaw()
+        {
+            Vector2 axis = new Vector2();
+            axis.x = GetAxisHorizontalRaw();
+            axis.y = GetAxisVerticalRaw();
+
+            if (axis.sqrMagnitude > 1f) return axis.normalized;
+            return axis;
+        }
+
+        private float GetAxisVerticalRaw()
+        {
+            float axis = 0.0f;
+
+            if (Keyboard.current.upArrowKey.isPressed)
+                axis += 1.0f;
+
+            if (Keyboard.current.downArrowKey.isPressed)
+                axis -= 1.0f;
+
+            return axis;
         }
 
         private void HandleGrab()
