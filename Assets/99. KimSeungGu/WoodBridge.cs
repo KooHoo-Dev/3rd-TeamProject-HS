@@ -1,6 +1,8 @@
 using System;
 using _99._KimSeungGu;
+using Study.Utilities;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Study_Inventory
 {
@@ -14,38 +16,65 @@ namespace Study_Inventory
             targetInventory = Inventory.Instance;
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        private void OnTriggerStay2D(Collider2D other)
         {
-            ItemScriptableObject item = other.GetComponent<Fish>().ThisItem;
-            
-            InventorySlot[,] grid = targetInventory.SlotGrid;
-
-            InventoryItemDB db = InventoryItemDB.Instance;
-
-            if (item.ItemType == ItemType.Fish)
+            if (other.CompareTag("Player"))
             {
-                for (int i = 0; i  < targetInventory.SizeRow; ++i) // 여기 I(아이)임
+                if (SimpleInput.GetKeyDown(Key.F))
                 {
-                    for(int j = 0; j < targetInventory.SizeColumn; ++j) // 여기 J(제이)임
+                    InventorySlot[,] grid = targetInventory.SlotGrid;
+
+                    for (int i = 0; i < targetInventory.SizeRow; i++)
                     {
-                        if (grid[i,j].IsEmpty)
+                        for (int j = 0; j < targetInventory.SizeColumn; j++)
                         {
-                            grid[i, j].SetItem(db.GetItem(item.Key));
-                            grid[i, j].CountTextUpdate();
-                            other.gameObject.SetActive(false);
-                            return;
-                        }
-                        if(grid[i,j].Item.Name==item.Name)
-                        {
-                            grid[i, j].CountTextUpdate();
-                            other.gameObject.SetActive(false);
-                            return;
+                            if (grid[i, j].Item.ItemType == ItemType.Plank && grid[i, j].ItemCount > 0)
+                            {
+                                grid[i, j].CountTextUpdate(false);
+                                BridgeManager.Instance.BridgeConstruction();
+                            }
                         }
                     }
                 }
             }
         }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.tag is "Fish" or "Item")
+            {
+                InventorySlot[,] grid = targetInventory.SlotGrid;
+
+                InventoryItemDB db = InventoryItemDB.Instance;
+
+                if (other.TryGetComponent<IScriptableObjectKind>(out var holder))
+                {
+                    ItemScriptableObject item = holder.ThisItem;
+
+                    if (item == null) return;
+
+                    for (int i = 0; i < targetInventory.SizeRow; ++i) // 여기 I(아이)임
+                    {
+                        for (int j = 0; j < targetInventory.SizeColumn; ++j) // 여기 J(제이)임
+                        {
+                            if (grid[i, j].IsEmpty)
+                            {
+                                grid[i, j].SetItem(db.GetItem(item.Key));
+                                grid[i, j].CountTextUpdate(true);
+                                holder.OnPickup();
+                                return;
+                            }
+
+                            if (grid[i, j].Item.Name == item.Name)
+                            {
+                                grid[i, j].CountTextUpdate(true);
+                                holder.OnPickup();
+                                return;
+                            }
+                        }
+                    }
+                }   
+            }
+        }
     }
-
 }
-

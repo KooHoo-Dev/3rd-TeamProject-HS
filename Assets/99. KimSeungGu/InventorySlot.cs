@@ -14,11 +14,11 @@ namespace Study_Inventory
         // - Cursor Slot의 경우에는 마우스의 위치를 따라다녀야 함으로
         //  위치를 설정하는 기능도 필요합니다
 
-        [field:SerializeField] public Image Content { get; private set; }
-        [field:SerializeField] public TMP_Text ItemCountText { get; private set; }
-        
+        [field: SerializeField] public Image Content { get; private set; }
+        [field: SerializeField] public TMP_Text ItemCountText { get; private set; }
+
         public int ItemCount;
-        
+
         private RectTransform rectTransform;
         private ItemScriptableObject item;
 
@@ -40,12 +40,17 @@ namespace Study_Inventory
             // as : 타입을 캐스팅하는 키워드입니다. 
         }
 
-        public void CountTextUpdate()
+        public void CountTextUpdate(bool isPlus)
         {
-            ItemCount++;
+            ItemCount += isPlus ? 1 : -1;
             ItemCountText.text = ItemCount.ToString();
+
+            if (ItemCount <= 0)
+            {
+                SetItem(null);
+            }
         }
-        
+
         /// <summary>
         /// Null을 허용하는 함수입니다. Null 전달시 슬롯이 비워집니다.
         /// </summary>
@@ -55,16 +60,16 @@ namespace Study_Inventory
             // inputItem은 Null이 들어오거나, 실제 InventoryItem 객체가 들어옵니다
             item = inputItem;
 
-            if(item == null) // item이 없는 경우
+            if (item == null) // item이 없는 경우
             {
-                Content.sprite = null;      // 이미지의 sprite를 비워준다
-                Content.enabled = false;    // 이미지의 활성화를 off한다.
+                Content.sprite = null; // 이미지의 sprite를 비워준다
+                Content.enabled = false; // 이미지의 활성화를 off한다.
                 ItemCountText.enabled = false;
             }
             else // item이 있는 경우
             {
                 Content.sprite = item.Icon; // 이미지의 sprite를 item.Icon으로 설정
-                Content.enabled = true;     // 이미지의 활성화를 on한다.
+                Content.enabled = true; // 이미지의 활성화를 on한다.
                 ItemCountText.enabled = true;
             }
         }
@@ -77,4 +82,3 @@ namespace Study_Inventory
         }
     }
 }
-
