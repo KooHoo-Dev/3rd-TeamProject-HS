@@ -34,8 +34,10 @@ namespace WeGotOne
             rb = GetComponent<Rigidbody2D>();
             baseScaleX = Mathf.Abs(transform.localScale.x);
         }
-        
-        
+
+
+        #region 이동 관련 함수 
+
         /// <summary>
         /// spawnPoint <-> patrolPoint 사이를 무한 왕복하는 순찰이동  
         /// </summary>
@@ -63,6 +65,20 @@ namespace WeGotOne
 
         }
 
+        public void StopMove()
+        {
+            if (patrolTween != null)
+            {
+                patrolTween.Kill();
+                patrolTween = null;
+            }
+        }
+
+        #endregion
+
+
+        #region 물고기 스프라이트 방향 전환 함수
+
         /// <summary>
         /// 왕복 구간(편도)이 하나 끝날 때마다 DOTween이 호출하는 콜백.
         /// 다음 목표가 어느 쪽인지 토글하고, 그에 맞춰 스프라이트 방향(LocalScale x값)을 갱신한다.
@@ -72,8 +88,8 @@ namespace WeGotOne
         {
             goingToPatrol = !goingToPatrol;
             float directionX = goingToPatrol
-             ? patrolPoint.position.x - rb.position.x
-             : spawnPoint.position.x - patrolPoint.position.x;
+                ? patrolPoint.position.x - rb.position.x
+                : spawnPoint.position.x - patrolPoint.position.x;
             ApplyingFacing(directionX);
         }
         
@@ -97,6 +113,10 @@ namespace WeGotOne
             transform.localScale = scale;
             
         }
+
+
+        #endregion
+
         
         
         

@@ -30,6 +30,19 @@ FishStateManager (MonoBehaviour)
 └─ FishStatData (DTO, 저항도/속도 등 수치)
 ```
 
+                FishStateManager
+                       │
+             "어떤 상태인가?"
+                       │
+       ┌───────────────┼───────────────┐
+       ▼               ▼               ▼
+     Idle            Patrol           Caught
+       │               │               │
+       │               ▼               ▼
+       │        FishMovement       FishMovement
+       │        .patrolMove()      .StopMovement()
+       │
+       └────── 1.5초 ──────→ Patrol
 
 ## 역할 분리 기준:
 
@@ -77,3 +90,13 @@ FishStatData: 순수 데이터. 로직 없음
 
 진입 시: 이동 정지, 포획 확정 이벤트 발생 (인벤토리 시스템에 전달할 훅)
 완료 기준: 이 상태 진입 후 플레이어가 다시 자원처럼 옮길 수 있는 상태가 됨 (Rigidbody kinematic 처리 등 고려)
+
+
+### 물고기 스폰방식
+구역 지정하여 플레이어가 다리를 건설하며 다음 구역으로 넘어갈 때마다 해당 구역의 랜덤 스폰을 지정하여 물고기 처리비용을 줄이는 방식으로 설계 해봅시다.
+
+
+
+
+
+
