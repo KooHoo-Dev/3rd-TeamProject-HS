@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace WeGotOne
@@ -9,6 +10,9 @@ namespace WeGotOne
         private Inventory targetInventory;
         
         public bool IsEnd => CurrentBridgeCount() == BridgeObjects.Length;
+        
+        // 게임 매니저나 나중에 다른 UI에게 전파하는 용도 델리게이트
+        public event Action OnBridgeBuild;
 
         protected override void Awake()
         {
@@ -42,6 +46,7 @@ namespace WeGotOne
                     {
                         grid[i, j].CountTextUpdate(false);
                         BridgeObjects[CurrentBridgeCount()].SetActive(true);
+                        OnBridgeBuild?.Invoke();
                         return;
                     }
                 }
