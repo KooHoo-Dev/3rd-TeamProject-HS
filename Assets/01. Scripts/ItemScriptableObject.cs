@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Study_Inventory
+namespace WeGotOne
 {
     public enum ItemType
     {
