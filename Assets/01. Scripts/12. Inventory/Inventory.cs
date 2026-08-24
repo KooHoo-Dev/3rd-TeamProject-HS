@@ -9,7 +9,6 @@ namespace WeGotOne
         // - Slot을 묶어서 관리해주는 용도
 
         [Header("Inventory Settings")]
-        [field: SerializeField] public string Name { get; private set; }
         [field: SerializeField] public int SizeRow { get; private set; } = 8;
         [field: SerializeField] public int SizeColumn { get; private set; } = 5;
 

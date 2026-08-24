@@ -5,7 +5,9 @@ namespace WeGotOne
 {
     public class BridgeManager : SingletonBase<BridgeManager>
     { 
-        [field: SerializeField] public GameObject[] BridgeObjects { get; private set; }
+        [field: SerializeField]
+        public GameObject[] BridgeObjects { get; private set; }
+        
         private Inventory targetInventory;
         
         public bool IsEnd => CurrentBridgeCount() == BridgeObjects.Length;

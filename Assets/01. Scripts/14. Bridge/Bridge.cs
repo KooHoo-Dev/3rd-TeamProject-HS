@@ -4,10 +4,10 @@ using UnityEngine.InputSystem;
 namespace WeGotOne
 {
     // 다리
-    public class WoodBridge : MonoBehaviour
+    public class Bridge : MonoBehaviour
     {
         private Inventory targetInventory;
-        public bool isCanBuild = false;
+        private bool isCanBuild = false;
 
         private void Awake()
         {
