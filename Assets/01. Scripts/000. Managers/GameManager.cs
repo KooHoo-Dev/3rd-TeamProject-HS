@@ -14,12 +14,20 @@ namespace WeGotOne
         // 게임 중인 전체 플레이어 수
         // 처음에 방 파고 시작할때 설정하도록
         // 지금은 테스트 클래스가 강제로 4로 초기화
-        private int totalPlayerCount;
+        [SerializeField] private int totalPlayerCount;
         
         // VictoryZone(육지)에 도착한 플레이어 수
-        private int arrivedPlayerCount = 0;
+        [SerializeField] private int arrivedPlayerCount = 0;
 
+        #region unity events
 
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+            gameOverUI.gameObject.SetActive(false);
+            gameWinUI.gameObject.SetActive(false);
+        }
+        
         private void OnEnable()
         {
             BridgeManager.Instance.OnBridgeBuild += CheckPlayerWin;
@@ -29,6 +37,8 @@ namespace WeGotOne
         {
             BridgeManager.Instance.OnBridgeBuild -= CheckPlayerWin;
         }
+
+        #endregion
 
         // 지금은 유니티 상으로 주입해서 게임오버, 게임 승리 UI 띄우도록 설정
         // 추후 UI 관련 매니저를 호출하는 방식으로 변경

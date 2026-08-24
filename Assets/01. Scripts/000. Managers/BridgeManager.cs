@@ -6,7 +6,7 @@ namespace WeGotOne
 {
     public class BridgeManager : SingletonBase<BridgeManager>
     { 
-        [field: SerializeField] public GameObject[] BridgeObjects { get; private set; }
+        [field: SerializeField] public WoodBridge[] BridgeObjects { get; private set; }
         private Inventory targetInventory;
         
         public bool IsEnd => CurrentBridgeCount() == BridgeObjects.Length;
@@ -14,9 +14,12 @@ namespace WeGotOne
         // 게임 매니저나 나중에 다른 UI에게 전파하는 용도 델리게이트
         public event Action OnBridgeBuild;
 
-        protected override void Awake()
+        // Awake -> OnInitialize 로 전환 (SingletonBase)에 맞게
+        protected override void OnInitialize()
         {
+            base.OnInitialize();
             targetInventory = Inventory.Instance;
+            BridgeObjects = GetComponentsInChildren<WoodBridge>(true);
         }
 
         public int CurrentBridgeCount()
@@ -25,7 +28,7 @@ namespace WeGotOne
 
             for (int i = 0; i < BridgeObjects.Length; i++)
             {
-                if (BridgeObjects[i].activeSelf)
+                if (BridgeObjects[i].gameObject.activeSelf)
                 {
                     currentCount++;
                 }
@@ -45,13 +48,24 @@ namespace WeGotOne
                     if (grid[i, j].Item.ItemType == ItemType.Plank && grid[i, j].ItemCount > 0)
                     {
                         grid[i, j].CountTextUpdate(false);
-                        BridgeObjects[CurrentBridgeCount()].SetActive(true);
+                        BridgeObjects[CurrentBridgeCount()].gameObject.SetActive(true);
                         OnBridgeBuild?.Invoke();
                         return;
                     }
                 }
             }
         }
+
+        #region test methods
+
+        // 테스트 메소드 (나무 비용 없이)
+        public void BuildBridgeWithoutCost()
+        {
+            BridgeObjects[CurrentBridgeCount()].gameObject.SetActive(true);
+            OnBridgeBuild?.Invoke();
+        }
+
+        #endregion
         
     }
 }

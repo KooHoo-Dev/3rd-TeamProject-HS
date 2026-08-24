@@ -7,13 +7,10 @@ namespace WeGotOne
         [SerializeField] private GameObject[] bridgeObjects;
         [SerializeField] private int testTotalPlayerCount = 4;
 
-        [ContextMenu("Activate All Bridge Blocks")]
-        public void ActivateAllBridgeBlocks()
+        [ContextMenu("Build Bridge")]
+        public void BuildBridge()
         {
-            foreach (var bridgeObject in bridgeObjects)
-            {
-                bridgeObject.SetActive(true);
-            }
+            BridgeManager.Instance.BuildBridgeWithoutCost();
         }
         
         [ContextMenu("Deactivate All Bridge Blocks")]
