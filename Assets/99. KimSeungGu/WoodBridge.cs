@@ -9,33 +9,19 @@ namespace Study_Inventory
     // 다리
     public class WoodBridge : MonoBehaviour
     {
-        public Inventory targetInventory;
+        private Inventory targetInventory;
+        public bool isCanBuild = false;
 
         private void Awake()
         {
             targetInventory = Inventory.Instance;
         }
 
-        private void OnTriggerStay2D(Collider2D other)
+        private void Update()
         {
-            if (other.CompareTag("Player"))
+            if (SimpleInput.GetKeyDown(Key.F) && isCanBuild)
             {
-                if (SimpleInput.GetKeyDown(Key.F))
-                {
-                    InventorySlot[,] grid = targetInventory.SlotGrid;
-
-                    for (int i = 0; i < targetInventory.SizeRow; i++)
-                    {
-                        for (int j = 0; j < targetInventory.SizeColumn; j++)
-                        {
-                            if (grid[i, j].Item.ItemType == ItemType.Plank && grid[i, j].ItemCount > 0)
-                            {
-                                grid[i, j].CountTextUpdate(false);
-                                BridgeManager.Instance.BridgeConstruction();
-                            }
-                        }
-                    }
-                }
+                BridgeManager.Instance.BridgeBuild();
             }
         }
 
@@ -74,6 +60,22 @@ namespace Study_Inventory
                         }
                     }
                 }   
+            }
+        }
+        
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                isCanBuild = true;
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                isCanBuild = false;
             }
         }
     }
