@@ -17,6 +17,9 @@ namespace WeGotOne
         private Collider2D currentTarget;
         private Rigidbody2D grabbedTarget;
         
+        // 본인 신체 못잡게 하기 위한 용도
+        private PlayerRoot owner;
+        
         public bool IsGrabbing => isGrabbing;
         public Rigidbody2D GrabbedTarget => grabbedTarget;
         
@@ -28,10 +31,24 @@ namespace WeGotOne
         public event Action Released;
         
 # region  유니티 함수
-        
+
+        private void Awake()
+        {
+            // 신체 가장 최상단에 PlayerRoot를 달아서
+            // 해당 컴포넌트가 동일하면 동일 신체로 보고 잡지 않을 예정
+            // 신체 부위 추가되도 동일하게 본인 신체는 안잡힘
+            owner = GetComponentInParent<PlayerRoot>();
+        }
+
         // 트리거에 물체 잡히면 타겟을 물체로 지정
         private void OnTriggerEnter2D(Collider2D other)
         {
+            PlayerRoot targetOwner = other.GetComponentInParent<PlayerRoot>();
+
+            // 자기 자신의 신체라면 잡기 대상에서 제외
+            if (targetOwner == owner)
+                return;
+            
             currentTarget = other;
         }
 
