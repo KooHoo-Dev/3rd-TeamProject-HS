@@ -42,8 +42,11 @@ namespace WeGotOne
                 {
                     if (grid[i, j].Item.ItemType == ItemType.Plank && grid[i, j].ItemCount > 0)
                     {
+                        if (IsEnd) return;
+                        
                         grid[i, j].CountTextUpdate(false);
                         BridgeObjects[CurrentBridgeCount()].SetActive(true);
+                        Debug.Log(CurrentBridgeCount());
                         return;
                     }
                 }
