@@ -54,14 +54,14 @@ namespace WeGotOne.Fish_Interface
         
         private void Subscribe(HandControllerWithInterface hand)
         {
-            hand.Grabbed += target => HandleGrabbed(hand, target);
-            hand.Released += () => HandleReleased(hand);
+            hand.Grabbed += HandleGrabbed; // 람다 없이 직접 등록
+            hand.Released += HandleReleased;
         }
 
         private void Unsubscribe(HandControllerWithInterface hand)
         {
-            hand.Grabbed -= target => HandleGrabbed(hand, target);
-            hand.Released -= () => HandleReleased(hand);
+            hand.Grabbed -= HandleGrabbed; // 정상적으로 해제됨!
+            hand.Released -= HandleReleased;
         }
 
         private void HandleGrabbed(HandControllerWithInterface hand, Rigidbody2D grabbedTarget)

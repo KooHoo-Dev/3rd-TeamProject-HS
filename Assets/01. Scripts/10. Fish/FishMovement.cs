@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -16,6 +18,18 @@ namespace WeGotOne
         [SerializeField]
         [Tooltip("물고기마다 개별적으로 가질 순찰 범위(좌우)")]
         private float patrolRange = 10f; // 기본값 10, 인스펙터에서 물고기마다 다르게 조절 가능
+        
+        [Header("도망(Runaway) 연출 설정")]
+        [SerializeField]
+        [Tooltip("도망갈 때의 속도 배율 (기존 순찰 속도 대비 몇 배 빠르게 달릴지)")]
+        private float runawaySpeedMultiplier = 2.5f;
+
+        [SerializeField]
+        [Tooltip("도망치는 총 거리")]
+        private float runawayDistance = 6.0f;
+
+       
+        
         
         [Header("장애물 감지 설정")]
         [SerializeField]
@@ -36,7 +50,9 @@ namespace WeGotOne
         private float registance; // 저항도
         private Animator anim;
         private Rigidbody2D rb; 
-        private Tween patrolTween;
+        private Tween patrolTween; // 순찰 트윈
+        private Tween runawayTween;  // 도망 트윈
+
 
         private float baseScaleX; // 물고기 스케일 절대 값
         private bool goingToPatrol; // 현재 patrolPoint 로 가는 중인지
@@ -81,23 +97,7 @@ namespace WeGotOne
             
             
         }
-        
-        /*// 좌 우 중 랜덤 오프셋 결정
-        float randomDirectionX = Random.value > 0.5f ? 1f : -1f;
-        float offsetX = randomDirectionX * patrolRange;
-            
-        // 상하 (Y축) 랜덤 오프셋 결정
-        // 좌우 범위 20-50% 사이 비율을 골라 항상 좌우보다 작게 만듬 (수면 위 순찰을 하지 않게 하기 위함)
-
-        float verticalRange = patrolRange * Random.Range(0.2f, 0.5f);
-        float randomDirectionY = Random.value > 0.5f ? 1f : -1f;
-        float offsetY = randomDirectionY * verticalRange;
-            
-            // 최종 목표 지점 설정 (대각선 방향)
-            this.patrolPosition = spawnPosition + new Vector3(offsetX, offsetY);
-            
-        PatrolMove();
-        */
+      
         
         /// <summary>
         /// 왕복 순찰 트윈을 시작합니다.
@@ -125,34 +125,7 @@ namespace WeGotOne
                 });
         }
         
-        
-        /// <summary>
-        /// Raycast 대신 BoxCast를 사용하여 부피가 있는 장애물 감지를 처리합니다.
-        /// </summary>
-        private void CheckForObstacles()
-        {
-            Vector3 targetPos = goingToPatrol ? patrolPosition : spawnPosition;
-            Vector2 moveDirection = (targetPos - transform.position).normalized;
-
-            // 2D BoxCast: 내 위치에서 지정한 크기의 상자(obstacleCheckSize)를 진행 방향으로 쏩니다.
-            RaycastHit2D hit = Physics2D.BoxCast(
-                transform.position,       // 시작점 (물고기 중심)
-                obstacleCheckSize,        // 박스의 크기 (가로, 세로)
-                0f,                       // 박스의 회전 각도
-                moveDirection,            // 발사 방향
-                obstacleCheckDistance,    // 발사 거리
-                obstacleLayer             // 대상 레이어
-            );
-
-            if (hit.collider != null)
-            {
-                TurnAroundImmediately();
-            }
-        }
-
-
-        
-        
+       
         
         #region 이동 관련 함수 
 
@@ -204,7 +177,56 @@ namespace WeGotOne
             // 3. 최종 목표 지점 설정
             this.patrolPosition = spawnPosition + new Vector3(offsetX, offsetY, 0f);
         }
+        
+        /// <summary>
+        /// 플레이어를 비스듬히 피해 무작위 대각선 방향으로 빠르게 도망치는 비동기 메서드
+        /// </summary>
+        public async Task RunawayMoveAsync(CancellationToken token)
+        {
+            // 1. 기존에 진행 중인 모든 순찰 및 회피 트윈 안전하게 정지
+            StopMove();
+            runawayTween?.Kill();
 
+            // 2. 도망갈 임의의 대각선 방향 벡터 계산 (X축은 양방향 랜덤, Y축은 위아래로 부드럽게 랜덤)
+            float fleeDirX = UnityEngine.Random.value > 0.5f ? 1f : -1f;
+            float fleeDirY = UnityEngine.Random.Range(-0.3f, 0.3f); // 너무 위아래로 수직 상승/하강 하지 않게 보정
+            Vector3 fleeDirection = new Vector3(fleeDirX, fleeDirY, 0f).normalized;
+
+            // 3. 현재 위치 기준 최종 도망 목표 좌표 설정
+            Vector3 targetPosition = transform.position + fleeDirection * runawayDistance;
+    
+            // 도망치는 진행 방향에 맞춰 물고기 좌우 스프라이트 반전
+            ApplyingFacing(fleeDirection.x);
+
+            // 4. 순찰 속도보다 훨씬 빠른 속도로 순간 질주
+            float speed = moveSpeed * runawaySpeedMultiplier;
+
+            // 5. 순간적으로 확 치고 나갔다가 서서히 감속하는 OutQuad 이징 트윈 실행
+            runawayTween = rb.DOMove(targetPosition, speed)
+                .SetSpeedBased()
+                .SetEase(Ease.OutQuad);
+
+            try
+            {
+                // 6. 비동기로 도망 트윈이 완벽히 끝날 때까지 렌더링 프레임을 양보하며 대기
+                while (runawayTween != null && runawayTween.IsActive() && runawayTween.IsPlaying() && !token.IsCancellationRequested)
+                {
+                    await Task.Yield(); // 매 프레임 대기하며 트윈 플레이 확인 (GC 최소화 및 호환성 극대화)
+                }
+            }
+            finally
+            {
+                // 예외 상황이나 취소 토큰 작동 시(예: 도망 도중 다른 상태로 전이됨) 안전하게 트윈 정리
+                if (token.IsCancellationRequested)
+                {
+                    runawayTween?.Kill();
+                    runawayTween = null;
+                }
+            }
+        }
+        
+        
+        
         public void StopMove()
         {
             if (patrolTween != null)
@@ -259,6 +281,30 @@ namespace WeGotOne
 
 
         #endregion
+        
+        /// <summary>
+        /// Raycast 대신 BoxCast를 사용하여 부피가 있는 장애물 감지를 처리합니다.
+        /// </summary>
+        private void CheckForObstacles()
+        {
+            Vector3 targetPos = goingToPatrol ? patrolPosition : spawnPosition;
+            Vector2 moveDirection = (targetPos - transform.position).normalized;
+
+            // 2D BoxCast: 내 위치에서 지정한 크기의 상자(obstacleCheckSize)를 진행 방향으로 쏩니다.
+            RaycastHit2D hit = Physics2D.BoxCast(
+                transform.position,       // 시작점 (물고기 중심)
+                obstacleCheckSize,        // 박스의 크기 (가로, 세로)
+                0f,                       // 박스의 회전 각도
+                moveDirection,            // 발사 방향
+                obstacleCheckDistance,    // 발사 거리
+                obstacleLayer             // 대상 레이어
+            );
+
+            if (hit.collider != null)
+            {
+                TurnAroundImmediately();
+            }
+        }
         
         #region 디버깅용 기즈모 드로잉 (BoxCast 시각화)
 

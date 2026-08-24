@@ -25,8 +25,8 @@ namespace WeGotOne
         private bool isGrabbing;
         
         // 팔에 잡은 물체가 있는지 알려주는 용도
-        public event Action<Rigidbody2D> Grabbed;
-        public event Action Released;
+        public event Action<HandControllerWithInterface, Rigidbody2D> Grabbed; 
+        public event Action<HandControllerWithInterface> Released; 
         
 # region  유니티 함수
         
@@ -44,6 +44,9 @@ namespace WeGotOne
 
         private void OnEnable() => HandRegistry.Register(this);
         
+        // [보완 사항]: 손 오브젝트가 비활성화되거나 파괴될 때, 정적(static) 목록에서 확실히 제거해 주어야 
+        // 씬 전환이나 오브젝트 풀 반환 시 NullReferenceException과 같은 메모리 누수가 발생하지 않습니다.
+        private void OnDisable() => HandRegistry.Unregister(this);
 
         #endregion
 
@@ -67,7 +70,7 @@ namespace WeGotOne
 
             grabbedTarget = currentTarget.attachedRigidbody;
             isGrabbing = true;
-            Grabbed?.Invoke(grabbedTarget);
+            Grabbed?.Invoke(this, grabbedTarget);
         }
         
         // 그냥 풀어주고 옵저버 알려주기
@@ -79,7 +82,7 @@ namespace WeGotOne
             grabbedTarget = null;
             isGrabbing = false;
             
-            Released?.Invoke();
+            Released?.Invoke(this);
         }
 # endregion
     }
