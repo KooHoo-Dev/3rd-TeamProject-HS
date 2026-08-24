@@ -10,13 +10,13 @@ namespace WeGotOne
         private void Awake()
         {
             fishMovement = GetComponent<FishMovement>();
+            
         }
 
         private void Start()
         {
-            fishMovement.spawnPoint = gameObject.transform;
             
-            fishMovement.patrolMove();
+            fishMovement.PullingInit(transform.position);
             
         }
         

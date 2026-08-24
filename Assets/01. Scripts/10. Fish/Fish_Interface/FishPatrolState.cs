@@ -17,7 +17,7 @@ namespace WeGotOne.Fish_Interface
         {
             if (fishMovement == null) return Task.CompletedTask;
             Debug.Log($"[PatrolState] : Patrol 상태 진입");
-            fishMovement.patrolMove();
+            fishMovement.PullingInit(fishMovement.transform.position);
             return Task.CompletedTask;
         }
 
