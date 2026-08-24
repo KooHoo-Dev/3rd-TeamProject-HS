@@ -1,8 +1,7 @@
-using Jay;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Study_Inventory
+namespace WeGotOne
 {
     public class InventoryItemDB : SingletonBase<InventoryItemDB>
     {

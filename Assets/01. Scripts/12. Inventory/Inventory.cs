@@ -1,8 +1,6 @@
-using System;
-using Jay;
 using UnityEngine;
 
-namespace Study_Inventory
+namespace WeGotOne
 {
     public class Inventory : SingletonBase<Inventory>
     {

@@ -1,10 +1,7 @@
-using System;
-using _99._KimSeungGu;
-using Study.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Study_Inventory
+namespace WeGotOne
 {
     // 다리
     public class WoodBridge : MonoBehaviour
@@ -33,7 +30,7 @@ namespace Study_Inventory
 
                 InventoryItemDB db = InventoryItemDB.Instance;
 
-                if (other.TryGetComponent<IScriptableObjectKind>(out var holder))
+                if (other.TryGetComponent<IPickupable>(out var holder))
                 {
                     ItemScriptableObject item = holder.ThisItem;
 

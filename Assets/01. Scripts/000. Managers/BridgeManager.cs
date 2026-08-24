@@ -1,17 +1,14 @@
-﻿using Jay;
-using Study_Inventory;
-using Study.Utilities;
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace _99._KimSeungGu
+namespace WeGotOne
 {
     public class BridgeManager : SingletonBase<BridgeManager>
-    {
-        [field: SerializeField] public GameObject[] BridgePrefab { get; private set; }
+    { 
+        [field: SerializeField] public GameObject[] BridgeObjects { get; private set; }
         private Inventory targetInventory;
         
-        public bool IsEnd => CurrentBridgeCount() == BridgePrefab.Length;
+        public bool IsEnd => CurrentBridgeCount() == BridgeObjects.Length;
 
         protected override void Awake()
         {
@@ -22,9 +19,9 @@ namespace _99._KimSeungGu
         {
             int currentCount = 0;
 
-            for (int i = 0; i < BridgePrefab.Length; i++)
+            for (int i = 0; i < BridgeObjects.Length; i++)
             {
-                if (BridgePrefab[i].activeSelf)
+                if (BridgeObjects[i].activeSelf)
                 {
                     currentCount++;
                 }
@@ -44,8 +41,8 @@ namespace _99._KimSeungGu
                     if (grid[i, j].Item.ItemType == ItemType.Plank && grid[i, j].ItemCount > 0)
                     {
                         grid[i, j].CountTextUpdate(false);
-                        BridgePrefab[CurrentBridgeCount()].SetActive(true);
-                        break;
+                        BridgeObjects[CurrentBridgeCount()].SetActive(true);
+                        return;
                     }
                 }
             }

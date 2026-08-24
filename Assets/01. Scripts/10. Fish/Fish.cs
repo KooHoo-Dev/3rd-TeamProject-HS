@@ -1,9 +1,8 @@
-﻿using Study_Inventory;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace _99._KimSeungGu
+namespace WeGotOne
 {
-    public class Fish : MonoBehaviour, IScriptableObjectKind
+    public class Fish : MonoBehaviour, IPickupable
     {
        [field: SerializeField]
         public ItemScriptableObject ThisItem {get; private set;}

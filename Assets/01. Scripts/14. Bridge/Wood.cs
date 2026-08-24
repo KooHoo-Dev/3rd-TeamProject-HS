@@ -1,10 +1,8 @@
-using _99._KimSeungGu;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-namespace Study_Inventory
+namespace WeGotOne
 {
-    public class Wood : MonoBehaviour, IScriptableObjectKind
+    public class Wood : MonoBehaviour, IPickupable
     {
         [field: SerializeField]
         public ItemScriptableObject ThisItem {get; private set;}

@@ -1,10 +1,9 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace Study_Inventory
+namespace WeGotOne
 {
     public class InventorySlot : MonoBehaviour
     {
