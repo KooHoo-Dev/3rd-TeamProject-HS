@@ -27,6 +27,8 @@ namespace WeGotOne
         [SerializeField] private ArmController rightUpperArm;
         [SerializeField] private BottomArmController leftForearm;
         [SerializeField] private BottomArmController rightForearm;
+        
+        [SerializeField] private PlayerHunger body;
 
         private void Update()
         {
@@ -36,6 +38,12 @@ namespace WeGotOne
 
         private void HandleMovement()
         {
+            if (body.CanMove == false)
+            {
+                ClearArmDirections();
+                return; 
+            }
+            
             Vector2 moveInput = SimpleInput.GetMoveAxisRaw();
 
             if (moveInput == Vector2.zero)

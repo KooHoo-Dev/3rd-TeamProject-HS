@@ -915,6 +915,7 @@ MonoBehaviour:
   rightUpperArm: {fileID: 103068950}
   leftForearm: {fileID: 233016821}
   rightForearm: {fileID: 1379084402}
+  body: {fileID: 1737595037}
 --- !u!1 &1135518197
 GameObject:
   m_ObjectHideFlags: 0
@@ -1956,6 +1957,7 @@ GameObject:
   - component: {fileID: 1737595035}
   - component: {fileID: 1737595034}
   - component: {fileID: 1737595033}
+  - component: {fileID: 1737595037}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -2102,6 +2104,22 @@ Transform:
   - {fileID: 1830463505}
   m_Father: {fileID: 705328778}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1737595037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737595032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69f8346fdd68a4443be0add0d2bd3571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.PlayerHunger
+  maxHunger: 100
+  currentHunger: 100
+  hungerTime: 150
+  hungerDecreaseMultiplier: 1
 --- !u!1 &1830463504
 GameObject:
   m_ObjectHideFlags: 0
