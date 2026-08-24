@@ -14,8 +14,10 @@ namespace WeGotOne
 
         public InventorySlot[,] SlotGrid { get; private set; }
 
-        private void Awake()
+        protected override void OnInitialize()
         {
+            base.OnInitialize();
+            
             InitSlotGrid();
 
             // Inner Method를 사용해서 초기화 로직을 만들어 봅시다.
@@ -39,7 +41,7 @@ namespace WeGotOne
                 }
             }
         }
-
+        
         /// <summary>
         /// 매개변수의 slot이 inventory 안에 존재하는지 검사
         /// </summary>
