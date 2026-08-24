@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 223c35a36a5b0a94b94fdd791ab42924, type: 3}
   m_Name: Wood
   m_EditorClassIdentifier: Assembly-CSharp::Study_Inventory.ItemScriptableObject
-  Key: 0
-  Name: 
-  Icon: {fileID: 0}
+  Key: 2
+  Name: Wood
+  Icon: {fileID: -7492097170800067375, guid: 5cff56dd873dacc48858b46f9c1b67e7, type: 3}
   Fullness: 0
   ItemType: 0
