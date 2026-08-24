@@ -18,6 +18,7 @@ namespace WeGotOne
         
         // VictoryZone(육지)에 도착한 플레이어 수
         [SerializeField] private int arrivedPlayerCount = 0;
+        private PlayerTracker playerTracker = new PlayerTracker();
 
         #region unity events
 
@@ -31,11 +32,13 @@ namespace WeGotOne
         private void OnEnable()
         {
             BridgeManager.Instance.OnBridgeBuild += CheckPlayerWin;
+            playerTracker.OnActivePlayerCountChanged += HandleLose;
         }
 
         private void OnDisable()
         {
             BridgeManager.Instance.OnBridgeBuild -= CheckPlayerWin;
+            playerTracker.OnActivePlayerCountChanged -= HandleLose;
         }
 
         #endregion
@@ -53,14 +56,18 @@ namespace WeGotOne
 
         #region public methods
         // 패배 처리
-        public void HandleLose()
+        public void HandleLose(int activePlayerCount)
         {
-            
+            if (activePlayerCount == 0)
+            {
+                gameOverUI.gameObject.SetActive(true);
+            }
         }
 
         public void SetTotalPlayerCount(int count)
         {
             totalPlayerCount = count;
+            playerTracker.ActivePlayerCount = count;
         }
 
         public void AddArrivedPlayerCount()
@@ -80,6 +87,26 @@ namespace WeGotOne
                 Debug.LogError($"arrivedPlayerCount가 음수로 설정되었습니다. arrivedPlayerCount: {arrivedPlayerCount}. 0으로 재설정.");
                 arrivedPlayerCount = 0;
             }
+        }
+
+        public void SubscribePlayerActiveEvent(SamplePlayer player)
+        {
+            player.OnPlayerActive += playerTracker.HandlePlayerActivation;
+        }
+
+        public void UnsubscribePlayerActiveEvent(SamplePlayer player)
+        {
+            player.OnPlayerActive -= playerTracker.HandlePlayerActivation;
+        }
+
+        public void SubscribePlayerInactiveEvent(SamplePlayer player)
+        {
+            player.OnPlayerOutOfEnergy += playerTracker.HandlePlayerDeactivation;
+        }
+        
+        public void UnsubscribePlayerInactiveEvent(SamplePlayer player)
+        {
+            player.OnPlayerOutOfEnergy -= playerTracker.HandlePlayerDeactivation;
         }
         
         #endregion
