@@ -5,24 +5,16 @@ using UnityEngine;
 namespace WeGotOne.Fish_Interface
 {   
     [RequireComponent(typeof(Rigidbody2D))]
-    
-    public class FishStateManager : MonoBehaviour , ICatchable
+    public class FishStateManager : MonoBehaviour, ICatchable
     {
-
         [SerializeField] private FishMovement fishMovement;
-
         public FishMovement FishMovement => fishMovement;
         
         private IFishState currentState;
         private CancellationTokenSource stateCts;
 
-        private Rigidbody2D rb;
-
-        #region 유니티 이벤트 함수
-
         private void Awake()
         {
-            rb = GetComponent<Rigidbody2D>();
             fishMovement = GetComponent<FishMovement>();
         }
 
@@ -31,50 +23,16 @@ namespace WeGotOne.Fish_Interface
             ChangeState(new FishIdleState());
         }
 
-        private void OnEnable()
-        {
-            foreach (HandControllerV2 hand in HandRegistry.ActiveHands)
-            {
-                Subscribe(hand);
-            }
-        }
-
         private void OnDisable()
         {
-            foreach (HandControllerV2 hand in HandRegistry.ActiveHands)
-            {
-                Unsubscribe(hand);
-            }
-        }
-        
-        
-
-        #endregion
-        
-        
-        private void Subscribe(HandControllerV2 hand)
-        {
-            hand.Grabbed += HandleGrabbed; // 람다 없이 직접 등록
-            hand.Released += HandleReleased;
+            // 진행 중인 비동기 상태 전환만 안전하게 취소
+            stateCts?.Cancel();
+            stateCts?.Dispose();
+            stateCts = null;
         }
 
-        private void Unsubscribe(HandControllerV2 hand)
-        {
-            hand.Grabbed -= HandleGrabbed; // 정상적으로 해제됨!
-            hand.Released -= HandleReleased;
-        }
+        #region ICatchable 인터페이스 구현 (손이 직접 호출하는 창구)
 
-        private void HandleGrabbed(HandControllerV2 hand, Rigidbody2D grabbedTarget)
-        {
-            if (grabbedTarget != rb) return; 
-            OnGrabbed(hand);
-        }
-
-        private void HandleReleased(HandControllerV2 hand)
-        {   // 이 손이 "물고기를 잡고 있던 손" 인지는 CaughtState 쪽에서 판단해야함 
-            OnReleased(hand);
-        }
-        
         public void OnGrabbed(HandControllerV2 hand)
         {
             TransitionTo(new FishCaughtSate(hand));
@@ -85,6 +43,18 @@ namespace WeGotOne.Fish_Interface
             TransitionTo(new FishRunawayState());
         }
 
+        public void OnMissed()
+        {
+            if (currentState is FishIdleState)
+            {
+                ChangeState(new FishRunawayState());
+            }
+        }
+
+        #endregion
+
+        #region 비동기 상태 머신 코어 (FSM)
+
         public void ChangeState(IFishState newState)
         {
             TransitionTo(newState);
@@ -92,37 +62,30 @@ namespace WeGotOne.Fish_Interface
         
         private async void TransitionTo(IFishState newState)
         {   
-            if (newState == null)
-            {
-                Debug.Log("전환하려는 상태가 현재 Null 이다");
-                return;
-            }
+            if (newState == null) return;
 
-            
-            // stateCts 가 null 이 아닐 때만 취소 
             stateCts?.Cancel();
             stateCts?.Dispose();
             stateCts = new CancellationTokenSource();
             CancellationToken token = stateCts.Token;
 
-           
             try
-            {   // 이전 상태 퇴장
+            {   
                 if (currentState != null)
+                {
                     await currentState.ExitAsync(token);
-                // 새로운 상태 진입
+                    if (this == null) return; 
+                }
+
                 currentState = newState;
                 await currentState.EnterAsync(this, token);
-
             }
             catch (OperationCanceledException)
             {
-                //이 전환이 더 최신 전환에 의해 취소됨 
-                Debug.Log("상태 전환이 취소되었다");
+                Debug.Log("상태 전환 취소");
             }
-            
         }
-        
-        
+
+        #endregion
     }
 }

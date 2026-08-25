@@ -1,16 +1,17 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using WeGotOne.Fish_Interface;
 
 namespace WeGotOne
 {
     /*
-     * 손의 상태를 담당하는 클래스
-     * 구조 : 움직임등은 담당하지 않고 하완(BottomArm)에 자식으로써 위치값을 공유받는다.
-     *       단순히 Collider 2D만을 컴포넌트로 가지고 트리거로써 물체와의 접촉이 있는지,
-     *       접촉이 있을때 Grabbed 상태로 넘어가는지, 잡은 물체는 무엇인지 등을 담당한다.
+     * 손의 상태를 담당하는 클래스 (V2)
+     * 구조 : 물리적인 움직임 연산 대신 Collider 2D 트리거를 통해 물체 접촉을 감지하며,
+     *       접촉 시 일정 시간 내에 잡지 않으면 대상에게 OnMissed 신호를 보냅니다.
+     *       잡거나 놓았을 때의 모든 신호 주도권을 가집니다.
      */
-    
     [RequireComponent(typeof(Collider2D))]
     public class HandControllerV2 : MonoBehaviour
     {
@@ -24,41 +25,54 @@ namespace WeGotOne
         // 잡기에 대한 상태
         private bool isGrabbing;
         
-        // 팔에 잡은 물체가 있는지 알려주는 용도
+        // 팔(ArmController)이 무게 계산용 추가 힘을 적용할 수 있도록 등록하는 이벤트
         public event Action<HandControllerV2, Rigidbody2D> Grabbed; 
         public event Action<HandControllerV2> Released; 
+
+        [Header("잡기 타이머 설정")]
+        [SerializeField] 
+        [Tooltip("물고기 등 잡을 수 있는 물체에 닿은 후 도망치기 전까지 주어지는 유예 시간")]
+        private float grabWindowTime = 1.2f; 
         
-# region  유니티 함수
+        private Coroutine grabTimerCoroutine;
+
+#region 유니티 생명주기 함수
         
-        // 트리거에 물체 잡히면 타겟을 물체로 지정
+        private void OnEnable() => HandRegistry.Register(this);
+        
+        private void OnDisable()
+        {
+            // 비활성화 시 작동 중인 타이머 안전하게 정리
+            StopGrabTimer();
+            HandRegistry.Unregister(this);
+        }
+
+        // 트리거에 물체가 들어왔을 때 처리
         private void OnTriggerEnter2D(Collider2D other)
         {
             currentTarget = other;
+
+            // 닿은 물체가 낚을 수 있는 대상(ICatchable)인 경우, 손이 스스로 타이머를 작동시킵니다.
+            if (other.TryGetComponent<ICatchable>(out var catchable))
+            {
+                StopGrabTimer();
+                grabTimerCoroutine = StartCoroutine(CoGrabWindowTimer(catchable));
+            }
         }
         
-        // 물체 나가면 풀어주기 (타겟만 풀어줌)
+        // 물체 범위 밖으로 나갔을 때 처리
         private void OnTriggerExit2D(Collider2D other)
         {
-            if(currentTarget == other) currentTarget = null;
+            if (currentTarget == other) 
+            {
+                currentTarget = null;
+                StopGrabTimer(); // 잡지 않고 손을 떼고 가버렸다면 도망 타이머 즉시 취소
+            }
         }
 
-        private void OnEnable() => HandRegistry.Register(this);
-        
-        // [보완 사항]: 손 오브젝트가 비활성화되거나 파괴될 때, 정적(static) 목록에서 확실히 제거해 주어야 
-        // 씬 전환이나 오브젝트 풀 반환 시 NullReferenceException과 같은 메모리 누수가 발생하지 않습니다.
-        private void OnDisable() => HandRegistry.Unregister(this);
+#endregion
 
-        #endregion
-
-# region 잡기 코드
-
-        /*
-         *  잡기 상태에 관한 코드
-         *  현재 잡은 상태거나,
-         *  잡을 수 있는 물체가 없으면 (손에 물체가 안닿아있으면)
-         *  리턴시킴
-         *  그 후 타겟 저장하고 옵저버로 뿌림 (무게 계산해서 팔에 추가힘 부여하는건 팔이 함)
-         */
+#region 잡기 핵심 코드
         
         public void Grab()
         {
@@ -68,26 +82,68 @@ namespace WeGotOne
             if (currentTarget == null)
                 return;
 
+            // 잡기에 성공했으므로 더 이상 도망 타이머를 돌릴 필요가 없음
+            StopGrabTimer();
+
             grabbedTarget = currentTarget.attachedRigidbody;
             isGrabbing = true;
+            
+            // 1. 상위 팔(ArmController)의 추가 힘 연산을 위한 이벤트 알림
             Grabbed?.Invoke(this, grabbedTarget);
+
+            // 2. 잡은 대상(물고기, 도구 등)에게 직접 잡혔음을 실시간 통보
+            if (currentTarget.TryGetComponent<ICatchable>(out var catchable))
+            {
+                catchable.OnGrabbed(this);
+            }
         }
         
-        // 그냥 풀어주고 옵저버 알려주기
         public void Release()
         {
             if (!isGrabbing)
                 return;
+
+            // 1. 잡고 있던 대상에게 놓아주었음을 먼저 통보
+            if (grabbedTarget != null && grabbedTarget.TryGetComponent<ICatchable>(out var catchable))
+            {
+                catchable.OnReleased(this);
+            }
             
             grabbedTarget = null;
             isGrabbing = false;
             
+            // 2. 상위 팔(ArmController)의 물리 힘 복원을 위한 이벤트 알림
             Released?.Invoke(this);
         }
-# endregion
+
+#endregion
+
+#region 타이머 코루틴 제어
+
+        private IEnumerator CoGrabWindowTimer(ICatchable catchable)
+        {
+            yield return new WaitForSeconds(grabWindowTime);
+
+            // 지정된 시간 동안 기다렸는데도 잡지(IsGrabbing) 못했다면, "놓쳤음"을 대상에게 통보
+            if (!isGrabbing)
+            {
+                catchable.OnMissed();
+            }
+        }
+
+        private void StopGrabTimer()
+        {
+            if (grabTimerCoroutine != null)
+            {
+                StopCoroutine(grabTimerCoroutine);
+                grabTimerCoroutine = null;
+            }
+        }
+
+#endregion
     }
 
-    #region 물고기 잡기 판정용 static 클래스 (활성화 된 손이 무엇이 있는지 등록해줌)
+#region 활성화된 손 레지스트리 (V2 매핑 완료)
 
     public static class HandRegistry
     {
@@ -98,5 +154,5 @@ namespace WeGotOne
         public static void Unregister(HandControllerV2 hand) => activeHands.Remove(hand);
     }
 
-    #endregion
+#endregion
 }
