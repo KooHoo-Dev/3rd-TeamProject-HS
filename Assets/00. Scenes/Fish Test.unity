@@ -2599,6 +2599,10 @@ PrefabInstance:
       propertyPath: m_IncludeLayers.m_Bits
       value: 64
       objectReference: {fileID: 0}
+    - target: {fileID: 3537277664783653994, guid: 4a58fd1a7623948af8ba51b50a262f00, type: 3}
+      propertyPath: maxResistance
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4704755448715920807, guid: 4a58fd1a7623948af8ba51b50a262f00, type: 3}
       propertyPath: obstacleLayer.m_Bits
       value: 72
@@ -16203,6 +16207,10 @@ PrefabInstance:
     - target: {fileID: 1578164406523907532, guid: 4a58fd1a7623948af8ba51b50a262f00, type: 3}
       propertyPath: m_IncludeLayers.m_Bits
       value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 3537277664783653994, guid: 4a58fd1a7623948af8ba51b50a262f00, type: 3}
+      propertyPath: maxResistance
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4704755448715920807, guid: 4a58fd1a7623948af8ba51b50a262f00, type: 3}
       propertyPath: obstacleLayer.m_Bits

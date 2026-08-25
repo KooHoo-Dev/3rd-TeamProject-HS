@@ -1,31 +1,57 @@
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace WeGotOne.Fish_Interface
 {
-    public class FishCaughtSate : IFishState
+    public class FishCaughtState : IFishState
     {
-        private readonly HandControllerV2 grabbingHand;
+        private readonly HandControllerV2 grabHand;
+        private FishStateManager owner;
 
-        public FishCaughtSate(HandControllerV2 hand)
+        public FishCaughtState(HandControllerV2 hand)
         {
-            grabbingHand = hand;
-        }        
-        
-        public async Task EnterAsync(FishStateManager owner, CancellationToken token)
-        {   
-            // 저항도 초기화, Patrol Twenn Kill 해야함
-            await Task.CompletedTask;
+            this.grabHand = hand;
+        }
+
+        public Task EnterAsync(FishStateManager owner, CancellationToken token)
+        {
+            this.owner = owner;
+            Debug.Log($"{owner.name} : 힘겨루기 상태(Caught) 진입.");
+
+            // [개선]: 움직임 스크립트에게 시각 떨림 효과를 시작해달라고 지시
+            owner.FishMovement.StartCaughtShake();
+
+            return Task.CompletedTask;
         }
 
         public void Tick()
         {
-            // 추가 해야 할 것: 저항도 감소, grabbingHand 위치 추적 등..
+            if (owner == null) return;
+
+            // 1. 저항도 깎기
+            owner.DecreaseResistance(Time.deltaTime);
+            float ratio = owner.CurrentResistance / owner.MaxResistance;
+
+            // 2. [개선]: 물리 및 시각 움직임의 세부 수치 업데이트를 전적으로 위임
+            owner.FishMovement.ApplyStruggleForce(ratio);
+            owner.FishMovement.UpdateCaughtShake(ratio);
+
+            // 3. 탈진 체크
+            if (owner.CurrentResistance <= 0f)
+            {
+                owner.ChangeState(new FishExhaustedState(grabHand));
+            }
         }
 
-        public async Task ExitAsync(CancellationToken token)
+        public Task ExitAsync(CancellationToken token)
         {
-            await Task.CompletedTask;
+            if (owner != null)
+            {
+                // [개선]: 상태 퇴장 시 떨림 끄기 호출
+                owner.FishMovement.StopCaughtShake();
+            }
+            return Task.CompletedTask;
         }
     }
 }

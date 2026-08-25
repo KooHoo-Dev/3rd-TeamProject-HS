@@ -28,7 +28,10 @@ namespace WeGotOne
         [Tooltip("도망치는 총 거리")]
         private float runawayDistance = 6.0f;
 
-       
+        [Header("힘겨루기(Struggle) 물리 설정")]
+        [SerializeField] private float maxStruggleForce = 18f; 
+        [SerializeField] private float struggleFrequency = 12f; 
+        private float struggleTimer;
         
         
         [Header("장애물 감지 설정")]
@@ -52,7 +55,7 @@ namespace WeGotOne
         private Rigidbody2D rb; 
         private Tween patrolTween; // 순찰 트윈
         private Tween runawayTween;  // 도망 트윈
-
+        private Tween visualShakeTween; // 물고기 저항 트윈
 
         private float baseScaleX; // 물고기 스케일 절대 값
         private bool goingToPatrol; // 현재 patrolPoint 로 가는 중인지
@@ -124,8 +127,65 @@ namespace WeGotOne
                     StartPatrol();
                 });
         }
+
+        #region 물고기 저항 움직임 관련 함수
         
-       
+        /// <summary>
+        /// 1. 힘겨루기가 시작될 때 DOTween을 이용해 부르르 떠는 시각 연출을 켭니다.
+        /// </summary>
+        public void StartCaughtShake()
+        {
+            StopCaughtShake(); // 혹시 돌고 있을지 모를 트윈 방어적 정리 [DoTween]
+
+            // 물고기 오브젝트 자체를 파르르 흔듭니다.
+            visualShakeTween = transform.DOShakePosition(
+                duration: 999f, // 무한히 유지되도록 설정
+                strength: 0.15f, 
+                vibrato: 25, 
+                randomness: 90, 
+                fadeOut: false
+            ).SetUpdate(UpdateType.Fixed); // 물리 사이클과 연동
+        }
+        
+        /// <summary>
+        /// 2. 매 프레임 남은 저항도 비율에 따라 물리적인 당김 힘을 가합니다.
+        /// </summary>
+        public void ApplyStruggleForce(float resistanceRatio)
+        {
+            struggleTimer += Time.deltaTime * (struggleFrequency * resistanceRatio);
+            float wave = Mathf.Sin(struggleTimer);
+            Vector2 struggleDirection = transform.up * wave;
+            float currentForce = maxStruggleForce * resistanceRatio;
+    
+            rb.AddForce(struggleDirection * currentForce, ForceMode2D.Force);
+        }
+
+        /// <summary>
+        /// 3. 매 프레임 남은 저항도 비율에 맞춰 시각 쉐이크의 속도(TimeScale)를 제어합니다.
+        /// </summary>
+        public void UpdateCaughtShake(float resistanceRatio)
+        {
+            if (visualShakeTween != null && visualShakeTween.IsActive())
+            {
+                // 저항도가 떨어질수록 몸을 더 느리게 떱니다.
+                visualShakeTween.timeScale = resistanceRatio;
+            }
+        }
+
+        /// <summary>
+        /// 4. 힘겨루기를 빠져나갈 때 흔들리던 트윈을 즉시 종료하고 원위치로 복구합니다.
+        /// </summary>
+        public void StopCaughtShake()
+        {
+            if (visualShakeTween != null && visualShakeTween.IsActive())
+            {
+                visualShakeTween.Kill(complete: true); // 원래 자리로 예쁘게 복귀 [DoTween]
+                visualShakeTween = null;
+            }
+        }
+
+        #endregion
+        
         
         #region 이동 관련 함수 
 
