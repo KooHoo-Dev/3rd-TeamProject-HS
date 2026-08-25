@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1078827059327087580}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 8540904274771517701}
   m_Layer: 0
   m_Name: RArmBottom
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -285,7 +285,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.70000005, y: 0}
-  m_ConnectedAnchor: {x: 0.5, y: 0}
+  m_ConnectedAnchor: {x: 0.49999982, y: 0}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -352,7 +352,7 @@ GameObject:
   - component: {fileID: 2732578607933853037}
   m_Layer: 0
   m_Name: Triangle
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: 5392492869963053469}
   m_Layer: 0
   m_Name: RHand
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -587,7 +587,7 @@ GameObject:
   - component: {fileID: 5237983890837497847}
   m_Layer: 0
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -763,7 +763,7 @@ GameObject:
   - component: {fileID: 5493197202351387558}
   m_Layer: 0
   m_Name: RArmTop
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -931,7 +931,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.70000005, y: 0}
-  m_ConnectedAnchor: {x: 0.5, y: -0.12831447}
+  m_ConnectedAnchor: {x: 0.49999982, y: -0.12831458}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -976,7 +976,7 @@ GameObject:
   - component: {fileID: 5689668321785431467}
   m_Layer: 0
   m_Name: LArmBottom
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1145,7 +1145,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.70000005, y: 0}
-  m_ConnectedAnchor: {x: 0.5, y: -0.00000033500658}
+  m_ConnectedAnchor: {x: 0.5000001, y: -0.00000014173605}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -1216,7 +1216,7 @@ GameObject:
   - component: {fileID: 5449506281188008245}
   m_Layer: 0
   m_Name: LArmTop
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1384,7 +1384,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.70000005, y: 0}
-  m_ConnectedAnchor: {x: -0.5, y: -0.12831438}
+  m_ConnectedAnchor: {x: -0.5000004, y: -0.12831458}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -1426,7 +1426,7 @@ GameObject:
   - component: {fileID: 1163081960828888353}
   m_Layer: 0
   m_Name: LHand
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
