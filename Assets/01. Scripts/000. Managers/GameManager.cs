@@ -7,7 +7,10 @@ namespace WeGotOne
     {
         public bool IsBridgeComplete => BridgeManager.Instance.IsEnd;
         public bool IsAllPlayerArrivedAtLand => arrivedPlayerCount == totalPlayerCount;
+        public int OutOfEnergyPlayerCount => totalPlayerCount - activePlayerCount;
+        public int ActivePlayerCount => activePlayerCount;
         
+        // 플레이어 상태 변화
         [SerializeField] private RectTransform gameOverUI;
         [SerializeField] private RectTransform gameWinUI;
         
@@ -18,8 +21,8 @@ namespace WeGotOne
         
         // VictoryZone(육지)에 도착한 플레이어 수
         [SerializeField] private int arrivedPlayerCount = 0;
-        private PlayerTracker playerTracker = new PlayerTracker();
-
+        [SerializeField] private int activePlayerCount;
+        
         #region unity events
 
         protected override void OnInitialize()
@@ -32,13 +35,11 @@ namespace WeGotOne
         private void OnEnable()
         {
             BridgeManager.Instance.OnBridgeBuild += CheckPlayerWin;
-            playerTracker.OnActivePlayerCountChanged += HandleLose;
         }
 
         private void OnDisable()
         {
             BridgeManager.Instance.OnBridgeBuild -= CheckPlayerWin;
-            playerTracker.OnActivePlayerCountChanged -= HandleLose;
         }
 
         #endregion
@@ -67,7 +68,7 @@ namespace WeGotOne
         public void SetTotalPlayerCount(int count)
         {
             totalPlayerCount = count;
-            playerTracker.ActivePlayerCount = count;
+            activePlayerCount = count;
         }
 
         public void AddArrivedPlayerCount()
@@ -89,26 +90,36 @@ namespace WeGotOne
             }
         }
 
-        public void SubscribePlayerActiveEvent(SamplePlayer player)
+        public void HandlePlayerActivation()
         {
-            player.OnPlayerActive += playerTracker.HandlePlayerActivation;
+            activePlayerCount++;
         }
 
-        public void UnsubscribePlayerActiveEvent(SamplePlayer player)
+        public void HandlePlayerDeactivation()
         {
-            player.OnPlayerActive -= playerTracker.HandlePlayerActivation;
-        }
-
-        public void SubscribePlayerInactiveEvent(SamplePlayer player)
-        {
-            player.OnPlayerOutOfEnergy += playerTracker.HandlePlayerDeactivation;
-        }
-        
-        public void UnsubscribePlayerInactiveEvent(SamplePlayer player)
-        {
-            player.OnPlayerOutOfEnergy -= playerTracker.HandlePlayerDeactivation;
+            activePlayerCount--;
         }
         
         #endregion
+
+        public void SubscribePlayerActiveEvent(SamplePlayer samplePlayer)
+        {
+            samplePlayer.OnPlayerActive += HandlePlayerActivation;
+        }
+
+        public void SubscribePlayerInactiveEvent(SamplePlayer samplePlayer)
+        {
+            samplePlayer.OnPlayerActive -= HandlePlayerActivation;
+        }
+
+        public void UnsubscribePlayerActiveEvent(SamplePlayer samplePlayer)
+        {
+            samplePlayer.OnPlayerActive -= HandlePlayerActivation;
+        }
+
+        public void UnsubscribePlayerInactiveEvent(SamplePlayer samplePlayer)
+        {
+            samplePlayer.OnPlayerActive += HandlePlayerActivation;
+        }
     }
 }

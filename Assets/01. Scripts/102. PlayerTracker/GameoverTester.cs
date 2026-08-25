@@ -27,10 +27,11 @@ namespace WeGotOne
                 if (playerList[i].IsOutOfEnergy)
                 {
                     playerList[i].SetPlayerActive();
+                    Debug.Log($"active - {GameManager.Instance.ActivePlayerCount}, outOfEnergy - {GameManager.Instance.OutOfEnergyPlayerCount}");
                     return;
                 }
             }
-            Debug.Log("All players are active");
+            Debug.Log($"All players are active: active - {GameManager.Instance.ActivePlayerCount}, outOfEnergy - {GameManager.Instance.OutOfEnergyPlayerCount}");
         }
         
         [ContextMenu("Make Any Player Out Of Energy")]
@@ -41,10 +42,11 @@ namespace WeGotOne
                 if (playerList[i].IsOutOfEnergy == false)
                 {
                     playerList[i].SetPlayerOutOfEnergy();
+                    Debug.Log($"active - {GameManager.Instance.ActivePlayerCount}, outOfEnergy - {GameManager.Instance.OutOfEnergyPlayerCount}");
                     return;
                 }
             }
-            Debug.Log("All players are out of energy");
+            Debug.Log($"All players are out of energy: active - {GameManager.Instance.ActivePlayerCount}, outOfEnergy - {GameManager.Instance.OutOfEnergyPlayerCount}");
         }
         
         [ContextMenu("Set Total Player Count")]
