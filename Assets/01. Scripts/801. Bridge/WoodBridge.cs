@@ -60,17 +60,17 @@ namespace WeGotOne
             }
         }
         
-        private void OnTriggerStay2D(Collider2D other)
+        private void OnCollisionStay2D(Collision2D other)
         {
-            if (other.CompareTag("Player"))
+            if (other.gameObject.CompareTag("Player"))
             {
                 isCanBuild = true;
             }
         }
 
-        private void OnTriggerExit2D(Collider2D other)
+        private void OnCollisionExit2D(Collision2D other)
         {
-            if (other.CompareTag("Player"))
+            if (other.gameObject.CompareTag("Player"))
             {
                 isCanBuild = false;
             }

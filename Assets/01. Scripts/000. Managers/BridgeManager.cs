@@ -61,6 +61,7 @@ namespace WeGotOne
         // 테스트 메소드 (나무 비용 없이)
         public void BuildBridgeWithoutCost()
         {
+            if (IsEnd) return;
             BridgeObjects[CurrentBridgeCount()].gameObject.SetActive(true);
             OnBridgeBuild?.Invoke();
         }
