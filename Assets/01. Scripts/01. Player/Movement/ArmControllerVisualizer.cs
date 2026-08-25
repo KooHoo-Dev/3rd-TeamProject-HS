@@ -14,7 +14,6 @@ namespace WeGotOne
         private static bool isDrawInputDirection = true;
 
         [DrawGizmo(GizmoType.Selected | GizmoType.NonSelected)]
-                                                
         private static void DrawInputDirection(ArmController controller, GizmoType gizmoType)
         {
             if (isDrawInputDirection == false)

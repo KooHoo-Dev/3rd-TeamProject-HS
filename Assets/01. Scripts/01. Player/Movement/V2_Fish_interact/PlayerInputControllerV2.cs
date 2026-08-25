@@ -20,7 +20,7 @@ namespace WeGotOne
      * 해당 클래스는 실제 연산없이, 플레이어가 입력한 키값을 각각 부위에 맞게 뿌려주는 역할
      */
     
-    public class PlayerInputControllerWithInterface : MonoBehaviour
+    public class PlayerInputControllerV2 : MonoBehaviour
     {
         [Header("Arms")]
         [SerializeField] private ArmControllerV2 leftUpperArm;
