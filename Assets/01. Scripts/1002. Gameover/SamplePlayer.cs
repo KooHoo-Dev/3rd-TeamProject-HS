@@ -5,8 +5,7 @@ namespace WeGotOne
 {
     public class SamplePlayer : MonoBehaviour
     {
-        public event Action OnPlayerOutOfEnergy;
-        public event Action OnPlayerActive;
+        public event Action<bool> OnPlayerActivationChanged;
         
         public bool IsOutOfEnergy { get; set; } = false;
 
@@ -14,14 +13,12 @@ namespace WeGotOne
 
         private void OnEnable()
         {
-            GameManager.Instance.SubscribePlayerActiveEvent( this );
-            GameManager.Instance.SubscribePlayerInactiveEvent( this );
+            GameManager.Instance.SubscribePlayerActivationChanged(this);
         }
         
         private void OnDisable()
         {
-            GameManager.Instance.UnsubscribePlayerActiveEvent(this);
-            GameManager.Instance.UnsubscribePlayerInactiveEvent(this);
+            GameManager.Instance.UnsubscribePlayerActivationChanged(this);
         }
 
         #endregion
@@ -31,13 +28,13 @@ namespace WeGotOne
         public void SetPlayerActive()
         {
             IsOutOfEnergy = false;
-            OnPlayerActive?.Invoke();
+            OnPlayerActivationChanged?.Invoke(true);
         }
         
         public void SetPlayerOutOfEnergy()
         {
             IsOutOfEnergy = true;
-            OnPlayerOutOfEnergy?.Invoke();
+            OnPlayerActivationChanged?.Invoke(false);
         }
 
         #endregion
