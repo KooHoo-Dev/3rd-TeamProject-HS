@@ -33,7 +33,7 @@ namespace WeGotOne
         
         [Header("장애물 감지 설정")]
         [SerializeField]
-        [Tooltip("장애물로 인식할 레이어 (예: Ground, Wall 등)")]
+        [Tooltip("장애물로 인식할 레이어 (예: Wall, Fish 등)")]
         private LayerMask obstacleLayer;
         
         [SerializeField]

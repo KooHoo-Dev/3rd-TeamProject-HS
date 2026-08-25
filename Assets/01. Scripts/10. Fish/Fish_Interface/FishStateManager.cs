@@ -33,7 +33,7 @@ namespace WeGotOne.Fish_Interface
 
         private void OnEnable()
         {
-            foreach (HandControllerWithInterface hand in HandRegistry.ActiveHands)
+            foreach (HandControllerV2 hand in HandRegistry.ActiveHands)
             {
                 Subscribe(hand);
             }
@@ -41,7 +41,7 @@ namespace WeGotOne.Fish_Interface
 
         private void OnDisable()
         {
-            foreach (HandControllerWithInterface hand in HandRegistry.ActiveHands)
+            foreach (HandControllerV2 hand in HandRegistry.ActiveHands)
             {
                 Unsubscribe(hand);
             }
@@ -52,35 +52,35 @@ namespace WeGotOne.Fish_Interface
         #endregion
         
         
-        private void Subscribe(HandControllerWithInterface hand)
+        private void Subscribe(HandControllerV2 hand)
         {
             hand.Grabbed += HandleGrabbed; // 람다 없이 직접 등록
             hand.Released += HandleReleased;
         }
 
-        private void Unsubscribe(HandControllerWithInterface hand)
+        private void Unsubscribe(HandControllerV2 hand)
         {
             hand.Grabbed -= HandleGrabbed; // 정상적으로 해제됨!
             hand.Released -= HandleReleased;
         }
 
-        private void HandleGrabbed(HandControllerWithInterface hand, Rigidbody2D grabbedTarget)
+        private void HandleGrabbed(HandControllerV2 hand, Rigidbody2D grabbedTarget)
         {
             if (grabbedTarget != rb) return; 
             OnGrabbed(hand);
         }
 
-        private void HandleReleased(HandControllerWithInterface hand)
+        private void HandleReleased(HandControllerV2 hand)
         {   // 이 손이 "물고기를 잡고 있던 손" 인지는 CaughtState 쪽에서 판단해야함 
             OnReleased(hand);
         }
         
-        public void OnGrabbed(HandControllerWithInterface hand)
+        public void OnGrabbed(HandControllerV2 hand)
         {
             TransitionTo(new FishCaughtSate(hand));
         }
 
-        public void OnReleased(HandControllerWithInterface hand)
+        public void OnReleased(HandControllerV2 hand)
         {
             TransitionTo(new FishRunawayState());
         }

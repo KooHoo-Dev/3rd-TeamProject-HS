@@ -7,7 +7,7 @@ namespace WeGotOne.Fish_Interface
     /// </summary>
     public interface ICatchable
     {
-        void OnGrabbed(HandControllerWithInterface hand);
-        void OnReleased(HandControllerWithInterface hand);
+        void OnGrabbed(HandControllerV2 hand);
+        void OnReleased(HandControllerV2 hand);
     }
 }

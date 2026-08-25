@@ -3,15 +3,6 @@ using UnityEngine;
 namespace WeGotOne
 {
     /*
-     * 팔 움직임에 관한 클래스
-     * 예상 구조 : 상완은 AddTorque로 토크힘으로 회전시켜서 각을 만들고, 실제 힘을 받는건 하완이 하는 구조
-     * 구현된 구조 : AddTorque로 하니까 회전축을 두개를 구현해야하는 문제가 생김
-     *             (몸체에서 손 방향으로 힘을 줄때의 토크와 반대 상황에서의의 토크가 다름)
-     *             해당 문제를 예상하지 못했어서 토크를 사용할 생각이었는데 해당 문제 겪고 나니
-     *             힘 기반으로 작성하는게 더 편하기도 하고 깔끔해보여서 AddForce 사용했음
-     *             그러고나니까 예상 구조에서 실제 상완, 하완의 차이점이 잡는 상태의 여부(한쪽 축을 동적으로 고정할지)라서
-     *             하완만 따로 해당 클래스 상속 받아서 쓰기로 함
-     *
      * 최종 구조 : 해당 클래스는 팔의 움직임을 담당하며,
      *            -- 인스펙터 부분 --
      *            기본적으로 'RigidBody 2D, Collider 2D, Hinge Joint 2D'를 가진 것을 전제로 함
@@ -25,11 +16,8 @@ namespace WeGotOne
      *            플레이어에 입력값에 따라서 방향을 정하고, 해당 방향으로 기본 힘의 크기로 이동하는 것이 일반적인 움직임
      */
     
-    // Fish 와 연관 시켜서 적용 해보려고 했는데.. 아직 한계가 있습니다..
-    
-    
     [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D), typeof(HingeJoint2D))]
-    public class ArmControllerWithInterface : MonoBehaviour
+    public class ArmControllerV2 : MonoBehaviour
     {
         public Vector2 InputDirection => inputDirection;
         // 기본적으로 사용할 힘
@@ -39,9 +27,9 @@ namespace WeGotOne
         [SerializeField] private float forceMultiplierOfMass = 10f;
         [SerializeField] private float forceLimit = 180f;
         
-        // 이벤트 구독용
-        [SerializeField] private HandControllerWithInterface hand;
-        protected HandControllerWithInterface Hand => hand;
+        // [수정]: 기존 HandController에서 인터페이스가 적용된 새로운 클래스명으로 변경
+        [SerializeField] private HandControllerV2 hand;
+        protected HandControllerV2 Hand => hand;
         
         private Rigidbody2D rigid;
         private Vector2 inputDirection;
@@ -65,17 +53,23 @@ namespace WeGotOne
 
         private void OnDisable()
         {
-            hand.Grabbed -= OnGrabbed;
-            hand.Released -= OnReleased;
+            // [보완]: 안전한 언구독을 위해 Null 조건부 연산자(?.)를 사용하면 좋습니다.
+            if (hand != null)
+            {
+                hand.Grabbed -= OnGrabbed;
+                hand.Released -= OnReleased;
+            }
         }
         
-        protected virtual void OnGrabbed(Rigidbody2D target)
+        // [수정]: 새로운 델리게이트 시그니처에 맞춰 첫 번째 매개변수로 이벤트를 보낸 손(hand)을 받도록 가상 함수 수정
+        protected virtual void OnGrabbed(HandControllerV2 hand, Rigidbody2D target)
         {
             grabbedTarget = target;
             isGrabbing = true;
         }
 
-        protected virtual void OnReleased()
+        // [수정]: 이벤트를 보낸 손(hand)을 받도록 가상 함수 수정
+        protected virtual void OnReleased(HandControllerV2 hand)
         {
             grabbedTarget = null;
             isGrabbing = false;

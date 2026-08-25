@@ -259,7 +259,7 @@ MonoBehaviour:
   leftUpperArm: {fileID: 4735202384107212666}
   rightUpperArm: {fileID: 6284392403743486847}
   leftForearm: {fileID: 7312715977314831151}
-  rightForearm: {fileID: 7833762073262121305}
+  rightForearm: {fileID: 0}
 --- !u!1 &3921039206849329133
 GameObject:
   m_ObjectHideFlags: 0
@@ -1103,7 +1103,6 @@ GameObject:
   - component: {fileID: 6666245487819869389}
   - component: {fileID: 6523555849934476004}
   - component: {fileID: 3861364669809462126}
-  - component: {fileID: 7833762073262121305}
   - component: {fileID: 4085767479866164323}
   m_Layer: 0
   m_Name: RArmBottom
@@ -1286,25 +1285,6 @@ HingeJoint2D:
   m_AngleLimits:
     m_LowerAngle: 0
     m_UpperAngle: 359
---- !u!114 &7833762073262121305
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7297583046215872704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49c4be79253c14540b8cd286090becef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ForearmController
-  defaultForce: 20
-  forceMultiplierOfMass: 10
-  forceLimit: 180
-  hand: {fileID: 0}
-  grabbedTarget: {fileID: 0}
-  isGrabbing: 0
-  grabJoint: {fileID: 4085767479866164323}
 --- !u!233 &4085767479866164323
 HingeJoint2D:
   m_ObjectHideFlags: 0

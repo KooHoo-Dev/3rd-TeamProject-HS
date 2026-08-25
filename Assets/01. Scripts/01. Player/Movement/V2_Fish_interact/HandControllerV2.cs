@@ -12,7 +12,7 @@ namespace WeGotOne
      */
     
     [RequireComponent(typeof(Collider2D))]
-    public class HandControllerWithInterface : MonoBehaviour
+    public class HandControllerV2 : MonoBehaviour
     {
         // 잡은 물체 저장용
         private Collider2D currentTarget;
@@ -25,8 +25,8 @@ namespace WeGotOne
         private bool isGrabbing;
         
         // 팔에 잡은 물체가 있는지 알려주는 용도
-        public event Action<HandControllerWithInterface, Rigidbody2D> Grabbed; 
-        public event Action<HandControllerWithInterface> Released; 
+        public event Action<HandControllerV2, Rigidbody2D> Grabbed; 
+        public event Action<HandControllerV2> Released; 
         
 # region  유니티 함수
         
@@ -87,15 +87,15 @@ namespace WeGotOne
 # endregion
     }
 
-    #region 물고기 잡기 판정용 static 함수 (활성화 된 손이 무엇이 있는지 등록해주는 함수)
+    #region 물고기 잡기 판정용 static 클래스 (활성화 된 손이 무엇이 있는지 등록해줌)
 
     public static class HandRegistry
     {
-        private static readonly List<HandControllerWithInterface> activeHands = new();
+        private static readonly List<HandControllerV2> activeHands = new();
 
-        public static List<HandControllerWithInterface> ActiveHands => activeHands;
-        public static void Register(HandControllerWithInterface hand) => activeHands.Add(hand);
-        public static void Unregister(HandControllerWithInterface hand) => activeHands.Remove(hand);
+        public static List<HandControllerV2> ActiveHands => activeHands;
+        public static void Register(HandControllerV2 hand) => activeHands.Add(hand);
+        public static void Unregister(HandControllerV2 hand) => activeHands.Remove(hand);
     }
 
     #endregion

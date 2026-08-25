@@ -5,9 +5,9 @@ namespace WeGotOne.Fish_Interface
 {
     public class FishCaughtSate : IFishState
     {
-        private readonly HandControllerWithInterface grabbingHand;
+        private readonly HandControllerV2 grabbingHand;
 
-        public FishCaughtSate(HandControllerWithInterface hand)
+        public FishCaughtSate(HandControllerV2 hand)
         {
             grabbingHand = hand;
         }        
