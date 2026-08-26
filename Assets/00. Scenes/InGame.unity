@@ -604,7 +604,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.GameoverTester
   playerList:
-  - {fileID: 1996724058}
+  - {fileID: 1418576892}
 --- !u!4 &660525033
 Transform:
   m_ObjectHideFlags: 0
@@ -1744,11 +1744,19 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1428121128984370994, guid: 6c85b18f9fddb413fa81916600df5cdd, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1996724058}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c85b18f9fddb413fa81916600df5cdd, type: 3}
+--- !u!114 &1418576892 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5237983890837497847, guid: 6c85b18f9fddb413fa81916600df5cdd, type: 3}
+  m_PrefabInstance: {fileID: 1418576891}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69f8346fdd68a4443be0add0d2bd3571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.PlayerHunger
 --- !u!1001 &1473969117
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2197,27 +2205,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 701204231294192243, guid: 58c351473d3bd9347abf3cf2c161d7fd, type: 3}
   m_PrefabInstance: {fileID: 1792523860}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1996724055 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1428121128984370994, guid: 6c85b18f9fddb413fa81916600df5cdd, type: 3}
-  m_PrefabInstance: {fileID: 1418576891}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1996724058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1996724055}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ef4efbd119a4775bbaebd79c93c3789, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.SamplePlayer
-  maxHunger: 100
-  currentHunger: 100
-  hungerTime: 150
-  hungerDecreaseMultiplier: 1
 --- !u!1 &2038910159
 GameObject:
   m_ObjectHideFlags: 0

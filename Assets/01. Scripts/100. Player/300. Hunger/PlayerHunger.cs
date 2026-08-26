@@ -24,6 +24,7 @@ namespace WeGotOne
         
         // 움직임 제어용
         public bool CanMove => currentHunger > 0f;
+        public bool IsStarved => CanMove == false;
 
         #region unity events
 
