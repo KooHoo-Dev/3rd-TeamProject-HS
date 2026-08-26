@@ -94,24 +94,24 @@ namespace WeGotOne
 
         public void SubscribePlayerStarveStateChanged(PlayerHunger playerHunger)
         {
-            playerHunger.OnPlayerStarveStateChanged += HandlePlayerActivationChanged;
+            playerHunger.OnPlayerStarveStateChanged += HandlePlayerStarveStateChanged;
         }
         
         public void UnsubscribeStarveStateChanged(PlayerHunger playerHunger)
         {
-            playerHunger.OnPlayerStarveStateChanged -= HandlePlayerActivationChanged;
+            playerHunger.OnPlayerStarveStateChanged -= HandlePlayerStarveStateChanged;
         }
 
-        private void HandlePlayerActivationChanged(bool isStarved)
+        private void HandlePlayerStarveStateChanged(bool isStarved)
         {
             if (isStarved)
             {
                 activePlayerCount--;
+                HandleLose(activePlayerCount);
             }
             else
             {
                 activePlayerCount++;
-                HandleLose(activePlayerCount);
             }
         }
     }

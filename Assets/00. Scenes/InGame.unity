@@ -2214,6 +2214,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ef4efbd119a4775bbaebd79c93c3789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.SamplePlayer
+  maxHunger: 100
+  currentHunger: 100
+  hungerTime: 150
+  hungerDecreaseMultiplier: 1
 --- !u!1 &2038910159
 GameObject:
   m_ObjectHideFlags: 0
