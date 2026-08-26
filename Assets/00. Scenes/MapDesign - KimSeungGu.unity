@@ -17072,12 +17072,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 333312abda9e4e146a425562b00d9493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.ItemObjectPool
-  <MaxItemCounts>k__BackingField: 030000000200000001000000
+  <MaxItemCounts>k__BackingField: 030000000200000003000000
   itemPrefabs:
   - {fileID: 7591785617051756835, guid: 38649e33fa801524bbbe22af3c6b16fd, type: 3}
   - {fileID: 6864666250702950283, guid: be6d4025df696854082fc8acdbb4100a, type: 3}
   - {fileID: 6691754160653459987, guid: 1194081bb080b624b838ba18eca05a87, type: 3}
-  plankTransforms: []
+  plankTransforms:
+  - {fileID: 932125288}
+  - {fileID: 1918052090}
+  - {fileID: 1426659104}
   fishTransforms:
   - {fileID: 1745247304}
   - {fileID: 1996899312}
