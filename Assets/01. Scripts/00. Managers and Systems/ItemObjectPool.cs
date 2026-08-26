@@ -22,6 +22,8 @@ namespace WeGotOne
 
         private void Start()
         {
+            itemPools = new GameObjectPool<Collectible>[itemPrefabs.Length];
+            
             for (int i = 0; i < itemPrefabs.Length; i++)
             {
                 itemPools[i] = new GameObjectPool<Collectible>(itemPrefabs[i]);
@@ -30,13 +32,17 @@ namespace WeGotOne
             ItemSpawn();
         }
 
+        private void Update()
+        {
+            if(SimpleInput.GetKeyDown(Key.Digit1))
+                ItemSpawn();
+        }
+
         public void ItemSpawn()
         {
             int plankIndex = 0;
             int fishIndex = 0;
             
-            itemPools = new GameObjectPool<Collectible>[itemPrefabs.Length];
-
             for (int i = 0; i < itemPrefabs.Length; i++)
             {
                 ItemType currentType = itemPrefabs[i].ThisItem.ItemType;

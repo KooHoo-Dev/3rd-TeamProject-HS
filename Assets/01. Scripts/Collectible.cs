@@ -1,14 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace WeGotOne
 {
     public abstract class Collectible : MonoBehaviour
     {
-        [field: SerializeField]
-        public ItemScriptableObject ThisItem { get; private set; }
+        [field: SerializeField] public ItemScriptableObject ThisItem { get; private set; }
         protected GameObjectPool<Collectible> myPool;
-        
+
+        private void Update()
+        {
+            if (SimpleInput.GetKeyDown(Key.Digit2))
+                OnPickup();
+        }
+
         public virtual void Init(GameObjectPool<Collectible> pool, Vector3 randomTransform)
         {
             myPool = pool;
