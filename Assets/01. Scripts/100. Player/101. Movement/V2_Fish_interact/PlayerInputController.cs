@@ -20,13 +20,13 @@ namespace WeGotOne
      * 해당 클래스는 실제 연산없이, 플레이어가 입력한 키값을 각각 부위에 맞게 뿌려주는 역할
      */
     
-    public class PlayerInputControllerV2 : MonoBehaviour
+    public class PlayerInputController : MonoBehaviour
     {
         [Header("Arms")]
-        [SerializeField] private ArmControllerV2 leftUpperArm;
-        [SerializeField] private ArmControllerV2 rightUpperArm;
-        [SerializeField] private BottomArmControllerV2 leftForearm;
-        [SerializeField] private BottomArmControllerV2 rightForearm;
+        [SerializeField] private ArmController leftUpperArm;
+        [SerializeField] private ArmController rightUpperArm;
+        [SerializeField] private BottomArmController leftForearm;
+        [SerializeField] private BottomArmController rightForearm;
 
         private void Update()
         {
