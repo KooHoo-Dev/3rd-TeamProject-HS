@@ -3,38 +3,20 @@ using UnityEngine;
 
 namespace WeGotOne
 {
-    public class SamplePlayer : MonoBehaviour
+    public class SamplePlayer : PlayerHunger
     {
-        public event Action<bool> OnPlayerActivationChanged;
-        
-        public bool IsOutOfEnergy { get; set; } = false;
+        public bool IsStarved { get; set; } = false;
 
         #region unity events
 
         private void OnEnable()
         {
-            GameManager.Instance.SubscribePlayerActivationChanged(this);
+            GameManager.Instance.SubscribePlayerStarveStateChanged(this);
         }
         
         private void OnDisable()
         {
-            GameManager.Instance.UnsubscribePlayerActivationChanged(this);
-        }
-
-        #endregion
-
-        #region public methods
-
-        public void SetPlayerActive()
-        {
-            IsOutOfEnergy = false;
-            OnPlayerActivationChanged?.Invoke(true);
-        }
-        
-        public void SetPlayerOutOfEnergy()
-        {
-            IsOutOfEnergy = true;
-            OnPlayerActivationChanged?.Invoke(false);
+            GameManager.Instance.UnsubscribeStarveStateChanged(this);
         }
 
         #endregion

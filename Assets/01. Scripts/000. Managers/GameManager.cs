@@ -92,25 +92,25 @@ namespace WeGotOne
 
         #endregion
 
-        public void SubscribePlayerActivationChanged(SamplePlayer samplePlayer)
+        public void SubscribePlayerStarveStateChanged(PlayerHunger playerHunger)
         {
-            samplePlayer.OnPlayerActivationChanged += HandlePlayerActivationChanged;
+            playerHunger.OnPlayerStarveStateChanged += HandlePlayerActivationChanged;
         }
         
-        public void UnsubscribePlayerActivationChanged(SamplePlayer samplePlayer)
+        public void UnsubscribeStarveStateChanged(PlayerHunger playerHunger)
         {
-            samplePlayer.OnPlayerActivationChanged -= HandlePlayerActivationChanged;
+            playerHunger.OnPlayerStarveStateChanged -= HandlePlayerActivationChanged;
         }
 
-        private void HandlePlayerActivationChanged(bool isPlayerActive)
+        private void HandlePlayerActivationChanged(bool isStarved)
         {
-            if (isPlayerActive)
+            if (isStarved)
             {
-                activePlayerCount++;
+                activePlayerCount--;
             }
             else
             {
-                activePlayerCount--;
+                activePlayerCount++;
                 HandleLose(activePlayerCount);
             }
         }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace WeGotOne
@@ -14,6 +15,9 @@ namespace WeGotOne
         [Header("허기 감소 배율 : 혹시 몰라서 확장해둠")]
         [SerializeField] private float hungerDecreaseMultiplier = 1f;
         
+        // 플레이어 무력화,활성화시 게임 매니저에게 알려주는 델리게이트
+        public event Action<bool> OnPlayerStarveStateChanged;
+        
         // 외부 확인용 UI 띄울때 이걸루 접근
         public float CurrentHunger => currentHunger;
         public float MaxHunger => maxHunger;
@@ -21,10 +25,24 @@ namespace WeGotOne
         // 움직임 제어용
         public bool CanMove => currentHunger > 0f;
 
+        #region unity events
+
         private void Update()
         {
             DecreaseHungerOverTime();
         }
+
+        private void OnEnable()
+        {
+            GameManager.Instance.SubscribePlayerStarveStateChanged(this);
+        }
+        
+        private void OnDisable()
+        {
+            GameManager.Instance.UnsubscribeStarveStateChanged(this);
+        }
+
+        #endregion
 
         private void DecreaseHungerOverTime()
         {
@@ -53,9 +71,17 @@ namespace WeGotOne
         /// <param name="amount"></param>
         public void IncreaseHunger(float amount)
         {
+            bool prevIsStarved = !CanMove;
             currentHunger = Mathf.Min( currentHunger + amount, maxHunger);
+
+            // 이전에 굶주린 상태였다가 회복이 되면
+            if (prevIsStarved)
+            {
+                // 게임매니저에 통지
+                NotifyPlayerStarveStateChanged( false);
+            }
         }
-        
+
         /// <summary>
         /// amount만큼 허기 게이지 감소
         /// </summary>
@@ -63,6 +89,33 @@ namespace WeGotOne
         public void DecreaseHunger(float amount)
         {
             currentHunger = Mathf.Max( currentHunger - amount, 0f );
+            
+            // 만약 이전에 굶주리지 않았다가 이번 배고픔 감소시 굶주리게 되었다면
+            if (CanMove == false)
+            {
+                // 델리게이트로 게임매니저로 통지
+                NotifyPlayerStarveStateChanged( true);
+            }
         }
+        
+        public void NotifyPlayerStarveStateChanged(bool isStarved)
+        {
+            OnPlayerStarveStateChanged?.Invoke(isStarved);
+        }
+
+        // GameoverTester를 위한 테스트 메소드
+        #region test methods
+
+        public void ResetHunger()
+        {
+            IncreaseHunger(maxHunger);
+        }
+
+        public void MakeStarved()
+        {
+            DecreaseHunger(maxHunger);
+        }
+
+        #endregion
     }    
 }

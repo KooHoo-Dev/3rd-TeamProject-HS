@@ -24,9 +24,9 @@ namespace WeGotOne
         {
             for (int i = 0; i < playerList.Count; i++)
             {
-                if (playerList[i].IsOutOfEnergy)
+                if (playerList[i].IsStarved)
                 {
-                    playerList[i].SetPlayerActive();
+                    playerList[i].ResetHunger();
                     Debug.Log($"active - {GameManager.Instance.ActivePlayerCount}, outOfEnergy - {GameManager.Instance.OutOfEnergyPlayerCount}");
                     return;
                 }
@@ -39,9 +39,9 @@ namespace WeGotOne
         {
             for (int i = 0; i < playerList.Count; i++)
             {
-                if (playerList[i].IsOutOfEnergy == false)
+                if (playerList[i].IsStarved == false)
                 {
-                    playerList[i].SetPlayerOutOfEnergy();
+                    playerList[i].MakeStarved();
                     Debug.Log($"active - {GameManager.Instance.ActivePlayerCount}, outOfEnergy - {GameManager.Instance.OutOfEnergyPlayerCount}");
                     return;
                 }
