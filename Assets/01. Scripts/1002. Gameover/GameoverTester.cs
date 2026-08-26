@@ -5,17 +5,13 @@ namespace WeGotOne
 {
     public class GameoverTester : MonoBehaviour
     {
-        // SamplePlayer들을 가지고 있고
+        // PlayerHunger를 가지고 있고
         // 하나씩 순서대로 무력화, 활성화 가능
-        [SerializeField] private List<SamplePlayer> playerList = new List<SamplePlayer>();
+        // 테스트하려면 playerList에 플레이어의 PlayerHunger 컴포넌트를 주입해야함
+        [SerializeField] private List<PlayerHunger> playerList = new List<PlayerHunger>();
         
         private void Start()
         {
-            SamplePlayer[] players = GetComponentsInChildren<SamplePlayer>();
-            for (int i = 0; i < players.Length; ++i)
-            {
-                playerList.Add(players[i]);
-            }
             GameManager.Instance.SetTotalPlayerCount(playerList.Count);
         }
 
@@ -24,9 +20,9 @@ namespace WeGotOne
         {
             for (int i = 0; i < playerList.Count; i++)
             {
-                if (playerList[i].IsOutOfEnergy)
+                if (playerList[i].IsStarved)
                 {
-                    playerList[i].SetPlayerActive();
+                    playerList[i].ResetHunger();
                     Debug.Log($"active - {GameManager.Instance.ActivePlayerCount}, outOfEnergy - {GameManager.Instance.OutOfEnergyPlayerCount}");
                     return;
                 }
@@ -39,9 +35,9 @@ namespace WeGotOne
         {
             for (int i = 0; i < playerList.Count; i++)
             {
-                if (playerList[i].IsOutOfEnergy == false)
+                if (playerList[i].IsStarved == false)
                 {
-                    playerList[i].SetPlayerOutOfEnergy();
+                    playerList[i].MakeStarved();
                     Debug.Log($"active - {GameManager.Instance.ActivePlayerCount}, outOfEnergy - {GameManager.Instance.OutOfEnergyPlayerCount}");
                     return;
                 }

@@ -90,37 +90,29 @@ namespace WeGotOne
             }
         }
 
-        public void HandlePlayerActivation()
-        {
-            activePlayerCount++;
-        }
-
-        public void HandlePlayerDeactivation()
-        {
-            activePlayerCount--;
-            HandleLose(activePlayerCount);
-        }
-        
         #endregion
 
-        public void SubscribePlayerActiveEvent(SamplePlayer samplePlayer)
+        public void SubscribePlayerStarveStateChanged(PlayerHunger playerHunger)
         {
-            samplePlayer.OnPlayerActive += HandlePlayerActivation;
+            playerHunger.OnPlayerStarveStateChanged += HandlePlayerStarveStateChanged;
+        }
+        
+        public void UnsubscribeStarveStateChanged(PlayerHunger playerHunger)
+        {
+            playerHunger.OnPlayerStarveStateChanged -= HandlePlayerStarveStateChanged;
         }
 
-        public void SubscribePlayerInactiveEvent(SamplePlayer samplePlayer)
+        private void HandlePlayerStarveStateChanged(bool isStarved)
         {
-            samplePlayer.OnPlayerOutOfEnergy += HandlePlayerDeactivation;
-        }
-
-        public void UnsubscribePlayerActiveEvent(SamplePlayer samplePlayer)
-        {
-            samplePlayer.OnPlayerActive -= HandlePlayerActivation;
-        }
-
-        public void UnsubscribePlayerInactiveEvent(SamplePlayer samplePlayer)
-        {
-            samplePlayer.OnPlayerOutOfEnergy -= HandlePlayerActivation;
+            if (isStarved)
+            {
+                activePlayerCount--;
+                HandleLose(activePlayerCount);
+            }
+            else
+            {
+                activePlayerCount++;
+            }
         }
     }
 }

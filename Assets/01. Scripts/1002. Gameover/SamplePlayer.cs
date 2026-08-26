@@ -3,41 +3,21 @@ using UnityEngine;
 
 namespace WeGotOne
 {
-    public class SamplePlayer : MonoBehaviour
+    // 테스트 씬을 위한 테스트 코드 수정... (PlayerHunger 상속으로 GameoverTester 유지)
+    public class SamplePlayer : PlayerHunger
     {
-        public event Action OnPlayerOutOfEnergy;
-        public event Action OnPlayerActive;
-        
-        public bool IsOutOfEnergy { get; set; } = false;
+        public bool IsStarved { get; set; } = false;
 
         #region unity events
 
         private void OnEnable()
         {
-            GameManager.Instance.SubscribePlayerActiveEvent( this );
-            GameManager.Instance.SubscribePlayerInactiveEvent( this );
+            GameManager.Instance.SubscribePlayerStarveStateChanged(this);
         }
         
         private void OnDisable()
         {
-            GameManager.Instance.UnsubscribePlayerActiveEvent(this);
-            GameManager.Instance.UnsubscribePlayerInactiveEvent(this);
-        }
-
-        #endregion
-
-        #region public methods
-
-        public void SetPlayerActive()
-        {
-            IsOutOfEnergy = false;
-            OnPlayerActive?.Invoke();
-        }
-        
-        public void SetPlayerOutOfEnergy()
-        {
-            IsOutOfEnergy = true;
-            OnPlayerOutOfEnergy?.Invoke();
+            GameManager.Instance.UnsubscribeStarveStateChanged(this);
         }
 
         #endregion
