@@ -30,7 +30,7 @@ namespace WeGotOne
 
                 InventoryItemDB db = InventoryItemDB.Instance;
 
-                if (other.TryGetComponent<IPickupable>(out var holder))
+                if (other.TryGetComponent<Collectible>(out var holder))
                 {
                     ItemScriptableObject item = holder.ThisItem;
 
