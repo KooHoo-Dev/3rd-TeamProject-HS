@@ -29,9 +29,9 @@ namespace WeGotOne
         private float runawayDistance = 6.0f;
 
         [Header("힘겨루기(Struggle) 물리 설정")]
-        [SerializeField] private float maxStruggleForce = 18f; 
-        [SerializeField] private float struggleFrequency = 12f; 
-        private float struggleTimer;
+        [SerializeField] private float maxStruggleForce = 25f;         // 사방으로 발버둥치는 최대 물리 힘
+        [SerializeField] private float directionChangeInterval = 0.3f;   // 도망치려는 방향을 바꾸는 주기 (초)
+
         
         
         [Header("장애물 감지 설정")]
@@ -48,16 +48,21 @@ namespace WeGotOne
         private float obstacleCheckDistance = 1.0f;
         
         
-        private Vector3 spawnPosition; // 물고기의 시작(귀환) 지점, 
-        private Vector3 patrolPosition; // 물고기의 순찰 포인트, 
-        private float registance; // 저항도
+         
         private Animator anim;
         private Rigidbody2D rb; 
+        
         private Tween patrolTween; // 순찰 트윈
         private Tween runawayTween;  // 도망 트윈
-        private Tween visualShakeTween; // 물고기 저항 트윈
-
+        private Tween driftTween; // 관성 감속용 트윈 (놓쳤을때 적용)
+       
+        private Vector3 spawnPosition; // 물고기의 시작(귀환) 지점, 
+        private Vector3 patrolPosition; // 물고기의 순찰 포인트,
+        private Vector2 struggleDirection;
+        
+        private float directionTimer;
         private float baseScaleX; // 물고기 스케일 절대 값
+        
         private bool goingToPatrol; // 현재 patrolPoint 로 가는 중인지
         private bool isEvading = false; // 장애물 회피 이동 중인지 여부
         
@@ -128,68 +133,22 @@ namespace WeGotOne
                 });
         }
 
-        #region 물고기 저항 움직임 관련 함수
-        
-        /// <summary>
-        /// 1. 힘겨루기가 시작될 때 DOTween을 이용해 부르르 떠는 시각 연출을 켭니다.
-        /// </summary>
-        public void StartCaughtShake()
-        {
-            StopCaughtShake(); // 혹시 돌고 있을지 모를 트윈 방어적 정리 [DoTween]
-
-            // 물고기 오브젝트 자체를 파르르 흔듭니다.
-            visualShakeTween = transform.DOShakePosition(
-                duration: 999f, // 무한히 유지되도록 설정
-                strength: 0.15f, 
-                vibrato: 25, 
-                randomness: 90, 
-                fadeOut: false
-            ).SetUpdate(UpdateType.Fixed); // 물리 사이클과 연동
-        }
-        
-        /// <summary>
-        /// 2. 매 프레임 남은 저항도 비율에 따라 물리적인 당김 힘을 가합니다.
-        /// </summary>
-        public void ApplyStruggleForce(float resistanceRatio)
-        {
-            struggleTimer += Time.deltaTime * (struggleFrequency * resistanceRatio);
-            float wave = Mathf.Sin(struggleTimer);
-            Vector2 struggleDirection = transform.up * wave;
-            float currentForce = maxStruggleForce * resistanceRatio;
-    
-            rb.AddForce(struggleDirection * currentForce, ForceMode2D.Force);
-        }
-
-        /// <summary>
-        /// 3. 매 프레임 남은 저항도 비율에 맞춰 시각 쉐이크의 속도(TimeScale)를 제어합니다.
-        /// </summary>
-        public void UpdateCaughtShake(float resistanceRatio)
-        {
-            if (visualShakeTween != null && visualShakeTween.IsActive())
-            {
-                // 저항도가 떨어질수록 몸을 더 느리게 떱니다.
-                visualShakeTween.timeScale = resistanceRatio;
-            }
-        }
-
-        /// <summary>
-        /// 4. 힘겨루기를 빠져나갈 때 흔들리던 트윈을 즉시 종료하고 원위치로 복구합니다.
-        /// </summary>
-        public void StopCaughtShake()
-        {
-            if (visualShakeTween != null && visualShakeTween.IsActive())
-            {
-                visualShakeTween.Kill(complete: true); // 원래 자리로 예쁘게 복귀 [DoTween]
-                visualShakeTween = null;
-            }
-        }
-
-        #endregion
+       
         
         
         #region 이동 관련 함수 
 
-       
+        /// <summary>
+        /// 물고기가 자연스럽게 대각선으로 도망치거나 발버둥 칠 방향 벡터를 반환합니다. (★중복 제거 및 공유)
+        /// </summary>
+        public Vector2 GetFleeDirection()
+        {
+            // X축은 좌우 랜덤, Y축은 너무 가파르지 않게 -0.3f ~ 0.3f 사이로 제한
+            float fleeDirX = UnityEngine.Random.value > 0.5f ? 1f : -1f;
+            float fleeDirY = UnityEngine.Random.Range(-0.3f, 0.3f); 
+            return new Vector2(fleeDirX, fleeDirY).normalized;
+        }
+
         /// <summary>
         /// 장애물 감지 즉시 현재 경로를 포기하고 반대 방향으로 즉시 복귀시킵니다.
         /// </summary>
@@ -219,22 +178,18 @@ namespace WeGotOne
                 });
         }
         
-        
         /// <summary>
         /// 현재 시작 위치(spawnPosition)를 기준으로 새로운 대각선 순찰 지점을 계산합니다.
         /// </summary>
         private void CalculateNewPatrolRoute()
         {
-            // 1. 좌우(X축) 랜덤 오프셋 결정
             float randomDirectionX = Random.value > 0.5f ? 1f : -1f;
             float offsetX = randomDirectionX * patrolRange; 
 
-            // 2. 상하(Y축) 랜덤 오프셋 결정 (항상 좌우보다 좁게 움직이도록 제한)
             float verticalRange = patrolRange * Random.Range(0.2f, 0.5f);
             float randomDirectionY = Random.value > 0.5f ? 1f : -1f;
             float offsetY = randomDirectionY * verticalRange;
 
-            // 3. 최종 목표 지점 설정
             this.patrolPosition = spawnPosition + new Vector3(offsetX, offsetY, 0f);
         }
         
@@ -243,40 +198,30 @@ namespace WeGotOne
         /// </summary>
         public async Task RunawayMoveAsync(CancellationToken token)
         {
-            // 1. 기존에 진행 중인 모든 순찰 및 회피 트윈 안전하게 정지
             StopMove();
             runawayTween?.Kill();
 
-            // 2. 도망갈 임의의 대각선 방향 벡터 계산 (X축은 양방향 랜덤, Y축은 위아래로 부드럽게 랜덤)
-            float fleeDirX = UnityEngine.Random.value > 0.5f ? 1f : -1f;
-            float fleeDirY = UnityEngine.Random.Range(-0.3f, 0.3f); // 너무 위아래로 수직 상승/하강 하지 않게 보정
-            Vector3 fleeDirection = new Vector3(fleeDirX, fleeDirY, 0f).normalized;
+            // [개선]: 기존 수식 대신 공용 헬퍼 함수를 호출해 일관성 있는 방향을 얻습니다.
+            Vector3 fleeDirection = GetFleeDirection();
 
-            // 3. 현재 위치 기준 최종 도망 목표 좌표 설정
             Vector3 targetPosition = transform.position + fleeDirection * runawayDistance;
-    
-            // 도망치는 진행 방향에 맞춰 물고기 좌우 스프라이트 반전
             ApplyingFacing(fleeDirection.x);
 
-            // 4. 순찰 속도보다 훨씬 빠른 속도로 순간 질주
             float speed = moveSpeed * runawaySpeedMultiplier;
 
-            // 5. 순간적으로 확 치고 나갔다가 서서히 감속하는 OutQuad 이징 트윈 실행
             runawayTween = rb.DOMove(targetPosition, speed)
                 .SetSpeedBased()
                 .SetEase(Ease.OutQuad);
 
             try
             {
-                // 6. 비동기로 도망 트윈이 완벽히 끝날 때까지 렌더링 프레임을 양보하며 대기
                 while (runawayTween != null && runawayTween.IsActive() && runawayTween.IsPlaying() && !token.IsCancellationRequested)
                 {
-                    await Task.Yield(); // 매 프레임 대기하며 트윈 플레이 확인 (GC 최소화 및 호환성 극대화)
+                    await Task.Yield();
                 }
             }
             finally
             {
-                // 예외 상황이나 취소 토큰 작동 시(예: 도망 도중 다른 상태로 전이됨) 안전하게 트윈 정리
                 if (token.IsCancellationRequested)
                 {
                     runawayTween?.Kill();
@@ -285,7 +230,36 @@ namespace WeGotOne
             }
         }
         
-        
+        /// <summary>
+        /// 잡혀있던 반동/도망치던 관성을 그대로 유지한 채 지정된 시간 동안 서서히 감속하여 멈춥니다.
+        /// </summary>
+        /// <param name="duration">감속에 걸리는 시간 (초)</param>
+        public void StartFaintDrift(float duration)
+        {
+            // 1. 기존의 순찰, 도망, 기존 감속 트윈만 골라 안전하게 제거합니다.
+            // (이때 rb.linearVelocity를 0으로 밀지 않아 관성이 보존됩니다!)
+            patrolTween?.Kill();
+            runawayTween?.Kill();
+            driftTween?.Kill();
+
+            // 2. DOTween.To를 활용해 리지드바디의 '현재 물리 속도값'을 시작으로 
+            // 서서히 Vector2.zero(정지) 상태로 이징(Ease)을 주며 감속시킵니다. [DoTween]
+            // Ease.OutCubic 이징을 사용하면 처음엔 빠르게 미끄러지다 마찰력에 의해 부드럽게 서서히 멈추는 연출이 됩니다.
+            driftTween = DOTween.To(
+                () => rb.linearVelocity, 
+                x => rb.linearVelocity = x, 
+                Vector2.zero, 
+                duration
+            ).SetEase(Ease.OutCubic);
+
+            // 3. 빙글빙글 도는 회전 속도 역시 동일한 주기로 서서히 정지시킵니다. [DoTween]
+            DOTween.To(
+                () => rb.angularVelocity,
+                x => rb.angularVelocity = x,
+                0f,
+                duration
+            ).SetEase(Ease.OutCubic);
+        }
         
         public void StopMove()
         {
@@ -294,9 +268,23 @@ namespace WeGotOne
                 patrolTween.Kill();
                 patrolTween = null;
             }
+            if (runawayTween != null)
+            {
+                runawayTween.Kill();
+                runawayTween = null;
+            }
+            if (driftTween != null)
+            {
+                driftTween.Kill();
+                driftTween = null;
+            }
+            
+            // [보완]: 선속도(linear)뿐만 아니라 회전속도(angular)도 완벽하게 0으로 잠급니다.
+            rb.linearVelocity = Vector2.zero; 
+            rb.angularVelocity = 0f; 
         }
 
-        #endregion
+#endregion
 
 
         #region 물고기 방향 및 스프라이트 뒤집기
@@ -338,9 +326,48 @@ namespace WeGotOne
             transform.localScale = scale;
             
         }
-
+        
 
         #endregion
+        
+        #region Caught 상태에서의 발버둥 (ApplyStruggleForce)
+
+        public void InitStruggle()
+        {
+            directionTimer = 0f;
+            // 최초 발버둥 방향 역시 공용 도망 방향 로직을 그대로 사용합니다.
+            struggleDirection = GetFleeDirection();
+        }
+
+        /// <summary>
+        /// 잡혀있는 동안 공용 도망 방향 알고리즘을 사용해 주기적으로 방향을 꺾으며 발버둥칩니다.
+        /// </summary>
+        public void ApplyStruggleForce(float resistanceRatio)
+        {
+            directionTimer += Time.deltaTime;
+
+            if (directionTimer >= directionChangeInterval)
+            {
+                directionTimer = 0f;
+                // [재활용]: 기존에 설계된 검증된 도망 방향 함수를 그대로 호출!
+                struggleDirection = GetFleeDirection();
+            }
+
+            float currentForce = maxStruggleForce * resistanceRatio;
+            rb.AddForce(struggleDirection * currentForce, ForceMode2D.Force);
+
+            // 물리 진행 방향에 따라 머리 방향 자연스럽게 회전
+            if (struggleDirection != Vector2.zero && currentForce > 0.1f)
+            {
+                float targetAngle = Mathf.Atan2(struggleDirection.y, struggleDirection.x) * Mathf.Rad2Deg;
+                rb.MoveRotation(Mathf.LerpAngle(rb.rotation, targetAngle - 90f, Time.deltaTime * 10f));
+            }
+        }
+
+        #endregion
+        
+        
+        
         
         /// <summary>
         /// Raycast 대신 BoxCast를 사용하여 부피가 있는 장애물 감지를 처리합니다.
