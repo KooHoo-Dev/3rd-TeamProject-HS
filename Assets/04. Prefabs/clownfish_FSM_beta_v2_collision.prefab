@@ -33,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 8009205023924444770}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 37.24, y: -14.33, z: 0}
+  m_LocalPosition: {x: 22.04, y: -7.69, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -158,7 +158,7 @@ MonoBehaviour:
   patrolRange: 10
   runawaySpeedMultiplier: 2.5
   runawayDistance: 6
-  maxStruggleForce: 25
+  maxStruggleForce: 15
   directionChangeInterval: 0.3
   obstacleLayer:
     serializedVersion: 2
@@ -345,7 +345,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishCollisionHandler
   terrainLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   minImpactThreshold: 5
 --- !u!1 &8978532485394104224
 GameObject:
