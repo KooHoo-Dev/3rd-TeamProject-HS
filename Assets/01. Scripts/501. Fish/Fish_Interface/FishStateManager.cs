@@ -60,22 +60,22 @@ namespace WeGotOne.Fish_Interface
 
         #region ICatchable 인터페이스 구현 (손 주도 상호작용)
 
-        public void OnGrabbed(HandControllerV2 hand)
+        public void OnGrabbed()
         {
             // [기믹 반영]: 물고기가 물 위에서 기절(Faint)해 있을 때 다시 잡으면,
             // 저항 없이 즉시 탈진(Exhausted) 상태로 파지되게 처리합니다.
             if (currentState is FishFaintState)
             {
-                TransitionTo(new FishExhaustedState(hand));
+                TransitionTo(new FishExhaustedState());
             }
             else
             {
                 // 정상 상태에서 잡으면 힘겨루기(Caught) 시작
-                TransitionTo(new FishCaughtState(hand));
+                TransitionTo(new FishCaughtState());
             }
         }
 
-        public void OnReleased(HandControllerV2 hand)
+        public void OnReleased()
         {
             float resistanceRatio = CurrentResistance / maxResistance;
 

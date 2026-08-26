@@ -6,13 +6,7 @@ namespace WeGotOne.Fish_Interface
 {
     public class FishCaughtState : IFishState
     {
-        private readonly HandControllerV2 grabHand;
         private FishStateManager owner;
-
-        public FishCaughtState(HandControllerV2 hand)
-        {
-            this.grabHand = hand;
-        }
 
         public Task EnterAsync(FishStateManager owner, CancellationToken token)
         {
@@ -39,7 +33,7 @@ namespace WeGotOne.Fish_Interface
             // 3. 탈진 체크 (저항도가 0이 되면 잡힌 채 힘을 잃는 샌드백 상태로 전환)
             if (owner.CurrentResistance <= 0f)
             {
-                owner.ChangeState(new FishExhaustedState(grabHand));
+                owner.ChangeState(new FishExhaustedState());
             }
         }
 

@@ -38,13 +38,11 @@ namespace WeGotOne
 
 #region 유니티 생명주기 함수
         
-        private void OnEnable() => HandRegistry.Register(this);
         
         private void OnDisable()
         {
             // 비활성화 시 작동 중인 타이머 안전하게 정리
             StopGrabTimer();
-            HandRegistry.Unregister(this);
         }
 
         // 트리거에 물체가 들어왔을 때 처리
@@ -94,7 +92,7 @@ namespace WeGotOne
             // 2. 잡은 대상(물고기, 도구 등)에게 직접 잡혔음을 실시간 통보
             if (currentTarget.TryGetComponent<ICatchable>(out var catchable))
             {
-                catchable.OnGrabbed(this);
+                catchable.OnGrabbed();
             }
         }
         
@@ -106,7 +104,7 @@ namespace WeGotOne
             // 1. 잡고 있던 대상에게 놓아주었음을 먼저 통보
             if (grabbedTarget != null && grabbedTarget.TryGetComponent<ICatchable>(out var catchable))
             {
-                catchable.OnReleased(this);
+                catchable.OnReleased();
             }
             
             grabbedTarget = null;
@@ -143,16 +141,4 @@ namespace WeGotOne
 #endregion
     }
 
-#region 활성화된 손 레지스트리 (V2 매핑 완료)
-
-    public static class HandRegistry
-    {
-        private static readonly List<HandControllerV2> activeHands = new();
-
-        public static List<HandControllerV2> ActiveHands => activeHands;
-        public static void Register(HandControllerV2 hand) => activeHands.Add(hand);
-        public static void Unregister(HandControllerV2 hand) => activeHands.Remove(hand);
-    }
-
-#endregion
 }

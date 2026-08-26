@@ -153,9 +153,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5eaf4c0932d54247a149214b6d83545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishMovement
-  spawnPoint: {fileID: 7749633873612573443}
-  patrolPoint: {fileID: 0}
   moveSpeed: 3
+  patrolRange: 10
+  runawaySpeedMultiplier: 2.5
+  runawayDistance: 6
+  maxStruggleForce: 25
+  directionChangeInterval: 0.3
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  obstacleCheckSize: {x: 0.8, y: 0.5}
+  obstacleCheckDistance: 1
 --- !u!50 &3810795173177794994
 Rigidbody2D:
   serializedVersion: 5
@@ -321,6 +329,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Fish_Interface.FishStateManager
   fishMovement: {fileID: 4704755448715920807}
+  maxResistance: 3
 --- !u!1 &6502636008879414745
 GameObject:
   m_ObjectHideFlags: 0

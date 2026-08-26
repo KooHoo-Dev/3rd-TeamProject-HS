@@ -10,13 +10,6 @@ namespace WeGotOne.Fish_Interface
     /// </summary>
     public class FishExhaustedState : IFishState
     {
-        private readonly HandControllerV2 grabHand;
-
-        public FishExhaustedState(HandControllerV2 hand)
-        {
-            this.grabHand = hand;
-        }
-
         public Task EnterAsync(FishStateManager owner, CancellationToken token)
         {
             Debug.Log($"{owner.name} : 완전히 탈진했습니다. 손쉽게 낚아올릴 수 있는 기회입니다!");
