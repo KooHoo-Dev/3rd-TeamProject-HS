@@ -12,7 +12,7 @@ namespace WeGotOne
         [field: SerializeField] public int[] MaxItemCounts { get; set; }
 
         [SerializeField] private Collectible[] itemPrefabs;
-        private GameObjectPool<Collectible>[] itemPools;
+        private PoolingSystem<Collectible>[] itemPools;
 
         /*[field: SerializeField] public float RangeX { get; set; }
         [field: SerializeField] public float RangeY { get; set; }*/
@@ -22,11 +22,11 @@ namespace WeGotOne
 
         private void Start()
         {
-            itemPools = new GameObjectPool<Collectible>[itemPrefabs.Length];
+            itemPools = new PoolingSystem<Collectible>[itemPrefabs.Length];
             
             for (int i = 0; i < itemPrefabs.Length; i++)
             {
-                itemPools[i] = new GameObjectPool<Collectible>(itemPrefabs[i]);
+                itemPools[i] = new PoolingSystem<Collectible>(itemPrefabs[i]);
             }
 
             ItemSpawn();
