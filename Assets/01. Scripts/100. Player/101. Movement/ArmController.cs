@@ -29,12 +29,16 @@ namespace WeGotOne
     public class ArmController : MonoBehaviour
     {
         public Vector2 InputDirection => inputDirection;
+        
         // 기본적으로 사용할 힘
-        [SerializeField] private float defaultForce = 20f;
+        [SerializeField] private float defaultForce;
         
         // 잡은 물체에 따른 추가적인 힘과 제한값
-        [SerializeField] private float forceMultiplierOfMass = 10f;
-        [SerializeField] private float forceLimit = 180f;
+        [SerializeField] private float forceMultiplierOfMass;
+        [SerializeField] private float forceLimit;
+        
+        // 런타임용. 없앨 가능성 높음
+        [SerializeField] public float currentForce;
         
         // 이벤트 구독용
         [SerializeField] private HandController hand;
@@ -104,9 +108,17 @@ namespace WeGotOne
             if (inputDirection == Vector2.zero)
                 return;
 
-            float currentForce = CalculateForce();
-
+            // float currentForce = CalculateForce(); 런타임용으로 밖으로 빼놨음. 빌드할땐 이거 살리고 밑에 죽일꺼
+            currentForce = CalculateForce();
+            
             rigid.AddForce(inputDirection * currentForce);
+
+            // 임시 코드. 공중같이 중력 영향 외 물리력 안받는 상황에서
+            // 팔로 무한 가속 되는거 막는 용도
+            if (rigid.linearVelocity.magnitude > 5f)
+            {
+                rigid.AddForce(-inputDirection * currentForce);
+            }
         }
 
         /*
@@ -122,11 +134,15 @@ namespace WeGotOne
             float result = defaultForce;
             
             // 잡은거 없으면 기본 힘
-            if (!isGrabbing)
+            if (isGrabbing == false)
                 return result;
             
             // 물체가 정적이면 최대힘 처리
             if(grabbedTarget == null)
+                return forceLimit;
+            
+            if(grabbedTarget.bodyType == RigidbodyType2D.Static ||
+               grabbedTarget.bodyType == RigidbodyType2D.Kinematic)
                 return forceLimit;
 
             // 물체 질량 * 배수로 추가힘 부여 (중력이 9.8이라 대충 10으로 곱했음)
@@ -137,5 +153,14 @@ namespace WeGotOne
             // 최대힘 못넘어가게 처리
             return Mathf.Min(result, forceLimit);
         }
+        
+        # region 치트 모드
+
+        public void SetForce(float force)
+        {
+            defaultForce = force;
+        }
+
+        # endregion
     }
 }

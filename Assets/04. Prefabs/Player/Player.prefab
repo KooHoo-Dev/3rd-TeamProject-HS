@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1078827059327087580}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,8 +96,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputController
   leftUpperArm: {fileID: 5449506281188008245}
   rightUpperArm: {fileID: 5493197202351387558}
-  leftForearm: {fileID: 2876422858014341728}
-  rightForearm: {fileID: 5501856885683191667}
+  leftBottomArm: {fileID: 0}
+  rightBottomArm: {fileID: 0}
   body: {fileID: 5237983890837497847}
 --- !u!1 &2300717585779601148
 GameObject:
@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 8540904274771517701}
   m_Layer: 0
   m_Name: RArmBottom
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -278,14 +278,14 @@ HingeJoint2D:
   m_GameObject: {fileID: 2300717585779601148}
   m_Enabled: 1
   serializedVersion: 4
-  m_EnableCollision: 0
+  m_EnableCollision: 1
   m_ConnectedRigidBody: {fileID: 4791570826168978956}
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.70000005, y: 0}
-  m_ConnectedAnchor: {x: 0.49999982, y: 0}
+  m_ConnectedAnchor: {x: 0.5, y: 0}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -352,7 +352,7 @@ GameObject:
   - component: {fileID: 2732578607933853037}
   m_Layer: 0
   m_Name: Triangle
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: 5392492869963053469}
   m_Layer: 0
   m_Name: RHand
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -587,7 +587,7 @@ GameObject:
   - component: {fileID: 5237983890837497847}
   m_Layer: 0
   m_Name: Body
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -716,7 +716,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 10
+  m_Mass: 30
   m_LinearDamping: 0
   m_AngularDamping: 0.1
   m_GravityScale: 1
@@ -746,7 +746,7 @@ MonoBehaviour:
   maxHunger: 100
   currentHunger: 100
   hungerTime: 150
-  hungerDecreaseMultiplier: 1
+  hungerDecreaseMultiplier: 0
 --- !u!1 &5582171428752309127
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,7 +763,7 @@ GameObject:
   - component: {fileID: 5493197202351387558}
   m_Layer: 0
   m_Name: RArmTop
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -924,14 +924,14 @@ HingeJoint2D:
   m_GameObject: {fileID: 5582171428752309127}
   m_Enabled: 1
   serializedVersion: 4
-  m_EnableCollision: 0
+  m_EnableCollision: 1
   m_ConnectedRigidBody: {fileID: 1900128273163877179}
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.70000005, y: 0}
-  m_ConnectedAnchor: {x: 0.49999982, y: -0.12831458}
+  m_ConnectedAnchor: {x: 0.5, y: -0.12831447}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -955,7 +955,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ArmController
   defaultForce: 40
   forceMultiplierOfMass: 20
-  forceLimit: 200
+  forceLimit: 500
   hand: {fileID: 5392492869963053469}
   grabbedTarget: {fileID: 0}
   isGrabbing: 0
@@ -976,7 +976,7 @@ GameObject:
   - component: {fileID: 5689668321785431467}
   m_Layer: 0
   m_Name: LArmBottom
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1138,14 +1138,14 @@ HingeJoint2D:
   m_GameObject: {fileID: 5693522220201820527}
   m_Enabled: 1
   serializedVersion: 4
-  m_EnableCollision: 0
+  m_EnableCollision: 1
   m_ConnectedRigidBody: {fileID: 1130073326204866200}
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.70000005, y: 0}
-  m_ConnectedAnchor: {x: 0.5000001, y: -0.00000014173605}
+  m_ConnectedAnchor: {x: 0.5, y: -0.00000033500658}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -1216,7 +1216,7 @@ GameObject:
   - component: {fileID: 5449506281188008245}
   m_Layer: 0
   m_Name: LArmTop
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1377,14 +1377,14 @@ HingeJoint2D:
   m_GameObject: {fileID: 7787526968644084252}
   m_Enabled: 1
   serializedVersion: 4
-  m_EnableCollision: 0
+  m_EnableCollision: 1
   m_ConnectedRigidBody: {fileID: 1900128273163877179}
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.70000005, y: 0}
-  m_ConnectedAnchor: {x: -0.5000004, y: -0.12831458}
+  m_ConnectedAnchor: {x: -0.5, y: -0.12831438}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -1408,7 +1408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ArmController
   defaultForce: 40
   forceMultiplierOfMass: 20
-  forceLimit: 200
+  forceLimit: 500
   hand: {fileID: 1163081960828888353}
   grabbedTarget: {fileID: 0}
   isGrabbing: 0
@@ -1426,7 +1426,7 @@ GameObject:
   - component: {fileID: 1163081960828888353}
   m_Layer: 0
   m_Name: LHand
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

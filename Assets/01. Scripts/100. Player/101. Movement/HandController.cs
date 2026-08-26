@@ -86,7 +86,7 @@ namespace WeGotOne
         // 그냥 풀어주고 옵저버 알려주기
         public void Release()
         {
-            if (!isGrabbing)
+            if (isGrabbing == false)
                 return;
             
             grabbedTarget = null;
