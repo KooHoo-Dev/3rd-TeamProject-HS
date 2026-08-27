@@ -108,7 +108,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 1000
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -173,12 +173,12 @@ TextureImporter:
       name: Cut_Arms_0
       rect:
         serializedVersion: 2
-        x: 83
-        y: 705
-        width: 302
-        height: 315
+        x: 87
+        y: 712
+        width: 227
+        height: 292
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -192,81 +192,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cut_Arms_1
-      rect:
-        serializedVersion: 2
-        x: 402
-        y: 699
-        width: 247
-        height: 298
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4423f8ca63ab5a330800000000000000
-      internalID: 3721585411077648964
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cut_Arms_2
-      rect:
-        serializedVersion: 2
-        x: 736
-        y: 853
-        width: 67
-        height: 109
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 45ce4586e01885170800000000000000
-      internalID: 8167419823116315732
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cut_Arms_3
-      rect:
-        serializedVersion: 2
-        x: 746
-        y: 943
-        width: 101
-        height: 73
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6498e5c8b15d1cd60800000000000000
-      internalID: 7908836734935140678
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Cut_Arms_4
       rect:
         serializedVersion: 2
-        x: 758
-        y: 375
-        width: 411
-        height: 628
+        x: 891
+        y: 702
+        width: 225
+        height: 301
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -280,81 +214,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cut_Arms_5
-      rect:
-        serializedVersion: 2
-        x: 760
-        y: 949
-        width: 15
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 674117c0821684070800000000000000
-      internalID: 8090823555206419574
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cut_Arms_6
-      rect:
-        serializedVersion: 2
-        x: 1182
-        y: 711
-        width: 271
-        height: 303
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e20c79ef3c55dad70800000000000000
-      internalID: 9055988725990277166
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cut_Arms_7
-      rect:
-        serializedVersion: 2
-        x: 1204
-        y: 817
-        width: 11
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9c64d1811ab25feb0800000000000000
-      internalID: -4686791866314832183
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Cut_Arms_8
       rect:
         serializedVersion: 2
-        x: 29
-        y: 265
-        width: 314
-        height: 225
+        x: 33
+        y: 270
+        width: 178
+        height: 216
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -371,12 +239,12 @@ TextureImporter:
       name: Cut_Arms_9
       rect:
         serializedVersion: 2
-        x: 81
-        y: 481
-        width: 284
-        height: 216
+        x: 86
+        y: 487
+        width: 242
+        height: 207
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -390,59 +258,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cut_Arms_10
-      rect:
-        serializedVersion: 2
-        x: 425
-        y: 481
-        width: 278
-        height: 191
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 61f8f814110962d20800000000000000
-      internalID: 3253446184610533142
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cut_Arms_11
-      rect:
-        serializedVersion: 2
-        x: 855
-        y: 479
-        width: 237
-        height: 201
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 002797b300c0c94b0800000000000000
-      internalID: -5432453855378312704
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Cut_Arms_12
       rect:
         serializedVersion: 2
-        x: 1192
-        y: 481
-        width: 261
-        height: 220
+        x: 1216
+        y: 488
+        width: 233
+        height: 209
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -459,12 +283,12 @@ TextureImporter:
       name: Cut_Arms_13
       rect:
         serializedVersion: 2
-        x: 1219
-        y: 255
-        width: 286
-        height: 265
+        x: 1317
+        y: 266
+        width: 183
+        height: 216
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -478,59 +302,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cut_Arms_14
-      rect:
-        serializedVersion: 2
-        x: 400
-        y: 251
-        width: 278
-        height: 221
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: bf9fc9fe38586f710800000000000000
-      internalID: 1726714308850416123
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cut_Arms_15
-      rect:
-        serializedVersion: 2
-        x: 746
-        y: 247
-        width: 389
-        height: 218
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: df553222b08376670800000000000000
-      internalID: 8531849639545230845
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Cut_Arms_16
       rect:
         serializedVersion: 2
-        x: 58
-        y: 45
-        width: 250
-        height: 194
+        x: 63
+        y: 48
+        width: 150
+        height: 186
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -544,59 +324,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cut_Arms_17
-      rect:
-        serializedVersion: 2
-        x: 420
-        y: 46
-        width: 258
-        height: 183
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: be887e1d4400953b0800000000000000
-      internalID: -5523383172413814549
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cut_Arms_18
-      rect:
-        serializedVersion: 2
-        x: 760
-        y: 17
-        width: 347
-        height: 211
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: cf0a4641ee770a750800000000000000
-      internalID: 6314178542001496316
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Cut_Arms_19
       rect:
         serializedVersion: 2
-        x: 1208
-        y: 44
-        width: 265
-        height: 185
+        x: 1317
+        y: 48
+        width: 152
+        height: 177
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -613,7 +349,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 21cd01afab82dfe48a9ccb54ade5af1f
     internalID: 0
     vertices: []
     indices: 

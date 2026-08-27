@@ -28,6 +28,14 @@ namespace WeGotOne
         // 팔(ArmController)이 무게 계산용 추가 힘을 적용할 수 있도록 등록하는 이벤트
         public event Action<HandControllerV2, Rigidbody2D> Grabbed; 
         public event Action<HandControllerV2> Released; 
+        
+        // 잡았을때 변경해줄 스프라이트. 애니메이션 아니니까 스프라이트 갈아끼울게요.
+        [SerializeField] private Sprite grabSprite;
+        [SerializeField] private Sprite handSprite;
+        private SpriteRenderer spriteRenderer;
+        
+        // 본인 신체 못잡게 하기 위한 용도
+        private PlayerRoot owner;
 
         [Header("잡기 타이머 설정")]
         [SerializeField] 
@@ -37,9 +45,18 @@ namespace WeGotOne
         private Coroutine grabTimerCoroutine;
 
 #region 유니티 생명주기 함수
-        
-        
-        private void OnDisable()
+
+        private void Awake()
+        {
+            // 신체 가장 최상단에 PlayerRoot를 달아서
+            // 해당 컴포넌트가 동일하면 동일 신체로 보고 잡지 않을 예정
+            // 신체 부위 추가되도 동일하게 본인 신체는 안잡힘
+            owner = GetComponentInParent<PlayerRoot>();
+            
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+private void OnDisable()
         {
             // 비활성화 시 작동 중인 타이머 안전하게 정리
             StopGrabTimer();
@@ -48,6 +65,12 @@ namespace WeGotOne
         // 트리거에 물체가 들어왔을 때 처리
         private void OnTriggerEnter2D(Collider2D other)
         {
+            PlayerRoot targetOwner = other.GetComponentInParent<PlayerRoot>();
+
+            // 자기 자신의 신체라면 잡기 대상에서 제외
+            if (targetOwner == owner)
+                return;
+            
             currentTarget = other;
 
             // 닿은 물체가 낚을 수 있는 대상(ICatchable)인 경우, 손이 스스로 타이머를 작동시킵니다.
@@ -74,6 +97,8 @@ namespace WeGotOne
         
         public void Grab()
         {
+            spriteRenderer.sprite = grabSprite;
+            
             if (isGrabbing)
                 return;
 
@@ -98,7 +123,9 @@ namespace WeGotOne
         
         public void Release()
         {
-            if (!isGrabbing)
+            spriteRenderer.sprite = handSprite;
+            
+            if (isGrabbing == false)
                 return;
 
             // 1. 잡고 있던 대상에게 놓아주었음을 먼저 통보
