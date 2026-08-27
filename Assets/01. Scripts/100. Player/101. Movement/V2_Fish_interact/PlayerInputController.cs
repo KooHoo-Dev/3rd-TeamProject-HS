@@ -25,8 +25,10 @@ namespace WeGotOne
         [Header("Arms")]
         [SerializeField] private ArmController leftUpperArm;
         [SerializeField] private ArmController rightUpperArm;
-        [SerializeField] private BottomArmController leftForearm;
-        [SerializeField] private BottomArmController rightForearm;
+        [SerializeField] private BottomArmController leftBottomArm;
+        [SerializeField] private BottomArmController rightBottomArm;
+        
+        [SerializeField] private PlayerHunger body;
 
         private void Update()
         {
@@ -36,6 +38,12 @@ namespace WeGotOne
 
         private void HandleMovement()
         {
+            if (body.CanMove == false)
+            {
+                ClearArmDirections();
+                return; 
+            }
+            
             Vector2 moveInput = SimpleInput.GetMoveAxisRaw();
 
             if (moveInput == Vector2.zero)
@@ -51,22 +59,22 @@ namespace WeGotOne
         {
             if (SimpleInput.GetKey(Key.LeftShift))
             {
-                leftForearm.Grab();
+                leftBottomArm.Grab();
             }
 
             if (SimpleInput.GetKeyUp(Key.LeftShift))
             {
-                leftForearm.Release();
+                leftBottomArm.Release();
             }
 
             if (SimpleInput.GetKey(Key.RightShift))
             {
-                rightForearm.Grab();
+                rightBottomArm.Grab();
             }
 
             if (SimpleInput.GetKeyUp(Key.RightShift))
             {
-                rightForearm.Release();
+                rightBottomArm.Release();
             }
         }
 
@@ -74,16 +82,16 @@ namespace WeGotOne
         {
             leftUpperArm.SetDirection(direction);
             rightUpperArm.SetDirection(direction);
-            leftForearm.SetDirection(direction);
-            rightForearm.SetDirection(direction);
+            leftBottomArm.SetDirection(direction);
+            rightBottomArm.SetDirection(direction);
         }
 
         private void ClearArmDirections()
         {
             leftUpperArm.ClearDirection();
             rightUpperArm.ClearDirection();
-            leftForearm.ClearDirection();
-            rightForearm.ClearDirection();
+            leftBottomArm.ClearDirection();
+            rightBottomArm.ClearDirection();
         }
     }
 }

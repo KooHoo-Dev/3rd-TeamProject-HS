@@ -4,10 +4,10 @@ using UnityEngine.InputSystem;
 namespace WeGotOne
 {
     // 다리
-    public class WoodBridge : MonoBehaviour
+    public class Bridge : MonoBehaviour
     {
         private Inventory targetInventory;
-        public bool isCanBuild = false;
+        private bool isCanBuild = false;
 
         private void Awake()
         {
@@ -30,7 +30,7 @@ namespace WeGotOne
 
                 InventoryItemDB db = InventoryItemDB.Instance;
 
-                if (other.TryGetComponent<IPickupable>(out var holder))
+                if (other.TryGetComponent<Collectible>(out var holder))
                 {
                     ItemScriptableObject item = holder.ThisItem;
 
