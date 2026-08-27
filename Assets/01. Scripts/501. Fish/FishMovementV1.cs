@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 namespace WeGotOne
 {
-    public class FishMovement : MonoBehaviour
+    public class FishMovementV1 : MonoBehaviour
     {
         
         [SerializeField]

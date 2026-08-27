@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace WeGotOne.Fish_Interface
 {   
-    [RequireComponent(typeof(Rigidbody2D))]
+    
     public class FishStateManager : MonoBehaviour, ICatchable
     {
         [SerializeField] private FishMovement fishMovement;
@@ -12,18 +12,29 @@ namespace WeGotOne.Fish_Interface
         
         [Header("저항도(Resistance) 설정")]
         [SerializeField] private float maxResistance = 20f;
-        public float MaxResistance => maxResistance;
-
+        
+        // 물 탈출 피드백 함수 예외값을 위한 bool값.
+        public bool IsGrabbed => currentState is FishCaughtState || currentState is FishExhaustedState;
+        public float MaxResistance => maxResistance; // 저항도
         public float CurrentResistance { get; private set; }
-
+         
+        
+        private WaterLayerAlert waterLayerAlert; // 물 탈출 알리미
         private IFishState currentState;
-        private CancellationTokenSource stateCts;
-        private Rigidbody2D rb;
+        private CancellationTokenSource stateCts; 
+       
 
         private void Awake()
         {
-            rb = GetComponent<Rigidbody2D>();
+            
             fishMovement = GetComponent<FishMovement>();
+            
+            waterLayerAlert = GetComponent<WaterLayerAlert>();
+            if (waterLayerAlert != null)
+            {
+                waterLayerAlert.OnEnteredWater += HandleEnteredWater;
+                waterLayerAlert.OnExitedWater += HandleExitedWater;
+            }
         }
 
         private void Start()
@@ -42,7 +53,36 @@ namespace WeGotOne.Fish_Interface
             stateCts?.Cancel();
             stateCts?.Dispose();
             stateCts = null;
+            
+            if (waterLayerAlert != null)
+            {
+                waterLayerAlert.OnEnteredWater -= HandleEnteredWater;
+                waterLayerAlert.OnExitedWater -= HandleExitedWater;
+            }
         }
+        
+        
+        
+        // 물 출입 시 실행할 예외 판단 및 위임 함수
+        private void HandleExitedWater()
+        {
+            // 플레이어 손에 안 잡혀 있을 때만 물리 처리 위임
+            if (!IsGrabbed && fishMovement != null)
+            {
+                fishMovement.SetAirPhysics();
+            }
+        }
+
+        private void HandleEnteredWater()
+        {
+            // 플레이어 손에 안 잡혀 있을 때만 물리 복구 위임
+            if (!IsGrabbed && fishMovement != null)
+            {
+                fishMovement.SetWaterPhysics();
+            }
+        }
+
+        
 
         #region 저항도 제어 함수
 
