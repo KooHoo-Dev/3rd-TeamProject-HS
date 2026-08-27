@@ -28,6 +28,11 @@ namespace WeGotOne
         // 팔(ArmController)이 무게 계산용 추가 힘을 적용할 수 있도록 등록하는 이벤트
         public event Action<HandControllerV2, Rigidbody2D> Grabbed; 
         public event Action<HandControllerV2> Released; 
+        
+        // 잡았을때 변경해줄 스프라이트. 애니메이션 아니니까 스프라이트 갈아끼울게요.
+        [SerializeField] private Sprite grabSprite;
+        [SerializeField] private Sprite handSprite;
+        private SpriteRenderer spriteRenderer;
 
         [Header("잡기 타이머 설정")]
         [SerializeField] 
@@ -37,9 +42,13 @@ namespace WeGotOne
         private Coroutine grabTimerCoroutine;
 
 #region 유니티 생명주기 함수
-        
-        
-        private void OnDisable()
+
+        private void Awake()
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+private void OnDisable()
         {
             // 비활성화 시 작동 중인 타이머 안전하게 정리
             StopGrabTimer();
@@ -74,6 +83,8 @@ namespace WeGotOne
         
         public void Grab()
         {
+            spriteRenderer.sprite = grabSprite;
+            
             if (isGrabbing)
                 return;
 
@@ -98,7 +109,9 @@ namespace WeGotOne
         
         public void Release()
         {
-            if (!isGrabbing)
+            spriteRenderer.sprite = handSprite;
+            
+            if (isGrabbing == false)
                 return;
 
             // 1. 잡고 있던 대상에게 놓아주었음을 먼저 통보
