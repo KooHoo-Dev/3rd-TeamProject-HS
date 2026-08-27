@@ -34,6 +34,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6960700179445949215}
+  - {fileID: 8907592052848579692}
+  - {fileID: 7817434669196092541}
+  - {fileID: 3265396044452497459}
+  - {fileID: 2192650440136616256}
   m_Father: {fileID: 2022661519328680211}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8196749526547502175
@@ -289,13 +293,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2259200407878810568}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.42261827, w: 0.9063079}
-  m_LocalPosition: {x: 1.7, y: -0.5, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.42261827, w: 0.9063079}
+  m_LocalPosition: {x: 1.7, y: -0.2505, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6203638828096711217}
-  m_Father: {fileID: 2022661519328680211}
+  m_Father: {fileID: 978448274674405883}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 50}
 --- !u!50 &936909916181868041
 Rigidbody2D:
@@ -546,13 +550,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3581248726266572533}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.9063079, w: 0.42261827}
-  m_LocalPosition: {x: -1.7, y: -0.51, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.9063079, w: 0.42261827}
+  m_LocalPosition: {x: -1.7, y: -0.26049998, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8306037357508745040}
-  m_Father: {fileID: 2022661519328680211}
+  m_Father: {fileID: 978448274674405883}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 130}
 --- !u!50 &6943477737858137358
 Rigidbody2D:
@@ -656,7 +660,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.09166014, y: -0.08072175}
-  m_ConnectedAnchor: {x: 0.055770054, y: 0.100164466}
+  m_ConnectedAnchor: {x: 0.05577009, y: 0.10016452}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -853,12 +857,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4191586830827755493}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.9063079, w: 0.42261827}
-  m_LocalPosition: {x: -1, y: -0.5, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.9063079, w: 0.42261827}
+  m_LocalPosition: {x: -1, y: -0.2505, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 2022661519328680211}
+  m_Father: {fileID: 978448274674405883}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 130}
 --- !u!50 &3950558180589802555
 Rigidbody2D:
@@ -981,7 +985,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.06368009, y: -0.1363558}
-  m_ConnectedAnchor: {x: -0.5638376, y: -0.13390183}
+  m_ConnectedAnchor: {x: -0.5638373, y: -0.13390183}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -1225,10 +1229,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 978448274674405883}
-  - {fileID: 8907592052848579692}
-  - {fileID: 7817434669196092541}
-  - {fileID: 3265396044452497459}
-  - {fileID: 2192650440136616256}
   - {fileID: 4375611721416806172}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1273,12 +1273,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7027879218981472927}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.42261827, w: 0.9063079}
-  m_LocalPosition: {x: 1, y: -0.5, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.42261827, w: 0.9063079}
+  m_LocalPosition: {x: 1, y: -0.2505, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 2022661519328680211}
+  m_Father: {fileID: 978448274674405883}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 50}
 --- !u!50 &3701769332301880862
 Rigidbody2D:
@@ -1401,7 +1401,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.045487177, y: 0.12885225}
-  m_ConnectedAnchor: {x: 0.6161646, y: -0.10656166}
+  m_ConnectedAnchor: {x: 0.61616445, y: -0.10656166}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
