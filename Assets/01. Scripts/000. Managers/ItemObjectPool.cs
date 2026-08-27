@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.iOS;
@@ -36,8 +37,7 @@ namespace WeGotOne
 
         private void Update()
         {
-            if (SimpleInput.GetKeyDown(Key.Digit1))
-                ItemSpawn();
+            
         }
 
         public void ItemSpawn()
@@ -80,6 +80,11 @@ namespace WeGotOne
                     item.transform.position = itemTransforms[i].position;
                 }
             }
+        }
+
+        IEnumerator ItemSpawnRoutine()
+        {
+            yield return WaitForSeconds()
         }
 
         /*private Vector3 RandomTransform()
