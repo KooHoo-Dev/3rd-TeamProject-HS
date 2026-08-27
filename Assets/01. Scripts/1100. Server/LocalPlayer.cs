@@ -15,6 +15,9 @@ namespace HelloServer
         [SerializeField] private float speed = 5f;
 
         public bool CanMove { get; set; } = true;
+        
+        [Header("입력값")]
+        public Keyboard Keyboard { get; private set; }
 
         public void Setup(User user, Color color)
         {
@@ -26,10 +29,10 @@ namespace HelloServer
         {
             if (CanMove == false) return;
 
-            Keyboard keyboard = Keyboard.current;
+            Keyboard = Keyboard.current;
 
-            float x = (keyboard.rightArrowKey.isPressed ? 1 : 0) - (keyboard.leftArrowKey.isPressed ? 1 : 0);
-            float y = (keyboard.upArrowKey.isPressed ? 1 : 0) - (keyboard.downArrowKey.isPressed ? 1 : 0);
+            float x = (Keyboard.rightArrowKey.isPressed ? 1 : 0) - (Keyboard.leftArrowKey.isPressed ? 1 : 0);
+            float y = (Keyboard.upArrowKey.isPressed ? 1 : 0) - (Keyboard.downArrowKey.isPressed ? 1 : 0);
 
             transform.Translate(new Vector3(x, y) * (speed * Time.deltaTime));
         }

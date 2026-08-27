@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
+using UnityEngine.InputSystem;
 
 namespace HelloServer
 {
@@ -199,12 +200,32 @@ namespace HelloServer
 
         private void OnSnapshot(SnapshotMessage message)
         {
-            throw new NotImplementedException();
+            if (Me.IsHost)
+            {
+                Debug.LogWarning("[방] 호스트가 스냅샷을 받았다. 서버 코드 문제");
+                return;
+            }
+            Debug.Log($"[방] 스냅샷을 받았다. {message.testData}");
         }
 
         private void OnGuestInputGroup(GuestInputGroupMessage message)
         {
-            throw new NotImplementedException();
+            if (Me.IsHost == false)
+            {
+                Debug.LogWarning("[방] 게스트가 게스트 입력 모음을 받았다. 서버 코드 문제");
+                return;
+            }
+
+            List<GuestInputMessage> inputs = message.Inputs;
+            for (int i = 0; i < inputs.Count; i++)
+            {
+                GuestInputMessage input = inputs[i];
+                if (input == null)
+                {
+                    continue;
+                }
+                Debug.Log($"[방] ({i + 1}번째) 게스트 입력 Id - {input.Id}, X - {input.X}, Y - {input.Y}, IsLeftShiftHold - {input.IsLeftShiftHold}, IsRightShiftHold - {input.IsRightShiftHold}");
+            }
         }
 
         private void OnWelcome(WelcomeMessage message)
@@ -216,7 +237,7 @@ namespace HelloServer
 
             foreach (User user in message.Users) Spawn(user);
 
-            Debug.Log($"[방] {RoomCode} 에 들어왔다. 내 번호는 {Me.Id}, 이미 {message.Users.Length}명 있다");
+            Debug.Log($"[방] {RoomCode} 에 들어왔다. 내 번호는 {Me.Id}, 역할은 {(Me.IsHost ? "Host" : "Guest")}, 이미 {message.Users.Length}명 있다");
         }
 
         private void OnJoin(JoinMessage message)
@@ -287,8 +308,32 @@ namespace HelloServer
                 if (Me == null) continue;
 
                 Vector2 position = localPlayer.transform.position;
+                Keyboard keyboard = localPlayer.Keyboard;
 
-                await SendAsync(new MoveMessage { Id = Me.Id, X = position.x, Y = position.y });
+                await SendSnapshotOrInputMessages(position, keyboard);
+            }
+        }
+
+        private async UniTask SendSnapshotOrInputMessages(Vector2 position, Keyboard keyboard)
+        {
+            if (Me.IsHost)
+            {
+                await SendAsync(new SnapshotMessage()
+                {
+                    testData = "I am Host"
+                });
+            }
+            else
+            {
+                // localplayer 쪽에서 관리 ㄱㄱ
+                await SendAsync(new GuestInputMessage
+                {
+                    Id = Me.Id, 
+                    X = position.x, 
+                    Y = position.y,
+                    IsLeftShiftHold = keyboard.leftShiftKey.isPressed,
+                    IsRightShiftHold = keyboard.rightShiftKey.isPressed
+                });
             }
         }
 
