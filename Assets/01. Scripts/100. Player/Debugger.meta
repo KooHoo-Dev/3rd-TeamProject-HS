@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/01. Scripts/100. Player/Debugger.meta
 guid: a6285c5359305fe4badf65c4dd638aee
+========
+guid: 0a7d408c64c489648a539e1ea4b3c5fa
+>>>>>>>> feature/S11-1-player-info-relay:Assets/01. Scripts/1100. Server.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
