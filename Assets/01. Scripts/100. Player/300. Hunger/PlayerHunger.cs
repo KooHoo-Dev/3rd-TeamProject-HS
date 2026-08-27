@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace WeGotOne
 {
@@ -9,11 +10,13 @@ namespace WeGotOne
         [SerializeField] private float maxHunger = 100f;
         [SerializeField] private float currentHunger = 100f;
         
-        [Header("제한시간 : 추후 낮밤 시간 합으로 변경 가능성 잇음")]
+        [Header("제한시간")]
         [SerializeField] private float hungerTime = 150f;
         
         [Header("허기 감소 배율 : 혹시 몰라서 확장해둠")]
         [SerializeField] private float hungerDecreaseMultiplier = 1f;
+        
+        [SerializeField] private Image hungerGauge;
         
         // 플레이어 무력화,활성화시 게임 매니저에게 알려주는 델리게이트
         public event Action<bool> OnPlayerStarveStateChanged;
@@ -58,6 +61,8 @@ namespace WeGotOne
             float decreaseAmount = baseDecreasePerSecond * hungerDecreaseMultiplier * Time.deltaTime;
 
             DecreaseHunger(decreaseAmount);
+            
+            UpdateHunger();
         }
         
         // 나중에 이벤트가 불러올 함수
@@ -81,6 +86,8 @@ namespace WeGotOne
                 // 게임매니저에 통지
                 NotifyPlayerStarveStateChanged( false);
             }
+
+            UpdateHunger();
         }
 
         /// <summary>
@@ -98,7 +105,12 @@ namespace WeGotOne
                 NotifyPlayerStarveStateChanged( true);
             }
         }
-        
+
+        private void UpdateHunger()
+        {
+            hungerGauge.fillAmount = currentHunger / maxHunger;
+        }
+
         public void NotifyPlayerStarveStateChanged(bool isStarved)
         {
             OnPlayerStarveStateChanged?.Invoke(isStarved);
