@@ -175,6 +175,8 @@ namespace HelloServer
                 case "leave": OnLeave(JsonConvert.DeserializeObject<LeaveMessage>(json)); break;
                 case "state": OnState(JsonConvert.DeserializeObject<StateMessage>(json)); break;
                 case "chat": OnChat(JsonConvert.DeserializeObject<ChatMessage>(json)); break;
+                case "inputGroup": OnGuestInputGroup(JsonConvert.DeserializeObject<GuestInputGroupMessage>(json)); break;
+                case "snapshot": OnSnapshot(JsonConvert.DeserializeObject<SnapshotMessage>(json)); break;
                 default: Debug.Log($"[방] 등록되지 않은 종류(type) : {type}"); break;
             }
             
@@ -193,6 +195,16 @@ namespace HelloServer
             //     // 모르는 종류는 흘린다. 서버가 먼저 새 소식을 붙여도 여기서 죽지 않게.
             //     default: Debug.Log($"[방] 등록되지 않은 종류(type) : {type}"); break;
             // }
+        }
+
+        private void OnSnapshot(SnapshotMessage message)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnGuestInputGroup(GuestInputGroupMessage message)
+        {
+            throw new NotImplementedException();
         }
 
         private void OnWelcome(WelcomeMessage message)
