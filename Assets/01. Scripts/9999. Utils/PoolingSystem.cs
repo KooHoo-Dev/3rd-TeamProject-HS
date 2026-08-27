@@ -37,10 +37,12 @@ namespace WeGotOne
                         onGet(objectPool[i]);
                         return objectPool[i];
                     }
-                }   
+                }
+
+                return null;
             }
 
-            T newObject = Object.Instantiate(original, parent, true);
+            T newObject = Object.Instantiate(original);
         
             objectPool.Add(newObject);
             newObject.gameObject.SetActive(true);
