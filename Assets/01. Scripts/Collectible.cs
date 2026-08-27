@@ -7,7 +7,7 @@ namespace WeGotOne
     public abstract class Collectible : MonoBehaviour
     {
         [field: SerializeField] public ItemScriptableObject ThisItem { get; private set; }
-        protected GameObjectPool<Collectible> myPool;
+        protected PoolingSystem<Collectible> myPool;
 
         private void Update()
         {
@@ -15,15 +15,16 @@ namespace WeGotOne
                 OnPickup();
         }
 
-        public virtual void Init(GameObjectPool<Collectible> pool, Vector3 randomTransform)
+        public virtual void Init(PoolingSystem<Collectible> pool, Transform parent)
         {
             myPool = pool;
-            transform.position = randomTransform;
+            transform.SetParent(parent);
+            transform.position = parent.position;
         }
 
         public virtual void OnPickup()
         {
-            myPool.Release(this);
+            gameObject.SetActive(false);
         }
     }
 }

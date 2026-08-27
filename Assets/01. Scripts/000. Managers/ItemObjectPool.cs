@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.iOS;
@@ -9,70 +10,75 @@ namespace WeGotOne
 {
     public class ItemObjectPool : MonoBehaviour
     {
-        [field: SerializeField] public int[] MaxItemCounts { get; set; }
+        [field: SerializeField] public int PlankCount { get; set; }
 
         [SerializeField] private Collectible[] itemPrefabs;
-        private GameObjectPool<Collectible>[] itemPools;
+        private PoolingSystem<Collectible>[] itemPools;
 
         /*[field: SerializeField] public float RangeX { get; set; }
         [field: SerializeField] public float RangeY { get; set; }*/
 
-        [SerializeField] private Transform[] plankTransforms;
-        [SerializeField] private Transform[] fishTransforms;
+        [SerializeField] private Transform[] itemTransforms;
+
+        private int poolIndex;
 
         private void Start()
         {
-            itemPools = new GameObjectPool<Collectible>[itemPrefabs.Length];
-            
+            itemPools = new PoolingSystem<Collectible>[itemPrefabs.Length];
+            PlankCount = BridgeManager.Instance.BridgeObjects.Length;
+
             for (int i = 0; i < itemPrefabs.Length; i++)
             {
-                itemPools[i] = new GameObjectPool<Collectible>(itemPrefabs[i]);
+                itemPools[i] = new PoolingSystem<Collectible>(itemPrefabs[i]);
             }
-
-            ItemSpawn();
         }
 
         private void Update()
         {
-            if(SimpleInput.GetKeyDown(Key.Digit1))
+            if (DayLoop.Instance.CurrentDayType == DayLoop.DayType.Day)
+            {
                 ItemSpawn();
+            }
         }
 
         public void ItemSpawn()
         {
-            int plankIndex = 0;
-            int fishIndex = 0;
+            poolIndex = 0;
             
-            for (int i = 0; i < itemPrefabs.Length; i++)
+            for (int i = 0; i < itemTransforms.Length; i++)
             {
-                ItemType currentType = itemPrefabs[i].ThisItem.ItemType;
+                bool isExist = itemTransforms[i].childCount > 0;
 
-                for (int j = 0; j < MaxItemCounts[i]; j++)
+                if (poolIndex < PlankCount && isExist == false)
                 {
-                    if (currentType == ItemType.Plank)
+                    Collectible collectible = Instantiate(itemPrefabs[0], itemTransforms[poolIndex]);
+                    collectible.transform.position = itemTransforms[poolIndex].position;
+                    poolIndex++;
+                    Debug.Log(poolIndex);   
+                }
+                else if (poolIndex >= PlankCount && isExist == false)
+                {
+                    int rand = Random.Range(1, itemPrefabs.Length);
+                    Collectible collectible = Instantiate(itemPrefabs[rand], itemTransforms[poolIndex]);
+                    collectible.transform.position = itemTransforms[poolIndex].position;
+                    poolIndex++;
+                    Debug.Log(poolIndex);
+                    continue;
+                }
+
+                GameObject item = itemTransforms[i].GetChild(0).gameObject;
+                
+                if (item.activeSelf == false)
+                {
+                    Plank plank = item.GetComponent<Plank>();
+                    
+                    if (plank && plank.IsPickUp)
                     {
-                        if (plankIndex < plankTransforms.Length)
-                        {
-                            Collectible item = itemPools[i].Get();
-                            Plank plank = item.GetComponent<Plank>();
-                            
-                            if (plank != null && plank.IsPickUp)
-                            {
-                                itemPools[i].Release(item); 
-                                continue;
-                            }
-                            
-                            item.Init(itemPools[i], plankTransforms[plankIndex++].position);
-                        }
+                        continue;
                     }
-                    else if (currentType == ItemType.Fish)
-                    {
-                        if (fishIndex < fishTransforms.Length)
-                        {
-                            Collectible item = itemPools[i].Get();
-                            item.Init(itemPools[i], fishTransforms[fishIndex++].position);
-                        }
-                    }
+                    
+                    item.SetActive(true);
+                    item.transform.position = itemTransforms[i].position;
                 }
             }
         }

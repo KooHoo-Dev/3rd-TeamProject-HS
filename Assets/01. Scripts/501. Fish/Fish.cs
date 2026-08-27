@@ -4,8 +4,5 @@ using UnityEngine.InputSystem;
 
 namespace WeGotOne
 {
-    public class Fish : Collectible
-    {
-        
-    }
+    public class Fish : Collectible { }
 }
