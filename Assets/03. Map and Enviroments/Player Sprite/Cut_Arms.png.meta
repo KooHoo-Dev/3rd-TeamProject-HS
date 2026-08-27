@@ -1,0 +1,650 @@
+fileFormatVersion: 2
+guid: 7547d6a01073e244bbd3854a6bc6db05
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3661329560484363007
+    second: Cut_Arms_0
+  - first:
+      213: 3721585411077648964
+    second: Cut_Arms_1
+  - first:
+      213: 8167419823116315732
+    second: Cut_Arms_2
+  - first:
+      213: 7908836734935140678
+    second: Cut_Arms_3
+  - first:
+      213: 7765417948551996241
+    second: Cut_Arms_4
+  - first:
+      213: 8090823555206419574
+    second: Cut_Arms_5
+  - first:
+      213: 9055988725990277166
+    second: Cut_Arms_6
+  - first:
+      213: -4686791866314832183
+    second: Cut_Arms_7
+  - first:
+      213: 1911668387058735738
+    second: Cut_Arms_8
+  - first:
+      213: -6791145058504655619
+    second: Cut_Arms_9
+  - first:
+      213: 3253446184610533142
+    second: Cut_Arms_10
+  - first:
+      213: -5432453855378312704
+    second: Cut_Arms_11
+  - first:
+      213: 3044164218824775020
+    second: Cut_Arms_12
+  - first:
+      213: 6641281080938791097
+    second: Cut_Arms_13
+  - first:
+      213: 1726714308850416123
+    second: Cut_Arms_14
+  - first:
+      213: 8531849639545230845
+    second: Cut_Arms_15
+  - first:
+      213: -1292544488347810331
+    second: Cut_Arms_16
+  - first:
+      213: -5523383172413814549
+    second: Cut_Arms_17
+  - first:
+      213: 6314178542001496316
+    second: Cut_Arms_18
+  - first:
+      213: 3108339784984931305
+    second: Cut_Arms_19
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Cut_Arms_0
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 705
+        width: 302
+        height: 315
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10541bdc928503dc0800000000000000
+      internalID: -3661329560484363007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_1
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 699
+        width: 247
+        height: 298
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4423f8ca63ab5a330800000000000000
+      internalID: 3721585411077648964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_2
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 853
+        width: 67
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45ce4586e01885170800000000000000
+      internalID: 8167419823116315732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_3
+      rect:
+        serializedVersion: 2
+        x: 746
+        y: 943
+        width: 101
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6498e5c8b15d1cd60800000000000000
+      internalID: 7908836734935140678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_4
+      rect:
+        serializedVersion: 2
+        x: 758
+        y: 375
+        width: 411
+        height: 628
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15362e33b7e44cb60800000000000000
+      internalID: 7765417948551996241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_5
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 949
+        width: 15
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 674117c0821684070800000000000000
+      internalID: 8090823555206419574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_6
+      rect:
+        serializedVersion: 2
+        x: 1182
+        y: 711
+        width: 271
+        height: 303
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e20c79ef3c55dad70800000000000000
+      internalID: 9055988725990277166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_7
+      rect:
+        serializedVersion: 2
+        x: 1204
+        y: 817
+        width: 11
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c64d1811ab25feb0800000000000000
+      internalID: -4686791866314832183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_8
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 265
+        width: 314
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7adaf2054c978a10800000000000000
+      internalID: 1911668387058735738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_9
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 481
+        width: 284
+        height: 216
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfc3ea1ec8101c1a0800000000000000
+      internalID: -6791145058504655619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_10
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 481
+        width: 278
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61f8f814110962d20800000000000000
+      internalID: 3253446184610533142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_11
+      rect:
+        serializedVersion: 2
+        x: 855
+        y: 479
+        width: 237
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 002797b300c0c94b0800000000000000
+      internalID: -5432453855378312704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_12
+      rect:
+        serializedVersion: 2
+        x: 1192
+        y: 481
+        width: 261
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6551057a3b0f3a20800000000000000
+      internalID: 3044164218824775020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_13
+      rect:
+        serializedVersion: 2
+        x: 1219
+        y: 255
+        width: 286
+        height: 265
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b001e2c4f19a2c50800000000000000
+      internalID: 6641281080938791097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_14
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 251
+        width: 278
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf9fc9fe38586f710800000000000000
+      internalID: 1726714308850416123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_15
+      rect:
+        serializedVersion: 2
+        x: 746
+        y: 247
+        width: 389
+        height: 218
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df553222b08376670800000000000000
+      internalID: 8531849639545230845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_16
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 45
+        width: 250
+        height: 194
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e5c3a3d2a5ff0ee0800000000000000
+      internalID: -1292544488347810331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_17
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 46
+        width: 258
+        height: 183
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be887e1d4400953b0800000000000000
+      internalID: -5523383172413814549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_18
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 17
+        width: 347
+        height: 211
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf0a4641ee770a750800000000000000
+      internalID: 6314178542001496316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms_19
+      rect:
+        serializedVersion: 2
+        x: 1208
+        y: 44
+        width: 265
+        height: 185
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ebad35d09a032b20800000000000000
+      internalID: 3108339784984931305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Cut_Arms_0: -3661329560484363007
+      Cut_Arms_1: 3721585411077648964
+      Cut_Arms_10: 3253446184610533142
+      Cut_Arms_11: -5432453855378312704
+      Cut_Arms_12: 3044164218824775020
+      Cut_Arms_13: 6641281080938791097
+      Cut_Arms_14: 1726714308850416123
+      Cut_Arms_15: 8531849639545230845
+      Cut_Arms_16: -1292544488347810331
+      Cut_Arms_17: -5523383172413814549
+      Cut_Arms_18: 6314178542001496316
+      Cut_Arms_19: 3108339784984931305
+      Cut_Arms_2: 8167419823116315732
+      Cut_Arms_3: 7908836734935140678
+      Cut_Arms_4: 7765417948551996241
+      Cut_Arms_5: 8090823555206419574
+      Cut_Arms_6: 9055988725990277166
+      Cut_Arms_7: -4686791866314832183
+      Cut_Arms_8: 1911668387058735738
+      Cut_Arms_9: -6791145058504655619
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
