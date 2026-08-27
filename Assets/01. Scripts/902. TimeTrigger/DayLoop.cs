@@ -18,6 +18,12 @@ namespace WeGotOne
 
         private DayType currentDayType = DayType.Day;
 
+        public DayType CurrentDayType
+        {
+            get => currentDayType;
+            set => currentDayType = value;
+        }
+
         public void SetDayType(DayType dayType)
         {
             if (currentDayType == dayType)

@@ -31,13 +31,14 @@ namespace WeGotOne
             {
                 itemPools[i] = new PoolingSystem<Collectible>(itemPrefabs[i]);
             }
-
-            ItemSpawn();
         }
 
         private void Update()
         {
-            
+            if (DayLoop.Instance.CurrentDayType == DayLoop.DayType.Day)
+            {
+                ItemSpawn();
+            }
         }
 
         public void ItemSpawn()
@@ -80,11 +81,6 @@ namespace WeGotOne
                     item.transform.position = itemTransforms[i].position;
                 }
             }
-        }
-
-        IEnumerator ItemSpawnRoutine()
-        {
-            yield return WaitForSeconds()
         }
 
         /*private Vector3 RandomTransform()
