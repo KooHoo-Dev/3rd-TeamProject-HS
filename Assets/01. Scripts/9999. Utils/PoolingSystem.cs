@@ -25,19 +25,22 @@ namespace WeGotOne
             this.onRelease = onRelease ?? (item => item.gameObject.SetActive(false));
         }
     
-        public T Get()
+        public T Get(bool isExist)
         {
-            for (int i = 0; i < objectPool.Count; i++)
+            if (isExist)
             {
-                if (objectPool[i].gameObject.activeSelf == false)
+                for (int i = 0; i < objectPool.Count; i++)
                 {
-                    objectPool[i].gameObject.SetActive(true);
-                    onGet(objectPool[i]);
-                    return objectPool[i];
-                }
+                    if (objectPool[i].gameObject.activeSelf == false)
+                    {
+                        objectPool[i].gameObject.SetActive(true);
+                        onGet(objectPool[i]);
+                        return objectPool[i];
+                    }
+                }   
             }
 
-            T newObject = Object.Instantiate(original);
+            T newObject = Object.Instantiate(original, parent, true);
         
             objectPool.Add(newObject);
             newObject.gameObject.SetActive(true);

@@ -9,24 +9,21 @@ namespace WeGotOne
 {
     public class ItemObjectPool : MonoBehaviour
     {
-        [field: SerializeField] public int[] MaxItemCounts { get; set; }
-
         [SerializeField] private Collectible[] itemPrefabs;
         private PoolingSystem<Collectible>[] itemPools;
 
         /*[field: SerializeField] public float RangeX { get; set; }
         [field: SerializeField] public float RangeY { get; set; }*/
 
-        [SerializeField] private Transform[] plankTransforms;
-        [SerializeField] private Transform[] fishTransforms;
+        [SerializeField] private Transform[] itemTransforms;
 
         private void Start()
         {
             itemPools = new PoolingSystem<Collectible>[itemPrefabs.Length];
-            
-            for (int i = 0; i < itemPrefabs.Length; i++)
+
+            for (int i = 0; i < itemPools.Length; i++)
             {
-                itemPools[i] = new PoolingSystem<Collectible>(itemPrefabs[i]);
+                itemPools[i] = new PoolingSystem<Collectible>(itemPrefabs[i], itemTransforms[i]);
             }
 
             ItemSpawn();
@@ -34,45 +31,22 @@ namespace WeGotOne
 
         private void Update()
         {
-            if(SimpleInput.GetKeyDown(Key.Digit1))
+            if (SimpleInput.GetKeyDown(Key.Digit1))
                 ItemSpawn();
         }
 
         public void ItemSpawn()
         {
-            int plankIndex = 0;
-            int fishIndex = 0;
-            
-            for (int i = 0; i < itemPrefabs.Length; i++)
+            for (int i = 0; i < itemTransforms.Length; i++)
             {
-                ItemType currentType = itemPrefabs[i].ThisItem.ItemType;
+                bool isExist = itemTransforms[i].childCount > 0;
+                Collectible item = itemPools[i].Get(isExist);
+                item.Init(itemPools[i], itemTransforms[i].position);
+                Plank plank = item.GetComponent<Plank>();
 
-                for (int j = 0; j < MaxItemCounts[i]; j++)
+                if (plank != null && plank.IsPickUp)
                 {
-                    if (currentType == ItemType.Plank)
-                    {
-                        if (plankIndex < plankTransforms.Length)
-                        {
-                            Collectible item = itemPools[i].Get();
-                            Plank plank = item.GetComponent<Plank>();
-                            
-                            if (plank != null && plank.IsPickUp)
-                            {
-                                itemPools[i].Release(item); 
-                                continue;
-                            }
-                            
-                            item.Init(itemPools[i], plankTransforms[plankIndex++].position);
-                        }
-                    }
-                    else if (currentType == ItemType.Fish)
-                    {
-                        if (fishIndex < fishTransforms.Length)
-                        {
-                            Collectible item = itemPools[i].Get();
-                            item.Init(itemPools[i], fishTransforms[fishIndex++].position);
-                        }
-                    }
+                    itemPools[i].Release(item);
                 }
             }
         }
