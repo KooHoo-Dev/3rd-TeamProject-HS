@@ -225,7 +225,7 @@ namespace HelloServer
         
         private void OnState(StateMessage message)
         {
-            foreach (PlayerState state in message.States)
+            foreach (PlayerState state in message.Players)
             {
                 // 내 것은 버린다. 서버가 알려 준 내 위치로 나를 다시 옮기면 안 된다.
                 // 내가 방금 움직인 자리보다 늘 한 박자 늦은 값이라, 넣으면 캐릭터가 뒤로 끌린다.
