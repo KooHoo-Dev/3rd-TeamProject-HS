@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 223c35a36a5b0a94b94fdd791ab42924, type: 3}
-  m_Name: Fish 1
+  m_Name: ClownFish
   m_EditorClassIdentifier: Assembly-CSharp::Study_Inventory.ItemScriptableObject
   Key: 1
-  Name: Fish2
-  Icon: {fileID: 21300000, guid: d1e09e5d337f0a04eb4b9bc609f52858, type: 3}
+  Name: ClownFish
+  Icon: {fileID: 21300000, guid: 72017037b19b03e49b29f0aa86cdfcaa, type: 3}
   Fullness: 0
   ItemType: 2
