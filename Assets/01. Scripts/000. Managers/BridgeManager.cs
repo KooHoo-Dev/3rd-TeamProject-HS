@@ -6,7 +6,7 @@ namespace WeGotOne
 {
     public class BridgeManager : SingletonBase<BridgeManager>
     { 
-        [field: SerializeField] public WoodBridge[] BridgeObjects { get; private set; }
+        [field: SerializeField] public Bridge[] BridgeObjects { get; private set; }
         private Inventory targetInventory;
         
         public bool IsEnd => CurrentBridgeCount() == BridgeObjects.Length;
@@ -19,7 +19,7 @@ namespace WeGotOne
         {
             base.OnInitialize();
             targetInventory = Inventory.Instance;
-            BridgeObjects = GetComponentsInChildren<WoodBridge>(true);
+            BridgeObjects = GetComponentsInChildren<Bridge>(true);
         }
 
         public int CurrentBridgeCount()

@@ -1,15 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace WeGotOne
 {
-    public class Fish : MonoBehaviour, IPickupable
+    public class Fish : Collectible
     {
-       [field: SerializeField]
-        public ItemScriptableObject ThisItem {get; private set;}
-
-        public void OnPickup()
-        {
-            gameObject.SetActive(false);
-        }
+        
     }
 }
