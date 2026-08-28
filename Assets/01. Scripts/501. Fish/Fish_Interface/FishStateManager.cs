@@ -12,17 +12,20 @@ namespace WeGotOne.Fish_Interface
         
         [Header("저항도(Resistance) 설정")]
         [SerializeField] private float maxResistance = 20f;
+
+        [Header("물 출입 쿨타임")] [SerializeField] [Tooltip("물속에 들어온 직후 다시 물밖으로 나가는 감지를 무시할 시간")]
+        private float waterExitCooldown = 1.0f;
         
         // 물 탈출 피드백 함수 예외값을 위한 bool값.
         public bool IsGrabbed => currentState is FishCaughtState || currentState is FishExhaustedState;
         public float MaxResistance => maxResistance; // 저항도
         public float CurrentResistance { get; private set; }
-         
         
         private WaterLayerAlert waterLayerAlert; // 물 탈출 알리미
         private IFishState currentState;
-        private CancellationTokenSource stateCts; 
-       
+        private CancellationTokenSource stateCts;
+
+        private float lastEnteredWaterTime = -999f; // 마지막에 물에 들어온 시각 
 
         private void Awake()
         {
@@ -66,6 +69,12 @@ namespace WeGotOne.Fish_Interface
         // 물 출입 시 실행할 예외 판단 및 위임 함수
         private void HandleExitedWater()
         {
+            if (Time.time - lastEnteredWaterTime < waterExitCooldown)
+            {
+                Debug.Log($"{name} 물 속 진입 쿨타임: 물 밖 판정 무시");
+                return;
+            }
+            
             // 플레이어 손에 안 잡혀 있을 때만 물리 처리 위임
             if (!IsGrabbed && fishMovement != null)
             {
@@ -75,6 +84,8 @@ namespace WeGotOne.Fish_Interface
 
         private void HandleEnteredWater()
         {
+            lastEnteredWaterTime = Time.time;
+            
             // 플레이어 손에 안 잡혀 있을 때만 물리 복구 위임
             if (!IsGrabbed && fishMovement != null)
             {
