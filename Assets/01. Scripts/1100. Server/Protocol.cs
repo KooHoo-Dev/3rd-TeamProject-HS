@@ -34,14 +34,15 @@ namespace HelloServer
         public string NickName { get; set; }
     }
 
-    public class MoveMessage
-    {
-        public string Type { get; set; } = "move";
-        public string Id { get; set; }
-        public float X { get; set; }
-        public float Y { get; set; }
-    }
-
+    // 이제 사용안함 GuestInputMessage, SnapshotMessage로 대체
+    // public class MoveMessage
+    // {
+    //     public string Type { get; set; } = "move";
+    //     public string Id { get; set; }
+    //     public float X { get; set; }
+    //     public float Y { get; set; }
+    // }
+    //
     public class GuestInputMessage
     {
         public string Type { get; set; } = "input";
