@@ -388,15 +388,20 @@ namespace HelloServer
                 await SendAsync(snapshot);
             }
             else
-            {
+            {   
+                // [해결]: keyboard가 null인지 체크하여 안전하게 삼항연산자로 처리합니다.
+                bool leftShiftHold = (keyboard != null) && keyboard.leftShiftKey.isPressed;
+                bool rightShiftHold = (keyboard != null) && keyboard.rightShiftKey.isPressed;
+                
                 // 게스트는 자신의 키보드 입력을 전송
+                // 게스트는 키보드 장치 null 에러를 방지하기 위해 임시로 false 하드코딩 송신
                 await SendAsync(new GuestInputMessage
                 {
                     Id = Me.Id, 
                     X = position.x, 
                     Y = position.y,
-                    IsLeftShiftHold = keyboard.leftShiftKey.isPressed,
-                    IsRightShiftHold = keyboard.rightShiftKey.isPressed
+                    IsLeftShiftHold = false,//leftShiftHold,    // 이제 null 안전합니다!
+                    IsRightShiftHold = false//rightShiftHold   
                 });
             }
         }
