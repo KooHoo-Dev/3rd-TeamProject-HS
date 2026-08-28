@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using WeGotOne;
 
 namespace HelloServer
 {
@@ -11,6 +12,8 @@ namespace HelloServer
         [SerializeField] private SpriteRenderer body;
         [SerializeField] private TMP_Text label;
 
+        [SerializeField] public PlayerInputContainer InputContainer;
+
         [Header("움직임")]
         [SerializeField] private float speed = 5f;
 
@@ -18,6 +21,11 @@ namespace HelloServer
         
         [Header("입력값")]
         public Keyboard Keyboard { get; private set; }
+
+        private void Awake()
+        {
+            InputContainer = GetComponent<PlayerInputContainer>();
+        }
 
         public void Setup(User user, Color color)
         {

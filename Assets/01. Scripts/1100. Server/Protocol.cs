@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace HelloServer
 {
@@ -24,6 +25,7 @@ namespace HelloServer
         public string Id { get; set; }
         public float X { get; set; }
         public float Y { get; set; }
+        public Quaternion Rotation { get; set; }
     }
 
     #region 클라이언트 -> 서버 (C2S)
@@ -65,6 +67,8 @@ namespace HelloServer
     public class SnapshotMessage
     {
         public string Type { get; set; } = "snapshot";
+        
+        public PlayerState[] Players { get; set; }
 
         // 아직 정해지지 않은 Physics 데이터는 그대로 전달한다.
         public string testData { get; set; } = "testsnapshot";

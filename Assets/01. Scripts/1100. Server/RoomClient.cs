@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -8,6 +9,8 @@ using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine.InputSystem;
+using WeGotOne;
+using PlayerInput = WeGotOne.PlayerInput;
 
 namespace HelloServer
 {
@@ -27,7 +30,7 @@ namespace HelloServer
         // 내가 조종하는 캐릭터. 씬에 미리 놓아 둔다.
         [SerializeField] private LocalPlayer localPlayer;
         // 남이 들어올 때마다 이걸로 하나씩 만든다.
-        [SerializeField] private RemotePlayer remotePrefab;
+        [SerializeField] private RemoteSpawner remotePrefab;
 
         [Header("보내기")]
         // 초당 몇 번 내 위치를 보낼지.
@@ -45,7 +48,10 @@ namespace HelloServer
         private ClientWebSocket socket;
         
         // 남들. 번호로 찾는다.
-        private readonly Dictionary<string, RemotePlayer> remotes = new Dictionary<string, RemotePlayer>();
+        // private readonly Dictionary<string, RemotePlayer> remotes = new Dictionary<string, RemotePlayer>();
+        
+        // SSG 커스텀 : 플레이어 맞춰서 편집
+        private readonly Dictionary<string, RemoteSpawner> remotes = new Dictionary<string, RemoteSpawner>();
 
         // 오간 말. 너무 쌓이지 않게 앞에서부터 버린다.
         private readonly List<string> chatLog = new List<string>();
@@ -205,6 +211,15 @@ namespace HelloServer
                 Debug.LogWarning("[방] 호스트가 스냅샷을 받았다. 서버 코드 문제");
                 return;
             }
+            
+            // 이 부분에 스냅샷 받아온거에서 위치값 분리해서 적용해주면 댐
+            for (int i = 0; i < message.Players.Length; i++)
+            {
+                Vector2 pos = new Vector2(message.Players[i].X, message.Players[i].Y);
+                if(remotes.TryGetValue(message.Players[i].Id, out RemoteSpawner remote) == false) continue;
+                remote.SetPosition(pos, message.Players[i].Rotation);
+            }
+            
             Debug.Log($"[방] 스냅샷을 받았다. {message.testData}");
         }
 
@@ -225,8 +240,14 @@ namespace HelloServer
                     continue;
                 }
                 Debug.Log($"[방] ({i + 1}번째) 게스트 입력 Id - {input.Id}, X - {input.X}, Y - {input.Y}, IsLeftShiftHold - {input.IsLeftShiftHold}, IsRightShiftHold - {input.IsRightShiftHold}");
+                
+                
+                if (remotes.TryGetValue(input.Id, out RemoteSpawner remote) == false) continue;
+                remote.SetTarget(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold);
             }
         }
+        
+        
 
         private void OnWelcome(WelcomeMessage message)
         {
@@ -248,7 +269,7 @@ namespace HelloServer
 
         private void OnLeave(LeaveMessage message)
         {
-            if (remotes.TryGetValue(message.Id, out RemotePlayer remote) == false) return;
+            if (remotes.TryGetValue(message.Id, out RemoteSpawner remote) == false) return;
 
             remotes.Remove(message.Id);
             Destroy(remote.gameObject);
@@ -263,8 +284,8 @@ namespace HelloServer
                 // 내 것은 버린다. 서버가 알려 준 내 위치로 나를 다시 옮기면 안 된다.
                 // 내가 방금 움직인 자리보다 늘 한 박자 늦은 값이라, 넣으면 캐릭터가 뒤로 끌린다.
                 if (state.Id == Me.Id) continue;
-                if (remotes.TryGetValue(state.Id, out RemotePlayer remote) == false) continue;
-                remote.SetTarget(new Vector2(state.X, state.Y));
+                if (remotes.TryGetValue(state.Id, out RemoteSpawner remote) == false) continue;
+                //remote.SetTarget(new Vector2(state.X, state.Y));
             }
         }
 
@@ -285,9 +306,9 @@ namespace HelloServer
             // 이미 있으면 만들지 않는다. welcome 과 join 이 겹칠 수 있다.
             if (remotes.ContainsKey(user.Id)) return;
 
-            RemotePlayer remote = Instantiate(remotePrefab, Vector3.zero, Quaternion.identity);
+            RemoteSpawner remote = Instantiate(remotePrefab, Vector3.zero, Quaternion.identity);
 
-            remote.Setup(user, ColorOf(user.Id));
+            remote.Setup(user);
 
             remotes[user.Id] = remote;
         }
@@ -306,20 +327,34 @@ namespace HelloServer
 
                 // 아직 번호를 못 받았으면 보낼 것이 없다.
                 if (Me == null) continue;
+                
+                PlayerInputContainer inputContainer = localPlayer.InputContainer;
 
-                Vector2 position = localPlayer.transform.position;
-                Keyboard keyboard = localPlayer.Keyboard;
+                Vector2 moveInput = inputContainer.MoveInput;
+                bool leftGrab = inputContainer.LeftGrabInput;
+                bool rightGrab = inputContainer.RightGrabInput;
 
-                await SendSnapshotOrInputMessages(position, keyboard);
+                await SendSnapshotOrInputMessages(moveInput, leftGrab, rightGrab);
             }
         }
 
-        private async UniTask SendSnapshotOrInputMessages(Vector2 position, Keyboard keyboard)
+        private async UniTask SendSnapshotOrInputMessages(Vector2 position, bool leftGrab, bool rightGrab)
         {
             if (Me.IsHost)
             {
+                PlayerState[] players = new PlayerState[remotes.Count];
+
+                int index = 0;
+
+                foreach (var remote in remotes)
+                {
+                    players[index] = remote.Value.ReturnPosition();
+                    index++;
+                }
+
                 await SendAsync(new SnapshotMessage()
                 {
+                    Players = players,
                     testData = "I am Host"
                 });
             }
@@ -331,8 +366,8 @@ namespace HelloServer
                     Id = Me.Id, 
                     X = position.x, 
                     Y = position.y,
-                    IsLeftShiftHold = keyboard.leftShiftKey.isPressed,
-                    IsRightShiftHold = keyboard.rightShiftKey.isPressed
+                    IsLeftShiftHold = leftGrab,
+                    IsRightShiftHold = rightGrab
                 });
             }
         }
