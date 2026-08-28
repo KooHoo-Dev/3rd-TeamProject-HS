@@ -354,11 +354,11 @@ namespace HelloServer
                 // inputContainer ???
                 Keyboard keyboard = Keyboard.current;
                 Vector2 position = localPlayer.transform.position;
-                await SendSnapshotOrInputMessage(keyboard, position);
+                await SendSnapshotOrInputMessage();
             }
         }
 
-        private async UniTask SendSnapshotOrInputMessage(Keyboard keyboard, Vector2 position)
+        private async UniTask SendSnapshotOrInputMessage()
         {
             
             if (Me.IsHost)
@@ -465,28 +465,24 @@ namespace HelloServer
             else
             {
                 // 게스트는 자신의 키보드 입력을 전송
-                await SendAsync(new GuestInputMessage
-                {
-                    Id = Me.Id, 
-                    X = position.x, 
-                    Y = position.y,
-                    IsLeftShiftHold = keyboard.leftShiftKey.isPressed,
-                    IsRightShiftHold = keyboard.rightShiftKey.isPressed
-                });
+                Vector2 input = SimpleInput.GetMoveAxisRaw();
+                Keyboard keyboard = Keyboard.current;
+                await SendInputMessages(input, keyboard.leftShiftKey.isPressed, keyboard.rightShiftKey.isPressed, keyboard.fKey.isPressed);
             }
         }
 
 
-        private async UniTask SendInputMessages(Vector2 position, bool leftGrab, bool rightGrab)
+        private async UniTask SendInputMessages(Vector2 input, bool leftGrab, bool rightGrab, bool buildKey)
         {
             // localplayer 쪽에서 관리 ㄱㄱ
             await SendAsync(new GuestInputMessage
             {
                 Id = Me.Id, 
-                X = position.x, 
-                Y = position.y,
+                X = input.x, 
+                Y = input.y,
                 IsLeftShiftHold = leftGrab,
-                IsRightShiftHold = rightGrab
+                IsRightShiftHold = rightGrab,
+                IsBuildKeyHold = buildKey,
             });
         }
 
