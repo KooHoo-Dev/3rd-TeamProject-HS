@@ -48,8 +48,8 @@ namespace WeGotOne
                 {
                     ItemScriptableObject item = grid[i, j].Item;
 
-                    if (item.ItemType == ItemType.Plank &&
-                        InventoryItemDB.instance.ItemCountDic[item.Key] > 0)
+                    //if (item.ItemType == ItemType.Plank &&
+                        //InventoryItemDB.instance.ItemCountDic[item.Key] > 0) 임시 처리
                     {
                         grid[i, j].CountTextUpdate(item.Key, false);
                         BridgeObjects[CurrentBridgeCount()].gameObject.SetActive(true);

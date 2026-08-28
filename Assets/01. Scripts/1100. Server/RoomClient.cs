@@ -181,28 +181,12 @@ namespace HelloServer
                 case "welcome": OnWelcome(JsonConvert.DeserializeObject<WelcomeMessage>(json)); break;
                 case "join": OnJoin(JsonConvert.DeserializeObject<JoinMessage>(json)); break;
                 case "leave": OnLeave(JsonConvert.DeserializeObject<LeaveMessage>(json)); break;
-                case "state": OnState(JsonConvert.DeserializeObject<StateMessage>(json)); break;
                 case "chat": OnChat(JsonConvert.DeserializeObject<ChatMessage>(json)); break;
                 case "inputGroup": OnGuestInputGroup(JsonConvert.DeserializeObject<GuestInputGroupMessage>(json)); break;
                 case "snapshot": OnSnapshot(JsonConvert.DeserializeObject<SnapshotMessage>(json)); break;
                 default: Debug.Log($"[방] 등록되지 않은 종류(type) : {type}"); break;
             }
-            
-            // === 아래는 수업중 했던 코드 ---
-            
-            // string type = JsonUtility.FromJson<TypeOnly>(json).Type;
-            
-            // switch (type)
-            // {
-            //     case "welcome": OnWelcome(JsonUtility.FromJson<WelcomeMessage>(json)); break;
-            //     case "join": OnJoin(JsonUtility.FromJson<JoinMessage>(json)); break;
-            //     case "leave": OnLeave(JsonUtility.FromJson<LeaveMessage>(json)); break;
-            //     case "state": OnState(JsonUtility.FromJson<StateMessage>(json)); break;
-            //     case "chat": OnChat(JsonUtility.FromJson<ChatMessage>(json)); break;
-            //
-            //     // 모르는 종류는 흘린다. 서버가 먼저 새 소식을 붙여도 여기서 죽지 않게.
-            //     default: Debug.Log($"[방] 등록되지 않은 종류(type) : {type}"); break;
-            // }
+           
         }
 
         private void OnSnapshot(SnapshotMessage message)
@@ -212,7 +196,7 @@ namespace HelloServer
                 Debug.LogWarning("[방] 호스트가 스냅샷을 받았다. 서버 코드 문제");
                 return;
             }
-            Debug.Log($"[방] 스냅샷을 받았다. {message.testData}");
+            
             
             SnapshotMessage = message;
         }
@@ -267,17 +251,7 @@ namespace HelloServer
             Debug.Log($"[방] {message.Id} 이(가) 나갔다");
         }
         
-        private void OnState(StateMessage message)
-        {
-            foreach (PlayerState state in message.Players)
-            {
-                // 내 것은 버린다. 서버가 알려 준 내 위치로 나를 다시 옮기면 안 된다.
-                // 내가 방금 움직인 자리보다 늘 한 박자 늦은 값이라, 넣으면 캐릭터가 뒤로 끌린다.
-                if (state.Id == Me.Id) continue;
-                if (remotes.TryGetValue(state.Id, out RemotePlayer remote) == false) continue;
-                remote.SetTarget(new Vector2(state.X, state.Y));
-            }
-        }
+        
 
         // 방에서 누가 말했다. 내 말도 여기로 돌아옴
         private void OnChat(ChatMessage message)
@@ -331,7 +305,7 @@ namespace HelloServer
             {
                 await SendAsync(new SnapshotMessage()
                 {
-                    testData = "I am Host"
+                    
                 });
             }
             else

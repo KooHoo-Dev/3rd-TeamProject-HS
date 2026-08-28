@@ -11,6 +11,7 @@ namespace HelloServer
 
     // 받은 글자가 어떤 종류인지 나타내는 데이터 객체
     // 일반적으로 Header라고 부릅니다.
+    
     // 전달받은 데이터의 종류만 먼저 읽고, 알맞은 처리를 합니다.
     public class TypeOnly
     {
@@ -30,6 +31,7 @@ namespace HelloServer
     public class FishState
     {
         public string Id { get; set; }       // 물고기 고유 식별 번호 (풀에서 생성 시 부여)
+        public int FishTypeIndex { get; set; } // 어떤 종류의 물고기인지 구분하는 인덱스
         public float X { get; set; }          // 현재 위치 X
         public float Y { get; set; }          // 현재 위치 Y
         public float ScaleX { get; set; }     // 좌우 반전 스케일값 (ApplyingFacing 결과 동기화용)
@@ -46,15 +48,7 @@ namespace HelloServer
         public string NickName { get; set; }
     }
 
-    // 이제 사용안함 GuestInputMessage, SnapshotMessage로 대체
-    // public class MoveMessage
-    // {
-    //     public string Type { get; set; } = "move";
-    //     public string Id { get; set; }
-    //     public float X { get; set; }
-    //     public float Y { get; set; }
-    // }
-    //
+    
     public class GuestInputMessage
     {
         public string Type { get; set; } = "input";
@@ -75,34 +69,28 @@ namespace HelloServer
         public List<GuestInputMessage> Inputs { get; set; } = new();
     }
 
-    // Host가 만든 Physics 상태를 Guest에게 전달할 때 사용하는 메시지.
+    // Host가 만든 Physics 상태와 인벤토리, 맵, 게임 상황까지를 Guest에게 전달할 때 사용하는 메시지.
     public class SnapshotMessage
     {
         public string Type { get; set; } = "snapshot";
-
-        // 아직 정해지지 않은 Physics 데이터는 그대로 전달한다.
-        public string testData { get; set; } = "testsnapshot";
         
+        // 1. 플레이어 물고기 물리 및 위치 상태 
+        public PlayerState[] Players { get; set; } // 플레이어 (위치, 무력화 상태)
+        public FishState[] Fishes { get; set; } // 물고기 (위치, 상태)
+        
+        // 2. 공용 인벤토리 정보
         public int[] ItemKeys { get; set; }
         public int[] ItemCounts { get; set; }
+        
+        // 3. 맵 오브젝트 건설 정보
         public int CurrentBridgeCount { get; set; } // 현재 다리가 몇 개 건설 됐는지
+        
+        // 4. 게임 라이프 사이클 및 시간 상태
+        public float ElapsedTime { get; set; }      // 흐른 시간 혹은 DayLoop 상태
+        public bool IsGameOver { get; set; }         // 게임 오버 여부
+        public bool IsGameWon { get; set; }          // 게임 승리 여부
     }
-
-    public class StateMessage
-    {
-        public string Type { get; set; } = "state";
-        public string Id { get; set; }
-        public string TestMessage { get; set; }
-        // 호스트의 유의미한 모든 정보
-        // 플레이어 (위치, 무력화 상태)
-        public PlayerState[] Players { get; set; }
-        // 물고기 (위치, 상태)
-        public FishState[] Fishes { get; set; } 
-        // 공용 인벤토리 내 자원량
-        // 다리 
-        // 시간 
-        // 게임 오버 척도, 게임 승리 척도
-    }
+    
 
     #endregion
 
@@ -137,13 +125,6 @@ namespace HelloServer
         public string NickName { get; set; }
         public string Text { get; set; }
     }
-
-    // 강사님 코드 비활성화
-    // public class StateMessage
-    // {
-    //     public string Type { get; set; } = "state";
-    //     public PlayerState[] States { get; set; }
-    // }
 
     #endregion
         
