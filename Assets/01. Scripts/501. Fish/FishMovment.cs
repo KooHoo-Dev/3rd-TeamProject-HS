@@ -37,6 +37,14 @@ namespace WeGotOne
         [SerializeField] 
         [Tooltip("물 밖으로 나갔을 때 적용할 중력 수치")]
         private float airGravityScale = 2.0f;
+        
+        [Header("수중 복귀 설정")]
+        [SerializeField]
+        [Tooltip("물속에 들어온 뒤, 순찰(트윈)을 시작하기 전 대기할 지연 시간(초)")]
+        private float patrolRestartDelay = 0.5f;
+
+        
+        
 
         #endregion
 
@@ -177,9 +185,17 @@ namespace WeGotOne
         public void SetWaterPhysics()
         {
             rb.gravityScale = 0f;             // 중력 제거 (부력 상태)
-            rb.linearVelocity = Vector2.zero; // 낙하 관성 즉시 초기화
             
-            StartPatrol();                    // 물 속에서 다시 순찰 시작
+            // 1. [보완] 뚝 멈추는 대신, 기존에 만들어 둔 'StartFaintDrift'를 사용해 
+            // 물의 저항을 받듯 떨어지던 속도를 부드럽게 감속시킵니다.
+            
+            CalculateNewPatrolRoute(); // 순찰 방향 초기화
+            StartFaintDrift(patrolRestartDelay);
+            
+    
+            // 2. [보완] 예약되어 있던 순찰 실행이 있다면 꼬이지 않게 취소하고, 지연 대기 후 순찰을 시작합니다.
+            CancelInvoke(nameof(StartPatrol));
+            Invoke(nameof(StartPatrol), patrolRestartDelay);
         }
 
         #endregion
@@ -249,7 +265,10 @@ namespace WeGotOne
         /// 실행 중인 모든 트윈을 멈추고 리지드바디 속도를 초기화하여 물고기를 멈춰 세웁니다.
         /// </summary>
         public void StopMove()
-        {
+        {   
+            // [보완] 대기 중이던 순찰 시작 예약도 안전하게 취소합니다.
+            CancelInvoke(nameof(StartPatrol));
+            
             patrolTween?.Kill();   patrolTween = null;
             runawayTween?.Kill();  runawayTween = null;
             driftTween?.Kill();    driftTween = null;
