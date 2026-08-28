@@ -5,12 +5,12 @@ using UnityEngine.Serialization;
 namespace WeGotOne
 {
     public class BridgeManager : SingletonBase<BridgeManager>
-    { 
+    {
         [field: SerializeField] public Bridge[] BridgeObjects { get; private set; }
         private Inventory targetInventory;
-        
+
         public bool IsEnd => CurrentBridgeCount() == BridgeObjects.Length;
-        
+
         // 게임 매니저나 나중에 다른 UI에게 전파하는 용도 델리게이트
         public event Action OnBridgeBuild;
 
@@ -36,18 +36,22 @@ namespace WeGotOne
 
             return currentCount;
         }
-        
+
         public void BridgeBuild()
         {
             InventorySlot[,] grid = targetInventory.SlotGrid;
+
 
             for (int i = 0; i < targetInventory.SizeRow; i++)
             {
                 for (int j = 0; j < targetInventory.SizeColumn; j++)
                 {
-                    if (grid[i, j].Item.ItemType == ItemType.Plank && grid[i, j].ItemCount > 0)
+                    ItemScriptableObject item = grid[i, j].Item;
+
+                    if (item.ItemType == ItemType.Plank &&
+                        InventoryItemDB.instance.ItemCountDic[item.Key] > 0)
                     {
-                        grid[i, j].CountTextUpdate(false);
+                        grid[i, j].CountTextUpdate(item.Key, false);
                         BridgeObjects[CurrentBridgeCount()].gameObject.SetActive(true);
                         OnBridgeBuild?.Invoke();
                         return;
@@ -67,6 +71,5 @@ namespace WeGotOne
         }
 
         #endregion
-        
     }
 }
