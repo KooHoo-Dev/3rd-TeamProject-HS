@@ -29,8 +29,8 @@ namespace HelloServer
 
         public void Setup(User user, Color color)
         {
-            label.text = $"{user.NickName} ({user.Id})";
-            body.color = color;
+            /*label.text = $"{user.NickName} ({user.Id})";
+            body.color = color;*/
         }
 
         private void Update()

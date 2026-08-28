@@ -108,7 +108,7 @@ namespace WeGotOne
 
         private void UpdateHunger()
         {
-            hungerGauge.fillAmount = currentHunger / maxHunger;
+            //hungerGauge.fillAmount = currentHunger / maxHunger;
         }
 
         public void NotifyPlayerStarveStateChanged(bool isStarved)

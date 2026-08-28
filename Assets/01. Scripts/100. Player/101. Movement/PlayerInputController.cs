@@ -27,8 +27,13 @@ namespace WeGotOne
         [SerializeField] private ArmController rightUpperArm;
         [SerializeField] private BottomArmController leftBottomArm;
         [SerializeField] private BottomArmController rightBottomArm;
-
         [SerializeField] private PlayerHunger body;
+        
+        public ArmController  LeftUpperArm => leftUpperArm;
+        public ArmController  RightUpperArm => rightUpperArm;
+        public BottomArmController LeftBottomArm => leftBottomArm;
+        public BottomArmController RightBottomArm => rightBottomArm;
+        public PlayerHunger Body => body;
 
         public void ApplyInput(Vector2 moveInput, bool leftGrab, bool rightGrab)
         {
@@ -49,7 +54,7 @@ namespace WeGotOne
                 ClearArmDirections();
                 return;
             }
-
+            
             SetArmDirections(moveInput);
         }
 
@@ -81,14 +86,6 @@ namespace WeGotOne
             leftBottomArm.SetDirection(direction);
             rightBottomArm.SetDirection(direction);
         }
-        
-        public void SetArmPosition(Vector2 direction, Quaternion rotation)
-        {
-            leftUpperArm.SetPosition(direction, rotation);
-            rightUpperArm.SetPosition(direction, rotation);
-            leftBottomArm.SetPosition(direction, rotation);
-            rightBottomArm.SetPosition(direction, rotation);
-        }
 
         private void ClearArmDirections()
         {
@@ -97,5 +94,35 @@ namespace WeGotOne
             leftBottomArm.ClearDirection();
             rightBottomArm.ClearDirection();
         }
+
+        #region 파츠별 위치 동기화
+
+        public void SetBodyPartPosition(float x, float y, float rotationZ)
+        {
+            body.transform.position = new Vector2(x, y);
+            body.transform.rotation = new Quaternion(body.transform.rotation.x, body.transform.rotation.y, rotationZ, body.transform.rotation.w);
+        }
+        
+        public void SetLeftArmTopPartPosition(float x, float y, float rotationZ)
+        {
+            leftUpperArm.SetPosition(new Vector2(x, y), rotationZ);
+        }
+        
+        public void SetLeftArmBottomPartPosition(float x, float y, float rotationZ)
+        {
+            leftBottomArm.SetPosition(new Vector2(x, y), rotationZ);
+        }
+        
+        public void SetRightArmTopPartPosition(float x, float y, float rotationZ)
+        {
+            rightUpperArm.SetPosition(new Vector2(x, y), rotationZ);
+        }
+        
+        public void SetRightArmBottomPartPosition(float x, float y, float rotationZ)
+        {
+            rightBottomArm.SetPosition(new Vector2(x, y), rotationZ);
+        }
+
+        #endregion
     }
 }

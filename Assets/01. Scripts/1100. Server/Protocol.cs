@@ -24,14 +24,22 @@ namespace HelloServer
     public class PlayerState
     {
         public string Id { get; set; }
+
+        public PartState Body;
+        public PartState LeftArmTop;
+        public PartState RightArmTop;
+        public PartState LeftArmBottom;
+        public PartState RightArmBottom;
+    }
+
+    public class PartState
+    {
         public float X { get; set; }
         public float Y { get; set; }
-        public float QuaternionX { get; set; }
-        public float QuaternionY { get; set; }
+        
         public float QuaternionZ { get; set; }
-        public float QuaternionW { get; set; }
     }
-    
+
     // 물고기 코드
     public class FishState
     {

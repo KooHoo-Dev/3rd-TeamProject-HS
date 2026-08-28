@@ -97,10 +97,10 @@ namespace WeGotOne
 
 # region 위치값 보정 함수
 
-        public void SetPosition(Vector2 position, Quaternion rotation)
+        public void SetPosition(Vector2 position, float rotation)
         {
             transform.position = position;
-            transform.rotation = rotation;
+            transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, rotation, transform.rotation.w);
         }
 
 # endregion

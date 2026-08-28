@@ -9,6 +9,7 @@ namespace WeGotOne
         [SerializeField] private PlayerInputContainer inputContainer;
 
         [SerializeField] private PlayerInputController inputController;
+        public PlayerInputController InputController => inputController;
 
         private bool isHost;
         private bool isInitialized;
@@ -42,12 +43,16 @@ namespace WeGotOne
             inputController.ApplyInput(moveInput, leftGrab, rightGrab);
         }
         
-        public void ApplyPosition(Vector2 moveInput, Quaternion rotInput)
+        public void ApplyPosition(PlayerState state)
         {
             if (isHost)
                 return;
 
-            inputController.SetArmPosition(moveInput, rotInput);
+            inputController.SetBodyPartPosition(state.Body.X,  state.Body.Y, state.Body.QuaternionZ);
+            inputController.SetLeftArmTopPartPosition(state.LeftArmTop.X,  state.LeftArmTop.Y, state.LeftArmTop.QuaternionZ);
+            inputController.SetLeftArmBottomPartPosition(state.LeftArmBottom.X,  state.LeftArmBottom.Y, state.LeftArmBottom.QuaternionZ);
+            inputController.SetRightArmTopPartPosition(state.RightArmTop.X,  state.RightArmTop.Y, state.RightArmTop.QuaternionZ);
+            inputController.SetRightArmBottomPartPosition(state.RightArmBottom.X,  state.RightArmBottom.Y, state.RightArmBottom.QuaternionZ);
         }
     }
 }

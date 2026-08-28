@@ -256,28 +256,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!114 &283337098 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7939927829246396705, guid: c99c2eeb65995ba499042f584122d889, type: 3}
-  m_PrefabInstance: {fileID: 1624043906}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3a645e8caa8c3b47a354054d4c05be2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Study.LocalServer.LocalPlayer
---- !u!114 &1084764994 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3029672969321348005, guid: c99c2eeb65995ba499042f584122d889, type: 3}
-  m_PrefabInstance: {fileID: 1624043906}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 580d78f6124b4b2a87286de073363184, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.PlayerInputContainer
 --- !u!1 &1552004936
 GameObject:
   m_ObjectHideFlags: 0
@@ -416,7 +394,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1624043906
+--- !u!1001 &1879337529
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -424,62 +402,90 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6080398489178169550, guid: c99c2eeb65995ba499042f584122d889, type: 3}
-      propertyPath: m_Name
-      value: LocalPlayer
-      objectReference: {fileID: 0}
-    - target: {fileID: 7939927829246396705, guid: c99c2eeb65995ba499042f584122d889, type: 3}
-      propertyPath: InputContainer
-      value: 
-      objectReference: {fileID: 1084764994}
-    - target: {fileID: 8929985250214131075, guid: c99c2eeb65995ba499042f584122d889, type: 3}
+    - target: {fileID: 2022661519328680211, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -2.19736
       objectReference: {fileID: 0}
-    - target: {fileID: 8929985250214131075, guid: c99c2eeb65995ba499042f584122d889, type: 3}
+    - target: {fileID: 2022661519328680211, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -3.17893
       objectReference: {fileID: 0}
-    - target: {fileID: 8929985250214131075, guid: c99c2eeb65995ba499042f584122d889, type: 3}
+    - target: {fileID: 2022661519328680211, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8929985250214131075, guid: c99c2eeb65995ba499042f584122d889, type: 3}
+    - target: {fileID: 2022661519328680211, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8929985250214131075, guid: c99c2eeb65995ba499042f584122d889, type: 3}
+    - target: {fileID: 2022661519328680211, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8929985250214131075, guid: c99c2eeb65995ba499042f584122d889, type: 3}
+    - target: {fileID: 2022661519328680211, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8929985250214131075, guid: c99c2eeb65995ba499042f584122d889, type: 3}
+    - target: {fileID: 2022661519328680211, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8929985250214131075, guid: c99c2eeb65995ba499042f584122d889, type: 3}
+    - target: {fileID: 2022661519328680211, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8929985250214131075, guid: c99c2eeb65995ba499042f584122d889, type: 3}
+    - target: {fileID: 2022661519328680211, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8929985250214131075, guid: c99c2eeb65995ba499042f584122d889, type: 3}
+    - target: {fileID: 2022661519328680211, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6906203256952799300, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
+      propertyPath: m_Name
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5689033259224130667, guid: c99c2eeb65995ba499042f584122d889, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 6906203256952799300, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 0}
-  m_SourcePrefab: {fileID: 100100000, guid: c99c2eeb65995ba499042f584122d889, type: 3}
+      addedObject: {fileID: 1879337531}
+  m_SourcePrefab: {fileID: 100100000, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
+--- !u!1 &1879337530 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6906203256952799300, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
+  m_PrefabInstance: {fileID: 1879337529}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1879337531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879337530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3a645e8caa8c3b47a354054d4c05be2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Study.LocalServer.LocalPlayer
+  body: {fileID: 0}
+  label: {fileID: 0}
+  InputContainer: {fileID: 1879337532}
+  speed: 5
+--- !u!114 &1879337532 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2533755176140539482, guid: e0d6064308a503442a9e5bb7e6dab59b, type: 3}
+  m_PrefabInstance: {fileID: 1879337529}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 580d78f6124b4b2a87286de073363184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.PlayerInputContainer
 --- !u!1 &2061268591
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,8 +518,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Study.LocalServer.RoomClient
   url: ws://34.50.63.204:5004/room
   nickName: IWantSleep
-  roomCode: 1234
-  localPlayer: {fileID: 283337098}
+  roomCode: ABCD
+  localPlayer: {fileID: 1879337531}
   remotePrefab: {fileID: 3293927007487016804, guid: 6751c8183cefcf74bbac459f548d8130, type: 3}
   sendPerSecond: 20
 --- !u!4 &2061268593
@@ -551,5 +557,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 124359488}
   - {fileID: 2061268593}
-  - {fileID: 1624043906}
   - {fileID: 1552004939}
+  - {fileID: 1879337529}

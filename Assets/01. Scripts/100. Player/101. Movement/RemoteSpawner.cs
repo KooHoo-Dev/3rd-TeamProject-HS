@@ -36,12 +36,37 @@ namespace WeGotOne
             State = new PlayerState
             {
                 Id = user.Id,
-                X = transform.position.x,
-                Y = transform.position.y,
-                QuaternionX = transform.rotation.x,
-                QuaternionY = transform.rotation.y,
-                QuaternionZ = transform.rotation.z,
-                QuaternionW = transform.rotation.w,
+                Body = new PartState
+                    {
+                        X = input.InputController.Body.transform.position.x,
+                        Y = input.InputController.Body.transform.position.y,
+                        QuaternionZ = input.InputController.Body.transform.rotation.z,
+                    },
+                    LeftArmTop = new PartState
+                    {
+                        X = input.InputController.LeftUpperArm.transform.position.x,
+                        Y = input.InputController.LeftUpperArm.transform.position.y,
+                        QuaternionZ = input.InputController.LeftUpperArm.transform.rotation.z,
+                    },
+                    RightArmTop = new PartState
+                    {
+                        X = input.InputController.RightUpperArm.transform.position.x,
+                        Y = input.InputController.RightUpperArm.transform.position.y,
+                        QuaternionZ = input.InputController.RightUpperArm.transform.rotation.z,
+                    },
+                    LeftArmBottom = new PartState
+                    {
+                        X = input.InputController.LeftBottomArm.transform.position.x,
+                        Y = input.InputController.LeftBottomArm.transform.position.y,
+                        QuaternionZ = input.InputController.LeftBottomArm.transform.rotation.z,
+                    },
+                    RightArmBottom = new PartState
+                    {
+                        X = input.InputController.RightBottomArm.transform.position.x,
+                        Y = input.InputController.RightBottomArm.transform.position.y,
+                        QuaternionZ = input.InputController.RightBottomArm.transform.rotation.z,
+                    },
+                
             };
         }
 
@@ -50,9 +75,9 @@ namespace WeGotOne
             input.ApplyNetworkInput(position, leftGrab, rightGrab);
         }
         
-        public void SetPosition(Vector2 position, Quaternion rotation)
+        public void SetPartPosition(PlayerState state)
         {
-            input.ApplyPosition(position, rotation);
+            input.ApplyPosition(state);
         }
 
         /*

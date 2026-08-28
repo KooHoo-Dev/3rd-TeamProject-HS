@@ -13,6 +13,9 @@ GameObject:
   - component: {fileID: 1018839917998779831}
   - component: {fileID: 1718342123156618310}
   - component: {fileID: 2182996499405351467}
+  - component: {fileID: 8741216093685920229}
+  - component: {fileID: 2533755176140539482}
+  - component: {fileID: 300005698744471662}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -29,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 972207991769387577}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 76.2, y: -35, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -179,6 +182,50 @@ MonoBehaviour:
   currentHunger: 100
   hungerTime: 150
   hungerDecreaseMultiplier: 1
+  hungerGauge: {fileID: 0}
+--- !u!114 &8741216093685920229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 972207991769387577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c040a96512c4a5d8f6391fe3c246815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.PlayerInput
+  inputContainer: {fileID: 2533755176140539482}
+  inputController: {fileID: 300005698744471662}
+--- !u!114 &2533755176140539482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 972207991769387577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 580d78f6124b4b2a87286de073363184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.PlayerInputContainer
+--- !u!114 &300005698744471662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 972207991769387577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65651f7a710d4859810c3a2a15f9ee9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.PlayerInputController
+  leftUpperArm: {fileID: 5425970398564813140}
+  rightUpperArm: {fileID: 4863864576486136797}
+  leftBottomArm: {fileID: 5328284148748337284}
+  rightBottomArm: {fileID: 5328284148748337284}
+  body: {fileID: 2182996499405351467}
 --- !u!1 &1141038428076915262
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,7 +450,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.09125055, y: 0.07331794}
-  m_ConnectedAnchor: {x: 0.058732156, y: -0.10542488}
+  m_ConnectedAnchor: {x: 0.05873321, y: -0.10542576}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -660,7 +707,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.09166014, y: -0.08072175}
-  m_ConnectedAnchor: {x: 0.055768095, y: 0.1001635}
+  m_ConnectedAnchor: {x: 0.055770043, y: 0.10016445}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -985,7 +1032,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.06368009, y: -0.1363558}
-  m_ConnectedAnchor: {x: -0.56383514, y: -0.1339016}
+  m_ConnectedAnchor: {x: -0.5638375, y: -0.13390183}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -1401,7 +1448,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.045487177, y: 0.12885225}
-  m_ConnectedAnchor: {x: 0.61616516, y: -0.10656166}
+  m_ConnectedAnchor: {x: 0.61616457, y: -0.10656166}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
