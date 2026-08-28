@@ -41,6 +41,9 @@ namespace HelloServer
         // 화면에 그리는 일은 RoomLobby 가 한다. 여기는 선을 타는 일만 한다.
         public int RemoteCount => remotes.Count;
         public LocalPlayer Local => localPlayer;
+
+        public static GuestInputGroupMessage GuestInputGroupMessage { get; private set; }
+        public static SnapshotMessage SnapshotMessage { get; private set; }
         
         private ClientWebSocket socket;
         
@@ -55,11 +58,15 @@ namespace HelloServer
         // 한 소켓에 동시에 두 번 보내면 안 된다.
         private readonly SemaphoreSlim sendLock = new SemaphoreSlim(1, 1);
 
+        #region unity method
+
         private void Awake()
         {
             // true로 해둬야 백그라운드에서도 데이터 수신 가능
             Application.runInBackground = true;
         }
+
+        #endregion
 
         public void Join(string code, string who)
         {
@@ -206,6 +213,8 @@ namespace HelloServer
                 return;
             }
             Debug.Log($"[방] 스냅샷을 받았다. {message.testData}");
+            
+            SnapshotMessage = message;
         }
 
         private void OnGuestInputGroup(GuestInputGroupMessage message)
@@ -226,6 +235,8 @@ namespace HelloServer
                 }
                 Debug.Log($"[방] ({i + 1}번째) 게스트 입력 Id - {input.Id}, X - {input.X}, Y - {input.Y}, IsLeftShiftHold - {input.IsLeftShiftHold}, IsRightShiftHold - {input.IsRightShiftHold}");
             }
+            
+            GuestInputGroupMessage = message;
         }
 
         private void OnWelcome(WelcomeMessage message)
