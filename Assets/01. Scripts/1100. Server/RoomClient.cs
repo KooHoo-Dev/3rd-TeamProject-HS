@@ -196,22 +196,7 @@ namespace HelloServer
                 // case "chat": OnChat(JsonConvert.DeserializeObject<ChatMessage>(json)); break;
                 default: Debug.Log($"[방] 등록되지 않은 종류(type) : {type}"); break;
             }
-            
-            // === 아래는 수업중 했던 코드 ---
-            
-            // string type = JsonUtility.FromJson<TypeOnly>(json).Type;
-            
-            // switch (type)
-            // {
-            //     case "welcome": OnWelcome(JsonUtility.FromJson<WelcomeMessage>(json)); break;
-            //     case "join": OnJoin(JsonUtility.FromJson<JoinMessage>(json)); break;
-            //     case "leave": OnLeave(JsonUtility.FromJson<LeaveMessage>(json)); break;
-            //     case "state": OnState(JsonUtility.FromJson<StateMessage>(json)); break;
-            //     case "chat": OnChat(JsonUtility.FromJson<ChatMessage>(json)); break;
-            //
-            //     // 모르는 종류는 흘린다. 서버가 먼저 새 소식을 붙여도 여기서 죽지 않게.
-            //     default: Debug.Log($"[방] 등록되지 않은 종류(type) : {type}"); break;
-            // }
+           
         }
 
         private void OnSnapshot(SnapshotMessage message)
@@ -221,7 +206,21 @@ namespace HelloServer
                 Debug.LogWarning("[방] 호스트가 스냅샷을 받았다. 서버 코드 문제");
                 return;
             }
-            Debug.Log($"[방] 스냅샷을 받았다. {message.testData}");
+            
+             
+            // [추가] 수신된 스냅샷의 전체 현황을 한눈에 볼 수 있도록 로그를 찍어줍니다.
+            int playerCount = message.Players != null ? message.Players.Length : 0;
+            int fishCount = message.Fishes != null ? message.Fishes.Length : 0;
+            int inventoryKindCount = message.ItemKeys != null ? message.ItemKeys.Length : 0;
+
+            Debug.Log($"[방] 스냅샷 수신! " +
+                      $"플레이어: {playerCount}명 | " +
+                      $"물고기(아이템): {fishCount}개 | " +
+                      $"인벤토리 등록: {inventoryKindCount}종류 | " +
+                      $"다리 개수: {message.CurrentBridgeCount}개 | " +
+                      $"경과 시간: {message.ElapsedTime:F1}초 " +
+                      $"(GameOver: {message.IsGameOver}, GameWon: {message.IsGameWon})");
+            
             
             SnapshotMessage = message;
         }
@@ -344,19 +343,61 @@ namespace HelloServer
             
             if (Me.IsHost)
             {
-                // SnapshotMessage 필드의 멤버 업데이트
-                // PlayerStates 초기화
-                // 자원 정보 (fishStates, Plank?States) 초기화
-                // 인벤토리 정보 (ItemKeys, ItemCounts) 초기화
-                // 다리 정보 (CurrentBridgeCount) 초기화
-                // 게임 시간 정보 초기화
-                // 게임 종료 상태 초기화
-                await SendAsync(SnapshotMessage);
+                // 1. 스냅샷 객체 생성
+                var snapshot = new SnapshotMessage();
+
+                // 2. [물고기/아이템 연동]: 씬의 ItemObjectPool에서 활성화된 아이템들을 가져와 배열로 변환
+                var itemPool = FindObjectOfType<WeGotOne.ItemObjectPool>();
+                if (itemPool != null)
+                {
+                    snapshot.Fishes = itemPool.PackActiveItems().ToArray();
+                }
+
+                // 3. [플레이어 상태 연동]: 나와 다른 게스트 플레이어들의 상태 채우기
+                var playerStates = new List<PlayerState>();
+        
+                // 내(호스트) 위치 정보 추가
+                playerStates.Add(new PlayerState 
+                { 
+                    Id = Me.Id, 
+                    X = position.x, 
+                    Y = position.y 
+                });
+
+                // 접속한 다른 원격 유저(게스트)들의 현재 씬 위치 추가
+                foreach (var pair in remotes)
+                {
+                    if (pair.Value != null)
+                    {
+                        playerStates.Add(new PlayerState
+                        {
+                            Id = pair.Key,
+                            X = pair.Value.transform.position.x,
+                            Y = pair.Value.transform.position.y
+                        });
+                    }
+                }
+                snapshot.Players = playerStates.ToArray();
+
+                // 4. [기타 월드 상태]: 인벤토리 자원 및 건설 현황 등 (구현된 시스템에 맞춰 연결)
+                // snapshot.ItemKeys = InventoryManager.Instance.GetKeys();
+                // snapshot.ItemCounts = InventoryManager.Instance.GetCounts();
+                // snapshot.CurrentBridgeCount = BridgeManager.Instance.BridgeObjects.Length;
+
+                // 5. 서버로 패킷 전송
+                await SendAsync(snapshot);
             }
             else
             {
-                // GuestInputMessage 필드의 멤버 업데이트
-                await SendAsync(GuestInputMessage);
+                // 게스트는 자신의 키보드 입력을 전송
+                await SendAsync(new GuestInputMessage
+                {
+                    Id = Me.Id, 
+                    X = position.x, 
+                    Y = position.y,
+                    IsLeftShiftHold = keyboard.leftShiftKey.isPressed,
+                    IsRightShiftHold = keyboard.rightShiftKey.isPressed
+                });
             }
         }
 
