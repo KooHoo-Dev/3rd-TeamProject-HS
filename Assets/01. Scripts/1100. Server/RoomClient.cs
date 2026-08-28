@@ -215,9 +215,9 @@ namespace HelloServer
             // 이 부분에 스냅샷 받아온거에서 위치값 분리해서 적용해주면 댐
             for (int i = 0; i < message.Players.Length; i++)
             {
-                Vector2 pos = new Vector2(message.Players[i].X, message.Players[i].Y);
-                if(remotes.TryGetValue(message.Players[i].Id, out RemoteSpawner remote) == false) continue;
                 PlayerState state = message.Players[i];
+                Vector2 pos = new Vector2(state.X, state.Y);
+                if(remotes.TryGetValue(state.Id, out RemoteSpawner remote) == false) continue;
                 Quaternion quaternion = new Quaternion(state.QuaternionX, state.QuaternionY, state.QuaternionZ, state.QuaternionW);
                 remote.SetPosition(pos, quaternion);
             }

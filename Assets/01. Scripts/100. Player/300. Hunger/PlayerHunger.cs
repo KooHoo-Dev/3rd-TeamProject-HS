@@ -62,7 +62,7 @@ namespace WeGotOne
 
             DecreaseHunger(decreaseAmount);
             
-            UpdateHunger();
+            // UpdateHunger();
         }
         
         // 나중에 이벤트가 불러올 함수
@@ -87,7 +87,7 @@ namespace WeGotOne
                 NotifyPlayerStarveStateChanged( false);
             }
 
-            UpdateHunger();
+            // UpdateHunger();
         }
 
         /// <summary>
