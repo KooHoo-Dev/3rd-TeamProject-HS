@@ -95,6 +95,16 @@ namespace WeGotOne
 
 #endregion
 
+# region 위치값 보정 함수
+
+        public void SetPosition(Vector2 position, Quaternion rotation)
+        {
+            transform.position = position;
+            transform.rotation = rotation;
+        }
+
+# endregion
+
         private void FixedUpdate()
         {
             MoveToDirection(inputDirection);

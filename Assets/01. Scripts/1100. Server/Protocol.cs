@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace HelloServer
 {
@@ -25,6 +26,7 @@ namespace HelloServer
         public string Id { get; set; }
         public float X { get; set; }
         public float Y { get; set; }
+        public Quaternion Rotation { get; set; }
     }
     
     // 물고기 코드

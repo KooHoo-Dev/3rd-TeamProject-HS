@@ -29,7 +29,7 @@ namespace HelloServer
         // 내가 조종하는 캐릭터. 씬에 미리 놓아 둔다.
         [SerializeField] private LocalPlayer localPlayer;
         // 남이 들어올 때마다 이걸로 하나씩 만든다.
-        [SerializeField] private RemotePlayer remotePrefab;
+        [SerializeField] private RemoteSpawner remotePrefab;
 
         [Header("보내기")]
         // 초당 몇 번 내 위치를 보낼지.
@@ -51,7 +51,10 @@ namespace HelloServer
         private ClientWebSocket socket;
         
         // 남들. 번호로 찾는다.
-        private readonly Dictionary<string, RemotePlayer> remotes = new Dictionary<string, RemotePlayer>();
+        // private readonly Dictionary<string, RemotePlayer> remotes = new Dictionary<string, RemotePlayer>();
+        
+        // SSG 커스텀 : 플레이어 맞춰서 편집
+        private readonly Dictionary<string, RemoteSpawner> remotes = new Dictionary<string, RemoteSpawner>();
 
         // 오간 말. 너무 쌓이지 않게 앞에서부터 버린다.
         private readonly List<string> chatLog = new List<string>();
@@ -207,6 +210,15 @@ namespace HelloServer
                 return;
             }
             
+            // 이 부분에 스냅샷 받아온거에서 위치값 분리해서 적용해주면 댐
+            for (int i = 0; i < message.Players.Length; i++)
+            {
+                Vector2 pos = new Vector2(message.Players[i].X, message.Players[i].Y);
+                if(remotes.TryGetValue(message.Players[i].Id, out RemoteSpawner remote) == false) continue;
+                remote.SetPosition(pos, message.Players[i].Rotation);
+            }
+            
+            Debug.Log($"[방] 스냅샷을 받았다. {message.testData}");
              
             // [추가] 수신된 스냅샷의 전체 현황을 한눈에 볼 수 있도록 로그를 찍어줍니다.
             int playerCount = message.Players != null ? message.Players.Length : 0;
@@ -242,10 +254,16 @@ namespace HelloServer
                     continue;
                 }
                 Debug.Log($"[방] ({i + 1}번째) 게스트 입력 Id - {input.Id}, X - {input.X}, Y - {input.Y}, IsLeftShiftHold - {input.IsLeftShiftHold}, IsRightShiftHold - {input.IsRightShiftHold}");
+                
+                
+                if (remotes.TryGetValue(input.Id, out RemoteSpawner remote) == false) continue;
+                remote.SetTarget(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold);
             }
             
             GuestInputGroupMessage = message;
         }
+        
+        
 
         private void OnWelcome(WelcomeMessage message)
         {
@@ -267,7 +285,7 @@ namespace HelloServer
 
         private void OnLeave(LeaveMessage message)
         {
-            if (remotes.TryGetValue(message.Id, out RemotePlayer remote) == false) return;
+            if (remotes.TryGetValue(message.Id, out RemoteSpawner remote) == false) return;
 
             remotes.Remove(message.Id);
             Destroy(remote.gameObject);
@@ -304,9 +322,9 @@ namespace HelloServer
             // 이미 있으면 만들지 않는다. welcome 과 join 이 겹칠 수 있다.
             if (remotes.ContainsKey(user.Id)) return;
 
-            RemotePlayer remote = Instantiate(remotePrefab, Vector3.zero, Quaternion.identity);
+            RemoteSpawner remote = Instantiate(remotePrefab, Vector3.zero, Quaternion.identity);
 
-            remote.Setup(user, ColorOf(user.Id));
+            remote.Setup(user);
 
             remotes[user.Id] = remote;
         }
@@ -330,9 +348,20 @@ namespace HelloServer
 
                 // 아직 번호를 못 받았으면 보낼 것이 없다.
                 if (Me == null) continue;
+                
+                // 호스트일때는 호스트 스냅샷
+                if (Me.IsHost)
+                {
+                    await SendSnapshot();
+                }
+                // 게스트들은 입력값 쏴주기
+                else
+                {
+                    PlayerInputContainer inputContainer = localPlayer.InputContainer;
 
-                Vector2 position = localPlayer.transform.position;
-                Keyboard keyboard = localPlayer.Keyboard;
+                    Vector2 moveInput = inputContainer.MoveInput;
+                    bool leftGrab = inputContainer.LeftGrabInput;
+                    bool rightGrab = inputContainer.RightGrabInput;
 
                 await SendSnapshotOrInputMessage(position, keyboard);
             }
@@ -399,6 +428,26 @@ namespace HelloServer
                     IsRightShiftHold = keyboard.rightShiftKey.isPressed
                 });
             }
+
+            await SendAsync(new SnapshotMessage
+            {
+                Players = players,
+                testData = "I am Host"
+            });
+        }
+
+
+        private async UniTask SendInputMessages(Vector2 position, bool leftGrab, bool rightGrab)
+        {
+            // localplayer 쪽에서 관리 ㄱㄱ
+            await SendAsync(new GuestInputMessage
+            {
+                Id = Me.Id, 
+                X = position.x, 
+                Y = position.y,
+                IsLeftShiftHold = leftGrab,
+                IsRightShiftHold = rightGrab
+            });
         }
 
         public void Say(string text)

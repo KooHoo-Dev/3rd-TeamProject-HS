@@ -27,24 +27,22 @@ namespace WeGotOne
         [SerializeField] private ArmController rightUpperArm;
         [SerializeField] private BottomArmController leftBottomArm;
         [SerializeField] private BottomArmController rightBottomArm;
-        
+
         [SerializeField] private PlayerHunger body;
 
-        private void Update()
+        public void ApplyInput(Vector2 moveInput, bool leftGrab, bool rightGrab)
         {
-            HandleMovement();
-            HandleGrab();
+            HandleMovement(moveInput);
+            HandleGrab(leftGrab, rightGrab);
         }
 
-        private void HandleMovement()
+        private void HandleMovement(Vector2 moveInput)
         {
             if (body.CanMove == false)
             {
                 ClearArmDirections();
-                return; 
+                return;
             }
-            
-            Vector2 moveInput = SimpleInput.GetMoveAxisRaw();
 
             if (moveInput == Vector2.zero)
             {
@@ -55,24 +53,22 @@ namespace WeGotOne
             SetArmDirections(moveInput);
         }
 
-        private void HandleGrab()
+        private void HandleGrab(bool leftGrab, bool rightGrab)
         {
-            if (SimpleInput.GetKey(Key.LeftShift))
+            if (leftGrab)
             {
                 leftBottomArm.Grab();
             }
-
-            if (SimpleInput.GetKeyUp(Key.LeftShift))
+            else
             {
                 leftBottomArm.Release();
             }
 
-            if (SimpleInput.GetKey(Key.RightShift))
+            if (rightGrab)
             {
                 rightBottomArm.Grab();
             }
-
-            if (SimpleInput.GetKeyUp(Key.RightShift))
+            else
             {
                 rightBottomArm.Release();
             }
@@ -84,6 +80,14 @@ namespace WeGotOne
             rightUpperArm.SetDirection(direction);
             leftBottomArm.SetDirection(direction);
             rightBottomArm.SetDirection(direction);
+        }
+        
+        public void SetArmPosition(Vector2 direction, Quaternion rotation)
+        {
+            leftUpperArm.SetPosition(direction, rotation);
+            rightUpperArm.SetPosition(direction, rotation);
+            leftBottomArm.SetPosition(direction, rotation);
+            rightBottomArm.SetPosition(direction, rotation);
         }
 
         private void ClearArmDirections()
