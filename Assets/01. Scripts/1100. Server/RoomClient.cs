@@ -197,6 +197,20 @@ namespace HelloServer
                 return;
             }
             
+             
+            // [추가] 수신된 스냅샷의 전체 현황을 한눈에 볼 수 있도록 로그를 찍어줍니다.
+            int playerCount = message.Players != null ? message.Players.Length : 0;
+            int fishCount = message.Fishes != null ? message.Fishes.Length : 0;
+            int inventoryKindCount = message.ItemKeys != null ? message.ItemKeys.Length : 0;
+
+            Debug.Log($"[방] 스냅샷 수신! " +
+                      $"플레이어: {playerCount}명 | " +
+                      $"물고기(아이템): {fishCount}개 | " +
+                      $"인벤토리 등록: {inventoryKindCount}종류 | " +
+                      $"다리 개수: {message.CurrentBridgeCount}개 | " +
+                      $"경과 시간: {message.ElapsedTime:F1}초 " +
+                      $"(GameOver: {message.IsGameOver}, GameWon: {message.IsGameWon})");
+            
             
             SnapshotMessage = message;
         }
@@ -303,14 +317,53 @@ namespace HelloServer
         {
             if (Me.IsHost)
             {
-                await SendAsync(new SnapshotMessage()
+                // 1. 스냅샷 객체 생성
+                var snapshot = new SnapshotMessage();
+
+                // 2. [물고기/아이템 연동]: 씬의 ItemObjectPool에서 활성화된 아이템들을 가져와 배열로 변환
+                var itemPool = FindObjectOfType<WeGotOne.ItemObjectPool>();
+                if (itemPool != null)
                 {
-                    
+                    snapshot.Fishes = itemPool.PackActiveItems().ToArray();
+                }
+
+                // 3. [플레이어 상태 연동]: 나와 다른 게스트 플레이어들의 상태 채우기
+                var playerStates = new List<PlayerState>();
+        
+                // 내(호스트) 위치 정보 추가
+                playerStates.Add(new PlayerState 
+                { 
+                    Id = Me.Id, 
+                    X = position.x, 
+                    Y = position.y 
                 });
+
+                // 접속한 다른 원격 유저(게스트)들의 현재 씬 위치 추가
+                foreach (var pair in remotes)
+                {
+                    if (pair.Value != null)
+                    {
+                        playerStates.Add(new PlayerState
+                        {
+                            Id = pair.Key,
+                            X = pair.Value.transform.position.x,
+                            Y = pair.Value.transform.position.y
+                        });
+                    }
+                }
+                snapshot.Players = playerStates.ToArray();
+
+                // 4. [기타 월드 상태]: 인벤토리 자원 및 건설 현황 등 (구현된 시스템에 맞춰 연결)
+                // snapshot.ItemKeys = InventoryManager.Instance.GetKeys();
+                // snapshot.ItemCounts = InventoryManager.Instance.GetCounts();
+                // snapshot.CurrentBridgeCount = BridgeManager.Instance.BridgeObjects.Length;
+
+                // 5. 서버로 패킷 전송
+                await SendAsync(snapshot);
             }
             else
             {
-                // localplayer 쪽에서 관리 ㄱㄱ
+                // 게스트는 자신의 키보드 입력을 전송
                 await SendAsync(new GuestInputMessage
                 {
                     Id = Me.Id, 
