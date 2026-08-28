@@ -53,6 +53,7 @@ namespace HelloServer
 
         public bool IsLeftShiftHold { get; set; }
         public bool IsRightShiftHold { get; set; }
+        public bool IsBuildKeyHold { get; set; } // 아직 건설 키 확정이 아니라 명시는 안 함
     }
 
     public class GuestInputGroupMessage
@@ -69,6 +70,10 @@ namespace HelloServer
 
         // 아직 정해지지 않은 Physics 데이터는 그대로 전달한다.
         public string testData { get; set; } = "testsnapshot";
+        
+        public int[] ItemKeys { get; set; }
+        public int[] ItemCounts { get; set; }
+        public int CurrentBridgeCount { get; set; } // 현재 다리가 몇 개 건설 됐는지
     }
 
     public class StateMessage
