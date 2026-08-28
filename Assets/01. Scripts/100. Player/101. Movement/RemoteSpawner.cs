@@ -38,7 +38,10 @@ namespace WeGotOne
                 Id = user.Id,
                 X = transform.position.x,
                 Y = transform.position.y,
-                Rotation = Quaternion.identity,
+                QuaternionX = transform.rotation.x,
+                QuaternionY = transform.rotation.y,
+                QuaternionZ = transform.rotation.z,
+                QuaternionW = transform.rotation.w,
             };
         }
 
@@ -50,15 +53,6 @@ namespace WeGotOne
         public void SetPosition(Vector2 position, Quaternion rotation)
         {
             input.ApplyPosition(position, rotation);
-        }
-
-        public PlayerState ReturnPosition()
-        {
-            State.X = transform.position.x;
-            State.Y = transform.position.y;
-            State.Rotation = transform.rotation;
-            
-            return State;
         }
 
         /*

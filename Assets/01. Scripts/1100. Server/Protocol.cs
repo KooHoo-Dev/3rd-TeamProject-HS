@@ -26,7 +26,10 @@ namespace HelloServer
         public string Id { get; set; }
         public float X { get; set; }
         public float Y { get; set; }
-        public Quaternion Rotation { get; set; }
+        public float QuaternionX { get; set; }
+        public float QuaternionY { get; set; }
+        public float QuaternionZ { get; set; }
+        public float QuaternionW { get; set; }
     }
     
     // 물고기 코드

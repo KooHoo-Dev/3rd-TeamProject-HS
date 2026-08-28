@@ -64,6 +64,7 @@ namespace HelloServer
 
         // 한 소켓에 동시에 두 번 보내면 안 된다.
         private readonly SemaphoreSlim sendLock = new SemaphoreSlim(1, 1);
+        private ItemObjectPool itemPool;
 
         #region unity method
 
@@ -72,6 +73,7 @@ namespace HelloServer
             base.OnInitialize();
             // true로 해둬야 백그라운드에서도 데이터 수신 가능
             Application.runInBackground = true;
+            itemPool = FindObjectOfType<ItemObjectPool>();
         }
 
         #endregion
@@ -215,11 +217,11 @@ namespace HelloServer
             {
                 Vector2 pos = new Vector2(message.Players[i].X, message.Players[i].Y);
                 if(remotes.TryGetValue(message.Players[i].Id, out RemoteSpawner remote) == false) continue;
-                remote.SetPosition(pos, message.Players[i].Rotation);
+                PlayerState state = message.Players[i];
+                Quaternion quaternion = new Quaternion(state.QuaternionX, state.QuaternionY, state.QuaternionZ, state.QuaternionW);
+                remote.SetPosition(pos, quaternion);
             }
             
-            Debug.Log($"[방] 스냅샷을 받았다. {message.testData}");
-             
             // [추가] 수신된 스냅샷의 전체 현황을 한눈에 볼 수 있도록 로그를 찍어줍니다.
             int playerCount = message.Players != null ? message.Players.Length : 0;
             int fishCount = message.Fishes != null ? message.Fishes.Length : 0;
@@ -348,26 +350,16 @@ namespace HelloServer
 
                 // 아직 번호를 못 받았으면 보낼 것이 없다.
                 if (Me == null) continue;
-                
+
                 // 호스트일때는 호스트 스냅샷
-                if (Me.IsHost)
-                {
-                    await SendSnapshot();
-                }
-                // 게스트들은 입력값 쏴주기
-                else
-                {
-                    PlayerInputContainer inputContainer = localPlayer.InputContainer;
-
-                    Vector2 moveInput = inputContainer.MoveInput;
-                    bool leftGrab = inputContainer.LeftGrabInput;
-                    bool rightGrab = inputContainer.RightGrabInput;
-
-                await SendSnapshotOrInputMessage(position, keyboard);
+                // inputContainer ???
+                Keyboard keyboard = Keyboard.current;
+                Vector2 position = localPlayer.transform.position;
+                await SendSnapshotOrInputMessage(keyboard, position);
             }
         }
 
-        private async UniTask SendSnapshotOrInputMessage(Vector2 position, Keyboard keyboard)
+        private async UniTask SendSnapshotOrInputMessage(Keyboard keyboard, Vector2 position)
         {
             
             if (Me.IsHost)
@@ -376,7 +368,6 @@ namespace HelloServer
                 var snapshot = new SnapshotMessage();
 
                 // 2. [물고기/아이템 연동]: 씬의 ItemObjectPool에서 활성화된 아이템들을 가져와 배열로 변환
-                var itemPool = FindObjectOfType<WeGotOne.ItemObjectPool>();
                 if (itemPool != null)
                 {
                     snapshot.Fishes = itemPool.PackActiveItems().ToArray();
@@ -389,8 +380,12 @@ namespace HelloServer
                 playerStates.Add(new PlayerState 
                 { 
                     Id = Me.Id, 
-                    X = position.x, 
-                    Y = position.y 
+                    X = localPlayer.transform.position.x,  
+                    Y = localPlayer.transform.position.y,
+                    QuaternionX = localPlayer.transform.rotation.x,
+                    QuaternionY = localPlayer.transform.rotation.y,
+                    QuaternionZ = localPlayer.transform.rotation.z,
+                    QuaternionW = localPlayer.transform.rotation.w,
                 });
 
                 // 접속한 다른 원격 유저(게스트)들의 현재 씬 위치 추가
@@ -428,12 +423,6 @@ namespace HelloServer
                     IsRightShiftHold = keyboard.rightShiftKey.isPressed
                 });
             }
-
-            await SendAsync(new SnapshotMessage
-            {
-                Players = players,
-                testData = "I am Host"
-            });
         }
 
 
