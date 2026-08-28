@@ -16,8 +16,6 @@ namespace WeGotOne
         [field: SerializeField] public Image Content { get; private set; }
         [field: SerializeField] public TMP_Text ItemCountText { get; private set; }
 
-        public int ItemCount;
-
         private RectTransform rectTransform;
         private ItemScriptableObject item;
 
@@ -39,12 +37,14 @@ namespace WeGotOne
             // as : 타입을 캐스팅하는 키워드입니다. 
         }
 
-        public void CountTextUpdate(bool isPlus)
+        public void CountTextUpdate(int itemKey, bool isPlus)
         {
-            ItemCount += isPlus ? 1 : -1;
-            ItemCountText.text = ItemCount.ToString();
+            int itemCount = InventoryItemDB.Instance.ItemCountDic[itemKey];
 
-            if (ItemCount <= 0)
+            itemCount += isPlus ? 1 : -1;
+            ItemCountText.text = itemCount.ToString();
+
+            if (itemCount <= 0)
             {
                 SetItem(null);
             }

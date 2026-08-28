@@ -43,14 +43,14 @@ namespace WeGotOne
                             if (grid[i, j].IsEmpty)
                             {
                                 grid[i, j].SetItem(db.GetItem(item.Key));
-                                grid[i, j].CountTextUpdate(true);
+                                grid[i, j].CountTextUpdate(item.Key, true);
                                 holder.OnPickup();
                                 return;
                             }
 
                             if (grid[i, j].Item.Name == item.Name)
                             {
-                                grid[i, j].CountTextUpdate(true);
+                                grid[i, j].CountTextUpdate(item.Key, true);
                                 holder.OnPickup();
                                 return;
                             }
