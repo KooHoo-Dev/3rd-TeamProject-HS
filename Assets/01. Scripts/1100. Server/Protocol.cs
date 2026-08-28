@@ -25,6 +25,18 @@ namespace HelloServer
         public float X { get; set; }
         public float Y { get; set; }
     }
+    
+    // 물고기 코드
+    public class FishState
+    {
+        public string Id { get; set; }       // 물고기 고유 식별 번호 (풀에서 생성 시 부여)
+        public float X { get; set; }          // 현재 위치 X
+        public float Y { get; set; }          // 현재 위치 Y
+        public float ScaleX { get; set; }     // 좌우 반전 스케일값 (ApplyingFacing 결과 동기화용)
+        public float Angle { get; set; }      // 머리 회전 각도 (발버둥 칠 때 회전값 동기화용)
+        public string CurrentState { get; set; }     // 현재 상태 이름 (Idle, Caught, Faint, Runaway 등)
+    }
+    
 
     #region 클라이언트 -> 서버 (C2S)
 
@@ -68,6 +80,8 @@ namespace HelloServer
 
         // 아직 정해지지 않은 Physics 데이터는 그대로 전달한다.
         public string testData { get; set; } = "testsnapshot";
+        
+        
     }
 
     public class StateMessage
@@ -79,6 +93,7 @@ namespace HelloServer
         // 플레이어 (위치, 무력화 상태)
         public PlayerState[] Players { get; set; }
         // 물고기 (위치, 상태)
+        public FishState[] Fishes { get; set; } 
         // 공용 인벤토리 내 자원량
         // 다리 
         // 시간 
