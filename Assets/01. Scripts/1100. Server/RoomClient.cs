@@ -8,13 +8,15 @@ using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine.InputSystem;
+using WeGotOne;
 
 namespace HelloServer
 {
     
     // RoomClient가 서버와의 네트워크 작업을 담당한다.
     // 송신, 수신 등을 모두 처리하는 객체
-    public class RoomClient : MonoBehaviour
+    // 씬에 종속적이지 않음
+    public class RoomClient : SingletonBase<RoomClient>
     {
         [Header("서버")]
         // 웹소켓 주소. http 가 아니라 ws로 시작.
@@ -42,8 +44,9 @@ namespace HelloServer
         public int RemoteCount => remotes.Count;
         public LocalPlayer Local => localPlayer;
 
-        public static GuestInputGroupMessage GuestInputGroupMessage { get; private set; }
-        public static SnapshotMessage SnapshotMessage { get; private set; }
+        public GuestInputGroupMessage GuestInputGroupMessage { get; private set; }
+        public GuestInputMessage GuestInputMessage { get; private set; }
+        public SnapshotMessage SnapshotMessage { get; private set; }
         
         private ClientWebSocket socket;
         
@@ -53,15 +56,17 @@ namespace HelloServer
         // 오간 말. 너무 쌓이지 않게 앞에서부터 버린다.
         private readonly List<string> chatLog = new List<string>();
 
-        private const int ChatKeep = 12;
+        // 채팅 정보 필드 폐기
+        // private const int ChatKeep = 12;
 
         // 한 소켓에 동시에 두 번 보내면 안 된다.
         private readonly SemaphoreSlim sendLock = new SemaphoreSlim(1, 1);
 
         #region unity method
 
-        private void Awake()
+        protected override void OnInitialize()
         {
+            base.OnInitialize();
             // true로 해둬야 백그라운드에서도 데이터 수신 가능
             Application.runInBackground = true;
         }
@@ -330,31 +335,28 @@ namespace HelloServer
                 Vector2 position = localPlayer.transform.position;
                 Keyboard keyboard = localPlayer.Keyboard;
 
-                await SendSnapshotOrInputMessages(position, keyboard);
+                await SendSnapshotOrInputMessage(position, keyboard);
             }
         }
 
-        private async UniTask SendSnapshotOrInputMessages(Vector2 position, Keyboard keyboard)
+        private async UniTask SendSnapshotOrInputMessage(Vector2 position, Keyboard keyboard)
         {
             
             if (Me.IsHost)
             {
-                await SendAsync(new SnapshotMessage()
-                {
-                    testData = "I am Host"
-                });
+                // SnapshotMessage 필드의 멤버 업데이트
+                // PlayerStates 초기화
+                // 자원 정보 (fishStates, Plank?States) 초기화
+                // 인벤토리 정보 (ItemKeys, ItemCounts) 초기화
+                // 다리 정보 (CurrentBridgeCount) 초기화
+                // 게임 시간 정보 초기화
+                // 게임 종료 상태 초기화
+                await SendAsync(SnapshotMessage);
             }
             else
             {
-                // localplayer 쪽에서 관리 ㄱㄱ
-                await SendAsync(new GuestInputMessage
-                {
-                    Id = Me.Id, 
-                    X = position.x, 
-                    Y = position.y,
-                    IsLeftShiftHold = keyboard.leftShiftKey.isPressed,
-                    IsRightShiftHold = keyboard.rightShiftKey.isPressed
-                });
+                // GuestInputMessage 필드의 멤버 업데이트
+                await SendAsync(GuestInputMessage);
             }
         }
 
