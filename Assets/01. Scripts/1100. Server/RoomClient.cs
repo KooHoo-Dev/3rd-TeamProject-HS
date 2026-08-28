@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -8,9 +7,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
-using UnityEngine.InputSystem;
 using WeGotOne;
-using PlayerInput = WeGotOne.PlayerInput;
 
 namespace HelloServer
 {
@@ -328,48 +325,71 @@ namespace HelloServer
                 // 아직 번호를 못 받았으면 보낼 것이 없다.
                 if (Me == null) continue;
                 
-                PlayerInputContainer inputContainer = localPlayer.InputContainer;
+                // 호스트일때는 호스트 스냅샷
+                if (Me.IsHost)
+                {
+                    await SendSnapshot();
+                }
+                // 게스트들은 입력값 쏴주기
+                else
+                {
+                    PlayerInputContainer inputContainer = localPlayer.InputContainer;
 
-                Vector2 moveInput = inputContainer.MoveInput;
-                bool leftGrab = inputContainer.LeftGrabInput;
-                bool rightGrab = inputContainer.RightGrabInput;
+                    Vector2 moveInput = inputContainer.MoveInput;
+                    bool leftGrab = inputContainer.LeftGrabInput;
+                    bool rightGrab = inputContainer.RightGrabInput;
 
-                await SendSnapshotOrInputMessages(moveInput, leftGrab, rightGrab);
+                    await SendInputMessages(moveInput, leftGrab, rightGrab);
+                }
             }
         }
 
-        private async UniTask SendSnapshotOrInputMessages(Vector2 position, bool leftGrab, bool rightGrab)
+        private async UniTask SendSnapshot()
         {
-            if (Me.IsHost)
+            PlayerState[] players =
+                new PlayerState[remotes.Count + 1];
+
+            int index = 0;
+
+            // 1. 호스트 자신
+            players[index] = new PlayerState
             {
-                PlayerState[] players = new PlayerState[remotes.Count];
+                Id = Me.Id,
 
-                int index = 0;
+                // 여기에는 호스트 자신의 실제 위치/회전
+                // 값을 넣어야 함
+            };
 
-                foreach (var remote in remotes)
-                {
-                    players[index] = remote.Value.ReturnPosition();
-                    index++;
-                }
+            index++;
 
-                await SendAsync(new SnapshotMessage()
-                {
-                    Players = players,
-                    testData = "I am Host"
-                });
-            }
-            else
+            // 2. 호스트가 관리하는 모든 게스트
+            foreach (var remote in remotes)
             {
-                // localplayer 쪽에서 관리 ㄱㄱ
-                await SendAsync(new GuestInputMessage
-                {
-                    Id = Me.Id, 
-                    X = position.x, 
-                    Y = position.y,
-                    IsLeftShiftHold = leftGrab,
-                    IsRightShiftHold = rightGrab
-                });
+                players[index] =
+                    remote.Value.ReturnPosition();
+
+                index++;
             }
+
+            await SendAsync(new SnapshotMessage
+            {
+                Players = players,
+                testData = "I am Host"
+            });
+        }
+
+
+        private async UniTask SendInputMessages(Vector2 position, bool leftGrab, bool rightGrab)
+        {
+            // localplayer 쪽에서 관리 ㄱㄱ
+            await SendAsync(new GuestInputMessage
+            {
+                Id = Me.Id, 
+                X = position.x, 
+                Y = position.y,
+                IsLeftShiftHold = leftGrab,
+                IsRightShiftHold = rightGrab
+            });
         }
 
         public void Say(string text)
