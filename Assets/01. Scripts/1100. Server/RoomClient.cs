@@ -8,13 +8,15 @@ using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine.InputSystem;
+using WeGotOne;
 
 namespace HelloServer
 {
     
     // RoomClient가 서버와의 네트워크 작업을 담당한다.
     // 송신, 수신 등을 모두 처리하는 객체
-    public class RoomClient : MonoBehaviour
+    // 씬에 종속적이지 않음
+    public class RoomClient : SingletonBase<RoomClient>
     {
         [Header("서버")]
         // 웹소켓 주소. http 가 아니라 ws로 시작.
@@ -42,8 +44,9 @@ namespace HelloServer
         public int RemoteCount => remotes.Count;
         public LocalPlayer Local => localPlayer;
 
-        public static GuestInputGroupMessage GuestInputGroupMessage { get; private set; }
-        public static SnapshotMessage SnapshotMessage { get; private set; }
+        public GuestInputGroupMessage GuestInputGroupMessage { get; private set; }
+        public GuestInputMessage GuestInputMessage { get; private set; }
+        public SnapshotMessage SnapshotMessage { get; private set; }
         
         private ClientWebSocket socket;
         
@@ -53,15 +56,17 @@ namespace HelloServer
         // 오간 말. 너무 쌓이지 않게 앞에서부터 버린다.
         private readonly List<string> chatLog = new List<string>();
 
-        private const int ChatKeep = 12;
+        // 채팅 정보 필드 폐기
+        // private const int ChatKeep = 12;
 
         // 한 소켓에 동시에 두 번 보내면 안 된다.
         private readonly SemaphoreSlim sendLock = new SemaphoreSlim(1, 1);
 
         #region unity method
 
-        private void Awake()
+        protected override void OnInitialize()
         {
+            base.OnInitialize();
             // true로 해둬야 백그라운드에서도 데이터 수신 가능
             Application.runInBackground = true;
         }
@@ -143,6 +148,10 @@ namespace HelloServer
                     result = await socket
                         .ReceiveAsync(new ArraySegment<byte>(buffer), destroyCancellationToken)
                         .AsUniTask();
+                    // 호스트가 게스트 입력 받아오거나
+                    // 게스트가 호스트 스냅샷 받아오거나
+                    // 하는 시점을 Update 이전으로 고정
+                    await UniTask.Yield(PlayerLoopTiming.Update);
                 }
                 catch (OperationCanceledException)
                 {
@@ -181,10 +190,10 @@ namespace HelloServer
                 case "welcome": OnWelcome(JsonConvert.DeserializeObject<WelcomeMessage>(json)); break;
                 case "join": OnJoin(JsonConvert.DeserializeObject<JoinMessage>(json)); break;
                 case "leave": OnLeave(JsonConvert.DeserializeObject<LeaveMessage>(json)); break;
-                case "state": OnState(JsonConvert.DeserializeObject<StateMessage>(json)); break;
-                case "chat": OnChat(JsonConvert.DeserializeObject<ChatMessage>(json)); break;
                 case "inputGroup": OnGuestInputGroup(JsonConvert.DeserializeObject<GuestInputGroupMessage>(json)); break;
                 case "snapshot": OnSnapshot(JsonConvert.DeserializeObject<SnapshotMessage>(json)); break;
+                // case "state": OnState(JsonConvert.DeserializeObject<StateMessage>(json)); break;
+                // case "chat": OnChat(JsonConvert.DeserializeObject<ChatMessage>(json)); break;
                 default: Debug.Log($"[방] 등록되지 않은 종류(type) : {type}"); break;
             }
             
@@ -267,29 +276,29 @@ namespace HelloServer
             Debug.Log($"[방] {message.Id} 이(가) 나갔다");
         }
         
-        private void OnState(StateMessage message)
-        {
-            foreach (PlayerState state in message.Players)
-            {
-                // 내 것은 버린다. 서버가 알려 준 내 위치로 나를 다시 옮기면 안 된다.
-                // 내가 방금 움직인 자리보다 늘 한 박자 늦은 값이라, 넣으면 캐릭터가 뒤로 끌린다.
-                if (state.Id == Me.Id) continue;
-                if (remotes.TryGetValue(state.Id, out RemotePlayer remote) == false) continue;
-                remote.SetTarget(new Vector2(state.X, state.Y));
-            }
-        }
-
-        // 방에서 누가 말했다. 내 말도 여기로 돌아옴
-        private void OnChat(ChatMessage message)
-        {
-            string mine = Me != null && message.Id == Me.Id ? " (나)" : "";
-
-            chatLog.Add($"{message.NickName}{mine} : {message.Text}");
-
-            if (chatLog.Count > ChatKeep) chatLog.RemoveAt(0);
-
-            Debug.Log($"[방] {message.NickName}({message.Id}) : {message.Text}");
-        }
+        // private void OnState(StateMessage message)
+        // {
+        //     foreach (PlayerState state in message.Players)
+        //     {
+        //         // 내 것은 버린다. 서버가 알려 준 내 위치로 나를 다시 옮기면 안 된다.
+        //         // 내가 방금 움직인 자리보다 늘 한 박자 늦은 값이라, 넣으면 캐릭터가 뒤로 끌린다.
+        //         if (state.Id == Me.Id) continue;
+        //         if (remotes.TryGetValue(state.Id, out RemotePlayer remote) == false) continue;
+        //         remote.SetTarget(new Vector2(state.X, state.Y));
+        //     }
+        // }
+        //
+        // // 방에서 누가 말했다. 내 말도 여기로 돌아옴
+        // private void OnChat(ChatMessage message)
+        // {
+        //     string mine = Me != null && message.Id == Me.Id ? " (나)" : "";
+        //
+        //     chatLog.Add($"{message.NickName}{mine} : {message.Text}");
+        //
+        //     if (chatLog.Count > ChatKeep) chatLog.RemoveAt(0);
+        //
+        //     Debug.Log($"[방] {message.NickName}({message.Id}) : {message.Text}");
+        // }
 
         private void Spawn(User user)
         {
@@ -313,7 +322,12 @@ namespace HelloServer
 
             while (destroyCancellationToken.IsCancellationRequested == false)
             {
+                // Update, FixedUpdate 이후 (게임 로직 처리 이후) 
+                // 호스트는 스냅샷
+                // 게스트는 게스트 인풋 전송
+                // WhenAll로하면 Delay가 나중에 완료되어서 PostLateUpdate 시점에 실행될거라 보장할 수 없음
                 await UniTask.Delay(delay, cancellationToken: destroyCancellationToken);
+                await UniTask.Yield(PlayerLoopTiming.LastUpdate);
 
                 // 아직 번호를 못 받았으면 보낼 것이 없다.
                 if (Me == null) continue;
@@ -321,30 +335,28 @@ namespace HelloServer
                 Vector2 position = localPlayer.transform.position;
                 Keyboard keyboard = localPlayer.Keyboard;
 
-                await SendSnapshotOrInputMessages(position, keyboard);
+                await SendSnapshotOrInputMessage(position, keyboard);
             }
         }
 
-        private async UniTask SendSnapshotOrInputMessages(Vector2 position, Keyboard keyboard)
+        private async UniTask SendSnapshotOrInputMessage(Vector2 position, Keyboard keyboard)
         {
+            
             if (Me.IsHost)
             {
-                await SendAsync(new SnapshotMessage()
-                {
-                    testData = "I am Host"
-                });
+                // SnapshotMessage 필드의 멤버 업데이트
+                // PlayerStates 초기화
+                // 자원 정보 (fishStates, Plank?States) 초기화
+                // 인벤토리 정보 (ItemKeys, ItemCounts) 초기화
+                // 다리 정보 (CurrentBridgeCount) 초기화
+                // 게임 시간 정보 초기화
+                // 게임 종료 상태 초기화
+                await SendAsync(SnapshotMessage);
             }
             else
             {
-                // localplayer 쪽에서 관리 ㄱㄱ
-                await SendAsync(new GuestInputMessage
-                {
-                    Id = Me.Id, 
-                    X = position.x, 
-                    Y = position.y,
-                    IsLeftShiftHold = keyboard.leftShiftKey.isPressed,
-                    IsRightShiftHold = keyboard.rightShiftKey.isPressed
-                });
+                // GuestInputMessage 필드의 멤버 업데이트
+                await SendAsync(GuestInputMessage);
             }
         }
 
