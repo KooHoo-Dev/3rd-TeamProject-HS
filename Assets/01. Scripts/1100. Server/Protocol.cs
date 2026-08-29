@@ -23,10 +23,33 @@ namespace HelloServer
     public class PlayerState
     {
         public string Id { get; set; }
+
+        public PartState Body { get; set; }
+        public PartState LeftArmTop { get; set; }
+        public PartState RightArmTop { get; set; }
+        public PartState LeftArmBottom { get; set; }
+        public PartState RightArmBottom { get; set; }
+        
+        public bool IsLeftGrab { get; set; }
+        public bool IsRightGrab { get; set; }
+    }
+
+    public class PartState
+    {
         public float X { get; set; }
         public float Y { get; set; }
+        
+        public Rotation Rotation { get; set; }
     }
-    
+
+    public class Rotation
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
+        public float W { get; set; }
+    }
+
     // 물고기 코드
     public class FishState
     {
@@ -86,7 +109,7 @@ namespace HelloServer
         public int CurrentBridgeCount { get; set; } // 현재 다리가 몇 개 건설 됐는지
         
         // 4. 게임 라이프 사이클 및 시간 상태
-        public float ElapsedTime { get; set; }      // 흐른 시간 혹은 DayLoop 상태
+        public bool IsDay { get; set; }      // 흐른 시간 혹은 DayLoop 상태
         public bool IsGameOver { get; set; }         // 게임 오버 여부
         public bool IsGameWon { get; set; }          // 게임 승리 여부
     }
