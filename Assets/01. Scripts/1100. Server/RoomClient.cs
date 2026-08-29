@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
+using UnityEditor.SettingsManagement;
 using UnityEngine.InputSystem;
 using WeGotOne;
 
@@ -25,11 +26,13 @@ namespace HelloServer
         [SerializeField] private string nickName = "이름없음";
         // 들어갈 방.
         [SerializeField] private string roomCode = "ABCD";
+        
         [Header("장면")]
         // 내가 조종하는 캐릭터. 씬에 미리 놓아 둔다.
-        [SerializeField] private LocalPlayer localPlayer;
+        // 8/28 수정 : 예시 플레이어인 LocalPlayer를 제거하고 프로젝트에서 사용하는 플레이어 컨트롤러로 변경
+        [SerializeField] private PlayerController localPlayer;
         // 남이 들어올 때마다 이걸로 하나씩 만든다.
-        [SerializeField] private RemotePlayer remotePrefab;
+        [SerializeField] private PlayerController remotePrefab;
 
         [Header("보내기")]
         // 초당 몇 번 내 위치를 보낼지.
@@ -42,7 +45,7 @@ namespace HelloServer
         
         // 화면에 그리는 일은 RoomLobby 가 한다. 여기는 선을 타는 일만 한다.
         public int RemoteCount => remotes.Count;
-        public LocalPlayer Local => localPlayer;
+        public PlayerController Local => localPlayer;
 
         public GuestInputGroupMessage GuestInputGroupMessage { get; private set; }
         public GuestInputMessage GuestInputMessage { get; private set; }
@@ -51,7 +54,10 @@ namespace HelloServer
         private ClientWebSocket socket;
         
         // 남들. 번호로 찾는다.
-        private readonly Dictionary<string, RemotePlayer> remotes = new Dictionary<string, RemotePlayer>();
+        // private readonly Dictionary<string, RemotePlayer> remotes = new Dictionary<string, RemotePlayer>();
+        
+        // SSG 커스텀 : 플레이어 맞춰서 편집
+        private readonly Dictionary<string, PlayerController> remotes = new Dictionary<string, PlayerController>();
 
         // 오간 말. 너무 쌓이지 않게 앞에서부터 버린다.
         private readonly List<string> chatLog = new List<string>();
@@ -61,6 +67,7 @@ namespace HelloServer
 
         // 한 소켓에 동시에 두 번 보내면 안 된다.
         private readonly SemaphoreSlim sendLock = new SemaphoreSlim(1, 1);
+        private ItemObjectPool itemPool;
 
         #region unity method
 
@@ -69,6 +76,12 @@ namespace HelloServer
             base.OnInitialize();
             // true로 해둬야 백그라운드에서도 데이터 수신 가능
             Application.runInBackground = true;
+            itemPool = FindObjectOfType<ItemObjectPool>();
+        }
+
+        private void OnDestroy()
+        {
+            socket?.Dispose();
         }
 
         #endregion
@@ -196,31 +209,42 @@ namespace HelloServer
                 // case "chat": OnChat(JsonConvert.DeserializeObject<ChatMessage>(json)); break;
                 default: Debug.Log($"[방] 등록되지 않은 종류(type) : {type}"); break;
             }
-           
         }
 
         private void OnSnapshot(SnapshotMessage message)
         {
             if (Me.IsHost)
             {
-                Debug.LogWarning("[방] 호스트가 스냅샷을 받았다. 서버 코드 문제");
+                SnapshotMessage = message;
                 return;
             }
             
-             
-            // [추가] 수신된 스냅샷의 전체 현황을 한눈에 볼 수 있도록 로그를 찍어줍니다.
-            int playerCount = message.Players != null ? message.Players.Length : 0;
-            int fishCount = message.Fishes != null ? message.Fishes.Length : 0;
-            int inventoryKindCount = message.ItemKeys != null ? message.ItemKeys.Length : 0;
-
-            Debug.Log($"[방] 스냅샷 수신! " +
-                      $"플레이어: {playerCount}명 | " +
-                      $"물고기(아이템): {fishCount}개 | " +
-                      $"인벤토리 등록: {inventoryKindCount}종류 | " +
-                      $"다리 개수: {message.CurrentBridgeCount}개 | " +
-                      $"경과 시간: {message.ElapsedTime:F1}초 " +
-                      $"(GameOver: {message.IsGameOver}, GameWon: {message.IsGameWon})");
+            foreach (PlayerState state in message.Players)
+            {
+                if (state.Id == Me.Id)
+                {
+                    localPlayer.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
+                }
+                else if (remotes.TryGetValue(state.Id, out PlayerController remote))
+                {
+                    remote.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
+                }
+            }
             
+            // 임시 비활성화 (json 형태로 로그 출력으로 대체)
+            // [추가] 수신된 스냅샷의 전체 현황을 한눈에 볼 수 있도록 로그를 찍어줍니다.
+            // int playerCount = message.Players != null ? message.Players.Length : 0;
+            // int fishCount = message.Fishes != null ? message.Fishes.Length : 0;
+            // int inventoryKindCount = message.ItemKeys != null ? message.ItemKeys.Length : 0;
+            //
+            // Debug.Log($"[방] 스냅샷 수신! " +
+            //           $"플레이어: {playerCount}명 | " +
+            //           $"물고기(아이템): {fishCount}개 | " +
+            //           $"인벤토리 등록: {inventoryKindCount}종류 | " +
+            //           $"다리 개수: {message.CurrentBridgeCount}개 | " +
+            //           $"경과 시간: {message.ElapsedTime:F1}초 " +
+            //           $"(GameOver: {message.IsGameOver}, GameWon: {message.IsGameWon})");
+            Debug.Log(message);
             
             SnapshotMessage = message;
         }
@@ -241,7 +265,11 @@ namespace HelloServer
                 {
                     continue;
                 }
-                Debug.Log($"[방] ({i + 1}번째) 게스트 입력 Id - {input.Id}, X - {input.X}, Y - {input.Y}, IsLeftShiftHold - {input.IsLeftShiftHold}, IsRightShiftHold - {input.IsRightShiftHold}");
+                // Debug.Log($"[방] ({i + 1}번째) 게스트 입력 Id - {input.Id}, X - {input.X}, Y - {input.Y}, IsLeftShiftHold - {input.IsLeftShiftHold}, IsRightShiftHold - {input.IsRightShiftHold}");
+                
+                
+                if (remotes.TryGetValue(input.Id, out PlayerController remote) == false) continue;
+                remote.ApplyInput(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold);
             }
             
             GuestInputGroupMessage = message;
@@ -252,11 +280,31 @@ namespace HelloServer
             Me = message.User;
             RoomCode = message.RoomCode;
 
-            localPlayer.Setup(Me, ColorOf(Me.Id));
-
+            // 자기 자신 포함 모두 스폰
+            // 자기 자신은 입력값을 전달해줘야함
+            // 입력값 전달은 호스트 여부에 따라 달라짐
+            // 호스트이면 즉시 반영
+            // 게스트이면 호스트 스냅샷만 반영 (입력값 비활성화)
+            Spawn(message.User);
             foreach (User user in message.Users) Spawn(user);
+            
+            remotes.TryGetValue(Me.Id, out PlayerController localPlayer);
+            this.localPlayer = localPlayer;
 
-            Debug.Log($"[방] {RoomCode} 에 들어왔다. 내 번호는 {Me.Id}, 역할은 {(Me.IsHost ? "Host" : "Guest")}, 이미 {message.Users.Length}명 있다");
+            Debug.Log(
+                $"[OnWelcome Setup 직전] " +
+                $"LocalObject={localPlayer.gameObject.name} | " +
+                $"LocalInstanceID={localPlayer.GetInstanceID()}"
+            );
+
+            localPlayer.Setup(Me);
+
+            Debug.Log(
+                $"[OnWelcome AFTER] " +
+                $"LocalObject={localPlayer.gameObject.name} | " +
+                $"LocalInstanceID={localPlayer.GetInstanceID()} | " +
+                $"LocalUser={localPlayer.User?.Id}"
+            );
         }
 
         private void OnJoin(JoinMessage message)
@@ -267,7 +315,7 @@ namespace HelloServer
 
         private void OnLeave(LeaveMessage message)
         {
-            if (remotes.TryGetValue(message.Id, out RemotePlayer remote) == false) return;
+            if (remotes.TryGetValue(message.Id, out PlayerController remote) == false) return;
 
             remotes.Remove(message.Id);
             Destroy(remote.gameObject);
@@ -304,9 +352,17 @@ namespace HelloServer
             // 이미 있으면 만들지 않는다. welcome 과 join 이 겹칠 수 있다.
             if (remotes.ContainsKey(user.Id)) return;
 
-            RemotePlayer remote = Instantiate(remotePrefab, Vector3.zero, Quaternion.identity);
+            PlayerController remote = Instantiate(remotePrefab, Vector3.zero, Quaternion.identity);
+            
+            Rigidbody2D[] rigid = remote.GetComponentsInChildren<Rigidbody2D>();
 
-            remote.Setup(user, ColorOf(user.Id));
+            for (int i = 0; i < rigid.Length; i++)
+            {
+                if(Me.IsHost == false)
+                    rigid[i].bodyType = RigidbodyType2D.Kinematic;
+            }
+
+            remote.Setup(user);
 
             remotes[user.Id] = remote;
         }
@@ -331,23 +387,19 @@ namespace HelloServer
                 // 아직 번호를 못 받았으면 보낼 것이 없다.
                 if (Me == null) continue;
 
-                Vector2 position = localPlayer.transform.position;
-                Keyboard keyboard = localPlayer.Keyboard;
-
-                await SendSnapshotOrInputMessage(position, keyboard);
+                // 호스트일때는 호스트 스냅샷
+                await SendSnapshotOrInputMessage();
             }
         }
 
-        private async UniTask SendSnapshotOrInputMessage(Vector2 position, Keyboard keyboard)
+        private async UniTask SendSnapshotOrInputMessage()
         {
-            
             if (Me.IsHost)
             {
                 // 1. 스냅샷 객체 생성
                 var snapshot = new SnapshotMessage();
 
                 // 2. [물고기/아이템 연동]: 씬의 ItemObjectPool에서 활성화된 아이템들을 가져와 배열로 변환
-                var itemPool = FindObjectOfType<WeGotOne.ItemObjectPool>();
                 if (itemPool != null)
                 {
                     snapshot.Fishes = itemPool.PackActiveItems().ToArray();
@@ -356,49 +408,50 @@ namespace HelloServer
                 // 3. [플레이어 상태 연동]: 나와 다른 게스트 플레이어들의 상태 채우기
                 var playerStates = new List<PlayerState>();
         
-                // 내(호스트) 위치 정보 추가
-                playerStates.Add(new PlayerState 
-                { 
-                    Id = Me.Id, 
-                    X = position.x, 
-                    Y = position.y 
-                });
+                AddPlayerState(playerStates, Me.Id);
 
                 // 접속한 다른 원격 유저(게스트)들의 현재 씬 위치 추가
                 foreach (var pair in remotes)
                 {
                     if (pair.Value != null)
                     {
-                        playerStates.Add(new PlayerState
-                        {
-                            Id = pair.Key,
-                            X = pair.Value.transform.position.x,
-                            Y = pair.Value.transform.position.y
-                        });
+                        AddPlayerState(playerStates, pair.Key);
                     }
                 }
                 snapshot.Players = playerStates.ToArray();
-
+                
                 // 4. [기타 월드 상태]: 인벤토리 자원 및 건설 현황 등 (구현된 시스템에 맞춰 연결)
                 // snapshot.ItemKeys = InventoryManager.Instance.GetKeys();
                 // snapshot.ItemCounts = InventoryManager.Instance.GetCounts();
                 // snapshot.CurrentBridgeCount = BridgeManager.Instance.BridgeObjects.Length;
 
                 // 5. 서버로 패킷 전송
+                SnapshotMessage = snapshot;
                 await SendAsync(snapshot);
             }
             else
             {
                 // 게스트는 자신의 키보드 입력을 전송
-                await SendAsync(new GuestInputMessage
-                {
-                    Id = Me.Id, 
-                    X = position.x, 
-                    Y = position.y,
-                    IsLeftShiftHold = keyboard.leftShiftKey.isPressed,
-                    IsRightShiftHold = keyboard.rightShiftKey.isPressed
-                });
+                Vector2 input = SimpleInput.GetMoveAxisRaw();
+                Keyboard keyboard = Keyboard.current;
+                await SendInputMessages(input, keyboard.leftShiftKey.isPressed, keyboard.rightShiftKey.isPressed, keyboard.fKey.isPressed);
             }
+        }
+
+
+        private async UniTask SendInputMessages(Vector2 input, bool leftGrab, bool rightGrab, bool buildKey)
+        {
+            // 플레이어 스스로의 입력 넣기
+            GuestInputMessage = new GuestInputMessage
+            {
+                Id = Me.Id,
+                X = input.x,
+                Y = input.y,
+                IsLeftShiftHold = leftGrab,
+                IsRightShiftHold = rightGrab,
+                IsBuildKeyHold = buildKey,
+            };
+            await SendAsync(GuestInputMessage);
         }
 
         public void Say(string text)
@@ -450,10 +503,78 @@ namespace HelloServer
 
             return Color.HSVToRGB(Mathf.Abs(hash % 360) / 360f, 0.65f, 0.95f);
         }
-
-        private void OnDestroy()
+        
+        private void AddPlayerState(List<PlayerState> playerStates, string playerId)
         {
-            socket?.Dispose();
+            // 내(호스트) 위치 정보 추가
+            playerStates.Add(new PlayerState 
+            { 
+                Id = playerId, 
+                Body = new PartState
+                {
+                    X = remotes[playerId].Body.transform.position.x,
+                    Y = remotes[playerId].Body.transform.position.y,
+                    Rotation = new Rotation()
+                    {
+                        X = remotes[playerId].Body.transform.rotation.x,
+                        Y = remotes[playerId].Body.transform.rotation.y,
+                        Z =  remotes[playerId].Body.transform.rotation.z,
+                        W =  remotes[playerId].Body.transform.rotation.w,
+                    }
+                },
+                LeftArmTop = new PartState
+                {
+                    X = remotes[playerId].LeftUpperArm.transform.position.x,
+                    Y = remotes[playerId].LeftUpperArm.transform.position.y,
+                    Rotation = new Rotation()
+                    {
+                        X = remotes[playerId].LeftUpperArm.transform.rotation.x,
+                        Y = remotes[playerId].LeftUpperArm.transform.rotation.y,
+                        Z =  remotes[playerId].LeftUpperArm.transform.rotation.z,
+                        W =  remotes[playerId].LeftUpperArm.transform.rotation.w,
+                    }
+
+                },
+                RightArmTop = new PartState
+                {
+                    X = remotes[playerId].RightUpperArm.transform.position.x,
+                    Y = remotes[playerId].RightUpperArm.transform.position.y,
+                    Rotation = new Rotation()
+                    {
+                        X = remotes[playerId].RightUpperArm.transform.rotation.x,
+                        Y = remotes[playerId].RightUpperArm.transform.rotation.y,
+                        Z =  remotes[playerId].RightUpperArm.transform.rotation.z,
+                        W =  remotes[playerId].RightUpperArm.transform.rotation.w,
+                    }
+
+                },
+                LeftArmBottom = new PartState
+                {
+                    X = remotes[playerId].LeftBottomArm.transform.position.x,
+                    Y = remotes[playerId].LeftBottomArm.transform.position.y,
+                    Rotation = new Rotation()
+                    {
+                        X = remotes[playerId].LeftBottomArm.transform.rotation.x,
+                        Y = remotes[playerId].LeftBottomArm.transform.rotation.y,
+                        Z =  remotes[playerId].LeftBottomArm.transform.rotation.z,
+                        W =  remotes[playerId].LeftBottomArm.transform.rotation.w,
+                    }
+                },
+                RightArmBottom = new PartState
+                {
+                    X = remotes[playerId].RightBottomArm.transform.position.x,
+                    Y = remotes[playerId].RightBottomArm.transform.position.y,
+                    Rotation = new Rotation()
+                    {
+                        X = remotes[playerId].RightBottomArm.transform.rotation.x,
+                        Y = remotes[playerId].RightBottomArm.transform.rotation.y,
+                        Z =  remotes[playerId].RightBottomArm.transform.rotation.z,
+                        W =  remotes[playerId].RightBottomArm.transform.rotation.w,
+                    }
+                },
+                IsLeftGrab = remotes[playerId].IsLeftGrab,
+                IsRightGrab = remotes[playerId].IsRightGrab,
+            });
         }
     }
 }

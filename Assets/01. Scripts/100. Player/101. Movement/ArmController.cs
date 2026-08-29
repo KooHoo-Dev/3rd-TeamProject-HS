@@ -66,14 +66,14 @@ namespace WeGotOne
         }
         
         // [수정]: 새로운 델리게이트 시그니처에 맞춰 첫 번째 매개변수로 이벤트를 보낸 손(hand)을 받도록 가상 함수 수정
-        protected virtual void OnGrabbed(HandControllerV2 hand, Rigidbody2D target)
+        protected virtual void OnGrabbed(Rigidbody2D target)
         {
             grabbedTarget = target;
             isGrabbing = true;
         }
 
         // [수정]: 이벤트를 보낸 손(hand)을 받도록 가상 함수 수정
-        protected virtual void OnReleased(HandControllerV2 hand)
+        protected virtual void OnReleased()
         {
             grabbedTarget = null;
             isGrabbing = false;
@@ -94,6 +94,16 @@ namespace WeGotOne
         }
 
 #endregion
+
+# region 위치값 보정 함수
+
+        public void SetPosition(Vector2 position, Quaternion rotation)
+        {
+            transform.position = position;
+            transform.rotation = rotation;
+        }
+
+# endregion
 
         private void FixedUpdate()
         {

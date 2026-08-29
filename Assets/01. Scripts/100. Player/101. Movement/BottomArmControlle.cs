@@ -17,10 +17,10 @@ namespace WeGotOne
         }
         
         // [수정]: 첫 번째 인자로 이벤트를 보낸 손(hand)을 받도록 수정
-        protected override void OnGrabbed(HandControllerV2 hand, Rigidbody2D target)
+        protected override void OnGrabbed(Rigidbody2D target)
         {
             // 잡기 상태 처리 (부모 클래스의 OnGrabbed도 변경된 시그니처로 호출)
-            base.OnGrabbed(hand, target);
+            base.OnGrabbed(target);
 
             // 타겟에 리지드바디가 있을 경우
             if (target != null)
@@ -38,14 +38,14 @@ namespace WeGotOne
         }
 
         // [수정]: 이벤트를 보낸 손(hand)을 받도록 수정
-        protected override void OnReleased(HandControllerV2 hand)
+        protected override void OnReleased()
         {
             // 잡기 Joint 해제
             grabJoint.enabled = false;
             grabJoint.connectedBody = null;
 
             // 상태 초기화
-            base.OnReleased(hand);
+            base.OnReleased();
         }
         
         public void Grab()

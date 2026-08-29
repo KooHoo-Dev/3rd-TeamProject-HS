@@ -28,8 +28,8 @@ namespace WeGotOne
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            gameOverUI.gameObject.SetActive(false);
-            gameWinUI.gameObject.SetActive(false);
+            /*gameOverUI.gameObject.SetActive(false);
+            gameWinUI.gameObject.SetActive(false);*/
         }
         
         private void OnEnable()
