@@ -25,11 +25,14 @@ namespace HelloServer
     {
         public string Id { get; set; }
 
-        public PartState Body;
-        public PartState LeftArmTop;
-        public PartState RightArmTop;
-        public PartState LeftArmBottom;
-        public PartState RightArmBottom;
+        public PartState Body { get; set; }
+        public PartState LeftArmTop { get; set; }
+        public PartState RightArmTop { get; set; }
+        public PartState LeftArmBottom { get; set; }
+        public PartState RightArmBottom { get; set; }
+        
+        public bool IsLeftGrab { get; set; }
+        public bool IsRightGrab { get; set; }
     }
 
     public class PartState
@@ -37,7 +40,7 @@ namespace HelloServer
         public float X { get; set; }
         public float Y { get; set; }
         
-        public float QuaternionZ { get; set; }
+        public float RotationZ { get; set; }
     }
 
     // 물고기 코드

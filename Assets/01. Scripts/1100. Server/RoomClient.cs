@@ -1,3 +1,4 @@
+/*
 using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
@@ -381,33 +382,33 @@ namespace HelloServer
                     Id = Me.Id, 
                     Body = new PartState
                     {
-                        X = localPlayer.GetComponentInChildren<PlayerInputController>().Body.transform.position.x,
-                        Y = localPlayer.GetComponentInChildren<PlayerInputController>().Body.transform.position.y,
-                        QuaternionZ = localPlayer.GetComponentInChildren<PlayerInputController>().Body.transform.rotation.z,
+                        X = localPlayer.GetComponentInChildren<PlayerController>().Body.transform.position.x,
+                        Y = localPlayer.GetComponentInChildren<PlayerController>().Body.transform.position.y,
+                        RotationZ = localPlayer.GetComponentInChildren<PlayerController>().Body.transform.rotation.z,
                     },
                     LeftArmTop = new PartState
                     {
-                        X = localPlayer.GetComponentInChildren<PlayerInputController>().LeftUpperArm.transform.position.x,
-                        Y = localPlayer.GetComponentInChildren<PlayerInputController>().LeftUpperArm.transform.position.y,
-                        QuaternionZ = localPlayer.GetComponentInChildren<PlayerInputController>().LeftUpperArm.transform.rotation.z,
+                        X = localPlayer.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.position.x,
+                        Y = localPlayer.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.position.y,
+                        RotationZ = localPlayer.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.rotation.z,
                     },
                     RightArmTop = new PartState
                     {
-                        X = localPlayer.GetComponentInChildren<PlayerInputController>().RightUpperArm.transform.position.x,
-                        Y = localPlayer.GetComponentInChildren<PlayerInputController>().RightUpperArm.transform.position.y,
-                        QuaternionZ = localPlayer.GetComponentInChildren<PlayerInputController>().RightUpperArm.transform.rotation.z,
+                        X = localPlayer.GetComponentInChildren<PlayerController>().RightUpperArm.transform.position.x,
+                        Y = localPlayer.GetComponentInChildren<PlayerController>().RightUpperArm.transform.position.y,
+                        RotationZ = localPlayer.GetComponentInChildren<PlayerController>().RightUpperArm.transform.rotation.z,
                     },
                     LeftArmBottom = new PartState
                     {
-                        X = localPlayer.GetComponentInChildren<PlayerInputController>().LeftBottomArm.transform.position.x,
-                        Y = localPlayer.GetComponentInChildren<PlayerInputController>().LeftBottomArm.transform.position.y,
-                        QuaternionZ = localPlayer.GetComponentInChildren<PlayerInputController>().LeftBottomArm.transform.rotation.z,
+                        X = localPlayer.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.position.x,
+                        Y = localPlayer.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.position.y,
+                        RotationZ = localPlayer.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.rotation.z,
                     },
                     RightArmBottom = new PartState
                     {
-                        X = localPlayer.GetComponentInChildren<PlayerInputController>().RightBottomArm.transform.position.x,
-                        Y = localPlayer.GetComponentInChildren<PlayerInputController>().RightBottomArm.transform.position.y,
-                        QuaternionZ = localPlayer.GetComponentInChildren<PlayerInputController>().RightBottomArm.transform.rotation.z,
+                        X = localPlayer.GetComponentInChildren<PlayerController>().RightBottomArm.transform.position.x,
+                        Y = localPlayer.GetComponentInChildren<PlayerController>().RightBottomArm.transform.position.y,
+                        RotationZ = localPlayer.GetComponentInChildren<PlayerController>().RightBottomArm.transform.rotation.z,
                     },
                 });
 
@@ -421,33 +422,33 @@ namespace HelloServer
                             Id = pair.Key,
                             Body = new PartState
                             {
-                                X = pair.Value.GetComponentInChildren<PlayerInputController>().Body.transform.position.x,
-                                Y = pair.Value.GetComponentInChildren<PlayerInputController>().Body.transform.position.y,
-                                QuaternionZ = pair.Value.GetComponentInChildren<PlayerInputController>().Body.transform.rotation.z,
+                                X = pair.Value.GetComponentInChildren<PlayerController>().Body.transform.position.x,
+                                Y = pair.Value.GetComponentInChildren<PlayerController>().Body.transform.position.y,
+                                RotationZ = pair.Value.GetComponentInChildren<PlayerController>().Body.transform.rotation.z,
                             },
                             LeftArmTop = new PartState
                             {
-                                X = pair.Value.GetComponentInChildren<PlayerInputController>().LeftUpperArm.transform.position.x,
-                                Y = pair.Value.GetComponentInChildren<PlayerInputController>().LeftUpperArm.transform.position.y,
-                                QuaternionZ = pair.Value.GetComponentInChildren<PlayerInputController>().LeftUpperArm.transform.rotation.z,
+                                X = pair.Value.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.position.x,
+                                Y = pair.Value.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.position.y,
+                                RotationZ = pair.Value.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.rotation.z,
                             },
                             RightArmTop = new PartState
                             {
-                                X = pair.Value.GetComponentInChildren<PlayerInputController>().RightUpperArm.transform.position.x,
-                                Y = pair.Value.GetComponentInChildren<PlayerInputController>().RightUpperArm.transform.position.y,
-                                QuaternionZ = pair.Value.GetComponentInChildren<PlayerInputController>().RightUpperArm.transform.rotation.z,
+                                X = pair.Value.GetComponentInChildren<PlayerController>().RightUpperArm.transform.position.x,
+                                Y = pair.Value.GetComponentInChildren<PlayerController>().RightUpperArm.transform.position.y,
+                                RotationZ = pair.Value.GetComponentInChildren<PlayerController>().RightUpperArm.transform.rotation.z,
                             },
                             LeftArmBottom = new PartState
                             {
-                                X = pair.Value.GetComponentInChildren<PlayerInputController>().LeftBottomArm.transform.position.x,
-                                Y = pair.Value.GetComponentInChildren<PlayerInputController>().LeftBottomArm.transform.position.y,
-                                QuaternionZ = pair.Value.GetComponentInChildren<PlayerInputController>().LeftBottomArm.transform.rotation.z,
+                                X = pair.Value.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.position.x,
+                                Y = pair.Value.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.position.y,
+                                RotationZ = pair.Value.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.rotation.z,
                             },
                             RightArmBottom = new PartState
                             {
-                                X = pair.Value.GetComponentInChildren<PlayerInputController>().RightBottomArm.transform.position.x,
-                                Y = pair.Value.GetComponentInChildren<PlayerInputController>().RightBottomArm.transform.position.y,
-                                QuaternionZ = pair.Value.GetComponentInChildren<PlayerInputController>().RightBottomArm.transform.rotation.z,
+                                X = pair.Value.GetComponentInChildren<PlayerController>().RightBottomArm.transform.position.x,
+                                Y = pair.Value.GetComponentInChildren<PlayerController>().RightBottomArm.transform.position.y,
+                                RotationZ = pair.Value.GetComponentInChildren<PlayerController>().RightBottomArm.transform.rotation.z,
                             },
                         });
                     }
@@ -546,3 +547,4 @@ namespace HelloServer
         }
     }
 }
+*/

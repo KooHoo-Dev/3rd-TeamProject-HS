@@ -1,3 +1,4 @@
+using HelloServer;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,7 +21,7 @@ namespace WeGotOne
      * 해당 클래스는 실제 연산없이, 플레이어가 입력한 키값을 각각 부위에 맞게 뿌려주는 역할
      */
     
-    public class PlayerInputController : MonoBehaviour
+    public class PlayerController : MonoBehaviour
     {
         [Header("Arms")]
         [SerializeField] private ArmController leftUpperArm;
@@ -29,12 +30,22 @@ namespace WeGotOne
         [SerializeField] private BottomArmController rightBottomArm;
         [SerializeField] private PlayerHunger body;
         
+        public bool IsLeftGrab { get; private set; }
+        public bool IsRightGrab { get; private set; }
+
+        public User User { get; private set; }
+        
         public ArmController  LeftUpperArm => leftUpperArm;
         public ArmController  RightUpperArm => rightUpperArm;
         public BottomArmController LeftBottomArm => leftBottomArm;
         public BottomArmController RightBottomArm => rightBottomArm;
         public PlayerHunger Body => body;
 
+        public void Setup(User user)
+        {
+            User = user;
+        }
+        
         public void ApplyInput(Vector2 moveInput, bool leftGrab, bool rightGrab)
         {
             HandleMovement(moveInput);
@@ -77,6 +88,9 @@ namespace WeGotOne
             {
                 rightBottomArm.Release();
             }
+            
+            IsLeftGrab = leftGrab;
+            IsRightGrab = rightGrab;
         }
 
         private void SetArmDirections(Vector2 direction)
@@ -94,35 +108,57 @@ namespace WeGotOne
             leftBottomArm.ClearDirection();
             rightBottomArm.ClearDirection();
         }
+        
+        public void ApplyPosition(PlayerState position, bool leftGrab, bool rightGrab)
+        {
+            Debug.Log(
+                $"[ApplyPosition BEFORE] " +
+                $"Player={User?.Id} | " +
+                $"Root={transform.position} | " +
+                $"Body={body.transform.position} | " +
+                $"Incoming=({position.Body.X}, {position.Body.Y})"
+            );
 
-        #region 파츠별 위치 동기화
+            body.transform.position = new Vector2(
+                position.Body.X,
+                position.Body.Y
+            );
+            
+            Debug.Log(
+                $"[ApplyPosition AFTER] " +
+                $"Player={User?.Id} | " +
+                $"Root={transform.position} | " +
+                $"Body={body.transform.position}"
+            );
 
-        public void SetBodyPartPosition(float x, float y, float rotationZ)
-        {
-            body.transform.position = new Vector2(x, y);
-            body.transform.rotation = new Quaternion(body.transform.rotation.x, body.transform.rotation.y, rotationZ, body.transform.rotation.w);
-        }
-        
-        public void SetLeftArmTopPartPosition(float x, float y, float rotationZ)
-        {
-            leftUpperArm.SetPosition(new Vector2(x, y), rotationZ);
-        }
-        
-        public void SetLeftArmBottomPartPosition(float x, float y, float rotationZ)
-        {
-            leftBottomArm.SetPosition(new Vector2(x, y), rotationZ);
-        }
-        
-        public void SetRightArmTopPartPosition(float x, float y, float rotationZ)
-        {
-            rightUpperArm.SetPosition(new Vector2(x, y), rotationZ);
-        }
-        
-        public void SetRightArmBottomPartPosition(float x, float y, float rotationZ)
-        {
-            rightBottomArm.SetPosition(new Vector2(x, y), rotationZ);
-        }
+            body.transform.rotation = new Quaternion(
+                body.transform.rotation.x,
+                body.transform.rotation.y,
+                position.Body.RotationZ,
+                body.transform.rotation.w
+            );
 
-        #endregion
+            leftUpperArm.SetPosition(
+                new Vector2(position.LeftArmTop.X, position.LeftArmTop.Y),
+                position.LeftArmTop.RotationZ
+            );
+
+            rightUpperArm.SetPosition(
+                new Vector2(position.RightArmTop.X, position.RightArmTop.Y),
+                position.RightArmTop.RotationZ
+            );
+
+            leftBottomArm.SetPosition(
+                new Vector2(position.LeftArmBottom.X, position.LeftArmBottom.Y),
+                position.LeftArmBottom.RotationZ
+            );
+
+            rightBottomArm.SetPosition(
+                new Vector2(position.RightArmBottom.X, position.RightArmBottom.Y),
+                position.RightArmBottom.RotationZ
+            );
+
+            HandleGrab(leftGrab, rightGrab);
+        }
     }
 }

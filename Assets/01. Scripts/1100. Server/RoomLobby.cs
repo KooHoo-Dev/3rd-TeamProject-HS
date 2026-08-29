@@ -96,14 +96,5 @@ namespace HelloServer
             GUI.Label(new Rect(20, 300, 700, 22),
                 "화살표로 움직인다. 채팅 칸을 누르면 움직이지 않는다.");
         }
-
-        // 채팅을 치는 동안에는 캐릭터를 멈춘다.
-        private void Update()
-        {
-            client.Local.CanMove = chatting == false;
-
-            // Esc 로 채팅 칸에서 빠져나온다.
-            if (Keyboard.current.escapeKey.wasPressedThisFrame) GUI.FocusControl(null);
-        }
     }
 }
