@@ -6,8 +6,6 @@ namespace WeGotOne
 {
     public abstract class Collectible : MonoBehaviour
     {
-        public bool IsPickUp { get; set; } = false;
-        
         [field: SerializeField] public ItemScriptableObject ThisItem { get; private set; }
         protected PoolingSystem<Collectible> myPool;
 

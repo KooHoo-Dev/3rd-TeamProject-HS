@@ -9,10 +9,12 @@ namespace WeGotOne
     {
         [field: SerializeField] public int PlankCount { get; set; }
         
+        
+        
         [SerializeField] private Collectible[] itemPrefabs;
         // [개선]: 인덱스(스폰 위치 순서)를 키로 삼아 생성된 아이템을 매핑·관리하는 딕셔너리
-        public Dictionary<int, Collectible> PoolObjectDic { get; private set; }
-            = new();
+        public Dictionary<int, Collectible> PoolObjectDic { get; private set; } 
+            = new Dictionary<int, Collectible>();
 
         [SerializeField] private Transform[] itemTransforms;
 
@@ -73,27 +75,27 @@ namespace WeGotOne
                 }
             }
         }
+
         
         #region 네트워크 동기화 전용 기능 (Host 측 패킹)
+
         /// <summary>
         /// [호스트 전용] 현재 씬에 활성화되어 작동 중인 아이템(물고기)들의 트랜스폼 상태를 
         /// 네트워크 전송 규격(FishState) 목록으로 안전하게 조립합니다.
         /// </summary>
-        public List<ItemState> PackActiveItems()
+        public List<FishState> PackActiveItems()
         {
-            List<ItemState> activeItems = new List<ItemState>();
+            List<FishState> activeFishes = new List<FishState>();
 
             foreach (var pair in PoolObjectDic)
             {
                 int index = pair.Key;
                 Collectible collectible = pair.Value;
 
-                if (collectible == null && collectible.gameObject.activeSelf == false)
-                    continue;
-
-                if (collectible.ThisItem.ItemType == ItemType.Fish)
+                // 딕셔너리에 객체가 정상 등록되어 있고, 게임 화면에 활성화 상태인 것만 선별합니다.
+                if (collectible != null && collectible.gameObject.activeSelf)
                 {
-                    activeItems.Add(new ItemState
+                    activeFishes.Add(new FishState
                     {
                         // 1. 고유 ID: 슬롯 위치 번호를 이름표로 변환 ("Slot_0", "Slot_1")
                         Id = $"Slot_{index}",
@@ -111,26 +113,9 @@ namespace WeGotOne
                         CurrentState = "Active" 
                     });
                 }
-                
-                else if (collectible.ThisItem.ItemType == ItemType.Plank)
-                {
-                    activeItems.Add(new ItemState
-                    {
-                        // 1. 고유 ID: 슬롯 위치 번호를 이름표로 변환 ("Slot_0", "Slot_1")
-                        Id = $"Slot_{index}",
-                        
-                        // 3. 물리 및 트랜스폼 상태값 매핑
-                        X = collectible.transform.position.x,
-                        Y = collectible.transform.position.y,
-                        Angle = collectible.transform.eulerAngles.z,
-                        
-                        // 4. 집혔는지 전달
-                        IsPickUp = collectible.IsPickUp
-                    });
-                }
             }
 
-            return activeItems;
+            return activeFishes;
         }
 
         /// <summary>
