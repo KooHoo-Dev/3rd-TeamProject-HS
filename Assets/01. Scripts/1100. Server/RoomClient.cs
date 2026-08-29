@@ -532,6 +532,8 @@ namespace HelloServer
                     Y = remotes[playerId].RightBottomArm.transform.position.y,
                     RotationZ = remotes[playerId].RightBottomArm.transform.rotation.z,
                 },
+                IsLeftGrab = remotes[playerId].IsLeftGrab,
+                IsRightGrab = remotes[playerId].IsRightGrab,
             });
         }
     }

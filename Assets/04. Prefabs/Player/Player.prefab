@@ -613,6 +613,7 @@ GameObject:
   - component: {fileID: 7327065818309798534}
   - component: {fileID: 7284720938916748011}
   - component: {fileID: 1836112645504577546}
+  - component: {fileID: 6291487196056199621}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -780,6 +781,19 @@ MonoBehaviour:
   hungerTime: 150
   hungerDecreaseMultiplier: 1
   hungerGauge: {fileID: 0}
+--- !u!114 &6291487196056199621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4563297617465103818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c040a96512c4a5d8f6391fe3c246815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.PlayerInputBranch
+  controller: {fileID: 4725110930171532697}
 --- !u!1 &4634323389783299864
 GameObject:
   m_ObjectHideFlags: 0
