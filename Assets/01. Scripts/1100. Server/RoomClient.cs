@@ -76,7 +76,7 @@ namespace HelloServer
             base.OnInitialize();
             // true로 해둬야 백그라운드에서도 데이터 수신 가능
             Application.runInBackground = true;
-            itemPool = FindObjectOfType<ItemObjectPool>();
+            itemPool = FindFirstObjectByType<ItemObjectPool>();
         }
 
         private void OnDestroy()
@@ -205,8 +205,6 @@ namespace HelloServer
                 case "leave": OnLeave(JsonConvert.DeserializeObject<LeaveMessage>(json)); break;
                 case "inputGroup": OnGuestInputGroup(JsonConvert.DeserializeObject<GuestInputGroupMessage>(json)); break;
                 case "snapshot": OnSnapshot(JsonConvert.DeserializeObject<SnapshotMessage>(json)); break;
-                // case "state": OnState(JsonConvert.DeserializeObject<StateMessage>(json)); break;
-                // case "chat": OnChat(JsonConvert.DeserializeObject<ChatMessage>(json)); break;
                 default: Debug.Log($"[방] 등록되지 않은 종류(type) : {type}"); break;
             }
         }
@@ -244,7 +242,7 @@ namespace HelloServer
             //           $"다리 개수: {message.CurrentBridgeCount}개 | " +
             //           $"경과 시간: {message.ElapsedTime:F1}초 " +
             //           $"(GameOver: {message.IsGameOver}, GameWon: {message.IsGameWon})");
-            Debug.Log(message);
+            Debug.Log(GetJson(message));
             
             SnapshotMessage = message;
         }
@@ -265,8 +263,6 @@ namespace HelloServer
                 {
                     continue;
                 }
-                // Debug.Log($"[방] ({i + 1}번째) 게스트 입력 Id - {input.Id}, X - {input.X}, Y - {input.Y}, IsLeftShiftHold - {input.IsLeftShiftHold}, IsRightShiftHold - {input.IsRightShiftHold}");
-                
                 
                 if (remotes.TryGetValue(input.Id, out PlayerController remote) == false) continue;
                 remote.ApplyInput(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold);
@@ -291,20 +287,7 @@ namespace HelloServer
             remotes.TryGetValue(Me.Id, out PlayerController localPlayer);
             this.localPlayer = localPlayer;
 
-            Debug.Log(
-                $"[OnWelcome Setup 직전] " +
-                $"LocalObject={localPlayer.gameObject.name} | " +
-                $"LocalInstanceID={localPlayer.GetInstanceID()}"
-            );
-
             localPlayer.Setup(Me);
-
-            Debug.Log(
-                $"[OnWelcome AFTER] " +
-                $"LocalObject={localPlayer.gameObject.name} | " +
-                $"LocalInstanceID={localPlayer.GetInstanceID()} | " +
-                $"LocalUser={localPlayer.User?.Id}"
-            );
         }
 
         private void OnJoin(JoinMessage message)
@@ -322,30 +305,6 @@ namespace HelloServer
 
             Debug.Log($"[방] {message.Id} 이(가) 나갔다");
         }
-        
-        // private void OnState(StateMessage message)
-        // {
-        //     foreach (PlayerState state in message.Players)
-        //     {
-        //         // 내 것은 버린다. 서버가 알려 준 내 위치로 나를 다시 옮기면 안 된다.
-        //         // 내가 방금 움직인 자리보다 늘 한 박자 늦은 값이라, 넣으면 캐릭터가 뒤로 끌린다.
-        //         if (state.Id == Me.Id) continue;
-        //         if (remotes.TryGetValue(state.Id, out RemotePlayer remote) == false) continue;
-        //         remote.SetTarget(new Vector2(state.X, state.Y));
-        //     }
-        // }
-        //
-        // // 방에서 누가 말했다. 내 말도 여기로 돌아옴
-        // private void OnChat(ChatMessage message)
-        // {
-        //     string mine = Me != null && message.Id == Me.Id ? " (나)" : "";
-        //
-        //     chatLog.Add($"{message.NickName}{mine} : {message.Text}");
-        //
-        //     if (chatLog.Count > ChatKeep) chatLog.RemoveAt(0);
-        //
-        //     Debug.Log($"[방] {message.NickName}({message.Id}) : {message.Text}");
-        // }
 
         private void Spawn(User user)
         {
@@ -575,6 +534,43 @@ namespace HelloServer
                 IsLeftGrab = remotes[playerId].IsLeftGrab,
                 IsRightGrab = remotes[playerId].IsRightGrab,
             });
+        }
+
+        private string GetJson(object message)
+        {
+            return JsonConvert.SerializeObject(message, Formatting.Indented);       
+        }
+        
+        [ContextMenu("Debug Snapshot")]
+        private void DebugSnapshot()
+        {
+            Debug.Log(
+                JsonConvert.SerializeObject(
+                    SnapshotMessage,
+                    Formatting.Indented
+                )
+            );
+        }
+
+        [ContextMenu("Debug InputGroup")]
+        private void DebugInputGroup()
+        {
+            Debug.Log(
+                JsonConvert.SerializeObject(
+                    GuestInputGroupMessage,
+                    Formatting.Indented
+            ));
+        }
+
+        [ContextMenu("Debug GuestInput")]
+        private void DebugGuestInput()
+        {
+            Debug.Log(
+                JsonConvert.SerializeObject(
+                    GuestInputMessage,
+                    Formatting.Indented
+                )
+            );       
         }
     }
 }
