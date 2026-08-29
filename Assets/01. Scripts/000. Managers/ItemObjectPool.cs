@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using HelloServer;
 using UnityEngine;
+using WeGotOne.Fish_Interface;
 using Random = UnityEngine.Random;
 
 namespace WeGotOne
@@ -9,16 +10,13 @@ namespace WeGotOne
     {
         [field: SerializeField] public int PlankCount { get; set; }
         
-        
-        
         [SerializeField] private Collectible[] itemPrefabs;
+        
         // [개선]: 인덱스(스폰 위치 순서)를 키로 삼아 생성된 아이템을 매핑·관리하는 딕셔너리
         public Dictionary<int, Collectible> PoolObjectDic { get; private set; } 
-            = new Dictionary<int, Collectible>();
+            = new();
 
         [SerializeField] private Transform[] itemTransforms;
-
-        private int poolIndex;
 
         private void Start()
         {   // 다리 개수에 맞춰 판자 생성 제한 설정
@@ -83,39 +81,52 @@ namespace WeGotOne
         /// [호스트 전용] 현재 씬에 활성화되어 작동 중인 아이템(물고기)들의 트랜스폼 상태를 
         /// 네트워크 전송 규격(FishState) 목록으로 안전하게 조립합니다.
         /// </summary>
-        public List<FishState> PackActiveItems()
+        public List<FishState> PackActiveFishes()
         {
-            List<FishState> activeFishes = new List<FishState>();
+            var list = new List<FishState>();
 
             foreach (var pair in PoolObjectDic)
             {
-                int index = pair.Key;
                 Collectible collectible = pair.Value;
+                if (collectible == null || !collectible.gameObject.activeSelf) continue;
+                if (collectible.ThisItem.ItemType == 0) continue; // Plank는 제외
 
-                // 딕셔너리에 객체가 정상 등록되어 있고, 게임 화면에 활성화 상태인 것만 선별합니다.
-                if (collectible != null && collectible.gameObject.activeSelf)
+                list.Add(new FishState
                 {
-                    activeFishes.Add(new FishState
-                    {
-                        // 1. 고유 ID: 슬롯 위치 번호를 이름표로 변환 ("Slot_0", "Slot_1")
-                        Id = $"Slot_{index}",
-                        
-                        // 2. 종류 인덱스: 스크립터블 오브젝트(SO) 및 프리팹 매칭을 위한 타입 구분 값
-                        FishTypeIndex = GetPrefabTypeIndex(collectible),
-                        
-                        // 3. 물리 및 트랜스폼 상태값 매핑
-                        X = collectible.transform.position.x,
-                        Y = collectible.transform.position.y,
-                        ScaleX = collectible.transform.localScale.x,
-                        Angle = collectible.transform.eulerAngles.z,
-                        
-                        // 4. 애니메이션 상태 동기화용 이름 지정 (기본값 "Active")
-                        CurrentState = "Active" 
-                    });
-                }
+                    Id = $"Slot_{pair.Key}",
+                    FishTypeIndex = GetPrefabTypeIndex(collectible), // GetPrefabTypeIndex 대체
+                    X = collectible.transform.position.x,
+                    Y = collectible.transform.position.y,
+                    ScaleX = collectible.transform.localScale.x,
+                    Angle = collectible.transform.eulerAngles.z,
+                    CurrentState = "Active" 
+                });
             }
 
-            return activeFishes;
+            return list;
+        }
+
+        public List<PlankState> PackActivePlanks()
+        {
+            var list = new List<PlankState>();
+
+            foreach (var pair in PoolObjectDic)
+            {
+                Collectible collectible = pair.Value;
+                if (collectible == null || !collectible.gameObject.activeSelf) continue;
+                if (collectible.ThisItem.ItemType != 0) continue; // Plank만 포함
+
+                list.Add(new PlankState
+                {
+                    Id = $"Slot_{pair.Key}",
+                    X = collectible.transform.position.x,
+                    Y = collectible.transform.position.y,
+                    Angle = collectible.transform.eulerAngles.z,
+                    IsPickUp = collectible.IsPickUp
+                });
+            }
+
+            return list;
         }
 
         /// <summary>

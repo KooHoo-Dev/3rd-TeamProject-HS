@@ -62,7 +62,15 @@ namespace HelloServer
         public string CurrentState { get; set; }     // 현재 상태 이름 (Idle, Caught, Faint, Runaway 등)
     }
     
-
+    public class PlankState
+    {
+        public string Id { get; set; }       // 물고기 고유 식별 번호 (풀에서 생성 시 부여)
+        public float X { get; set; }          // 현재 위치 X
+        public float Y { get; set; }          // 현재 위치 Y
+        public float Angle { get; set; }      // 머리 회전 각도 (발버둥 칠 때 회전값 동기화용)
+        public bool IsPickUp { get; set; }
+    }
+    
     #region 클라이언트 -> 서버 (C2S)
 
     public class HelloMessage
@@ -100,6 +108,7 @@ namespace HelloServer
         // 1. 플레이어 물고기 물리 및 위치 상태 
         public PlayerState[] Players { get; set; } // 플레이어 (위치, 무력화 상태)
         public FishState[] Fishes { get; set; } // 물고기 (위치, 상태)
+        public PlankState[] Planks { get; set; } // 물고기 (위치, 상태)
         
         // 2. 공용 인벤토리 정보
         public int[] ItemKeys { get; set; }
