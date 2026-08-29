@@ -26,12 +26,13 @@ namespace HelloServer
         // 들어갈 방.
         [SerializeField] private string roomCode = "ABCD";
         [Header("장면")]
+        
+        
         // 내가 조종하는 캐릭터. 씬에 미리 놓아 둔다.
-        // 강사님꺼여서 비활성화
-        // [SerializeField] private LocalPlayer localPlayer;
-        [SerializeField] private RemoteSpawner localPlayer;
+        // 8/28 수정 : 예시 플레이어인 LocalPlayer를 제거하고 프로젝트에서 사용하는 플레이어 컨트롤러로 변경
+        [SerializeField] private PlayerController localPlayer;
         // 남이 들어올 때마다 이걸로 하나씩 만든다.
-        [SerializeField] private RemoteSpawner remotePrefab;
+        [SerializeField] private PlayerController remotePrefab;
 
         [Header("보내기")]
         // 초당 몇 번 내 위치를 보낼지.
@@ -44,8 +45,7 @@ namespace HelloServer
         
         // 화면에 그리는 일은 RoomLobby 가 한다. 여기는 선을 타는 일만 한다.
         public int RemoteCount => remotes.Count;
-        // 강사님 LocalPLayer을 성건님 RemoteSpawner (호스트 - 게스트 혼용 플레이어 객체) 로 대체
-        public RemoteSpawner Local => localPlayer;
+        public PlayerController Local => localPlayer;
 
         public GuestInputGroupMessage GuestInputGroupMessage { get; private set; }
         public GuestInputMessage GuestInputMessage { get; private set; }
@@ -57,7 +57,7 @@ namespace HelloServer
         // private readonly Dictionary<string, RemotePlayer> remotes = new Dictionary<string, RemotePlayer>();
         
         // SSG 커스텀 : 플레이어 맞춰서 편집
-        private readonly Dictionary<string, RemoteSpawner> remotes = new Dictionary<string, RemoteSpawner>();
+        private readonly Dictionary<string, PlayerController> remotes = new Dictionary<string, PlayerController>();
 
         // 오간 말. 너무 쌓이지 않게 앞에서부터 버린다.
         private readonly List<string> chatLog = new List<string>();
@@ -209,7 +209,6 @@ namespace HelloServer
                 // case "chat": OnChat(JsonConvert.DeserializeObject<ChatMessage>(json)); break;
                 default: Debug.Log($"[방] 등록되지 않은 종류(type) : {type}"); break;
             }
-           
         }
 
         private void OnSnapshot(SnapshotMessage message)
@@ -220,17 +219,16 @@ namespace HelloServer
                 return;
             }
             
-            // 이 부분에 스냅샷 받아온거에서 위치값 분리해서 적용해주면 댐
-            for (int i = 0; i < message.Players.Length; i++)
+            foreach (PlayerState state in message.Players)
             {
-                PlayerState state = message.Players[i];
-
-                if (remotes.TryGetValue(state.Id, out RemoteSpawner remote) == false)
+                if (state.Id == Me.Id)
                 {
-                    Debug.LogError($"플레이어 Id: {state.Id}, remotes에 없는 플레이어가 snapshot으로 들어옴! Join, Welcome 처리 문제");
-                    continue;
+                    localPlayer.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
                 }
-                remote.SetPartPosition(state);
+                else if (remotes.TryGetValue(state.Id, out PlayerController remote))
+                {
+                    remote.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
+                }
             }
             
             // 임시 비활성화 (json 형태로 로그 출력으로 대체)
@@ -270,14 +268,12 @@ namespace HelloServer
                 Debug.Log($"[방] ({i + 1}번째) 게스트 입력 Id - {input.Id}, X - {input.X}, Y - {input.Y}, IsLeftShiftHold - {input.IsLeftShiftHold}, IsRightShiftHold - {input.IsRightShiftHold}");
                 
                 
-                if (remotes.TryGetValue(input.Id, out RemoteSpawner remote) == false) continue;
-                remote.SetTarget(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold);
+                if (remotes.TryGetValue(input.Id, out PlayerController remote) == false) continue;
+                remote.ApplyInput(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold);
             }
             
             GuestInputGroupMessage = message;
         }
-        
-        
 
         private void OnWelcome(WelcomeMessage message)
         {
@@ -298,7 +294,20 @@ namespace HelloServer
             
             OnSnapshot(SnapshotMessage);
 
-            Debug.Log($"[방] {RoomCode} 에 들어왔다. 내 번호는 {Me.Id}, 역할은 {(Me.IsHost ? "Host" : "Guest")}, 이미 {message.Users.Length}명 있다");
+            Debug.Log(
+                $"[OnWelcome Setup 직전] " +
+                $"LocalObject={localPlayer.gameObject.name} | " +
+                $"LocalInstanceID={localPlayer.GetInstanceID()}"
+            );
+
+            localPlayer.Setup(Me);
+
+            Debug.Log(
+                $"[OnWelcome AFTER] " +
+                $"LocalObject={localPlayer.gameObject.name} | " +
+                $"LocalInstanceID={localPlayer.GetInstanceID()} | " +
+                $"LocalUser={localPlayer.User?.Id}"
+            );
         }
 
         private void OnJoin(JoinMessage message)
@@ -309,7 +318,7 @@ namespace HelloServer
 
         private void OnLeave(LeaveMessage message)
         {
-            if (remotes.TryGetValue(message.Id, out RemoteSpawner remote) == false) return;
+            if (remotes.TryGetValue(message.Id, out PlayerController remote) == false) return;
 
             remotes.Remove(message.Id);
             Destroy(remote.gameObject);
@@ -346,8 +355,8 @@ namespace HelloServer
             // 이미 있으면 만들지 않는다. welcome 과 join 이 겹칠 수 있다.
             if (remotes.ContainsKey(user.Id)) return;
 
-            RemoteSpawner remote = Instantiate(remotePrefab, Vector3.zero, Quaternion.identity);
-
+            PlayerController remote = Instantiate(remotePrefab, Vector3.zero, Quaternion.identity);
+            
             remote.Setup(user);
 
             remotes[user.Id] = remote;
@@ -380,7 +389,6 @@ namespace HelloServer
 
         private async UniTask SendSnapshotOrInputMessage()
         {
-            
             if (Me.IsHost)
             {
                 // 1. 스냅샷 객체 생성
@@ -406,7 +414,7 @@ namespace HelloServer
                     }
                 }
                 snapshot.Players = playerStates.ToArray();
-
+                
                 // 4. [기타 월드 상태]: 인벤토리 자원 및 건설 현황 등 (구현된 시스템에 맞춰 연결)
                 // snapshot.ItemKeys = InventoryManager.Instance.GetKeys();
                 // snapshot.ItemCounts = InventoryManager.Instance.GetCounts();

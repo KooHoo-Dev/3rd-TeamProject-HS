@@ -26,13 +26,13 @@ namespace WeGotOne
         private bool isGrabbing;
         
         // 팔(ArmController)이 무게 계산용 추가 힘을 적용할 수 있도록 등록하는 이벤트
-        public event Action<HandControllerV2, Rigidbody2D> Grabbed; 
-        public event Action<HandControllerV2> Released; 
+        public event Action<Rigidbody2D> Grabbed; 
+        public event Action Released; 
         
         // 잡았을때 변경해줄 스프라이트. 애니메이션 아니니까 스프라이트 갈아끼울게요.
         [SerializeField] private Sprite grabSprite;
         [SerializeField] private Sprite handSprite;
-        private SpriteRenderer spriteRenderer;
+        [SerializeField] private SpriteRenderer spriteRenderer;
         
         // 본인 신체 못잡게 하기 위한 용도
         private PlayerRoot owner;
@@ -112,7 +112,7 @@ private void OnDisable()
             isGrabbing = true;
             
             // 1. 상위 팔(ArmController)의 추가 힘 연산을 위한 이벤트 알림
-            Grabbed?.Invoke(this, grabbedTarget);
+            Grabbed?.Invoke(grabbedTarget);
 
             // 2. 잡은 대상(물고기, 도구 등)에게 직접 잡혔음을 실시간 통보
             if (currentTarget.TryGetComponent<ICatchable>(out var catchable))
@@ -138,7 +138,7 @@ private void OnDisable()
             isGrabbing = false;
             
             // 2. 상위 팔(ArmController)의 물리 힘 복원을 위한 이벤트 알림
-            Released?.Invoke(this);
+            Released?.Invoke();
         }
 
 #endregion
