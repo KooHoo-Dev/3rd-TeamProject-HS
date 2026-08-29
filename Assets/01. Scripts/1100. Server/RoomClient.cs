@@ -30,9 +30,9 @@ namespace HelloServer
         [Header("장면")]
         // 내가 조종하는 캐릭터. 씬에 미리 놓아 둔다.
         // 8/28 수정 : 예시 플레이어인 LocalPlayer를 제거하고 프로젝트에서 사용하는 플레이어 컨트롤러로 변경
-        [SerializeField] private PlayerController localPlayer;
         // 남이 들어올 때마다 이걸로 하나씩 만든다.
         [SerializeField] private PlayerController remotePrefab;
+        private PlayerController localPlayer;
 
         [Header("보내기")]
         // 초당 몇 번 내 위치를 보낼지.
@@ -219,11 +219,12 @@ namespace HelloServer
             
             foreach (PlayerState state in message.Players)
             {
-                if (state.Id == Me.Id)
-                {
-                    localPlayer.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
-                }
-                else if (remotes.TryGetValue(state.Id, out PlayerController remote))
+                // snapshot에 자기자신도 있어서 제거
+                // if (state.Id == Me.Id)
+                // {
+                //     localPlayer.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
+                // }
+                if (remotes.TryGetValue(state.Id, out PlayerController remote))
                 {
                     remote.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
                 }
@@ -368,7 +369,8 @@ namespace HelloServer
                 // 3. [플레이어 상태 연동]: 나와 다른 게스트 플레이어들의 상태 채우기
                 var playerStates = new List<PlayerState>();
         
-                AddPlayerState(playerStates, Me.Id);
+                // remotes에 자기 자신도 있어서 제거
+                // AddPlayerState(playerStates, Me.Id);
 
                 // 접속한 다른 원격 유저(게스트)들의 현재 씬 위치 추가
                 foreach (var pair in remotes)
