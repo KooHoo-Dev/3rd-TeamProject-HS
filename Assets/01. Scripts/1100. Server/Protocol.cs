@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace HelloServer
 {
@@ -18,8 +19,7 @@ namespace HelloServer
         public string Type { get; set; }
     }
 
-    // 위치 상태를 나타내는 데이터 객체 한줄
-    // 강사님 코드는 비활성화
+    // 플레이어 상태 정보
     public class PlayerState
     {
         public string Id { get; set; }
@@ -79,7 +79,6 @@ namespace HelloServer
         public string NickName { get; set; }
     }
 
-    
     public class GuestInputMessage
     {
         public string Type { get; set; } = "input";
