@@ -39,6 +39,7 @@ namespace HelloServer
         // 보내는 쪽이 더 자주 보내도 되지만, 받는 쪽이 그만큼 자주 보게 되지는 않는다.
         [SerializeField] private float sendPerSecond = 20f;
 
+        [SerializeField] private Transform spawnPoint;
         // 서버가 정해 준 내 정보. welcome 을 받기 전에는 비어 있다.
         public User Me { get; private set; }
         
@@ -225,7 +226,7 @@ namespace HelloServer
                 // }
                 if (remotes.TryGetValue(state.Id, out PlayerController remote))
                 {
-                    remote.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
+                    remote.ApplySnapshot(state, state.IsLeftGrab, state.IsRightGrab);
                 }
             }
             
@@ -311,7 +312,7 @@ namespace HelloServer
             // 이미 있으면 만들지 않는다. welcome 과 join 이 겹칠 수 있다.
             if (remotes.ContainsKey(user.Id)) return;
 
-            PlayerController remote = Instantiate(remotePrefab, Vector3.zero, Quaternion.identity);
+            PlayerController remote = Instantiate(remotePrefab, spawnPoint.position, Quaternion.identity);
             
             Rigidbody2D[] rigid = remote.GetComponentsInChildren<Rigidbody2D>();
 

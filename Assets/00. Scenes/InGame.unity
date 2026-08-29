@@ -730,11 +730,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7758014116864251977, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.93488
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7758014116864251977, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.01733
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7758014116864251977, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1693,17 +1693,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 719254793580413816, guid: 9f38c5641ae18ed4badf78e3ccb5a155, type: 3}
   m_PrefabInstance: {fileID: 791605917}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &868683091 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2955807939535471609, guid: 4471dd391aefe7841a132e64480e4b08, type: 3}
-  m_PrefabInstance: {fileID: 391941712}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cf7a713149b463198717d2f9d983671, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Fish
 --- !u!1001 &898575692
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1853,7 +1842,7 @@ Transform:
   m_GameObject: {fileID: 940507610}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.6, y: -1.9, z: -10}
+  m_LocalPosition: {x: -0.57, y: 0.89, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2563,6 +2552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da8da0f53e324e23ba4027edda7d9e5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HelloServer.NetworkDebugOnGUI
+  isDebugMode: 1
 --- !u!4 &1303722707
 Transform:
   m_ObjectHideFlags: 0
@@ -2880,8 +2870,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d70a25747a443b6a0ca3323484a6d68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.ArmControllerVisualizer
-  controller: {fileID: 0}
-  isDrawInputDirection: 1
+  controllers: []
+  isDebugMode: 1
 --- !u!4 &1661108131
 Transform:
   m_ObjectHideFlags: 0
