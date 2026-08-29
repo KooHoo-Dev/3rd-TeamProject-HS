@@ -19,14 +19,6 @@ namespace WeGotOne
         {
             if (controller.User == null) return;
             
-            Debug.Log(
-                $"[PlayerInputBranch] " +
-                $"BranchObject={gameObject.name} | " +
-                $"Controller={controller.gameObject.name} | " +
-                $"Player={controller.User?.Id} | " +
-                $"IsHost={controller.User?.IsHost}"
-            );
-            
             // 호스트는 직접 키보드 입력으로 계산
             if (controller.User.IsHost)
             {

@@ -354,6 +354,14 @@ namespace HelloServer
 
             PlayerController remote = Instantiate(remotePrefab, Vector3.zero, Quaternion.identity);
             
+            Rigidbody2D[] rigid = remote.GetComponentsInChildren<Rigidbody2D>();
+
+            for (int i = 0; i < rigid.Length; i++)
+            {
+                if(Me.IsHost == false)
+                    rigid[i].bodyType = RigidbodyType2D.Kinematic;
+            }
+
             remote.Setup(user);
 
             remotes[user.Id] = remote;
