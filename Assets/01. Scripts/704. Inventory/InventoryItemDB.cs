@@ -26,13 +26,14 @@ namespace WeGotOne
             {
                 ItemScriptableObject item = items[i];
                 
-                if (itemDic.ContainsKey(item.Key))
+                if (itemDic.ContainsKey(item.Key) == false)
                 {
-                    Debug.LogWarning($"[InventoryItemDB] 중복 Key = {item.Key}");
-                    continue; 
+                    itemDic.Add(item.Key, item);   
                 }
-
-                itemDic.Add(item.Key, item);
+                if (ItemCountDic.ContainsKey(item.Key) == false)
+                {
+                    ItemCountDic.Add(item.Key, 0);   
+                }
             }
         }
 

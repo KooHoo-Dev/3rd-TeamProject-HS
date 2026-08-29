@@ -40,8 +40,9 @@ namespace WeGotOne
         public void CountTextUpdate(int itemKey, bool isPlus)
         {
             int itemCount = InventoryItemDB.Instance.ItemCountDic[itemKey];
-
+            
             itemCount += isPlus ? 1 : -1;
+            InventoryItemDB.Instance.ItemCountDic[itemKey] = itemCount;
             ItemCountText.text = itemCount.ToString();
 
             if (itemCount <= 0)
