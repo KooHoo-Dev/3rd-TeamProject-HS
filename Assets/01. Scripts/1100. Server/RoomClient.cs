@@ -402,7 +402,8 @@ namespace HelloServer
                 // 2. [물고기/아이템 연동]: 씬의 ItemObjectPool에서 활성화된 아이템들을 가져와 배열로 변환
                 if (itemPool != null)
                 {
-                    snapshot.Fishes = itemPool.PackActiveItems().ToArray();
+                    snapshot.Fishes = itemPool.PackActiveFishes().ToArray();
+                    snapshot.Planks = itemPool.PackActivePlanks().ToArray();
                 }
 
                 // 3. [플레이어 상태 연동]: 나와 다른 게스트 플레이어들의 상태 채우기
