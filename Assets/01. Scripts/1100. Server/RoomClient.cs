@@ -1,4 +1,3 @@
-/*
 using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
@@ -27,10 +26,13 @@ namespace HelloServer
         // 들어갈 방.
         [SerializeField] private string roomCode = "ABCD";
         [Header("장면")]
+        
+        
         // 내가 조종하는 캐릭터. 씬에 미리 놓아 둔다.
-        [SerializeField] private LocalPlayer localPlayer;
+        // 8/28 수정 : 예시 플레이어인 LocalPlayer를 제거하고 프로젝트에서 사용하는 플레이어 컨트롤러로 변경
+        [SerializeField] private PlayerController localPlayer;
         // 남이 들어올 때마다 이걸로 하나씩 만든다.
-        [SerializeField] private RemoteSpawner remotePrefab;
+        [SerializeField] private PlayerController remotePrefab;
 
         [Header("보내기")]
         // 초당 몇 번 내 위치를 보낼지.
@@ -43,7 +45,7 @@ namespace HelloServer
         
         // 화면에 그리는 일은 RoomLobby 가 한다. 여기는 선을 타는 일만 한다.
         public int RemoteCount => remotes.Count;
-        public LocalPlayer Local => localPlayer;
+        public PlayerController Local => localPlayer;
 
         public GuestInputGroupMessage GuestInputGroupMessage { get; private set; }
         public GuestInputMessage GuestInputMessage { get; private set; }
@@ -55,7 +57,7 @@ namespace HelloServer
         // private readonly Dictionary<string, RemotePlayer> remotes = new Dictionary<string, RemotePlayer>();
         
         // SSG 커스텀 : 플레이어 맞춰서 편집
-        private readonly Dictionary<string, RemoteSpawner> remotes = new Dictionary<string, RemoteSpawner>();
+        private readonly Dictionary<string, PlayerController> remotes = new Dictionary<string, PlayerController>();
 
         // 오간 말. 너무 쌓이지 않게 앞에서부터 버린다.
         private readonly List<string> chatLog = new List<string>();
@@ -202,7 +204,6 @@ namespace HelloServer
                 // case "chat": OnChat(JsonConvert.DeserializeObject<ChatMessage>(json)); break;
                 default: Debug.Log($"[방] 등록되지 않은 종류(type) : {type}"); break;
             }
-           
         }
 
         private void OnSnapshot(SnapshotMessage message)
@@ -213,13 +214,16 @@ namespace HelloServer
                 return;
             }
             
-            // 이 부분에 스냅샷 받아온거에서 위치값 분리해서 적용해주면 댐
-            for (int i = 0; i < message.Players.Length; i++)
+            foreach (PlayerState state in message.Players)
             {
-                PlayerState state = message.Players[i];
-                
-                if(remotes.TryGetValue(state.Id, out RemoteSpawner remote) == false) continue;
-                remote.SetPartPosition(state);
+                if (state.Id == Me.Id)
+                {
+                    localPlayer.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
+                }
+                else if (remotes.TryGetValue(state.Id, out PlayerController remote))
+                {
+                    remote.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
+                }
             }
             
             // [추가] 수신된 스냅샷의 전체 현황을 한눈에 볼 수 있도록 로그를 찍어줍니다.
@@ -258,25 +262,43 @@ namespace HelloServer
                 Debug.Log($"[방] ({i + 1}번째) 게스트 입력 Id - {input.Id}, X - {input.X}, Y - {input.Y}, IsLeftShiftHold - {input.IsLeftShiftHold}, IsRightShiftHold - {input.IsRightShiftHold}");
                 
                 
-                if (remotes.TryGetValue(input.Id, out RemoteSpawner remote) == false) continue;
-                remote.SetTarget(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold);
+                if (remotes.TryGetValue(input.Id, out PlayerController remote) == false) continue;
+                remote.ApplyInput(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold);
             }
             
             GuestInputGroupMessage = message;
         }
-        
-        
 
         private void OnWelcome(WelcomeMessage message)
         {
             Me = message.User;
             RoomCode = message.RoomCode;
 
-            localPlayer.Setup(Me, ColorOf(Me.Id));
+            Debug.Log(
+                $"[OnWelcome BEFORE] " +
+                $"Me={Me.Id} | " +
+                $"LocalObject={localPlayer.gameObject.name} | " +
+                $"LocalInstanceID={localPlayer.GetInstanceID()} | " +
+                $"LocalUser={localPlayer.User?.Id}"
+            );
 
-            foreach (User user in message.Users) Spawn(user);
+            foreach (User user in message.Users)
+                Spawn(user);
 
-            Debug.Log($"[방] {RoomCode} 에 들어왔다. 내 번호는 {Me.Id}, 역할은 {(Me.IsHost ? "Host" : "Guest")}, 이미 {message.Users.Length}명 있다");
+            Debug.Log(
+                $"[OnWelcome Setup 직전] " +
+                $"LocalObject={localPlayer.gameObject.name} | " +
+                $"LocalInstanceID={localPlayer.GetInstanceID()}"
+            );
+
+            localPlayer.Setup(Me);
+
+            Debug.Log(
+                $"[OnWelcome AFTER] " +
+                $"LocalObject={localPlayer.gameObject.name} | " +
+                $"LocalInstanceID={localPlayer.GetInstanceID()} | " +
+                $"LocalUser={localPlayer.User?.Id}"
+            );
         }
 
         private void OnJoin(JoinMessage message)
@@ -287,7 +309,7 @@ namespace HelloServer
 
         private void OnLeave(LeaveMessage message)
         {
-            if (remotes.TryGetValue(message.Id, out RemoteSpawner remote) == false) return;
+            if (remotes.TryGetValue(message.Id, out PlayerController remote) == false) return;
 
             remotes.Remove(message.Id);
             Destroy(remote.gameObject);
@@ -324,8 +346,8 @@ namespace HelloServer
             // 이미 있으면 만들지 않는다. welcome 과 join 이 겹칠 수 있다.
             if (remotes.ContainsKey(user.Id)) return;
 
-            RemoteSpawner remote = Instantiate(remotePrefab, Vector3.zero, Quaternion.identity);
-
+            PlayerController remote = Instantiate(remotePrefab, Vector3.zero, Quaternion.identity);
+            
             remote.Setup(user);
 
             remotes[user.Id] = remote;
@@ -353,15 +375,23 @@ namespace HelloServer
 
                 // 호스트일때는 호스트 스냅샷
                 // inputContainer ???
+                
                 Keyboard keyboard = Keyboard.current;
-                Vector2 position = localPlayer.transform.position;
-                await SendSnapshotOrInputMessage(keyboard, position);
+                if (Me.IsHost)
+                {
+                    await SendSnapshotOrInputMessage(keyboard, localPlayer.transform.position);
+                }
+                else
+                {
+                    Vector2 moveInput = SimpleInput.GetMoveAxisRaw();
+                    
+                    await SendSnapshotOrInputMessage(keyboard, moveInput);
+                }
             }
         }
 
         private async UniTask SendSnapshotOrInputMessage(Keyboard keyboard, Vector2 position)
         {
-            
             if (Me.IsHost)
             {
                 // 1. 스냅샷 객체 생성
@@ -382,34 +412,37 @@ namespace HelloServer
                     Id = Me.Id, 
                     Body = new PartState
                     {
-                        X = localPlayer.GetComponentInChildren<PlayerController>().Body.transform.position.x,
-                        Y = localPlayer.GetComponentInChildren<PlayerController>().Body.transform.position.y,
-                        RotationZ = localPlayer.GetComponentInChildren<PlayerController>().Body.transform.rotation.z,
+                        X = localPlayer.Body.transform.position.x,
+                        Y = localPlayer.Body.transform.position.y,
+                        RotationZ = localPlayer.Body.transform.rotation.z,
                     },
                     LeftArmTop = new PartState
                     {
-                        X = localPlayer.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.position.x,
-                        Y = localPlayer.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.position.y,
-                        RotationZ = localPlayer.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.rotation.z,
+                        X = localPlayer.LeftUpperArm.transform.position.x,
+                        Y = localPlayer.LeftUpperArm.transform.position.y,
+                        RotationZ = localPlayer.LeftUpperArm.transform.rotation.z,
                     },
                     RightArmTop = new PartState
                     {
-                        X = localPlayer.GetComponentInChildren<PlayerController>().RightUpperArm.transform.position.x,
-                        Y = localPlayer.GetComponentInChildren<PlayerController>().RightUpperArm.transform.position.y,
-                        RotationZ = localPlayer.GetComponentInChildren<PlayerController>().RightUpperArm.transform.rotation.z,
+                        X = localPlayer.RightUpperArm.transform.position.x,
+                        Y = localPlayer.RightUpperArm.transform.position.y,
+                        RotationZ = localPlayer.RightUpperArm.transform.rotation.z,
                     },
                     LeftArmBottom = new PartState
                     {
-                        X = localPlayer.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.position.x,
-                        Y = localPlayer.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.position.y,
-                        RotationZ = localPlayer.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.rotation.z,
+                        X = localPlayer.LeftBottomArm.transform.position.x,
+                        Y = localPlayer.LeftBottomArm.transform.position.y,
+                        RotationZ = localPlayer.LeftBottomArm.transform.rotation.z,
                     },
                     RightArmBottom = new PartState
                     {
-                        X = localPlayer.GetComponentInChildren<PlayerController>().RightBottomArm.transform.position.x,
-                        Y = localPlayer.GetComponentInChildren<PlayerController>().RightBottomArm.transform.position.y,
-                        RotationZ = localPlayer.GetComponentInChildren<PlayerController>().RightBottomArm.transform.rotation.z,
+                        X = localPlayer.RightBottomArm.transform.position.x,
+                        Y = localPlayer.RightBottomArm.transform.position.y,
+                        RotationZ = localPlayer.RightBottomArm.transform.rotation.z,
                     },
+                    
+                    IsLeftGrab = localPlayer.IsLeftGrab,
+                    IsRightGrab = localPlayer.IsRightGrab,
                 });
 
                 // 접속한 다른 원격 유저(게스트)들의 현재 씬 위치 추가
@@ -422,39 +455,41 @@ namespace HelloServer
                             Id = pair.Key,
                             Body = new PartState
                             {
-                                X = pair.Value.GetComponentInChildren<PlayerController>().Body.transform.position.x,
-                                Y = pair.Value.GetComponentInChildren<PlayerController>().Body.transform.position.y,
-                                RotationZ = pair.Value.GetComponentInChildren<PlayerController>().Body.transform.rotation.z,
+                                X = pair.Value.Body.transform.position.x,
+                                Y = pair.Value.Body.transform.position.y,
+                                RotationZ = pair.Value.Body.transform.rotation.z,
                             },
                             LeftArmTop = new PartState
                             {
-                                X = pair.Value.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.position.x,
-                                Y = pair.Value.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.position.y,
-                                RotationZ = pair.Value.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.rotation.z,
+                                X = pair.Value.LeftUpperArm.transform.position.x,
+                                Y = pair.Value.LeftUpperArm.transform.position.y,
+                                RotationZ = pair.Value.LeftUpperArm.transform.rotation.z,
                             },
                             RightArmTop = new PartState
                             {
-                                X = pair.Value.GetComponentInChildren<PlayerController>().RightUpperArm.transform.position.x,
-                                Y = pair.Value.GetComponentInChildren<PlayerController>().RightUpperArm.transform.position.y,
-                                RotationZ = pair.Value.GetComponentInChildren<PlayerController>().RightUpperArm.transform.rotation.z,
+                                X = pair.Value.RightUpperArm.transform.position.x,
+                                Y = pair.Value.RightUpperArm.transform.position.y,
+                                RotationZ = pair.Value.RightUpperArm.transform.rotation.z,
                             },
                             LeftArmBottom = new PartState
                             {
-                                X = pair.Value.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.position.x,
-                                Y = pair.Value.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.position.y,
-                                RotationZ = pair.Value.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.rotation.z,
+                                X = pair.Value.LeftBottomArm.transform.position.x,
+                                Y = pair.Value.LeftBottomArm.transform.position.y,
+                                RotationZ = pair.Value.LeftBottomArm.transform.rotation.z,
                             },
                             RightArmBottom = new PartState
                             {
-                                X = pair.Value.GetComponentInChildren<PlayerController>().RightBottomArm.transform.position.x,
-                                Y = pair.Value.GetComponentInChildren<PlayerController>().RightBottomArm.transform.position.y,
-                                RotationZ = pair.Value.GetComponentInChildren<PlayerController>().RightBottomArm.transform.rotation.z,
+                                X = pair.Value.RightBottomArm.transform.position.x,
+                                Y = pair.Value.RightBottomArm.transform.position.y,
+                                RotationZ = pair.Value.RightBottomArm.transform.rotation.z,
                             },
+                            IsLeftGrab = pair.Value.IsLeftGrab,
+                            IsRightGrab = pair.Value.IsRightGrab,
                         });
                     }
                 }
                 snapshot.Players = playerStates.ToArray();
-
+                
                 // 4. [기타 월드 상태]: 인벤토리 자원 및 건설 현황 등 (구현된 시스템에 맞춰 연결)
                 // snapshot.ItemKeys = InventoryManager.Instance.GetKeys();
                 // snapshot.ItemCounts = InventoryManager.Instance.GetCounts();
@@ -475,20 +510,6 @@ namespace HelloServer
                     IsRightShiftHold = keyboard.rightShiftKey.isPressed
                 });
             }
-        }
-
-
-        private async UniTask SendInputMessages(Vector2 position, bool leftGrab, bool rightGrab)
-        {
-            // localplayer 쪽에서 관리 ㄱㄱ
-            await SendAsync(new GuestInputMessage
-            {
-                Id = Me.Id, 
-                X = position.x, 
-                Y = position.y,
-                IsLeftShiftHold = leftGrab,
-                IsRightShiftHold = rightGrab
-            });
         }
 
         public void Say(string text)
@@ -547,4 +568,3 @@ namespace HelloServer
         }
     }
 }
-*/
