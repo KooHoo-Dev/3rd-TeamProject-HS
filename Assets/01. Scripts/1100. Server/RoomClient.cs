@@ -506,31 +506,63 @@ namespace HelloServer
                 {
                     X = remotes[playerId].Body.transform.position.x,
                     Y = remotes[playerId].Body.transform.position.y,
-                    RotationZ = remotes[playerId].Body.transform.rotation.z,
+                    Rotation = new Rotation()
+                    {
+                        X = remotes[playerId].Body.transform.rotation.x,
+                        Y = remotes[playerId].Body.transform.rotation.y,
+                        Z =  remotes[playerId].Body.transform.rotation.z,
+                        W =  remotes[playerId].Body.transform.rotation.w,
+                    }
                 },
                 LeftArmTop = new PartState
                 {
                     X = remotes[playerId].LeftUpperArm.transform.position.x,
                     Y = remotes[playerId].LeftUpperArm.transform.position.y,
-                    RotationZ = remotes[playerId].LeftUpperArm.transform.rotation.z,
+                    Rotation = new Rotation()
+                    {
+                        X = remotes[playerId].LeftUpperArm.transform.rotation.x,
+                        Y = remotes[playerId].LeftUpperArm.transform.rotation.y,
+                        Z =  remotes[playerId].LeftUpperArm.transform.rotation.z,
+                        W =  remotes[playerId].LeftUpperArm.transform.rotation.w,
+                    }
+
                 },
                 RightArmTop = new PartState
                 {
                     X = remotes[playerId].RightUpperArm.transform.position.x,
                     Y = remotes[playerId].RightUpperArm.transform.position.y,
-                    RotationZ = remotes[playerId].RightUpperArm.transform.rotation.z,
+                    Rotation = new Rotation()
+                    {
+                        X = remotes[playerId].RightUpperArm.transform.rotation.x,
+                        Y = remotes[playerId].RightUpperArm.transform.rotation.y,
+                        Z =  remotes[playerId].RightUpperArm.transform.rotation.z,
+                        W =  remotes[playerId].RightUpperArm.transform.rotation.w,
+                    }
+
                 },
                 LeftArmBottom = new PartState
                 {
                     X = remotes[playerId].LeftBottomArm.transform.position.x,
                     Y = remotes[playerId].LeftBottomArm.transform.position.y,
-                    RotationZ = remotes[playerId].LeftBottomArm.transform.rotation.z,
+                    Rotation = new Rotation()
+                    {
+                        X = remotes[playerId].LeftBottomArm.transform.rotation.x,
+                        Y = remotes[playerId].LeftBottomArm.transform.rotation.y,
+                        Z =  remotes[playerId].LeftBottomArm.transform.rotation.z,
+                        W =  remotes[playerId].LeftBottomArm.transform.rotation.w,
+                    }
                 },
                 RightArmBottom = new PartState
                 {
                     X = remotes[playerId].RightBottomArm.transform.position.x,
                     Y = remotes[playerId].RightBottomArm.transform.position.y,
-                    RotationZ = remotes[playerId].RightBottomArm.transform.rotation.z,
+                    Rotation = new Rotation()
+                    {
+                        X = remotes[playerId].RightBottomArm.transform.rotation.x,
+                        Y = remotes[playerId].RightBottomArm.transform.rotation.y,
+                        Z =  remotes[playerId].RightBottomArm.transform.rotation.z,
+                        W =  remotes[playerId].RightBottomArm.transform.rotation.w,
+                    }
                 },
                 IsLeftGrab = remotes[playerId].IsLeftGrab,
                 IsRightGrab = remotes[playerId].IsRightGrab,
