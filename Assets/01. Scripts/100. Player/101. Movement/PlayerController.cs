@@ -45,42 +45,53 @@ namespace WeGotOne
         
         // 보간 주기. Snapshot 보내는 주기
         private const float SnapshotInterval = 1f / 20f;
+        private float smooth = 10f;
 
         private float interpolationTime;
         private bool initialized;
 
-        private Vector2 previousBodyPosition;
-        private Quaternion previousBodyRotation;
-
-        private Vector2 previousLeftUpperPosition;
-        private Quaternion previousLeftUpperRotation;
-
-        private Vector2 previousRightUpperPosition;
-        private Quaternion previousRightUpperRotation;
-
-        private Vector2 previousLeftBottomPosition;
-        private Quaternion previousLeftBottomRotation;
-
-        private Vector2 previousRightBottomPosition;
-        private Quaternion previousRightBottomRotation;
-
-        private Vector2 targetBodyPosition;
-        private Quaternion targetBodyRotation;
-
-        private Vector2 targetLeftUpperPosition;
-        private Quaternion targetLeftUpperRotation;
-
-        private Vector2 targetRightUpperPosition;
-        private Quaternion targetRightUpperRotation;
-
-        private Vector2 targetLeftBottomPosition;
-        private Quaternion targetLeftBottomRotation;
-
-        private Vector2 targetRightBottomPosition;
-        private Quaternion targetRightBottomRotation;
+        // private Vector2 previousBodyPosition;
+        // private Quaternion previousBodyRotation;
+        //
+        // private Vector2 previousLeftUpperPosition;
+        // private Quaternion previousLeftUpperRotation;
+        //
+        // private Vector2 previousRightUpperPosition;
+        // private Quaternion previousRightUpperRotation;
+        //
+        // private Vector2 previousLeftBottomPosition;
+        // private Quaternion previousLeftBottomRotation;
+        //
+        // private Vector2 previousRightBottomPosition;
+        // private Quaternion previousRightBottomRotation;
+        //
+        // private Vector2 targetBodyPosition;
+        // private Quaternion targetBodyRotation;
+        //
+        // private Vector2 targetLeftUpperPosition;
+        // private Quaternion targetLeftUpperRotation;
+        //
+        // private Vector2 targetRightUpperPosition;
+        // private Quaternion targetRightUpperRotation;
+        //
+        // private Vector2 targetLeftBottomPosition;
+        // private Quaternion targetLeftBottomRotation;
+        //
+        // private Vector2 targetRightBottomPosition;
+        // private Quaternion targetRightBottomRotation;
         
         # endregion
+        
+        private void Update()
+        {
+            if (initialized == false)
+            {
+                return;
+            }
 
+            interpolationTime += Time.deltaTime;
+        }
+        
         public void Setup(User user)
         {
             User = user;
@@ -89,6 +100,83 @@ namespace WeGotOne
         public void ApplyInput(Vector2 moveInput, bool leftGrab, bool rightGrab)
         {
             HandleMovement(moveInput);
+            HandleGrab(leftGrab, rightGrab);
+        }
+        
+        public void ApplyPosition(PlayerState position, bool leftGrab, bool rightGrab)
+        {
+            // 서버에서 들어온 값 저장
+            Vector2 newBodyPosition = new Vector2(position.Body.X, position.Body.Y);
+            Quaternion newBodyRotation = ToQuaternion(position.Body.Rotation);
+            Vector2 newLeftUpperPosition = new Vector2(position.LeftArmTop.X, position.LeftArmTop.Y);
+            Quaternion newLeftUpperRotation = ToQuaternion(position.LeftArmTop.Rotation);
+            Vector2 newRightUpperPosition = new Vector2(position.RightArmTop.X, position.RightArmTop.Y);
+            Quaternion newRightUpperRotation = ToQuaternion(position.RightArmTop.Rotation);
+            Vector2 newLeftBottomPosition = new Vector2(position.LeftArmBottom.X, position.LeftArmBottom.Y);
+            Quaternion newLeftBottomRotation = ToQuaternion(position.LeftArmBottom.Rotation);
+            Vector2 newRightBottomPosition = new Vector2(position.RightArmBottom.X, position.RightArmBottom.Y);
+            Quaternion newRightBottomRotation = ToQuaternion(position.RightArmBottom.Rotation);
+
+            // 값 저장하고 처음 적용이면 한번 적용
+            if (initialized == false)
+            {
+                body.transform.position = newBodyPosition;
+                body.transform.rotation = newBodyRotation;
+
+                leftUpperArm.transform.position = newLeftUpperPosition;
+                leftUpperArm.transform.rotation = newLeftUpperRotation;
+
+                rightUpperArm.transform.position = newRightUpperPosition;
+                rightUpperArm.transform.rotation = newRightUpperRotation;
+
+                leftBottomArm.transform.position = newLeftBottomPosition;
+                leftBottomArm.transform.rotation = newLeftBottomRotation;
+
+                rightBottomArm.transform.position = newRightBottomPosition;
+                rightBottomArm.transform.rotation = newRightBottomRotation;
+
+                initialized = true;
+
+                HandleGrab(leftGrab, rightGrab);
+                return;
+            }
+
+            float t = Mathf.Clamp01(1f - Mathf.Exp(-smooth * Time.deltaTime));
+
+            ApplyInterpolatedTransform(
+                body.transform,
+                newBodyPosition,
+                newBodyRotation,
+                t);
+
+            ApplyInterpolatedTransform(
+                leftUpperArm.transform,
+                newLeftUpperPosition,
+                newLeftUpperRotation,
+                t);
+
+            ApplyInterpolatedTransform(
+                rightUpperArm.transform,
+                newRightUpperPosition,
+                newRightUpperRotation,
+                t);
+
+            ApplyInterpolatedTransform(
+                leftBottomArm.transform,
+                newLeftBottomPosition,
+                newLeftBottomRotation,
+                t);
+
+            ApplyInterpolatedTransform(
+                rightBottomArm.transform,
+                newRightBottomPosition,
+                newRightBottomRotation,
+                t);
+
+            HandleGrab(leftGrab, rightGrab);
+
+            // interpolationTime = 0f;
+
             HandleGrab(leftGrab, rightGrab);
         }
 
@@ -148,110 +236,25 @@ namespace WeGotOne
             leftBottomArm.ClearDirection();
             rightBottomArm.ClearDirection();
         }
-        
-        public void ApplyPosition(PlayerState position, bool leftGrab, bool rightGrab)
+
+        private void ApplyInterpolatedTransform(
+            Transform target,
+            Vector2 newPosition,
+            Quaternion newRotation,
+            float t)
         {
-            // 서버에서 들어온 값 저장
-            Vector2 newBodyPosition = new Vector2(position.Body.X, position.Body.Y);
-            Quaternion newBodyRotation = ToQuaternion(position.Body.Rotation);
-            Vector2 newLeftUpperPosition = new Vector2(position.LeftArmTop.X, position.LeftArmTop.Y);
-            Quaternion newLeftUpperRotation = ToQuaternion(position.LeftArmTop.Rotation);
-            Vector2 newRightUpperPosition = new Vector2(position.RightArmTop.X, position.RightArmTop.Y);
-            Quaternion newRightUpperRotation = ToQuaternion(position.RightArmTop.Rotation);
-            Vector2 newLeftBottomPosition = new Vector2(position.LeftArmBottom.X, position.LeftArmBottom.Y);
-            Quaternion newLeftBottomRotation = ToQuaternion(position.LeftArmBottom.Rotation);
-            Vector2 newRightBottomPosition = new Vector2(position.RightArmBottom.X, position.RightArmBottom.Y);
-            Quaternion newRightBottomRotation = ToQuaternion(position.RightArmBottom.Rotation);
+            target.position = Vector2.Lerp(
+                target.position,
+                newPosition,
+                t
+            );
 
-            // 값 저장하고 처음 적용이면 한번 적용
-            if (initialized == false)
-            {
-                previousBodyPosition = newBodyPosition;
-                targetBodyPosition = newBodyPosition;
-
-                previousBodyRotation = newBodyRotation;
-                targetBodyRotation = newBodyRotation;
-
-                previousLeftUpperPosition = newLeftUpperPosition;
-                targetLeftUpperPosition = newLeftUpperPosition;
-
-                previousLeftUpperRotation = newLeftUpperRotation;
-                targetLeftUpperRotation = newLeftUpperRotation;
-
-                previousRightUpperPosition = newRightUpperPosition;
-                targetRightUpperPosition = newRightUpperPosition;
-
-                previousRightUpperRotation = newRightUpperRotation;
-                targetRightUpperRotation = newRightUpperRotation;
-
-                previousLeftBottomPosition = newLeftBottomPosition;
-                targetLeftBottomPosition = newLeftBottomPosition;
-
-                previousLeftBottomRotation = newLeftBottomRotation;
-                targetLeftBottomRotation = newLeftBottomRotation;
-
-                previousRightBottomPosition = newRightBottomPosition;
-                targetRightBottomPosition = newRightBottomPosition;
-
-                previousRightBottomRotation = newRightBottomRotation;
-                targetRightBottomRotation = newRightBottomRotation;
-
-                body.transform.position = newBodyPosition;
-                body.transform.rotation = newBodyRotation;
-
-                leftUpperArm.transform.position = newLeftUpperPosition;
-                leftUpperArm.transform.rotation = newLeftUpperRotation;
-
-                rightUpperArm.transform.position = newRightUpperPosition;
-                rightUpperArm.transform.rotation = newRightUpperRotation;
-
-                leftBottomArm.transform.position = newLeftBottomPosition;
-                leftBottomArm.transform.rotation = newLeftBottomRotation;
-
-                rightBottomArm.transform.position = newRightBottomPosition;
-                rightBottomArm.transform.rotation = newRightBottomRotation;
-
-                initialized = true;
-
-                HandleGrab(leftGrab, rightGrab);
-                return;
-            }
-
-            // 처음 아니면 이전값 받아오면서 Update 시키기
-            previousBodyPosition = targetBodyPosition;
-            previousBodyRotation = targetBodyRotation;
-
-            previousLeftUpperPosition = targetLeftUpperPosition;
-            previousLeftUpperRotation = targetLeftUpperRotation;
-
-            previousRightUpperPosition = targetRightUpperPosition;
-            previousRightUpperRotation = targetRightUpperRotation;
-
-            previousLeftBottomPosition = targetLeftBottomPosition;
-            previousLeftBottomRotation = targetLeftBottomRotation;
-
-            previousRightBottomPosition = targetRightBottomPosition;
-            previousRightBottomRotation = targetRightBottomRotation;
-
-            targetBodyPosition = newBodyPosition;
-            targetBodyRotation = newBodyRotation;
-
-            targetLeftUpperPosition = newLeftUpperPosition;
-            targetLeftUpperRotation = newLeftUpperRotation;
-
-            targetRightUpperPosition = newRightUpperPosition;
-            targetRightUpperRotation = newRightUpperRotation;
-
-            targetLeftBottomPosition = newLeftBottomPosition;
-            targetLeftBottomRotation = newLeftBottomRotation;
-
-            targetRightBottomPosition = newRightBottomPosition;
-            targetRightBottomRotation = newRightBottomRotation;
-
-            interpolationTime = 0f;
-
-            HandleGrab(leftGrab, rightGrab);
-        }
+            target.rotation = Quaternion.Lerp(
+                target.rotation,
+                newRotation,
+                t
+            );
+        } 
 
         private Quaternion ToQuaternion(Rotation rotation)
         {
@@ -262,33 +265,5 @@ namespace WeGotOne
                 rotation.W
             );
         } 
-        
-        private void Update()
-        {
-            if (initialized == false)
-            {
-                return;
-            }
-
-            interpolationTime += Time.deltaTime;
-
-            float t = interpolationTime / SnapshotInterval;
-            t = Mathf.Clamp01(t);
-            
-            body.transform.position = Vector2.Lerp(previousBodyPosition, targetBodyPosition, t);
-            body.transform.rotation = Quaternion.Lerp(previousBodyRotation, targetBodyRotation, t);
-
-            leftUpperArm.transform.position = Vector2.Lerp(previousLeftUpperPosition, targetLeftUpperPosition, t);
-            leftUpperArm.transform.rotation = Quaternion.Lerp(previousLeftUpperRotation, targetLeftUpperRotation, t);
-
-            rightUpperArm.transform.position = Vector2.Lerp(previousRightUpperPosition, targetRightUpperPosition, t);
-            rightUpperArm.transform.rotation = Quaternion.Lerp(previousRightUpperRotation, targetRightUpperRotation, t);
-
-            leftBottomArm.transform.position = Vector2.Lerp(previousLeftBottomPosition, targetLeftBottomPosition, t);
-            leftBottomArm.transform.rotation = Quaternion.Lerp(previousLeftBottomRotation, targetLeftBottomRotation, t);
-
-            rightBottomArm.transform.position = Vector2.Lerp(previousRightBottomPosition, targetRightBottomPosition, t);
-            rightBottomArm.transform.rotation = Quaternion.Lerp(previousRightBottomRotation, targetRightBottomRotation, t);
-        }
     }
 }
