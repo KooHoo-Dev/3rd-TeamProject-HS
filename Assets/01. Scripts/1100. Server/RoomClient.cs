@@ -504,33 +504,33 @@ namespace HelloServer
                 Id = playerId, 
                 Body = new PartState
                 {
-                    X = remotes[playerId].GetComponentInChildren<PlayerController>().Body.transform.position.x,
-                    Y = remotes[playerId].GetComponentInChildren<PlayerController>().Body.transform.position.y,
-                    RotationZ = remotes[playerId].GetComponentInChildren<PlayerController>().Body.transform.rotation.z,
+                    X = remotes[playerId].Body.transform.position.x,
+                    Y = remotes[playerId].Body.transform.position.y,
+                    RotationZ = remotes[playerId].Body.transform.rotation.z,
                 },
                 LeftArmTop = new PartState
                 {
-                    X = remotes[playerId].GetComponentInChildren<PlayerController>().LeftUpperArm.transform.position.x,
-                    Y = remotes[playerId].GetComponentInChildren<PlayerController>().LeftUpperArm.transform.position.y,
-                    RotationZ = remotes[playerId].GetComponentInChildren<PlayerController>().LeftUpperArm.transform.rotation.z,
+                    X = remotes[playerId].LeftUpperArm.transform.position.x,
+                    Y = remotes[playerId].LeftUpperArm.transform.position.y,
+                    RotationZ = remotes[playerId].LeftUpperArm.transform.rotation.z,
                 },
                 RightArmTop = new PartState
                 {
-                    X = remotes[playerId].GetComponentInChildren<PlayerController>().RightUpperArm.transform.position.x,
-                    Y = remotes[playerId].GetComponentInChildren<PlayerController>().RightUpperArm.transform.position.y,
-                    RotationZ = remotes[playerId].GetComponentInChildren<PlayerController>().RightUpperArm.transform.rotation.z,
+                    X = remotes[playerId].RightUpperArm.transform.position.x,
+                    Y = remotes[playerId].RightUpperArm.transform.position.y,
+                    RotationZ = remotes[playerId].RightUpperArm.transform.rotation.z,
                 },
                 LeftArmBottom = new PartState
                 {
-                    X = remotes[playerId].GetComponentInChildren<PlayerController>().LeftBottomArm.transform.position.x,
-                    Y = remotes[playerId].GetComponentInChildren<PlayerController>().LeftBottomArm.transform.position.y,
-                    RotationZ = remotes[playerId].GetComponentInChildren<PlayerController>().LeftBottomArm.transform.rotation.z,
+                    X = remotes[playerId].LeftBottomArm.transform.position.x,
+                    Y = remotes[playerId].LeftBottomArm.transform.position.y,
+                    RotationZ = remotes[playerId].LeftBottomArm.transform.rotation.z,
                 },
                 RightArmBottom = new PartState
                 {
-                    X = remotes[playerId].GetComponentInChildren<PlayerController>().RightBottomArm.transform.position.x,
-                    Y = remotes[playerId].GetComponentInChildren<PlayerController>().RightBottomArm.transform.position.y,
-                    RotationZ = remotes[playerId].GetComponentInChildren<PlayerController>().RightBottomArm.transform.rotation.z,
+                    X = remotes[playerId].RightBottomArm.transform.position.x,
+                    Y = remotes[playerId].RightBottomArm.transform.position.y,
+                    RotationZ = remotes[playerId].RightBottomArm.transform.rotation.z,
                 },
             });
         }
