@@ -265,7 +265,7 @@ namespace HelloServer
                 {
                     continue;
                 }
-                Debug.Log($"[방] ({i + 1}번째) 게스트 입력 Id - {input.Id}, X - {input.X}, Y - {input.Y}, IsLeftShiftHold - {input.IsLeftShiftHold}, IsRightShiftHold - {input.IsRightShiftHold}");
+                // Debug.Log($"[방] ({i + 1}번째) 게스트 입력 Id - {input.Id}, X - {input.X}, Y - {input.Y}, IsLeftShiftHold - {input.IsLeftShiftHold}, IsRightShiftHold - {input.IsRightShiftHold}");
                 
                 
                 if (remotes.TryGetValue(input.Id, out PlayerController remote) == false) continue;
@@ -504,33 +504,33 @@ namespace HelloServer
                 Id = playerId, 
                 Body = new PartState
                 {
-                    X = localPlayer.GetComponentInChildren<PlayerController>().Body.transform.position.x,
-                    Y = localPlayer.GetComponentInChildren<PlayerController>().Body.transform.position.y,
-                    RotationZ = localPlayer.GetComponentInChildren<PlayerController>().Body.transform.rotation.z,
+                    X = remotes[playerId].GetComponentInChildren<PlayerController>().Body.transform.position.x,
+                    Y = remotes[playerId].GetComponentInChildren<PlayerController>().Body.transform.position.y,
+                    RotationZ = remotes[playerId].GetComponentInChildren<PlayerController>().Body.transform.rotation.z,
                 },
                 LeftArmTop = new PartState
                 {
-                    X = localPlayer.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.position.x,
-                    Y = localPlayer.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.position.y,
-                    RotationZ = localPlayer.GetComponentInChildren<PlayerController>().LeftUpperArm.transform.rotation.z,
+                    X = remotes[playerId].GetComponentInChildren<PlayerController>().LeftUpperArm.transform.position.x,
+                    Y = remotes[playerId].GetComponentInChildren<PlayerController>().LeftUpperArm.transform.position.y,
+                    RotationZ = remotes[playerId].GetComponentInChildren<PlayerController>().LeftUpperArm.transform.rotation.z,
                 },
                 RightArmTop = new PartState
                 {
-                    X = localPlayer.GetComponentInChildren<PlayerController>().RightUpperArm.transform.position.x,
-                    Y = localPlayer.GetComponentInChildren<PlayerController>().RightUpperArm.transform.position.y,
-                    RotationZ = localPlayer.GetComponentInChildren<PlayerController>().RightUpperArm.transform.rotation.z,
+                    X = remotes[playerId].GetComponentInChildren<PlayerController>().RightUpperArm.transform.position.x,
+                    Y = remotes[playerId].GetComponentInChildren<PlayerController>().RightUpperArm.transform.position.y,
+                    RotationZ = remotes[playerId].GetComponentInChildren<PlayerController>().RightUpperArm.transform.rotation.z,
                 },
                 LeftArmBottom = new PartState
                 {
-                    X = localPlayer.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.position.x,
-                    Y = localPlayer.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.position.y,
-                    RotationZ = localPlayer.GetComponentInChildren<PlayerController>().LeftBottomArm.transform.rotation.z,
+                    X = remotes[playerId].GetComponentInChildren<PlayerController>().LeftBottomArm.transform.position.x,
+                    Y = remotes[playerId].GetComponentInChildren<PlayerController>().LeftBottomArm.transform.position.y,
+                    RotationZ = remotes[playerId].GetComponentInChildren<PlayerController>().LeftBottomArm.transform.rotation.z,
                 },
                 RightArmBottom = new PartState
                 {
-                    X = localPlayer.GetComponentInChildren<PlayerController>().RightBottomArm.transform.position.x,
-                    Y = localPlayer.GetComponentInChildren<PlayerController>().RightBottomArm.transform.position.y,
-                    RotationZ = localPlayer.GetComponentInChildren<PlayerController>().RightBottomArm.transform.rotation.z,
+                    X = remotes[playerId].GetComponentInChildren<PlayerController>().RightBottomArm.transform.position.x,
+                    Y = remotes[playerId].GetComponentInChildren<PlayerController>().RightBottomArm.transform.position.y,
+                    RotationZ = remotes[playerId].GetComponentInChildren<PlayerController>().RightBottomArm.transform.rotation.z,
                 },
             });
         }
