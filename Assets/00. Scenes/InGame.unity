@@ -2772,7 +2772,8 @@ MonoBehaviour:
   <PlankCount>k__BackingField: 0
   itemPrefabs:
   - {fileID: 6691754160653459987, guid: 1194081bb080b624b838ba18eca05a87, type: 3}
-  - {fileID: 6379582482144207266, guid: e9ab641d222f5d54eba6eac2f9ca6843, type: 3}
+  - {fileID: 2955807939535471609, guid: 4471dd391aefe7841a132e64480e4b08, type: 3}
+  - {fileID: 2325836844950980227, guid: 9f38c5641ae18ed4badf78e3ccb5a155, type: 3}
   itemTransforms: []
 --- !u!4 &1561437504
 Transform:
