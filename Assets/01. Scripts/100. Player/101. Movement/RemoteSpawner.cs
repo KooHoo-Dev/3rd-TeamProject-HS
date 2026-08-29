@@ -27,6 +27,7 @@ namespace WeGotOne
         public void Setup(User user)
         {
             User = user;
+            input.Setup(user.IsHost);
             /*
             label.text = $"{user.NickName} ({user.Id})";
             body.color = color;
