@@ -25,9 +25,8 @@ namespace HelloServer
         [SerializeField] private string nickName = "이름없음";
         // 들어갈 방.
         [SerializeField] private string roomCode = "ABCD";
+        
         [Header("장면")]
-        
-        
         // 내가 조종하는 캐릭터. 씬에 미리 놓아 둔다.
         // 8/28 수정 : 예시 플레이어인 LocalPlayer를 제거하고 프로젝트에서 사용하는 플레이어 컨트롤러로 변경
         [SerializeField] private PlayerController localPlayer;

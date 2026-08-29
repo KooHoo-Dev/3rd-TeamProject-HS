@@ -101,7 +101,7 @@ namespace HelloServer
         public int CurrentBridgeCount { get; set; } // 현재 다리가 몇 개 건설 됐는지
         
         // 4. 게임 라이프 사이클 및 시간 상태
-        public float ElapsedTime { get; set; }      // 흐른 시간 혹은 DayLoop 상태
+        public bool IsDay { get; set; }      // 흐른 시간 혹은 DayLoop 상태
         public bool IsGameOver { get; set; }         // 게임 오버 여부
         public bool IsGameWon { get; set; }          // 게임 승리 여부
     }
