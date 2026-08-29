@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
-using UnityEditor.SettingsManagement;
 using UnityEngine.InputSystem;
 using WeGotOne;
 
@@ -30,9 +29,9 @@ namespace HelloServer
         [Header("장면")]
         // 내가 조종하는 캐릭터. 씬에 미리 놓아 둔다.
         // 8/28 수정 : 예시 플레이어인 LocalPlayer를 제거하고 프로젝트에서 사용하는 플레이어 컨트롤러로 변경
-        [SerializeField] private PlayerController localPlayer;
         // 남이 들어올 때마다 이걸로 하나씩 만든다.
         [SerializeField] private PlayerController remotePrefab;
+        private PlayerController localPlayer;
 
         [Header("보내기")]
         // 초당 몇 번 내 위치를 보낼지.
@@ -40,6 +39,7 @@ namespace HelloServer
         // 보내는 쪽이 더 자주 보내도 되지만, 받는 쪽이 그만큼 자주 보게 되지는 않는다.
         [SerializeField] private float sendPerSecond = 20f;
 
+        [SerializeField] private Transform spawnPoint;
         // 서버가 정해 준 내 정보. welcome 을 받기 전에는 비어 있다.
         public User Me { get; private set; }
         
@@ -219,13 +219,14 @@ namespace HelloServer
             
             foreach (PlayerState state in message.Players)
             {
-                if (state.Id == Me.Id)
+                // snapshot에 자기자신도 있어서 제거
+                // if (state.Id == Me.Id)
+                // {
+                //     localPlayer.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
+                // }
+                if (remotes.TryGetValue(state.Id, out PlayerController remote))
                 {
-                    localPlayer.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
-                }
-                else if (remotes.TryGetValue(state.Id, out PlayerController remote))
-                {
-                    remote.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
+                    remote.ApplySnapshot(state, state.IsLeftGrab, state.IsRightGrab);
                 }
             }
             
@@ -311,7 +312,7 @@ namespace HelloServer
             // 이미 있으면 만들지 않는다. welcome 과 join 이 겹칠 수 있다.
             if (remotes.ContainsKey(user.Id)) return;
 
-            PlayerController remote = Instantiate(remotePrefab, Vector3.zero, Quaternion.identity);
+            PlayerController remote = Instantiate(remotePrefab, spawnPoint.position, Quaternion.identity);
             
             Rigidbody2D[] rigid = remote.GetComponentsInChildren<Rigidbody2D>();
 
@@ -368,7 +369,8 @@ namespace HelloServer
                 // 3. [플레이어 상태 연동]: 나와 다른 게스트 플레이어들의 상태 채우기
                 var playerStates = new List<PlayerState>();
         
-                AddPlayerState(playerStates, Me.Id);
+                // remotes에 자기 자신도 있어서 제거
+                // AddPlayerState(playerStates, Me.Id);
 
                 // 접속한 다른 원격 유저(게스트)들의 현재 씬 위치 추가
                 foreach (var pair in remotes)
