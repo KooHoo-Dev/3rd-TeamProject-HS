@@ -521,7 +521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 048741b19b0c4bd98b650d15f17e13d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HelloServer.RoomLobby
-  nickName: IWantSleep
+  nickName: Host
   roomCode: 1234
 --- !u!114 &2061268595
 MonoBehaviour:

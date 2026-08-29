@@ -119,7 +119,6 @@ namespace HelloServer
 
         public User User { get; set; }
         public User[] Users { get; set; }
-        public SnapshotMessage SnapshotMessage { get; set; }
     }
 
     public class JoinMessage
