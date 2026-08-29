@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
+using UnityEditor.SettingsManagement;
 using UnityEngine.InputSystem;
 using WeGotOne;
 
@@ -287,11 +288,8 @@ namespace HelloServer
             Spawn(message.User);
             foreach (User user in message.Users) Spawn(user);
             
-            // localPlayer.Setup(Me, ColorOf(Me.Id));
             remotes.TryGetValue(Me.Id, out PlayerController localPlayer);
             this.localPlayer = localPlayer;
-            
-            OnSnapshot(SnapshotMessage);
 
             Debug.Log(
                 $"[OnWelcome Setup 직전] " +
