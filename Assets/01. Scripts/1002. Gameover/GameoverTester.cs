@@ -12,7 +12,7 @@ namespace WeGotOne
         
         private void Start()
         {
-            GameManager.Instance.SetTotalPlayerCount(playerList.Count);
+            SetTotalPlayerCount();
         }
 
         [ContextMenu("Activate Any Player")]
@@ -48,6 +48,7 @@ namespace WeGotOne
         [ContextMenu("Set Total Player Count")]
         public void SetTotalPlayerCount()
         {
+            playerList = new List<PlayerHunger>(FindObjectsOfType<PlayerHunger>());
             GameManager.Instance.SetTotalPlayerCount(playerList.Count);
         }
     }
