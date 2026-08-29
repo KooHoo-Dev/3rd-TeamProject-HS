@@ -39,7 +39,7 @@ namespace WeGotOne
 
         public void CountTextUpdate(int itemKey, bool isPlus)
         {
-            int itemCount = 0;//InventoryItemDB.Instance.itemDic[itemKey]; 임시 처리
+            int itemCount = InventoryItemDB.Instance.ItemCountDic[itemKey];
 
             itemCount += isPlus ? 1 : -1;
             ItemCountText.text = itemCount.ToString();

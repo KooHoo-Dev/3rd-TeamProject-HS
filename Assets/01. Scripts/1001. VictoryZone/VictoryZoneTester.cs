@@ -9,7 +9,7 @@ namespace WeGotOne
         [ContextMenu("Build Bridge")]
         public void BuildBridge()
         {
-            BridgeManager.Instance.BuildBridgeWithoutCost();
+//            BridgeManager.Instance.BuildBridgeWithoutCost();
         }
         
         [ContextMenu("Set Total Player Count")]
