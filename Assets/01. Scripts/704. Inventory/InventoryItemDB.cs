@@ -5,16 +5,13 @@ namespace WeGotOne
 {
     public class InventoryItemDB : SingletonBase<InventoryItemDB>
     {
+        private const int DEFAULT_ITEM_KEY = 0;
+        
         public ItemScriptableObject[] items;
 
-        private Dictionary<int, ItemScriptableObject> itemDic 
-            = new Dictionary<int, ItemScriptableObject>();
-
-        private const int DEFAULT_ITEM_KEY = 0;
-
-        public int Count => itemDic.Count;
-
-
+        private Dictionary<int, ItemScriptableObject> itemDic = new();
+        public Dictionary<int, int> ItemCountDic = new();
+        
         // 제공해드린 싱글톤을 상속받은 개체의 초기화는
         // OnInitialize(), Start()를 중심으로 하되
         // Awake 꼭 필요한 상황에서는 override를 하시고
