@@ -39,7 +39,15 @@ namespace HelloServer
         public float X { get; set; }
         public float Y { get; set; }
         
-        public float RotationZ { get; set; }
+        public Rotation Rotation { get; set; }
+    }
+
+    public class Rotation
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
+        public float W { get; set; }
     }
 
     // 물고기 코드

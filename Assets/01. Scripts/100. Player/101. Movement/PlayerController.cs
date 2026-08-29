@@ -119,10 +119,30 @@ namespace WeGotOne
                 $"Incoming=({position.Body.X}, {position.Body.Y})"
             );
 
-            body.transform.position = new Vector2(
-                position.Body.X,
-                position.Body.Y
+            body.transform.position = new Vector2(position.Body.X, position.Body.Y);
+            body.transform.rotation = ToQuaternion(position.Body.Rotation);
+
+            leftUpperArm.SetPosition(
+                new Vector2(position.LeftArmTop.X, position.LeftArmTop.Y),
+                ToQuaternion(position.LeftArmTop.Rotation)
             );
+
+            rightUpperArm.SetPosition(
+                new Vector2(position.RightArmTop.X, position.RightArmTop.Y),
+                ToQuaternion(position.RightArmTop.Rotation)
+            );
+
+            leftBottomArm.SetPosition(
+                new Vector2(position.LeftArmBottom.X, position.LeftArmBottom.Y),
+                ToQuaternion(position.LeftArmBottom.Rotation)
+            );
+
+            rightBottomArm.SetPosition(
+                new Vector2(position.RightArmBottom.X, position.RightArmBottom.Y),
+                ToQuaternion(position.RightArmBottom.Rotation)
+            ); 
+            
+            HandleGrab(leftGrab, rightGrab);
             
             Debug.Log(
                 $"[ApplyPosition AFTER] " +
@@ -130,35 +150,16 @@ namespace WeGotOne
                 $"Root={transform.position} | " +
                 $"Body={body.transform.position}"
             );
-
-            body.transform.rotation = new Quaternion(
-                body.transform.rotation.x,
-                body.transform.rotation.y,
-                position.Body.RotationZ,
-                body.transform.rotation.w
-            );
-
-            leftUpperArm.SetPosition(
-                new Vector2(position.LeftArmTop.X, position.LeftArmTop.Y),
-                position.LeftArmTop.RotationZ
-            );
-
-            rightUpperArm.SetPosition(
-                new Vector2(position.RightArmTop.X, position.RightArmTop.Y),
-                position.RightArmTop.RotationZ
-            );
-
-            leftBottomArm.SetPosition(
-                new Vector2(position.LeftArmBottom.X, position.LeftArmBottom.Y),
-                position.LeftArmBottom.RotationZ
-            );
-
-            rightBottomArm.SetPosition(
-                new Vector2(position.RightArmBottom.X, position.RightArmBottom.Y),
-                position.RightArmBottom.RotationZ
-            );
-
-            HandleGrab(leftGrab, rightGrab);
         }
+
+        private Quaternion ToQuaternion(Rotation rotation)
+        {
+            return new Quaternion(
+                rotation.X,
+                rotation.Y,
+                rotation.Z,
+                rotation.W
+            );
+        } 
     }
 }
