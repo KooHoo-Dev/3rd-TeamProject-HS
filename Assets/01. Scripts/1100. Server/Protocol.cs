@@ -8,6 +8,7 @@ namespace HelloServer
         public string Id { get; set; }
         public string NickName { get; set; }
         public bool IsHost { get; set; }
+
     }
 
     // 받은 글자가 어떤 종류인지 나타내는 데이터 객체
@@ -23,6 +24,8 @@ namespace HelloServer
     public class PlayerState
     {
         public string Id { get; set; }
+
+        public float CurrentHunger { get; set; }
 
         public PartState Body { get; set; }
         public PartState LeftArmTop { get; set; }
@@ -120,8 +123,8 @@ namespace HelloServer
         
         // 4. 게임 라이프 사이클 및 시간 상태
         public bool IsDay { get; set; }      // 흐른 시간 혹은 DayLoop 상태
-        public bool IsGameOver { get; set; }         // 게임 오버 여부
-        public bool IsGameWon { get; set; }          // 게임 승리 여부
+        public int ActivePlayerCount { get; set; }
+        public int ArrivedPlayerCount { get; set; }
     }
     
 

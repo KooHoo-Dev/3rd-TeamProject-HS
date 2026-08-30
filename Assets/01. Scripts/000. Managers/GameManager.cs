@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using HelloServer;
 
 namespace WeGotOne
 {
@@ -9,6 +10,7 @@ namespace WeGotOne
         public bool IsAllPlayerArrivedAtLand => arrivedPlayerCount == totalPlayerCount;
         public int OutOfEnergyPlayerCount => totalPlayerCount - activePlayerCount;
         public int ActivePlayerCount => activePlayerCount;
+        public int ArrivedPlayerCount => arrivedPlayerCount;
         
         // 플레이어 상태 변화
         [SerializeField] private RectTransform gameOverUI;
@@ -22,14 +24,15 @@ namespace WeGotOne
         // VictoryZone(육지)에 도착한 플레이어 수
         [SerializeField] private int arrivedPlayerCount = 0;
         [SerializeField] private int activePlayerCount;
+        private bool isGameFinished;
         
         #region unity events
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            /*gameOverUI.gameObject.SetActive(false);
-            gameWinUI.gameObject.SetActive(false);*/
+            gameOverUI.gameObject.SetActive(false);
+            gameWinUI.gameObject.SetActive(false);
         }
         
         private void OnEnable()
@@ -44,23 +47,39 @@ namespace WeGotOne
 
         #endregion
 
-        // 지금은 유니티 상으로 주입해서 게임오버, 게임 승리 UI 띄우도록 설정
-        // 추후 UI 관련 매니저를 호출하는 방식으로 변경
-        // 다리가 완성되고 플레이어 모두가 육지에 도착하면 승리
         private void CheckPlayerWin()
         {
-            if (IsBridgeComplete && IsAllPlayerArrivedAtLand)
-            {
-                gameWinUI.gameObject.SetActive(true);
-            }
+            if (CanRunLocalGameLogic == false) return;
+
+            EvaluateGameEnd();
         }
 
-        // 패배 처리
-        private void HandleLose(int activePlayerCount)
+        private void EvaluateGameEnd()
         {
-            if (activePlayerCount == 0)
+            if (isGameFinished) return;
+
+            bool isGameOver = activePlayerCount == 0;
+            bool isGameWon = IsBridgeComplete && IsAllPlayerArrivedAtLand;
+
+            if (isGameOver && isGameWon)
+            {
+                Debug.LogError("게임 오버와 승리 조건이 동시에 충족되었습니다. 게임 오버로 처리합니다.");
+                gameOverUI.gameObject.SetActive(true);
+                isGameFinished = true;
+                return;
+            }
+
+            if (isGameOver)
             {
                 gameOverUI.gameObject.SetActive(true);
+                isGameFinished = true;
+                return;
+            }
+
+            if (isGameWon)
+            {
+                gameWinUI.gameObject.SetActive(true);
+                isGameFinished = true;
             }
         }
 
@@ -71,17 +90,64 @@ namespace WeGotOne
             activePlayerCount = count;
         }
 
+        public void ResetNetworkPlayerCounts()
+        {
+            totalPlayerCount = 0;
+            activePlayerCount = 0;
+            arrivedPlayerCount = 0;
+            isGameFinished = false;
+            gameOverUI.gameObject.SetActive(false);
+            gameWinUI.gameObject.SetActive(false);
+        }
+
+        public void AddPlayer()
+        {
+            totalPlayerCount++;
+            activePlayerCount++;
+        }
+
+        public void RemovePlayer()
+        {
+            totalPlayerCount = Mathf.Max(0, totalPlayerCount - 1);
+        }
+
+        public void RemovePlayer(bool isStarved, bool isArrived)
+        {
+            RemovePlayer();
+
+            if (isStarved == false)
+            {
+                activePlayerCount = Mathf.Max(0, activePlayerCount - 1);
+            }
+
+            if (isArrived)
+            {
+                arrivedPlayerCount = Mathf.Max(0, arrivedPlayerCount - 1);
+            }
+
+            EvaluateGameEnd();
+        }
+
+        public void ApplySnapshot(int snapshotActivePlayerCount, int snapshotArrivedPlayerCount)
+        {
+            activePlayerCount = snapshotActivePlayerCount;
+            arrivedPlayerCount = snapshotArrivedPlayerCount;
+
+            EvaluateGameEnd();
+        }
+
         public void AddArrivedPlayerCount()
         {
+            if (CanRunLocalGameLogic == false) return;
+
             arrivedPlayerCount++;
-            if (IsAllPlayerArrivedAtLand)
-            {
-                CheckPlayerWin();
-            }
+            EvaluateGameEnd();
         }
 
         public void RemoveArrivedPlayerCount()
         {
+            if (CanRunLocalGameLogic == false) return;
+
             arrivedPlayerCount--;
             if (arrivedPlayerCount < 0)
             {
@@ -104,14 +170,27 @@ namespace WeGotOne
 
         private void HandlePlayerStarveStateChanged(bool isStarved)
         {
+            if (CanRunLocalGameLogic == false) return;
+
             if (isStarved)
             {
                 activePlayerCount--;
-                HandleLose(activePlayerCount);
             }
             else
             {
                 activePlayerCount++;
+            }
+
+            EvaluateGameEnd();
+        }
+
+        private bool CanRunLocalGameLogic
+        {
+            get
+            {
+                return RoomClient.IsInitialized == false ||
+                       RoomClient.Instance.Me == null ||
+                       RoomClient.Instance.Me.IsHost;
             }
         }
     }

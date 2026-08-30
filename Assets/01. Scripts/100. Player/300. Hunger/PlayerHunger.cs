@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using HelloServer;
 
 namespace WeGotOne
 {
@@ -33,6 +34,8 @@ namespace WeGotOne
 
         private void Update()
         {
+            if (CanRunLocalGameLogic == false) return;
+
             DecreaseHungerOverTime();
         }
 
@@ -77,11 +80,13 @@ namespace WeGotOne
         /// <param name="amount"></param>
         public void IncreaseHunger(float amount)
         {
-            bool prevIsStarved = !CanMove;
+            if (CanRunLocalGameLogic == false) return;
+
+            bool wasStarved = IsStarved;
             currentHunger = Mathf.Min( currentHunger + amount, maxHunger);
 
             // 이전에 굶주린 상태였다가 회복이 되면
-            if (prevIsStarved)
+            if (wasStarved && IsStarved == false)
             {
                 // 게임매니저에 통지
                 NotifyPlayerStarveStateChanged( false);
@@ -96,10 +101,13 @@ namespace WeGotOne
         /// <param name="amount"></param>
         public void DecreaseHunger(float amount)
         {
+            if (CanRunLocalGameLogic == false) return;
+
+            bool wasStarved = IsStarved;
             currentHunger = Mathf.Max( currentHunger - amount, 0f );
             
             // 만약 이전에 굶주리지 않았다가 이번 배고픔 감소시 굶주리게 되었다면
-            if (CanMove == false)
+            if (wasStarved == false && IsStarved)
             {
                 // 델리게이트로 게임매니저로 통지
                 NotifyPlayerStarveStateChanged( true);
@@ -113,7 +121,25 @@ namespace WeGotOne
 
         public void NotifyPlayerStarveStateChanged(bool isStarved)
         {
+            if (CanRunLocalGameLogic == false) return;
+
             OnPlayerStarveStateChanged?.Invoke(isStarved);
+        }
+
+        public void ApplySnapshot(float snapshotCurrentHunger)
+        {
+            currentHunger = Mathf.Clamp(snapshotCurrentHunger, 0f, maxHunger);
+            UpdateHunger();
+        }
+
+        private bool CanRunLocalGameLogic
+        {
+            get
+            {
+                return RoomClient.IsInitialized == false ||
+                       RoomClient.Instance.Me == null ||
+                       RoomClient.Instance.Me.IsHost;
+            }
         }
 
         // GameoverTester를 위한 테스트 메소드

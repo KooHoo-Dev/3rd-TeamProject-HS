@@ -190,12 +190,12 @@ namespace HelloServer
             );
 
             GUILayout.Label(
-                $"GameOver : {snapshot.IsGameOver}",
+                $"Active Players : {snapshot.ActivePlayerCount}",
                 _labelStyle
             );
 
             GUILayout.Label(
-                $"GameWon : {snapshot.IsGameWon}",
+                $"Arrived Players : {snapshot.ArrivedPlayerCount}",
                 _labelStyle
             );
 
