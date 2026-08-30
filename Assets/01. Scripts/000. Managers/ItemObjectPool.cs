@@ -170,10 +170,10 @@ namespace WeGotOne
             {
                 PlankState state = planks[i];
 
-                if (!TryGetSlotIndex(state.Id, out int slotIndex))
+                if (TryGetSlotIndex(state.Id, out int slotIndex) == false)
                     continue;
 
-                if (!PoolObjectDic.TryGetValue(slotIndex, out Collectible collectible))
+                if (PoolObjectDic.TryGetValue(slotIndex, out Collectible collectible) == false)
                     continue;
 
                 collectible.transform.position = new Vector3(state.X, state.Y, collectible.transform.position.z);
@@ -191,7 +191,7 @@ namespace WeGotOne
             if (string.IsNullOrEmpty(id))
                 return false;
 
-            if (!id.StartsWith("Slot_"))
+            if (id.StartsWith("Slot_") == false)
                 return false;
 
             return int.TryParse(id.Substring(5), out slotIndex);
