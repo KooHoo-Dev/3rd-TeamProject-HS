@@ -239,21 +239,9 @@ namespace HelloServer
             }
             
             // 스냅샷의 다리 개수만큼 게스트의 다리 오브젝트 활성화
-            BridgeManager.Instance.BuildBridgeWithoutCost(message.CurrentBridgeCount);
+            // BridgeManager.Instance.BuildBridgeWithoutCost(message.CurrentBridgeCount);
+            BridgeManager.Instance.ApplySnapshot(message.CurrentBridgeCount);
 
-            // 임시 비활성화 (json 형태로 로그 출력으로 대체)
-            // [추가] 수신된 스냅샷의 전체 현황을 한눈에 볼 수 있도록 로그를 찍어줍니다.
-            // int playerCount = message.Players != null ? message.Players.Length : 0;
-            // int fishCount = message.Fishes != null ? message.Fishes.Length : 0;
-            // int inventoryKindCount = message.ItemKeys != null ? message.ItemKeys.Length : 0;
-            //
-            // Debug.Log($"[방] 스냅샷 수신! " +
-            //           $"플레이어: {playerCount}명 | " +
-            //           $"물고기(아이템): {fishCount}개 | " +
-            //           $"인벤토리 등록: {inventoryKindCount}종류 | " +
-            //           $"다리 개수: {message.CurrentBridgeCount}개 | " +
-            //           $"경과 시간: {message.ElapsedTime:F1}초 " +
-            //           $"(GameOver: {message.IsGameOver}, GameWon: {message.IsGameWon})");
             Debug.Log(message);
 
             SnapshotMessage = message;
@@ -432,13 +420,15 @@ namespace HelloServer
 
                 snapshot.Players = playerStates.ToArray();
 
+                snapshot.ItemKeys = new int[InventoryItemDB.Instance.ItemCountDic.Count];
+                snapshot.ItemCounts = new int[InventoryItemDB.Instance.ItemCountDic.Count];
                 for (int i = 0; i < InventoryItemDB.Instance.ItemCountDic.Count; i++)
                 {
                     snapshot.ItemKeys[i] = i;
                     snapshot.ItemCounts[i] = InventoryItemDB.Instance.ItemCountDic[i];
                 }
 
-                snapshot.CurrentBridgeCount = BridgeManager.Instance.BridgeObjects.Length;
+                snapshot.CurrentBridgeCount = BridgeManager.Instance.CurrentBridgeCount();
 
                 // 5. 서버로 패킷 전송
                 SnapshotMessage = snapshot;

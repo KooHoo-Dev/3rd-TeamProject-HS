@@ -45,6 +45,7 @@ namespace WeGotOne
             {
                 for (int j = 0; j < targetInventory.SizeColumn; j++)
                 {
+                    // 아이템 그리드
                     ItemScriptableObject item = grid[i, j].Item;
 
                     if (item.ItemType == ItemType.Plank &&
@@ -59,6 +60,14 @@ namespace WeGotOne
             }
         }
 
+        public void ApplySnapshot(int messageCurrentBridgeCount)
+        {
+            for (int i = 0; i < messageCurrentBridgeCount; i++)
+            {
+                BridgeObjects[i].gameObject.SetActive(true);
+            }
+        }
+
         #region test methods
 
         // 테스트 메소드 (나무 비용 없이)
@@ -68,7 +77,7 @@ namespace WeGotOne
             BridgeObjects[count].gameObject.SetActive(true);
             OnBridgeBuild?.Invoke();
         }
-
+        
         #endregion
     }
 }
