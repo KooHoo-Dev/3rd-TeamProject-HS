@@ -58,7 +58,7 @@ namespace WeGotOne
             if (RoomClient.Instance.Me.IsHost == false) return;
             if (other.gameObject.CompareTag("Player"))
             {
-                PlayerController player = other.gameObject.GetComponent<PlayerController>();
+                PlayerController player = other.gameObject.GetComponentInParent<PlayerController>();
                 if (player.IsBuild)
                 {
                     BridgeManager.Instance.BridgeBuild();

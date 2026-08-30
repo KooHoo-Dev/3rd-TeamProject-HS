@@ -47,6 +47,9 @@ namespace WeGotOne
                 {
                     // 아이템 그리드
                     ItemScriptableObject item = grid[i, j].Item;
+                    
+                    // 슬롯이 중간에 하나라도 비어있으면 종료 (승구님이 나중에 해주세용)
+                    if (item == null) return;
 
                     if (item.ItemType == ItemType.Plank &&
                         InventoryItemDB.instance.ItemCountDic[item.Key] > 0)
