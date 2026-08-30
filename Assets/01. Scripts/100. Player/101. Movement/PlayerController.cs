@@ -31,6 +31,7 @@ namespace WeGotOne
 
         public bool IsLeftGrab { get; private set; }
         public bool IsRightGrab { get; private set; }
+        public bool IsBuild { get; private set; }
 
         public User User { get; private set; }
 
@@ -152,10 +153,11 @@ namespace WeGotOne
         public void ApplyInput(
             Vector2 moveInput,
             bool leftGrab,
-            bool rightGrab)
+            bool rightGrab, bool isBuildKeyHold)
         {
             HandleMovement(moveInput);
             HandleGrab(leftGrab, rightGrab);
+            IsBuild = isBuildKeyHold;
         }
 
         public void ApplySnapshot(

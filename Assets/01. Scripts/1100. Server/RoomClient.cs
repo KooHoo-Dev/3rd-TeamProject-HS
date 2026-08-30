@@ -265,7 +265,7 @@ namespace HelloServer
                 }
                 
                 if (remotes.TryGetValue(input.Id, out PlayerController remote) == false) continue;
-                remote.ApplyInput(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold);
+                remote.ApplyInput(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold, input.IsBuildKeyHold);
             }
 
             GuestInputGroupMessage = message;
