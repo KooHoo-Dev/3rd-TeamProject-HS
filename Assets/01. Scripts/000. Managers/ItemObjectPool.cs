@@ -19,10 +19,13 @@ namespace WeGotOne
 
         [SerializeField] private Transform[] itemTransforms;
 
+        private bool isHost; // isHost 판단용
+        
         private IEnumerator Start()
         {   
             // 다리 개수에 맞춰 판자 생성 제한 설정
             yield return new WaitUntil(() => RoomClient.Instance.SnapshotMessage != null);
+            isHost = RoomClient.Instance.Me != null && RoomClient.Instance.Me.IsHost; // bool 값 할당
             ItemSpawn();
         }
 
@@ -41,7 +44,19 @@ namespace WeGotOne
             
                     Collectible collectible = Instantiate(itemPrefabs[prefabIndex], currentTransform);
                     collectible.transform.position = currentTransform.position;
-            
+                    
+                    
+                    // [게스트 전용 - 스폰 즉시 물리/이동 차단] - 신규 (요구사항 1, 2)
+                    // Plank는 이동 로직이 없으므로 물고기(ItemType != 0)만 대상으로 함
+                    
+                    if (isHost == false && collectible.ThisItem.ItemType != 0)
+                    {
+                        var movement = collectible.GetComponent<FishMovement>();
+                        if (movement != null) movement.LockForGuest();
+                    }
+                    
+                    
+                    
                     // [개선]: 인덱서([])를 사용하여 중복 키 오류 없이 안전하게 저장
                     PoolObjectDic[i] = collectible; 
             
