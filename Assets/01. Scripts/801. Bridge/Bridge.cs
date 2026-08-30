@@ -1,3 +1,4 @@
+using HelloServer;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,7 +17,7 @@ namespace WeGotOne
 
         private void Update()
         {
-            if (SimpleInput.GetKeyDown(Key.F) /*&& isCanBuild*/)
+            if (SimpleInput.GetKeyDown(Key.F) && isCanBuild && RoomClient.Instance.Me.IsHost)
             {
                 BridgeManager.Instance.BridgeBuild();
             }

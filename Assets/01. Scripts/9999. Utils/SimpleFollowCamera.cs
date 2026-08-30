@@ -36,7 +36,7 @@ namespace WeGotOne
         }
 
 
-        private void Update()
+        private void LateUpdate()
         {
             switch(State)
             {
@@ -53,9 +53,9 @@ namespace WeGotOne
                     // =======================
                     // 아래의 보간내용은 (transform.position)을 (Target.position + offset)으로 초당 (lerpSpeed) 속도로
                     // 계속 가깝게 만드는 코드 입니다. Target.position이 멀다면 더 빨리, 가깝다면 느리게
-                    Vector3 lerpPos = Vector3.Lerp(transform.position, Target.position + offset, lerpSpeed * Time.deltaTime);
-                    lerpPos.z = transform.position.z; // 2D의 경우 z는 바뀌지 않습니다.
-                    transform.position = lerpPos;
+                    Vector3 lerpPos = Vector3.Lerp(Cam.transform.position, Target.position + offset, lerpSpeed * Time.deltaTime);
+                    lerpPos.z = Cam.transform.position.z; // 2D의 경우 z는 바뀌지 않습니다.
+                    Cam.transform.position = lerpPos;
                     break;
             }
         }
