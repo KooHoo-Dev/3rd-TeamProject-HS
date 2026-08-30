@@ -24,8 +24,9 @@ namespace WeGotOne
             // :왼쪽으로 밀어내기 전의 출발선(첫 번째 비트)을 잡기 위한 기준 숫자
             
             // 부딪힌 오브젝트의 레이어가 물 레이어인지 확인
-            if (((1 << collision.gameObject.layer) & waterLayer) != 0)
+            if (((1 << collision.gameObject.layer) & waterLayer) != 0 && enabled)
             {
+                Debug.Log($"너냐? WaterLayerAlert가 꺼져있어도 너가 실행된다고?");
                 IsInWater = true;
                 OnEnteredWater?.Invoke();// 물에 들어와있음 알림 전송
             }
@@ -34,7 +35,7 @@ namespace WeGotOne
         private void OnTriggerExit2D(Collider2D collision)
         {
             // 벗어난 오브젝트의 레이어가 물 레이어인지 확인
-            if (((1 << collision.gameObject.layer) & waterLayer) != 0)
+            if (((1 << collision.gameObject.layer) & waterLayer) != 0 && enabled)
             {
                 IsInWater = false;
                 Debug.Log($"{collision.name} 이 물 밖으로 나왔다");

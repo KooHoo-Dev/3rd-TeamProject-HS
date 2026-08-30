@@ -239,6 +239,8 @@ namespace HelloServer
             // 스냅샷의 다리 개수만큼 게스트의 다리 오브젝트 활성화
             // BridgeManager.Instance.BuildBridgeWithoutCost(message.CurrentBridgeCount);
             BridgeManager.Instance.ApplySnapshot(message.CurrentBridgeCount);
+            itemPool.ApplyFishes(message.Fishes);
+            itemPool.ApplyPlanks(message.Planks);
 
             Debug.Log(GetJson(message));
 
@@ -284,7 +286,7 @@ namespace HelloServer
 
             remotes.TryGetValue(Me.Id, out PlayerController localPlayer);
             this.localPlayer = localPlayer;
-
+            
             localPlayer.Setup(Me);
         }
 

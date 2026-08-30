@@ -112,7 +112,32 @@ namespace WeGotOne
         }
 
         #endregion
+        
+        #region 게스트 전용 잠금 - 신규
 
+        // ==========================================
+        // [게스트 전용 이동/물리 완전 차단] - 신규
+        // enabled = false만으로는 외부(FishPatrolState 등)에서 PullingInit() 같은
+        // public 메서드를 직접 호출하는 걸 막지 못합니다. 트윈을 실제로 거는
+        // 모든 진입점에서 이 플래그를 직접 체크해 확실히 차단합니다.
+        // ==========================================
+        private bool isGuestLocked;
+
+        public void LockForGuest()
+        {
+            isGuestLocked = true;
+
+            StopMove(); // 혹시 이미 걸려있던 트윈이 있다면 즉시 정리
+
+            // [요구사항 2] Rigidbody Dynamic -> Kinematic 전환
+            if (rb != null) rb.bodyType = RigidbodyType2D.Kinematic;
+
+            enabled = false; // Update 등 자동 콜백까지 이중 차단
+        }
+        
+        #endregion
+        
+        
         #region 풀링 시스템 초기화 및 기본 순찰
 
         /// <summary>
@@ -120,6 +145,8 @@ namespace WeGotOne
         /// </summary>
         public void PullingInit(Vector3 startPos)
         {   
+            if (isGuestLocked) return;
+            
             this.spawnPosition = startPos;
             transform.position = startPos;
             
@@ -132,6 +159,7 @@ namespace WeGotOne
         /// </summary>
         public void StartPatrol()
         {
+            if (isGuestLocked) return;
             StopMove();
             goingToPatrol = true;
             
@@ -207,6 +235,7 @@ namespace WeGotOne
         /// </summary>
         public async Task RunawayMoveAsync(CancellationToken token)
         {
+            if (isGuestLocked) return;
             StopMove();
             runawayTween?.Kill();
 
@@ -242,6 +271,8 @@ namespace WeGotOne
         /// </summary>
         public void StartFaintDrift(float duration)
         {
+            if (isGuestLocked) return; 
+            
             patrolTween?.Kill();
             runawayTween?.Kill();
             driftTween?.Kill();
@@ -297,6 +328,7 @@ namespace WeGotOne
         private void TurnAroundImmediately()
         {
             
+            if (isGuestLocked) return; 
             StopMove();
             goingToPatrol = !goingToPatrol;
 
