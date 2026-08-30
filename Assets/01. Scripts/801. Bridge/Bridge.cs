@@ -23,15 +23,16 @@ namespace WeGotOne
             }
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        private void OnCollisionEnter2D(Collision2D other)
         {
-            if (other.tag is "Fish" or "Item")
+            if (RoomClient.Instance.Me.IsHost == false) return;
+            if (other.gameObject.tag is "Fish" or "Item")
             {
                 InventorySlot[,] grid = targetInventory.SlotGrid;
 
                 InventoryItemDB db = InventoryItemDB.Instance;
 
-                if (other.TryGetComponent<Collectible>(out var holder))
+                if (other.gameObject.TryGetComponent<Collectible>(out var holder))
                 {
                     ItemScriptableObject item = holder.ThisItem;
 
@@ -63,6 +64,7 @@ namespace WeGotOne
         
         private void OnCollisionStay2D(Collision2D other)
         {
+            if (RoomClient.Instance.Me.IsHost == false) return;
             if (other.gameObject.CompareTag("Player"))
             {
                 isCanBuild = true;
@@ -71,6 +73,7 @@ namespace WeGotOne
 
         private void OnCollisionExit2D(Collision2D other)
         {
+            if (RoomClient.Instance.Me.IsHost == false) return;
             if (other.gameObject.CompareTag("Player"))
             {
                 isCanBuild = false;
