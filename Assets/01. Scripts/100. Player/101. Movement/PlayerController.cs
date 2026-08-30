@@ -142,6 +142,11 @@ namespace WeGotOne
         public void Setup(User user)
         {
             User = user;
+            
+            // Body에 붙은 카메라 재설정
+            SimpleFollowCamera cameraController = GetComponentInChildren<SimpleFollowCamera>(true);
+            if (user.Id == RoomClient.Instance.Me.Id)
+                cameraController.enabled = true;
         }
 
         public void ApplyInput(
