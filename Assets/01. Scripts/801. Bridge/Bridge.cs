@@ -8,19 +8,10 @@ namespace WeGotOne
     public class Bridge : MonoBehaviour
     {
         private Inventory targetInventory;
-        private bool isCanBuild = false;
 
         private void Awake()
         {
             targetInventory = Inventory.Instance;
-        }
-
-        private void Update()
-        {
-            if (SimpleInput.GetKeyDown(Key.F) && isCanBuild && RoomClient.Instance.Me.IsHost)
-            {
-                BridgeManager.Instance.BridgeBuild();
-            }
         }
 
         private void OnCollisionEnter2D(Collision2D other)
@@ -67,17 +58,21 @@ namespace WeGotOne
             if (RoomClient.Instance.Me.IsHost == false) return;
             if (other.gameObject.CompareTag("Player"))
             {
-                isCanBuild = true;
+                PlayerController player = other.gameObject.GetComponent<PlayerController>();
+                if (player.IsBuild)
+                {
+                    BridgeManager.Instance.BridgeBuild();
+                }
             }
         }
 
-        private void OnCollisionExit2D(Collision2D other)
-        {
-            if (RoomClient.Instance.Me.IsHost == false) return;
-            if (other.gameObject.CompareTag("Player"))
-            {
-                isCanBuild = false;
-            }
-        }
+        // private void OnCollisionExit2D(Collision2D other)
+        // {
+        //     if (RoomClient.Instance.Me.IsHost == false) return;
+        //     if (other.gameObject.CompareTag("Player"))
+        //     {
+        //         isCanBuild = false;
+        //     }
+        // }
     }
 }
