@@ -5,16 +5,13 @@ namespace WeGotOne
 {
     public class InventoryItemDB : SingletonBase<InventoryItemDB>
     {
+        private const int DEFAULT_ITEM_KEY = 0;
+        
         public ItemScriptableObject[] items;
 
-        private Dictionary<int, ItemScriptableObject> itemDic 
-            = new Dictionary<int, ItemScriptableObject>();
-
-        private const int DEFAULT_ITEM_KEY = 0;
-
-        public int Count => itemDic.Count;
-
-
+        private Dictionary<int, ItemScriptableObject> itemDic = new();
+        public Dictionary<int, int> ItemCountDic = new();
+        
         // 제공해드린 싱글톤을 상속받은 개체의 초기화는
         // OnInitialize(), Start()를 중심으로 하되
         // Awake 꼭 필요한 상황에서는 override를 하시고
@@ -29,13 +26,14 @@ namespace WeGotOne
             {
                 ItemScriptableObject item = items[i];
                 
-                if (itemDic.ContainsKey(item.Key))
+                if (itemDic.ContainsKey(item.Key) == false)
                 {
-                    Debug.LogWarning($"[InventoryItemDB] 중복 Key = {item.Key}");
-                    continue; 
+                    itemDic.Add(item.Key, item);   
                 }
-
-                itemDic.Add(item.Key, item);
+                if (ItemCountDic.ContainsKey(item.Key) == false)
+                {
+                    ItemCountDic.Add(item.Key, 0);   
+                }
             }
         }
 

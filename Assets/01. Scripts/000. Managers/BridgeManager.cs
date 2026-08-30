@@ -40,16 +40,16 @@ namespace WeGotOne
         public void BridgeBuild()
         {
             InventorySlot[,] grid = targetInventory.SlotGrid;
-
-
+            
             for (int i = 0; i < targetInventory.SizeRow; i++)
             {
                 for (int j = 0; j < targetInventory.SizeColumn; j++)
                 {
+                    // 아이템 그리드
                     ItemScriptableObject item = grid[i, j].Item;
 
-                    //if (item.ItemType == ItemType.Plank &&
-                        //InventoryItemDB.instance.ItemCountDic[item.Key] > 0) 임시 처리
+                    if (item.ItemType == ItemType.Plank &&
+                        InventoryItemDB.instance.ItemCountDic[item.Key] > 0)
                     {
                         grid[i, j].CountTextUpdate(item.Key, false);
                         BridgeObjects[CurrentBridgeCount()].gameObject.SetActive(true);
@@ -60,16 +60,24 @@ namespace WeGotOne
             }
         }
 
+        public void ApplySnapshot(int messageCurrentBridgeCount)
+        {
+            for (int i = 0; i < messageCurrentBridgeCount; i++)
+            {
+                BridgeObjects[i].gameObject.SetActive(true);
+            }
+        }
+
         #region test methods
 
         // 테스트 메소드 (나무 비용 없이)
-        public void BuildBridgeWithoutCost()
+        public void BuildBridgeWithoutCost(int count)
         {
             if (IsEnd) return;
-            BridgeObjects[CurrentBridgeCount()].gameObject.SetActive(true);
+            BridgeObjects[count].gameObject.SetActive(true);
             OnBridgeBuild?.Invoke();
         }
-
+        
         #endregion
     }
 }

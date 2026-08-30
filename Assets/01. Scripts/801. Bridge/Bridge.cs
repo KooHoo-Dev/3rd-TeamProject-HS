@@ -16,7 +16,7 @@ namespace WeGotOne
 
         private void Update()
         {
-            if (SimpleInput.GetKeyDown(Key.F) && isCanBuild)
+            if (SimpleInput.GetKeyDown(Key.F) /*&& isCanBuild*/)
             {
                 BridgeManager.Instance.BridgeBuild();
             }

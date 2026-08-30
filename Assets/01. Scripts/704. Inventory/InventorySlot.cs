@@ -39,9 +39,21 @@ namespace WeGotOne
 
         public void CountTextUpdate(int itemKey, bool isPlus)
         {
-            int itemCount = 0;//InventoryItemDB.Instance.itemDic[itemKey]; 임시 처리
-
+            // 지금 코드가 인벤토리 db에 영향을 주려면 db를 직접 건드는게 아니라 UI 객체인 InventorySlot을 거치는 구조라서
+            // 나중에 유지보수할때 '어? ItemDb를 안건드리고 왜 UI 오브젝트를 건들지?' 라고 오해할 수 있을 거 같습니다.
+            // 지금 BridgeManager -> InventorySlot -> InventoryItemDB 에 값 업데이트인데
+            // 나중에
+            // 1. BridgeManager -> InventoryDB
+            // 2. InventorySlot ---> InventoryDB (Inventory나 InventorySlot이 InventoryDB 참조해서 업데이트) 
+            // 델리게이트나 Slot이 DB의 값을 참조하는 형태 둘 중 하나로 리팩토링해야할 거 같아요
+            
+            // 지금은 괜찮은데 나중에 아래와 같은 문제가 있으면 꼭 리팩토링 해야할 거 같습니다
+            // 1. 서버/저장/초기화에서 UI 없이 Inventory를 변경해야 하거나 (유니티 씬 로딩 같이)
+            // 2. InventorySlot이 UI 외 책임을 계속 흡수하면서 커지는 문제 (UI, DB 문제 터지면 의도치 않게 이 코드도 봐야할 수도 있음. InventorySlot인데 실제로는 InventoryDB 개수 관리 책임도 가지고 있으니까 )
+            int itemCount = InventoryItemDB.Instance.ItemCountDic[itemKey];
+            
             itemCount += isPlus ? 1 : -1;
+            InventoryItemDB.Instance.ItemCountDic[itemKey] = itemCount;
             ItemCountText.text = itemCount.ToString();
 
             if (itemCount <= 0)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -12,7 +13,6 @@ using WeGotOne;
 
 namespace HelloServer
 {
-    
     // RoomClient가 서버와의 네트워크 작업을 담당한다.
     // 송신, 수신 등을 모두 처리하는 객체
     // 씬에 종속적이지 않음
@@ -20,12 +20,15 @@ namespace HelloServer
     {
         [Header("서버")]
         // 웹소켓 주소. http 가 아니라 ws로 시작.
-        [SerializeField] private string url = "ws://localhost:5000/room";
+        [SerializeField]
+        private string url = "ws://localhost:5000/room";
+
         // 서버에 알릴 내 이름.
         [SerializeField] private string nickName = "이름없음";
+
         // 들어갈 방.
         [SerializeField] private string roomCode = "ABCD";
-        
+
         [Header("장면")]
         // 내가 조종하는 캐릭터. 씬에 미리 놓아 둔다.
         // 8/28 수정 : 예시 플레이어인 LocalPlayer를 제거하고 프로젝트에서 사용하는 플레이어 컨트롤러로 변경
@@ -37,12 +40,13 @@ namespace HelloServer
         // 초당 몇 번 내 위치를 보낼지.
         // 서버가 뿌리는 횟수와는 별개. (그쪽은 appsettings.json)
         // 보내는 쪽이 더 자주 보내도 되지만, 받는 쪽이 그만큼 자주 보게 되지는 않는다.
-        [SerializeField] private float sendPerSecond = 20f;
+        [SerializeField]
+        private float sendPerSecond = 20f;
 
         [SerializeField] private Transform spawnPoint;
         // 서버가 정해 준 내 정보. welcome 을 받기 전에는 비어 있다.
         public User Me { get; private set; }
-        
+
         // 화면에 그리는 일은 RoomLobby 가 한다. 여기는 선을 타는 일만 한다.
         public int RemoteCount => remotes.Count;
         public PlayerController Local => localPlayer;
@@ -50,12 +54,12 @@ namespace HelloServer
         public GuestInputGroupMessage GuestInputGroupMessage { get; private set; }
         public GuestInputMessage GuestInputMessage { get; private set; }
         public SnapshotMessage SnapshotMessage { get; private set; }
-        
+
         private ClientWebSocket socket;
-        
+
         // 남들. 번호로 찾는다.
         // private readonly Dictionary<string, RemotePlayer> remotes = new Dictionary<string, RemotePlayer>();
-        
+
         // SSG 커스텀 : 플레이어 맞춰서 편집
         private readonly Dictionary<string, PlayerController> remotes = new Dictionary<string, PlayerController>();
 
@@ -169,7 +173,7 @@ namespace HelloServer
                 catch (OperationCanceledException)
                 {
                     // 이 오브젝트가 사라졌다
-                    return;   
+                    return;
                 }
                 catch (WebSocketException)
                 {
@@ -195,7 +199,7 @@ namespace HelloServer
         private void Handle(string json)
         {
             // JsonUtility => Newtonsfot.Json의 Json Utility로 변경됨.
-            
+
             string type = JsonConvert.DeserializeObject<TypeOnly>(json).Type;
 
             switch (type)
@@ -203,7 +207,8 @@ namespace HelloServer
                 case "welcome": OnWelcome(JsonConvert.DeserializeObject<WelcomeMessage>(json)); break;
                 case "join": OnJoin(JsonConvert.DeserializeObject<JoinMessage>(json)); break;
                 case "leave": OnLeave(JsonConvert.DeserializeObject<LeaveMessage>(json)); break;
-                case "inputGroup": OnGuestInputGroup(JsonConvert.DeserializeObject<GuestInputGroupMessage>(json)); break;
+                case "inputGroup":
+                    OnGuestInputGroup(JsonConvert.DeserializeObject<GuestInputGroupMessage>(json)); break;
                 case "snapshot": OnSnapshot(JsonConvert.DeserializeObject<SnapshotMessage>(json)); break;
                 default: Debug.Log($"[방] 등록되지 않은 종류(type) : {type}"); break;
             }
@@ -216,7 +221,7 @@ namespace HelloServer
                 SnapshotMessage = message;
                 return;
             }
-            
+
             foreach (PlayerState state in message.Players)
             {
                 // snapshot에 자기자신도 있어서 제거
@@ -230,21 +235,13 @@ namespace HelloServer
                 }
             }
             
-            // 임시 비활성화 (json 형태로 로그 출력으로 대체)
-            // [추가] 수신된 스냅샷의 전체 현황을 한눈에 볼 수 있도록 로그를 찍어줍니다.
-            // int playerCount = message.Players != null ? message.Players.Length : 0;
-            // int fishCount = message.Fishes != null ? message.Fishes.Length : 0;
-            // int inventoryKindCount = message.ItemKeys != null ? message.ItemKeys.Length : 0;
-            //
-            // Debug.Log($"[방] 스냅샷 수신! " +
-            //           $"플레이어: {playerCount}명 | " +
-            //           $"물고기(아이템): {fishCount}개 | " +
-            //           $"인벤토리 등록: {inventoryKindCount}종류 | " +
-            //           $"다리 개수: {message.CurrentBridgeCount}개 | " +
-            //           $"경과 시간: {message.ElapsedTime:F1}초 " +
-            //           $"(GameOver: {message.IsGameOver}, GameWon: {message.IsGameWon})");
-            Debug.Log(GetJson(message));
             
+            // 스냅샷의 다리 개수만큼 게스트의 다리 오브젝트 활성화
+            // BridgeManager.Instance.BuildBridgeWithoutCost(message.CurrentBridgeCount);
+            BridgeManager.Instance.ApplySnapshot(message.CurrentBridgeCount);
+
+            Debug.Log(GetJson(message));
+
             SnapshotMessage = message;
         }
 
@@ -268,7 +265,7 @@ namespace HelloServer
                 if (remotes.TryGetValue(input.Id, out PlayerController remote) == false) continue;
                 remote.ApplyInput(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold);
             }
-            
+
             GuestInputGroupMessage = message;
         }
 
@@ -284,7 +281,7 @@ namespace HelloServer
             // 게스트이면 호스트 스냅샷만 반영 (입력값 비활성화)
             Spawn(message.User);
             foreach (User user in message.Users) Spawn(user);
-            
+
             remotes.TryGetValue(Me.Id, out PlayerController localPlayer);
             this.localPlayer = localPlayer;
 
@@ -318,7 +315,7 @@ namespace HelloServer
 
             for (int i = 0; i < rigid.Length; i++)
             {
-                if(Me.IsHost == false)
+                if (Me.IsHost == false)
                     rigid[i].bodyType = RigidbodyType2D.Kinematic;
             }
 
@@ -380,12 +377,18 @@ namespace HelloServer
                         AddPlayerState(playerStates, pair.Key);
                     }
                 }
+
                 snapshot.Players = playerStates.ToArray();
-                
-                // 4. [기타 월드 상태]: 인벤토리 자원 및 건설 현황 등 (구현된 시스템에 맞춰 연결)
-                // snapshot.ItemKeys = InventoryManager.Instance.GetKeys();
-                // snapshot.ItemCounts = InventoryManager.Instance.GetCounts();
-                // snapshot.CurrentBridgeCount = BridgeManager.Instance.BridgeObjects.Length;
+
+                snapshot.ItemKeys = new int[InventoryItemDB.Instance.ItemCountDic.Count];
+                snapshot.ItemCounts = new int[InventoryItemDB.Instance.ItemCountDic.Count];
+                for (int i = 0; i < InventoryItemDB.Instance.ItemCountDic.Count; i++)
+                {
+                    snapshot.ItemKeys[i] = i;
+                    snapshot.ItemCounts[i] = InventoryItemDB.Instance.ItemCountDic[i];
+                }
+
+                snapshot.CurrentBridgeCount = BridgeManager.Instance.CurrentBridgeCount();
 
                 // 5. 서버로 패킷 전송
                 SnapshotMessage = snapshot;
@@ -396,7 +399,8 @@ namespace HelloServer
                 // 게스트는 자신의 키보드 입력을 전송
                 Vector2 input = SimpleInput.GetMoveAxisRaw();
                 Keyboard keyboard = Keyboard.current;
-                await SendInputMessages(input, keyboard.leftShiftKey.isPressed, keyboard.rightShiftKey.isPressed, keyboard.fKey.isPressed);
+                await SendInputMessages(input, keyboard.leftShiftKey.isPressed, keyboard.rightShiftKey.isPressed,
+                    keyboard.fKey.isPressed);
             }
         }
 
@@ -465,13 +469,13 @@ namespace HelloServer
 
             return Color.HSVToRGB(Mathf.Abs(hash % 360) / 360f, 0.65f, 0.95f);
         }
-        
+
         private void AddPlayerState(List<PlayerState> playerStates, string playerId)
         {
             // 내(호스트) 위치 정보 추가
-            playerStates.Add(new PlayerState 
-            { 
-                Id = playerId, 
+            playerStates.Add(new PlayerState
+            {
+                Id = playerId,
                 Body = new PartState
                 {
                     X = remotes[playerId].Body.transform.position.x,
@@ -480,8 +484,8 @@ namespace HelloServer
                     {
                         X = remotes[playerId].Body.transform.rotation.x,
                         Y = remotes[playerId].Body.transform.rotation.y,
-                        Z =  remotes[playerId].Body.transform.rotation.z,
-                        W =  remotes[playerId].Body.transform.rotation.w,
+                        Z = remotes[playerId].Body.transform.rotation.z,
+                        W = remotes[playerId].Body.transform.rotation.w,
                     }
                 },
                 LeftArmTop = new PartState
@@ -492,10 +496,9 @@ namespace HelloServer
                     {
                         X = remotes[playerId].LeftUpperArm.transform.rotation.x,
                         Y = remotes[playerId].LeftUpperArm.transform.rotation.y,
-                        Z =  remotes[playerId].LeftUpperArm.transform.rotation.z,
-                        W =  remotes[playerId].LeftUpperArm.transform.rotation.w,
+                        Z = remotes[playerId].LeftUpperArm.transform.rotation.z,
+                        W = remotes[playerId].LeftUpperArm.transform.rotation.w,
                     }
-
                 },
                 RightArmTop = new PartState
                 {
@@ -505,10 +508,9 @@ namespace HelloServer
                     {
                         X = remotes[playerId].RightUpperArm.transform.rotation.x,
                         Y = remotes[playerId].RightUpperArm.transform.rotation.y,
-                        Z =  remotes[playerId].RightUpperArm.transform.rotation.z,
-                        W =  remotes[playerId].RightUpperArm.transform.rotation.w,
+                        Z = remotes[playerId].RightUpperArm.transform.rotation.z,
+                        W = remotes[playerId].RightUpperArm.transform.rotation.w,
                     }
-
                 },
                 LeftArmBottom = new PartState
                 {
@@ -518,8 +520,8 @@ namespace HelloServer
                     {
                         X = remotes[playerId].LeftBottomArm.transform.rotation.x,
                         Y = remotes[playerId].LeftBottomArm.transform.rotation.y,
-                        Z =  remotes[playerId].LeftBottomArm.transform.rotation.z,
-                        W =  remotes[playerId].LeftBottomArm.transform.rotation.w,
+                        Z = remotes[playerId].LeftBottomArm.transform.rotation.z,
+                        W = remotes[playerId].LeftBottomArm.transform.rotation.w,
                     }
                 },
                 RightArmBottom = new PartState
@@ -530,8 +532,8 @@ namespace HelloServer
                     {
                         X = remotes[playerId].RightBottomArm.transform.rotation.x,
                         Y = remotes[playerId].RightBottomArm.transform.rotation.y,
-                        Z =  remotes[playerId].RightBottomArm.transform.rotation.z,
-                        W =  remotes[playerId].RightBottomArm.transform.rotation.w,
+                        Z = remotes[playerId].RightBottomArm.transform.rotation.z,
+                        W = remotes[playerId].RightBottomArm.transform.rotation.w,
                     }
                 },
                 IsLeftGrab = remotes[playerId].IsLeftGrab,
