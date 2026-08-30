@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using HelloServer;
 using UnityEngine;
@@ -18,17 +19,11 @@ namespace WeGotOne
 
         [SerializeField] private Transform[] itemTransforms;
 
-        private void Start()
-        {   // 다리 개수에 맞춰 판자 생성 제한 설정
-            PlankCount = BridgeManager.Instance.BridgeObjects.Length;
-        }
-
-        private void Update()
-        {   // 낮 시간 동안에만 아이템(물고기 등) 스폰 로직 작동
-            if (DayLoop.Instance.CurrentDayType == DayLoop.DayType.Day)
-            {
-                ItemSpawn();
-            }
+        private IEnumerator Start()
+        {   
+            // 다리 개수에 맞춰 판자 생성 제한 설정
+            yield return new WaitUntil(() => RoomClient.Instance.SnapshotMessage != null);
+            ItemSpawn();
         }
 
         public void ItemSpawn()
@@ -148,5 +143,61 @@ namespace WeGotOne
         }
 
         #endregion
+        
+        # region 신성건
+        
+        public void ApplyFishes(FishState[] fishes)
+        {
+            for (int i = 0; i < fishes.Length; i++)
+            {
+                FishState state = fishes[i];
+
+                if (TryGetSlotIndex(state.Id, out int slotIndex) == false)
+                    continue;
+
+                if (PoolObjectDic.TryGetValue(slotIndex, out Collectible collectible) == false)
+                    continue;
+
+                collectible.transform.position = new Vector3(state.X, state.Y, collectible.transform.position.z);
+                collectible.transform.localScale = new Vector3(state.ScaleX, collectible.transform.localScale.y, collectible.transform.localScale.z);
+                collectible.transform.rotation = Quaternion.Euler(0f, 0f, state.Angle);
+            }
+        }
+
+        public void ApplyPlanks(PlankState[] planks)
+        {
+            for (int i = 0; i < planks.Length; i++)
+            {
+                PlankState state = planks[i];
+
+                if (!TryGetSlotIndex(state.Id, out int slotIndex))
+                    continue;
+
+                if (!PoolObjectDic.TryGetValue(slotIndex, out Collectible collectible))
+                    continue;
+
+                collectible.transform.position = new Vector3(state.X, state.Y, collectible.transform.position.z);
+                collectible.transform.rotation = Quaternion.Euler(0f, 0f, state.Angle);
+                collectible.IsPickUp = state.IsPickUp;
+            }
+        }
+        
+        // 아이템 값 저장할때 Slot_{슬롯번호}식으로 들어가길래 파싱해주는 용.
+        // 그냥 형식 맞나만 보고 앞에서5개 빼버렷어요
+        private bool TryGetSlotIndex(string id, out int slotIndex)
+        {
+            slotIndex = -1;
+
+            if (string.IsNullOrEmpty(id))
+                return false;
+
+            if (!id.StartsWith("Slot_"))
+                return false;
+
+            return int.TryParse(id.Substring(5), out slotIndex);
+        }
+        
+        # endregion
+        
     }
 }
