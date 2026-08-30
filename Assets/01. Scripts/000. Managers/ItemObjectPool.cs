@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using HelloServer;
+using Newtonsoft.Json;
 using UnityEngine;
 using WeGotOne.Fish_Interface;
 using Random = UnityEngine.Random;
@@ -18,38 +19,66 @@ namespace WeGotOne
             = new();
 
         [SerializeField] private Transform[] itemTransforms;
+        
+        // 맵에 미리 배치된 나무 정보 가져오기
+        private List<Transform> plankList;
 
-        private bool isHost; // isHost 판단용
+        private int itemId = 0;
         
         private IEnumerator Start()
         {   
             // 다리 개수에 맞춰 판자 생성 제한 설정
             yield return new WaitUntil(() => RoomClient.Instance.SnapshotMessage != null);
-            isHost = RoomClient.Instance.Me != null && RoomClient.Instance.Me.IsHost; // bool 값 할당
+            // 맵에 이미 배치되어 있는 판자들을 풀에 등록
+            RegisterExistingPlanks(); 
             ItemSpawn();
+        }
+
+        private void RegisterExistingPlanks()
+        {
+            Plank[] planks = FindObjectsOfType<Plank>();
+
+            PlankCount = planks.Length;
+
+            for (int i = 0; i < PlankCount; i++)
+            {
+                Plank plank = planks[i];
+                if (RoomClient.Instance.Me.IsHost == false)
+                {
+                    plank.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+                }
+
+                PoolObjectDic[itemId++] = plank;
+
+                Debug.Log($"[Pool] 기존 판자 등록 - 슬롯 인덱스: {i}, 판자: {plank.name}");
+            } 
         }
 
         public void ItemSpawn()
         {
             for (int i = 0; i < itemTransforms.Length; i++)
             {
+                // 판자는 맵에 이미 존재하므로 생성하지 않음
+                // if (i < PlankCount)
+                //     continue;
+
                 Transform currentTransform = itemTransforms[i];
                 bool isExist = currentTransform.childCount > 0;
 
-                // 1. 해당 자리에 아이템이 없는 경우 (새로 생성 후 딕셔너리 등록)
                 if (!isExist)
                 {
-                    // i가 PlankCount보다 작으면 0번 프리팹(판자), 아니면 랜덤 프리팹(물고기 등)
-                    int prefabIndex = (i < PlankCount) ? 0 : Random.Range(1, itemPrefabs.Length);
-            
-                    Collectible collectible = Instantiate(itemPrefabs[prefabIndex], currentTransform);
+                    int prefabIndex = Random.Range(1, itemPrefabs.Length);
+
+                    Collectible collectible =
+                        Instantiate(itemPrefabs[prefabIndex], currentTransform);
+
                     collectible.transform.position = currentTransform.position;
                     
                     
                     // [게스트 전용 - 스폰 즉시 물리/이동 차단] - 신규 (요구사항 1, 2)
                     // Plank는 이동 로직이 없으므로 물고기(ItemType != 0)만 대상으로 함
                     
-                    if (isHost == false && collectible.ThisItem.ItemType == ItemType.Fish)
+                    if (RoomClient.Instance.Me.IsHost == false && collectible.ThisItem.ItemType == ItemType.Fish)
                     {
                         var movement = collectible.GetComponent<FishMovement>();
                         if (movement != null) movement.LockForGuest();
@@ -58,32 +87,23 @@ namespace WeGotOne
                     
                     
                     // [개선]: 인덱서([])를 사용하여 중복 키 오류 없이 안전하게 저장
-                    PoolObjectDic[i] = collectible; 
+                    PoolObjectDic[itemId++] = collectible; 
             
                     Debug.Log($"[Pool] 새 아이템 생성 - 슬롯 인덱스: {i}");
-                    continue; // 생성을 완료했으므로 재활용 로직은 건너뜀
+                    continue;
                 }
 
-                // 2. 이미 아이템이 존재하지만 비활성화 상태인 경우 (재활용하여 다시 켜기)
                 GameObject item = currentTransform.GetChild(0).gameObject;
-        
+
                 if (!item.activeSelf)
                 {
-                    Plank plank = item.GetComponent<Plank>();
-            
-                    // 만약 주울 수 있는 판자 상태인데 이미 먹힌 경우라면 대기
-                    if (plank != null && plank.IsPickUp)
-                    {
-                        continue;
-                    }
-            
                     item.SetActive(true);
                     item.transform.position = currentTransform.position;
+
                     Debug.Log($"[Pool] 아이템 재활용 활성화 - 슬롯 인덱스: {i}");
                 }
             }
         }
-
         
         #region 네트워크 동기화 전용 기능 (Host 측 패킹)
 
@@ -270,5 +290,14 @@ namespace WeGotOne
         
         # endregion
         
+        [ContextMenu("Debug ItemObjectPool")]
+        private void DebugItemObjectPool()
+        {
+            foreach (var pair in PoolObjectDic)
+            {
+                Collectible collectible = pair.Value;
+                Debug.Log($"{collectible.enabled} {pair.Key}: {collectible.name}");
+            }
+        }
     }
 }

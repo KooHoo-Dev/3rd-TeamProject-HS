@@ -31,8 +31,6 @@ namespace WeGotOne
         [Header("힘겨루기(Struggle) 물리 설정")]
         [SerializeField] private float maxStruggleForce = 25f;         // 사방으로 발버둥치는 최대 물리 힘
         [SerializeField] private float directionChangeInterval = 0.3f;   // 도망치려는 방향을 바꾸는 주기 (초)
-
-        
         
         [Header("장애물 감지 설정")]
         [SerializeField]
@@ -46,8 +44,6 @@ namespace WeGotOne
         [SerializeField]
         [Tooltip("장애물을 감지할 전방 레이 거리")]
         private float obstacleCheckDistance = 1.0f;
-        
-        
          
         private Animator anim;
         private Rigidbody2D rb; 

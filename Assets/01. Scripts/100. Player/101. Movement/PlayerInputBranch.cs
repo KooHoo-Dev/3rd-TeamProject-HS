@@ -25,8 +25,9 @@ namespace WeGotOne
                 Vector2 moveInput = SimpleInput.GetMoveAxisRaw();
                 bool leftGrab = SimpleInput.GetKey(Key.LeftShift);
                 bool rightGrab = SimpleInput.GetKey(Key.RightShift);
+                bool buildKey = SimpleInput.GetKey(Key.F);
                     
-                controller.ApplyInput(moveInput, leftGrab, rightGrab);
+                controller.ApplyInput(moveInput, leftGrab, rightGrab, buildKey);
             }
         }
     }
