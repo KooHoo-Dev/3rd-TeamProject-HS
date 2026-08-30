@@ -296,7 +296,6 @@ namespace WeGotOne
         /// </summary>
         private void TurnAroundImmediately()
         {
-            Debug.LogWarning($"{name} : 장애물 감지! 즉시 반대 방향으로 되돌아갑니다.");
             
             StopMove();
             goingToPatrol = !goingToPatrol;

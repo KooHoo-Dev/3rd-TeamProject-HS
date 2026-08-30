@@ -395,7 +395,11 @@ namespace HelloServer
                 await SendAsync(snapshot);
             }
             else
-            {
+            {   
+                // [해결]: keyboard가 null인지 체크하여 안전하게 삼항연산자로 처리합니다.
+                bool leftShiftHold = (keyboard != null) && keyboard.leftShiftKey.isPressed;
+                bool rightShiftHold = (keyboard != null) && keyboard.rightShiftKey.isPressed;
+                
                 // 게스트는 자신의 키보드 입력을 전송
                 Vector2 input = SimpleInput.GetMoveAxisRaw();
                 Keyboard keyboard = Keyboard.current;
