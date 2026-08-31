@@ -11,12 +11,13 @@ namespace WeGotOne
         [SerializeField] private float maxHunger = 100f;
         [SerializeField] private float currentHunger = 100f;
         
-        [Header("제한시간")]
+        [Header("제한사항")]
         [SerializeField] private float hungerTime = 100f;
+        private int waterLayer;
+        private bool isInWater = false;
         
         [Header("허기 감소 배율 : 혹시 몰라서 확장해둠")]
         [SerializeField] private float hungerDecreaseMultiplier = 1f;
-        
         [SerializeField] private Image hungerGauge;
         
         // 플레이어 무력화,활성화시 게임 매니저에게 알려주는 델리게이트
@@ -42,11 +43,28 @@ namespace WeGotOne
         private void OnEnable()
         {
             GameManager.Instance.SubscribePlayerStarveStateChanged(this);
+            waterLayer = LayerMask.NameToLayer("Water");
         }
         
         private void OnDisable()
         {
             GameManager.Instance.UnsubscribeStarveStateChanged(this);
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.gameObject.layer == waterLayer)
+            {
+                isInWater = true;
+            }
+        }
+        
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.gameObject.layer == waterLayer)
+            {
+                isInWater = false;
+            }
         }
 
         #endregion
@@ -56,6 +74,9 @@ namespace WeGotOne
             if (currentHunger <= 0f)
                 return;
 
+            if (isInWater == false)
+                return;
+            
             // 기본 배고픔 감소량
             float baseDecreasePerSecond = maxHunger / hungerTime;
             
