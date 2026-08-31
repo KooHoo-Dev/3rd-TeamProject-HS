@@ -1634,6 +1634,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bubble
       objectReference: {fileID: 0}
+    - target: {fileID: 1606648664194177568, guid: ad6fb785fdae6bf4c9bdd76fa9f3f13a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5191365625590444877, guid: ad6fb785fdae6bf4c9bdd76fa9f3f13a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1700,6 +1704,10 @@ PrefabInstance:
     - target: {fileID: 1606648664194177568, guid: ad6fb785fdae6bf4c9bdd76fa9f3f13a, type: 3}
       propertyPath: m_Name
       value: Bubble
+      objectReference: {fileID: 0}
+    - target: {fileID: 1606648664194177568, guid: ad6fb785fdae6bf4c9bdd76fa9f3f13a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5191365625590444877, guid: ad6fb785fdae6bf4c9bdd76fa9f3f13a, type: 3}
       propertyPath: m_LocalPosition.x
