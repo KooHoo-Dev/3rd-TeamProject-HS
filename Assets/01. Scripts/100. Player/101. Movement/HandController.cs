@@ -15,9 +15,14 @@ namespace WeGotOne
     [RequireComponent(typeof(Collider2D))]
     public class HandControllerV2 : MonoBehaviour
     {
+        private int waterLayer = LayerMask.NameToLayer("Water");
+        
         // 잡은 물체 저장용
         private Collider2D currentTarget;
         private Rigidbody2D grabbedTarget;
+        
+        // 원래 enter2D에서 물체 하나씩만 저장했는데 단체로 저장하고 0번만 빼오게 해야될듯
+        private List<Collider2D> targets;
         
         public bool IsGrabbing => isGrabbing;
         public Rigidbody2D GrabbedTarget => grabbedTarget;
@@ -54,6 +59,8 @@ namespace WeGotOne
             owner = GetComponentInParent<PlayerRoot>();
             
             spriteRenderer = GetComponent<SpriteRenderer>();
+            
+            targets = new List<Collider2D>();
         }
 
 private void OnDisable()
@@ -66,12 +73,15 @@ private void OnDisable()
         private void OnTriggerEnter2D(Collider2D other)
         {
             PlayerRoot targetOwner = other.GetComponentInParent<PlayerRoot>();
-
             // 자기 자신의 신체라면 잡기 대상에서 제외
             if (targetOwner == owner)
                 return;
+
+            if (other.gameObject.layer == waterLayer)
+                return;
             
-            currentTarget = other;
+            targets.Add(other);
+            currentTarget = targets[0];
 
             // 닿은 물체가 낚을 수 있는 대상(ICatchable)인 경우, 손이 스스로 타이머를 작동시킵니다.
             if (other.TryGetComponent<ICatchable>(out var catchable))
@@ -84,9 +94,19 @@ private void OnDisable()
         // 물체 범위 밖으로 나갔을 때 처리
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (currentTarget == other) 
+            if (targets == null || targets.Count == 0)
+                return;
+            
+            if (targets.Contains(other))
             {
-                currentTarget = null;
+                targets.Remove(other);
+                
+                // 목표 타겟 변경하거나 없애기
+                if(targets.Count != 0)
+                    currentTarget = targets[0];
+                else
+                    currentTarget = null;
+                
                 StopGrabTimer(); // 잡지 않고 손을 떼고 가버렸다면 도망 타이머 즉시 취소
             }
         }
