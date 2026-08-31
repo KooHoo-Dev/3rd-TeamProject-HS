@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -9,6 +8,7 @@ using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using WeGotOne;
 
 namespace HelloServer
@@ -35,6 +35,7 @@ namespace HelloServer
         // 남이 들어올 때마다 이걸로 하나씩 만든다.
         [SerializeField] private PlayerController remotePrefab;
         private PlayerController localPlayer;
+        [SerializeField] private Image staminaGauge;
 
         [Header("보내기")]
         // 초당 몇 번 내 위치를 보낼지.
@@ -294,6 +295,8 @@ namespace HelloServer
             }
 
             remotes.TryGetValue(Me.Id, out PlayerController localPlayer);
+            
+            localPlayer.Body.StaminaGauge = staminaGauge;
             this.localPlayer = localPlayer;
             
             localPlayer.Setup(Me);

@@ -27,12 +27,12 @@ namespace WeGotOne
         
         [Header("스태미나 감소 배율 : 혹시 몰라서 확장해둠")]
         [SerializeField] private float staminaDecreaseMultiplier = 1f;
-        [SerializeField] private Image staminaGauge;
-        
+
         // 플레이어 무력화,활성화시 게임 매니저에게 알려주는 델리게이트
         public event Action<bool> OnPlayerStarveStateChanged;
         
         // 외부 확인용 UI 띄울때 이걸루 접근
+        [SerializeField] public Image StaminaGauge;
         public float CurrentStamina => currentStamina;
         public float MaxStamina => maxStamina;
         
@@ -104,7 +104,7 @@ namespace WeGotOne
             Debug.Log(decreaseAmount);
             DecreaseStamina(decreaseAmount);
             
-            // UpdateStamina();
+            UpdateStamina();
         }
         
         // 나중에 이벤트가 불러올 함수
@@ -131,7 +131,7 @@ namespace WeGotOne
                 NotifyPlayerStarveStateChanged( false);
             }
 
-            // UpdateStamina();
+            UpdateStamina();
         }
 
         /// <summary>
@@ -174,7 +174,13 @@ namespace WeGotOne
 
         private void UpdateStamina()
         {
-            //staminaGauge.fillAmount = currentStamina / maxStamina;
+            // 업데이트가 먼저 돌아버려서 그냥 널처리 햇어요
+            if (StaminaGauge == null)
+            {
+                return;
+            }
+            
+            StaminaGauge.fillAmount = currentStamina / maxStamina;
         }
 
         public void NotifyPlayerStarveStateChanged(bool isStarved)
