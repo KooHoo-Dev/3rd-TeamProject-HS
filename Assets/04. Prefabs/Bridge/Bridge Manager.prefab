@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5921569, g: 0.34901962, b: 0.3019608, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -151,7 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 852143a5fdeee8f4f9a05f4a646d77c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Study_Inventory.WoodBridge
-  isCanBuild: 0
 --- !u!1 &2426194801210759423
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,7 +235,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5921569, g: 0.34901962, b: 0.3019608, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -303,7 +302,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 852143a5fdeee8f4f9a05f4a646d77c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Study_Inventory.WoodBridge
-  isCanBuild: 0
 --- !u!1 &2509799853098849016
 GameObject:
   m_ObjectHideFlags: 0
@@ -388,7 +386,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5921569, g: 0.34901962, b: 0.3019608, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -455,7 +453,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 852143a5fdeee8f4f9a05f4a646d77c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Study_Inventory.WoodBridge
-  isCanBuild: 0
 --- !u!1 &5879958725394525494
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,7 +537,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5882353, g: 0.3529412, b: 0.30980393, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -607,7 +604,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 852143a5fdeee8f4f9a05f4a646d77c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Study_Inventory.WoodBridge
-  isCanBuild: 0
 --- !u!1 &9215672416595029417
 GameObject:
   m_ObjectHideFlags: 0
@@ -656,8 +652,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8c1877b4e004fa48e6e38a926c16c7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_99._KimSeungGu.BridgeManager
-  <BridgePrefab>k__BackingField:
-  - {fileID: 215770838429736119}
-  - {fileID: 2509799853098849016}
-  - {fileID: 2426194801210759423}
-  - {fileID: 5879958725394525494}
+  <BridgeObjects>k__BackingField: []
