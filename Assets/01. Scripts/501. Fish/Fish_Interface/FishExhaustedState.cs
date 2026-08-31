@@ -15,7 +15,11 @@ namespace WeGotOne.Fish_Interface
             Debug.Log($"{owner.name} : 완전히 탈진했습니다. 손쉽게 낚아올릴 수 있는 기회입니다!");
             
             // 저항을 멈추고 얌전하게 힘을 뺍니다.
-            owner.FishMovement.StopMove(); 
+            owner.FishMovement.StopMove();
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Confused);
+            // 파티클 있을때만 실행
+            if(owner.confusedParticle != null)
+                owner.PlayConfusedParticle();
             return Task.CompletedTask;
         }
 
@@ -29,5 +33,7 @@ namespace WeGotOne.Fish_Interface
             
             return Task.CompletedTask;
         }
+        
+        
     }
 }

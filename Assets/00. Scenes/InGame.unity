@@ -344,6 +344,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1682943535265470491, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3067123557442481481, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -3388,10 +3392,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.AudioManager
   bgmClips: []
-  bgmVolume: 0
-  sfxClips: []
-  sfxVolume: 0
-  channels: 0
+  bgmVolume: 1
+  sfxClips:
+  - {fileID: 8300000, guid: ef4376a6c29119e4eb3db92c69e4e04a, type: 3}
+  sfxVolume: 1
+  channels: 16
 --- !u!4 &2030178771
 Transform:
   m_ObjectHideFlags: 0

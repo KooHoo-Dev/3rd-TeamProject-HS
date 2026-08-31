@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using HelloServer;
@@ -35,6 +36,7 @@ namespace WeGotOne
         [SerializeField] public Image StaminaGauge;
         public float CurrentStamina => currentStamina;
         public float MaxStamina => maxStamina;
+        private float staminaSoundTimer;
         
         // 움직임 제어용
         public bool CanMove => currentStamina > 0f;
@@ -44,18 +46,20 @@ namespace WeGotOne
 
         private void Update()
         {
-            if (CanRunLocalGameLogic == false) return;
-
-            if (isInWater)
+            if (CanRunLocalGameLogic)
             {
-                outOfWaterTime = 0f;
+                if (isInWater)
+                {
+                    outOfWaterTime = 0f;
+                    DecreaseStaminaOverTime();
+                }
+                else
+                {
+                    RecoverStaminaOverTime();
+                }
+            }
 
-                DecreaseStaminaOverTime();
-            }
-            else
-            {
-                RecoverStaminaOverTime();
-            }
+            UpdateStaminaUI();
         }
 
         private void OnEnable()
@@ -86,6 +90,41 @@ namespace WeGotOne
         }
 
         #endregion
+        
+        private void UpdateStaminaUI()
+        {
+            if (StaminaGauge == null) return;
+            
+            staminaSoundTimer += Time.deltaTime;
+
+            float interval = GetStaminaUpdateInterval();
+
+            if (staminaSoundTimer < interval)
+            {
+                return;
+            }
+
+            staminaSoundTimer = 0f;
+
+            StaminaGauge.transform.parent.DOPunchScale(Vector3.one * 0.2f, 0.3f);
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Pulse);
+        }
+        
+        private float GetStaminaUpdateInterval()
+        {
+            float staminaPercent = currentStamina / maxStamina;
+            
+            if (staminaPercent >= 0.5f)
+            {
+                return 5f;
+            }
+            if (staminaPercent >= 0.3f)
+            {
+                return 3f;
+            }
+            
+            return 1f;
+        }
 
         private void DecreaseStaminaOverTime()
         {
@@ -97,11 +136,9 @@ namespace WeGotOne
             
             // 기본 스태미나 감소량
             float baseDecreasePerSecond = maxStamina / staminaTime;
-            
             float highestForce = playerController.GetHighestHungerForce();
-            
             float decreaseAmount = (baseDecreasePerSecond + (highestForce * forceStaminaMultiplier)) * staminaDecreaseMultiplier * Time.deltaTime;
-            Debug.Log(decreaseAmount);
+            
             DecreaseStamina(decreaseAmount);
             
             UpdateStamina();

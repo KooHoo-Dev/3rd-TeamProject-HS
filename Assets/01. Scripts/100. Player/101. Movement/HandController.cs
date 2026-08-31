@@ -19,6 +19,8 @@ namespace WeGotOne
         private Collider2D currentTarget;
         private Rigidbody2D grabbedTarget;
         
+        [SerializeField] private ParticleSystem fishGrabParticle;
+        
         // 원래 enter2D에서 물체 하나씩만 저장했는데 단체로 저장하고 0번만 빼오게 해야될듯
         private List<Collider2D> targets;
         
@@ -130,18 +132,35 @@ private void OnDisable()
             // 잡기에 성공했으므로 더 이상 도망 타이머를 돌릴 필요가 없음
             StopGrabTimer();
 
-            Debug.Log($"머임 {currentTarget.gameObject.name} + {currentTarget.gameObject.layer}");
             grabbedTarget = currentTarget.attachedRigidbody;
             isGrabbing = true;
             
             // 1. 상위 팔(ArmController)의 추가 힘 연산을 위한 이벤트 알림
             Grabbed?.Invoke(grabbedTarget);
 
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.PopGrab);
+            
             // 2. 잡은 대상(물고기, 도구 등)에게 직접 잡혔음을 실시간 통보
             if (currentTarget.TryGetComponent<ICatchable>(out var catchable))
             {
                 catchable.OnGrabbed();
             }
+            
+            if (currentTarget.CompareTag("Fish"))
+            {
+                PlayFishGrabParticle();
+            }
+        }
+        
+        private void PlayFishGrabParticle()
+        {
+            if (fishGrabParticle == null)
+                return;
+            
+            if (fishGrabParticle.isPlaying)
+                return;
+            
+            fishGrabParticle.gameObject.SetActive(true);
         }
         
         public void Release()
@@ -162,6 +181,7 @@ private void OnDisable()
             
             // 2. 상위 팔(ArmController)의 물리 힘 복원을 위한 이벤트 알림
             Released?.Invoke();
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.PopRelease);
         }
 
 #endregion

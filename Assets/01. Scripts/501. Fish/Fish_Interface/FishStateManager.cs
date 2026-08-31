@@ -26,6 +26,9 @@ namespace WeGotOne.Fish_Interface
         private CancellationTokenSource stateCts;
 
         private float lastEnteredWaterTime = -999f; // 마지막에 물에 들어온 시각 
+        
+        // 기절 파티클용
+        [SerializeField] public ParticleSystem confusedParticle;
 
         private void Awake()
         {
@@ -192,5 +195,19 @@ namespace WeGotOne.Fish_Interface
         }
 
         #endregion
+        
+        // 파티클 켜주는 함수
+        public void PlayConfusedParticle()
+        {
+            // 파티클 없으면 리턴
+            if (confusedParticle == null)
+                return;
+            // 파티클 실행중이면 리턴 (켜져있는데 또 켜면 어색함)
+            if (confusedParticle.isPlaying)
+                return;
+            
+            // 안켜져있을때만 켜는거에요
+            confusedParticle.gameObject.SetActive(true);
+        }
     }
 }
