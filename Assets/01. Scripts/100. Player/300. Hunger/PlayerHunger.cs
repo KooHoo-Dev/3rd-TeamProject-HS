@@ -12,7 +12,7 @@ namespace WeGotOne
         [SerializeField] private float currentHunger = 100f;
         
         [Header("제한시간")]
-        [SerializeField] private float hungerTime = 150f;
+        [SerializeField] private float hungerTime = 100f;
         
         [Header("허기 감소 배율 : 혹시 몰라서 확장해둠")]
         [SerializeField] private float hungerDecreaseMultiplier = 1f;
