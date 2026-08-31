@@ -189,15 +189,33 @@ namespace WeGotOne
         /// </summary>
         public void ApplyFishes(FishState[] fishes)
         {
+            if (fishes == null)
+            {
+                Debug.LogError("[Pool] 물고기 스냅샷이 비어 있습니다.");
+                return;
+            }
+
             for (int i = 0; i < fishes.Length; i++)
             {
                 FishState state = fishes[i];
 
                 if (TryGetSlotIndex(state.Id, out int slotIndex) == false)
+                {
+                    Debug.LogError($"[Pool] 물고기 스냅샷 ID 형식이 잘못되었습니다: {state.Id}");
                     continue;
+                }
 
                 if (PoolObjectDic.TryGetValue(slotIndex, out Collectible collectible) == false)
+                {
+                    Debug.LogError($"[Pool] 물고기 스냅샷 슬롯을 찾을 수 없습니다: {state.Id}");
                     continue;
+                }
+                
+                if (collectible == null || collectible.ThisItem == null)
+                {
+                    Debug.LogError($"[Pool] 물고기 슬롯 리소스가 비어 있습니다: {state.Id}");
+                    continue;
+                } 
 
                 // ==========================================
                 // [프리팹 종류 불일치 보정] - 신규
@@ -210,10 +228,14 @@ namespace WeGotOne
                     if (collectible == null) continue; // 방어: 해당 Key의 프리팹을 못 찾은 경우
                 }
 
-                collectible.transform.position = new Vector3(state.X, state.Y, collectible.transform.position.z);
-                collectible.transform.localScale = new Vector3(state.ScaleX, collectible.transform.localScale.y, collectible.transform.localScale.z);
-                collectible.gameObject.SetActive(state.IsActive);
-                collectible.transform.rotation = Quaternion.Euler(0f, 0f, state.Angle);
+                Fish fish = collectible as Fish;
+                if (fish == null)
+                {
+                    Debug.LogError($"[Pool] 물고기 슬롯에 Fish 컴포넌트가 없습니다: {state.Id}");
+                    continue;
+                }
+
+                fish.ApplySnapshot(state);
             }
         }
         
@@ -225,10 +247,22 @@ namespace WeGotOne
                 PlankState state = planks[i];
 
                 if (TryGetSlotIndex(state.Id, out int slotIndex) == false)
+                {
+                    Debug.LogError($"[Pool] 나무 스냅샷 ID 형식이 잘못되었습니다: {state.Id}");
                     continue;
+                }
 
                 if (PoolObjectDic.TryGetValue(slotIndex, out Collectible collectible) == false)
+                {
+                    Debug.LogError($"[Pool] 나무 스냅샷 슬롯을 찾을 수 없습니다: {state.Id}");
                     continue;
+                }
+
+                if (collectible == null || collectible.ThisItem == null)
+                {
+                    Debug.LogError($"[Pool] 나무 슬롯 리소스가 비어 있습니다: {state.Id}");
+                    continue;
+                }
                 
                 if (collectible.ThisItem.Key != state.Index)
                 {
@@ -236,10 +270,14 @@ namespace WeGotOne
                     if (collectible == null) continue;
                 }
 
-                collectible.transform.position = new Vector3(state.X, state.Y, collectible.transform.position.z);
-                collectible.transform.rotation = Quaternion.Euler(0f, 0f, state.Angle);
-                collectible.gameObject.SetActive(state.IsActive);
-                collectible.IsPickUp = state.IsPickUp;
+                Plank plank = collectible as Plank;
+                if (plank == null)
+                {
+                    Debug.LogError($"[Pool] 나무 슬롯에 Plank 컴포넌트가 없습니다: {state.Id}");
+                    continue;
+                }
+
+                plank.ApplySnapshot(state);
             }
         }
         
@@ -249,9 +287,18 @@ namespace WeGotOne
         /// </summary>
         private Collectible ReplaceWithCorrectPrefab(int slotIndex, Collectible oldCollectible, int correctKey)
         {
+            if (itemPrefabs == null)
+            {
+                Debug.LogError("[Pool] 아이템 프리팹 배열이 설정되지 않았습니다.");
+                return null;
+            }
+
             Collectible correctPrefab = null;
             foreach (var prefab in itemPrefabs)
             {
+                if (prefab == null || prefab.ThisItem == null)
+                    continue;
+
                 if (prefab.ThisItem.Key == correctKey)
                 {
                     correctPrefab = prefab;
@@ -261,13 +308,14 @@ namespace WeGotOne
 
             if (correctPrefab == null)
             {
-                Debug.LogWarning($"[Pool] Key {correctKey}에 해당하는 프리팹을 찾을 수 없습니다.");
+                Debug.LogError($"[Pool] Key {correctKey}에 해당하는 프리팹을 찾을 수 없습니다.");
                 return null;
             }
 
             Transform parent = oldCollectible.transform.parent;
             Vector3 pos = oldCollectible.transform.position;
 
+            // 나중에 수정... (풀링의 본질을 훼손중)
             Destroy(oldCollectible.gameObject);
 
             Collectible newCollectible = Instantiate(correctPrefab, parent);
