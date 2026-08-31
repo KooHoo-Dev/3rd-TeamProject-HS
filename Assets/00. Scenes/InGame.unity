@@ -3391,7 +3391,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e23a2857f4da19a488f5cef61aac14bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.AudioManager
-  bgmClips: []
+  bgmClips:
+  - {fileID: 8300000, guid: e103e48eda7dd134bb42a10d9d070a2d, type: 3}
   bgmVolume: 1
   sfxClips:
   - {fileID: 8300000, guid: ef4376a6c29119e4eb3db92c69e4e04a, type: 3}
