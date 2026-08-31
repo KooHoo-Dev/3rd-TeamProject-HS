@@ -15,8 +15,6 @@ namespace WeGotOne
     [RequireComponent(typeof(Collider2D))]
     public class HandControllerV2 : MonoBehaviour
     {
-        private int waterLayer = LayerMask.NameToLayer("Water");
-        
         // 잡은 물체 저장용
         private Collider2D currentTarget;
         private Rigidbody2D grabbedTarget;
@@ -77,7 +75,8 @@ private void OnDisable()
             if (targetOwner == owner)
                 return;
 
-            if (other.gameObject.layer == waterLayer)
+            // private int waterLayer = LayerMask.NameToLayer("Water"); 이거 넣으면 4가 맞는데 안돌아가서 일단 일케하고 미뤄둠
+            if (other.gameObject.layer == 4)
                 return;
             
             targets.Add(other);
@@ -128,6 +127,7 @@ private void OnDisable()
             // 잡기에 성공했으므로 더 이상 도망 타이머를 돌릴 필요가 없음
             StopGrabTimer();
 
+            Debug.Log($"머임 {currentTarget.gameObject.name} + {currentTarget.gameObject.layer}");
             grabbedTarget = currentTarget.attachedRigidbody;
             isGrabbing = true;
             
