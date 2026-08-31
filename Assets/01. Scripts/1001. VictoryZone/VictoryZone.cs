@@ -6,19 +6,17 @@ namespace WeGotOne
 {
     public class VictoryZone : MonoBehaviour
     {
-        private void OnTriggerEnter2D(Collider2D other)
+        private void OnTriggerStay2D(Collider2D other)
         {
             if (CanRunLocalGameLogic == false) return;
 
             if (other.CompareTag("Player"))
             {
                 PlayerController playerController = other.GetComponentInParent<PlayerController>();
-                if (playerController != null && playerController.User != null)
-                {
-                    RoomClient.Instance.SetPlayerArrived(playerController.User.Id, true);
-                }
+                if (playerController == null || playerController.User == null) return;
 
-                GameManager.Instance.AddArrivedPlayerCount();
+                RoomClient.Instance.SetPlayerArrived(playerController.User.Id, true);
+                GameManager.Instance.AddArrivedPlayerCount(playerController.User.Id);
             }
         }
 
@@ -29,12 +27,10 @@ namespace WeGotOne
             if (other.CompareTag("Player"))
             {
                 PlayerController playerController = other.GetComponentInParent<PlayerController>();
-                if (playerController != null && playerController.User != null)
-                {
-                    RoomClient.Instance.SetPlayerArrived(playerController.User.Id, false);
-                }
+                if (playerController == null || playerController.User == null) return;
 
-                GameManager.Instance.RemoveArrivedPlayerCount();
+                RoomClient.Instance.SetPlayerArrived(playerController.User.Id, false);
+                GameManager.Instance.RemoveArrivedPlayerCount(playerController.User.Id);
             }
         }
 

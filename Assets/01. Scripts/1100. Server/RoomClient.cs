@@ -242,7 +242,9 @@ namespace HelloServer
             BridgeManager.Instance.ApplySnapshot(message.CurrentBridgeCount);
             itemPool.ApplyFishes(message.Fishes);
             itemPool.ApplyPlanks(message.Planks);
+            
             GameManager.Instance.ApplySnapshot(message.ActivePlayerCount, message.ArrivedPlayerCount);
+            Inventory.Instance.ApplySnapshot(message.ItemKeys, message.ItemCounts);
 
             Debug.Log(GetJson(message));
 
@@ -310,7 +312,7 @@ namespace HelloServer
             if (Me.IsHost)
             {
                 bool wasArrived = arrivedPlayerIds.Remove(message.Id);
-                GameManager.Instance.RemovePlayer(remote.Body.IsStarved, wasArrived);
+                GameManager.Instance.RemovePlayer(message.Id, remote.Body.IsStarved, wasArrived);
             }
             else
             {
@@ -393,6 +395,8 @@ namespace HelloServer
                 // 2. [물고기/아이템 연동]: 씬의 ItemObjectPool에서 활성화된 아이템들을 가져와 배열로 변환
                 if (itemPool != null)
                 {
+                    // 이때 비활성화된 얘들도 가져와서 반영해줘야함
+                    // IsActive 필드도 반영이 안된듯
                     snapshot.Fishes = itemPool.PackActiveFishes().ToArray();
                     snapshot.Planks = itemPool.PackActivePlanks().ToArray();
                 }
@@ -416,10 +420,10 @@ namespace HelloServer
 
                 snapshot.ItemKeys = new int[InventoryItemDB.Instance.ItemCountDic.Count];
                 snapshot.ItemCounts = new int[InventoryItemDB.Instance.ItemCountDic.Count];
-                for (int i = 0; i < InventoryItemDB.Instance.ItemCountDic.Count; i++)
+                foreach (var pair in InventoryItemDB.Instance.ItemCountDic)
                 {
-                    snapshot.ItemKeys[i] = i;
-                    snapshot.ItemCounts[i] = InventoryItemDB.Instance.ItemCountDic[i];
+                    snapshot.ItemKeys[pair.Key] = pair.Key;
+                    snapshot.ItemCounts[pair.Key] = pair.Value;
                 }
 
                 snapshot.CurrentBridgeCount = BridgeManager.Instance.CurrentBridgeCount();

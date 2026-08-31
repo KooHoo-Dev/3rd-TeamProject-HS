@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections.Generic;
 using HelloServer;
 
 namespace WeGotOne
@@ -24,6 +25,7 @@ namespace WeGotOne
         // VictoryZone(육지)에 도착한 플레이어 수
         [SerializeField] private int arrivedPlayerCount = 0;
         [SerializeField] private int activePlayerCount;
+        private readonly HashSet<string> arrivedPlayerIds = new HashSet<string>();
         private bool isGameFinished;
         
         #region unity events
@@ -95,6 +97,7 @@ namespace WeGotOne
             totalPlayerCount = 0;
             activePlayerCount = 0;
             arrivedPlayerCount = 0;
+            arrivedPlayerIds.Clear();
             isGameFinished = false;
             gameOverUI.gameObject.SetActive(false);
             gameWinUI.gameObject.SetActive(false);
@@ -111,9 +114,10 @@ namespace WeGotOne
             totalPlayerCount = Mathf.Max(0, totalPlayerCount - 1);
         }
 
-        public void RemovePlayer(bool isStarved, bool isArrived)
+        public void RemovePlayer(string playerId, bool isStarved, bool isArrived)
         {
             RemovePlayer();
+            arrivedPlayerIds.Remove(playerId);
 
             if (isStarved == false)
             {
@@ -136,17 +140,21 @@ namespace WeGotOne
             EvaluateGameEnd();
         }
 
-        public void AddArrivedPlayerCount()
+        public void AddArrivedPlayerCount(string playerId)
         {
             if (CanRunLocalGameLogic == false) return;
+            if (string.IsNullOrEmpty(playerId)) return;
+            if (arrivedPlayerIds.Add(playerId) == false) return;
 
             arrivedPlayerCount++;
             EvaluateGameEnd();
         }
 
-        public void RemoveArrivedPlayerCount()
+        public void RemoveArrivedPlayerCount(string playerId)
         {
             if (CanRunLocalGameLogic == false) return;
+            if (string.IsNullOrEmpty(playerId)) return;
+            if (arrivedPlayerIds.Remove(playerId) == false) return;
 
             arrivedPlayerCount--;
             if (arrivedPlayerCount < 0)
