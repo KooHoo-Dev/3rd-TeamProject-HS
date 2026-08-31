@@ -166,14 +166,14 @@ namespace WeGotOne
 
         #endregion
 
-        public void SubscribePlayerStarveStateChanged(PlayerHunger playerHunger)
+        public void SubscribePlayerStarveStateChanged(PlayerStamina playerStamina)
         {
-            playerHunger.OnPlayerStarveStateChanged += HandlePlayerStarveStateChanged;
+            playerStamina.OnPlayerStarveStateChanged += HandlePlayerStarveStateChanged;
         }
         
-        public void UnsubscribeStarveStateChanged(PlayerHunger playerHunger)
+        public void UnsubscribeStarveStateChanged(PlayerStamina playerStamina)
         {
-            playerHunger.OnPlayerStarveStateChanged -= HandlePlayerStarveStateChanged;
+            playerStamina.OnPlayerStarveStateChanged -= HandlePlayerStarveStateChanged;
         }
 
         private void HandlePlayerStarveStateChanged(bool isStarved)

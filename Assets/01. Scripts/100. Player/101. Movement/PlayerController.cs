@@ -27,7 +27,7 @@ namespace WeGotOne
         [SerializeField] private ArmController rightUpperArm;
         [SerializeField] private BottomArmController leftBottomArm;
         [SerializeField] private BottomArmController rightBottomArm;
-        [SerializeField] private PlayerHunger body;
+        [SerializeField] private PlayerStamina body;
 
         public bool IsLeftGrab { get; private set; }
         public bool IsRightGrab { get; private set; }
@@ -39,7 +39,7 @@ namespace WeGotOne
         public ArmController RightUpperArm => rightUpperArm;
         public BottomArmController LeftBottomArm => leftBottomArm;
         public BottomArmController RightBottomArm => rightBottomArm;
-        public PlayerHunger Body => body;
+        public PlayerStamina Body => body;
 
         #region 보간용
 
@@ -90,54 +90,12 @@ namespace WeGotOne
 
             interpolationTime += Time.deltaTime;
 
-            float t = Mathf.Clamp01(
-                interpolationTime / SnapshotInterval
-            );
-
-            ApplyInterpolatedTransform(
-                body.transform,
-                previousBodyPosition,
-                targetBodyPosition,
-                previousBodyRotation,
-                targetBodyRotation,
-                t
-            );
-
-            ApplyInterpolatedTransform(
-                leftUpperArm.transform,
-                previousLeftUpperPosition,
-                targetLeftUpperPosition,
-                previousLeftUpperRotation,
-                targetLeftUpperRotation,
-                t
-            );
-
-            ApplyInterpolatedTransform(
-                rightUpperArm.transform,
-                previousRightUpperPosition,
-                targetRightUpperPosition,
-                previousRightUpperRotation,
-                targetRightUpperRotation,
-                t
-            );
-
-            ApplyInterpolatedTransform(
-                leftBottomArm.transform,
-                previousLeftBottomPosition,
-                targetLeftBottomPosition,
-                previousLeftBottomRotation,
-                targetLeftBottomRotation,
-                t
-            );
-
-            ApplyInterpolatedTransform(
-                rightBottomArm.transform,
-                previousRightBottomPosition,
-                targetRightBottomPosition,
-                previousRightBottomRotation,
-                targetRightBottomRotation,
-                t
-            );
+            float t = Mathf.Clamp01(interpolationTime / SnapshotInterval);
+            ApplyInterpolatedTransform(body.transform, previousBodyPosition, targetBodyPosition, previousBodyRotation, targetBodyRotation, t);
+            ApplyInterpolatedTransform(leftUpperArm.transform, previousLeftUpperPosition, targetLeftUpperPosition, previousLeftUpperRotation, targetLeftUpperRotation, t);
+            ApplyInterpolatedTransform(rightUpperArm.transform, previousRightUpperPosition, targetRightUpperPosition, previousRightUpperRotation, targetRightUpperRotation, t);
+            ApplyInterpolatedTransform(leftBottomArm.transform, previousLeftBottomPosition, targetLeftBottomPosition, previousLeftBottomRotation, targetLeftBottomRotation, t);
+            ApplyInterpolatedTransform(rightBottomArm.transform, previousRightBottomPosition, targetRightBottomPosition, previousRightBottomRotation, targetRightBottomRotation, t);
         }
 
         public void Setup(User user)
@@ -148,6 +106,30 @@ namespace WeGotOne
             SimpleFollowCamera cameraController = GetComponentInChildren<SimpleFollowCamera>(true);
             if (user.Id == RoomClient.Instance.Me.Id)
                 cameraController.enabled = true;
+        }
+        
+        public float GetHighestHungerForce()
+        {
+            float highestForce = 0f;
+
+            if (leftUpperArm.CanConsumeAdditionalHunger)
+            {
+                highestForce = Mathf.Max(highestForce, leftUpperArm.CurrentForce);
+            }
+            if (rightUpperArm.CanConsumeAdditionalHunger)
+            {
+                highestForce = Mathf.Max(highestForce, rightUpperArm.CurrentForce);
+            }
+            if (leftBottomArm.CanConsumeAdditionalHunger)
+            {
+                highestForce = Mathf.Max(highestForce, leftBottomArm.CurrentForce);
+            }
+            if (rightBottomArm.CanConsumeAdditionalHunger)
+            {
+                highestForce = Mathf.Max(highestForce, rightBottomArm.CurrentForce);
+            }
+
+            return highestForce;
         }
 
         public void ApplyInput(Vector2 moveInput, bool leftGrab, bool rightGrab, bool isBuildKeyHold)
@@ -160,76 +142,30 @@ namespace WeGotOne
         public void ApplySnapshot(PlayerState position, bool leftGrab, bool rightGrab)
         {
             body.ApplySnapshot(position.CurrentHunger);
-
+            
             // 서버에서 들어온 값 저장
             Vector2 newBodyPosition = ToVector2(position.Body);
-
             Quaternion newBodyRotation = ToQuaternion(position.Body.Rotation);
-
             Vector2 newLeftUpperPosition = ToVector2(position.LeftArmTop);
-
             Quaternion newLeftUpperRotation = ToQuaternion(position.LeftArmTop.Rotation);
-
             Vector2 newRightUpperPosition = ToVector2(position.RightArmTop);
-
             Quaternion newRightUpperRotation = ToQuaternion(position.RightArmTop.Rotation);
-
             Vector2 newLeftBottomPosition = ToVector2(position.LeftArmBottom);
-
-            Quaternion newLeftBottomRotation =
-                ToQuaternion(position.LeftArmBottom.Rotation);
-
-            Vector2 newRightBottomPosition =
-                ToVector2(position.RightArmBottom);
-
-            Quaternion newRightBottomRotation =
-                ToQuaternion(position.RightArmBottom.Rotation);
+            Quaternion newLeftBottomRotation = ToQuaternion(position.LeftArmBottom.Rotation);
+            Vector2 newRightBottomPosition = ToVector2(position.RightArmBottom);
+            Quaternion newRightBottomRotation = ToQuaternion(position.RightArmBottom.Rotation);
 
             // 처음 Snapshot이면 즉시 적용
             if (initialized == false)
             {
-                ApplyTransform(
-                    body.transform,
-                    newBodyPosition,
-                    newBodyRotation
-                );
+                ApplyTransform(body.transform, newBodyPosition, newBodyRotation);
+                ApplyTransform(leftUpperArm.transform, newLeftUpperPosition, newLeftUpperRotation);
+                ApplyTransform(rightUpperArm.transform, newRightUpperPosition, newRightUpperRotation);
+                ApplyTransform(leftBottomArm.transform, newLeftBottomPosition, newLeftBottomRotation);
+                ApplyTransform(rightBottomArm.transform, newRightBottomPosition, newRightBottomRotation);
 
-                ApplyTransform(
-                    leftUpperArm.transform,
-                    newLeftUpperPosition,
-                    newLeftUpperRotation
-                );
-
-                ApplyTransform(
-                    rightUpperArm.transform,
-                    newRightUpperPosition,
-                    newRightUpperRotation
-                );
-
-                ApplyTransform(
-                    leftBottomArm.transform,
-                    newLeftBottomPosition,
-                    newLeftBottomRotation
-                );
-
-                ApplyTransform(
-                    rightBottomArm.transform,
-                    newRightBottomPosition,
-                    newRightBottomRotation
-                );
-
-                SetSnapshotTargets(
-                    newBodyPosition,
-                    newBodyRotation,
-                    newLeftUpperPosition,
-                    newLeftUpperRotation,
-                    newRightUpperPosition,
-                    newRightUpperRotation,
-                    newLeftBottomPosition,
-                    newLeftBottomRotation,
-                    newRightBottomPosition,
-                    newRightBottomRotation
-                );
+                SetSnapshotTargets(newBodyPosition, newBodyRotation, newLeftUpperPosition, newLeftUpperRotation, newRightUpperPosition, 
+                    newRightUpperRotation, newLeftBottomPosition, newLeftBottomRotation, newRightBottomPosition, newRightBottomRotation);
 
                 StorePreviousSnapshot();
 
@@ -244,18 +180,8 @@ namespace WeGotOne
             StorePreviousSnapshot();
 
             // 새 Snapshot을 target으로 저장
-            SetSnapshotTargets(
-                newBodyPosition,
-                newBodyRotation,
-                newLeftUpperPosition,
-                newLeftUpperRotation,
-                newRightUpperPosition,
-                newRightUpperRotation,
-                newLeftBottomPosition,
-                newLeftBottomRotation,
-                newRightBottomPosition,
-                newRightBottomRotation
-            );
+            SetSnapshotTargets(newBodyPosition, newBodyRotation, newLeftUpperPosition, newLeftUpperRotation, newRightUpperPosition, 
+                newRightUpperRotation, newLeftBottomPosition, newLeftBottomRotation, newRightBottomPosition, newRightBottomRotation);
 
             // 새로운 Snapshot 구간 보간 시작
             interpolationTime = 0f;
@@ -280,9 +206,7 @@ namespace WeGotOne
             SetArmDirections(moveInput);
         }
 
-        private void HandleGrab(
-            bool leftGrab,
-            bool rightGrab)
+        private void HandleGrab(bool leftGrab, bool rightGrab)
         {
             if (leftGrab)
             {
@@ -342,17 +266,8 @@ namespace WeGotOne
             previousRightBottomRotation = targetRightBottomRotation;
         }
 
-        private void SetSnapshotTargets(
-            Vector2 bodyPosition,
-            Quaternion bodyRotation,
-            Vector2 leftUpperPosition,
-            Quaternion leftUpperRotation,
-            Vector2 rightUpperPosition,
-            Quaternion rightUpperRotation,
-            Vector2 leftBottomPosition,
-            Quaternion leftBottomRotation,
-            Vector2 rightBottomPosition,
-            Quaternion rightBottomRotation)
+        private void SetSnapshotTargets(Vector2 bodyPosition, Quaternion bodyRotation, Vector2 leftUpperPosition, Quaternion leftUpperRotation, Vector2 rightUpperPosition,
+            Quaternion rightUpperRotation, Vector2 leftBottomPosition, Quaternion leftBottomRotation, Vector2 rightBottomPosition, Quaternion rightBottomRotation)
         {
             targetBodyPosition = bodyPosition;
             targetBodyRotation = bodyRotation;
@@ -370,52 +285,26 @@ namespace WeGotOne
             targetRightBottomRotation = rightBottomRotation;
         }
 
-        private void ApplyTransform(
-            Transform target,
-            Vector2 position,
-            Quaternion rotation)
+        private void ApplyTransform(Transform target, Vector2 position, Quaternion rotation)
         {
             target.position = position;
             target.rotation = rotation;
         }
 
-        private void ApplyInterpolatedTransform(
-            Transform target,
-            Vector2 previousPosition,
-            Vector2 targetPosition,
-            Quaternion previousRotation,
-            Quaternion targetRotation,
-            float t)
+        private void ApplyInterpolatedTransform(Transform target, Vector2 previousPosition, Vector2 targetPosition, Quaternion previousRotation, Quaternion targetRotation, float t)
         {
-            target.position = Vector2.Lerp(
-                previousPosition,
-                targetPosition,
-                t
-            );
-
-            target.rotation = Quaternion.Lerp(
-                previousRotation,
-                targetRotation,
-                t
-            );
+            target.position = Vector2.Lerp(previousPosition, targetPosition, t);
+            target.rotation = Quaternion.Lerp(previousRotation, targetRotation, t);
         }
 
         private Vector2 ToVector2(PartState partState)
         {
-            return new Vector2(
-                partState.X,
-                partState.Y
-            );
+            return new Vector2(partState.X, partState.Y);
         }
 
         private Quaternion ToQuaternion(Rotation rotation)
         {
-            return new Quaternion(
-                rotation.X,
-                rotation.Y,
-                rotation.Z,
-                rotation.W
-            );
+            return new Quaternion(rotation.X, rotation.Y, rotation.Z, rotation.W);
         }
 
         #endregion

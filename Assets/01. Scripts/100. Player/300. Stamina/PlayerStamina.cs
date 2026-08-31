@@ -5,30 +5,39 @@ using HelloServer;
 
 namespace WeGotOne
 {
-    public class PlayerHunger : MonoBehaviour
+    public class PlayerStamina : MonoBehaviour
     {
-        [Header("배고픔 기본 설정")]
-        [SerializeField] private float maxHunger = 100f;
-        [SerializeField] private float currentHunger = 100f;
+        [Header("스태미나 기본 설정")]
+        [SerializeField] private float maxStamina = 100f;
+        [SerializeField] private float currentStamina = 100f;
+        
+        // 무게에 따른 추가 배율
+        [SerializeField] private PlayerController playerController;
+        [SerializeField] private float forceStaminaMultiplier = 0.1f;
+
+        [SerializeField] private float recoverDelay = 5f;
+        [SerializeField] private float recoverPerSecond = 10f;
+
+        private float outOfWaterTime;
         
         [Header("제한사항")]
-        [SerializeField] private float hungerTime = 100f;
+        [SerializeField] private float staminaTime = 100f;
         private int waterLayer;
         private bool isInWater = false;
         
-        [Header("허기 감소 배율 : 혹시 몰라서 확장해둠")]
-        [SerializeField] private float hungerDecreaseMultiplier = 1f;
-        [SerializeField] private Image hungerGauge;
+        [Header("스태미나 감소 배율 : 혹시 몰라서 확장해둠")]
+        [SerializeField] private float staminaDecreaseMultiplier = 1f;
+        [SerializeField] private Image staminaGauge;
         
         // 플레이어 무력화,활성화시 게임 매니저에게 알려주는 델리게이트
         public event Action<bool> OnPlayerStarveStateChanged;
         
         // 외부 확인용 UI 띄울때 이걸루 접근
-        public float CurrentHunger => currentHunger;
-        public float MaxHunger => maxHunger;
+        public float CurrentStamina => currentStamina;
+        public float MaxStamina => maxStamina;
         
         // 움직임 제어용
-        public bool CanMove => currentHunger > 0f;
+        public bool CanMove => currentStamina > 0f;
         public bool IsStarved => CanMove == false;
 
         #region unity events
@@ -37,7 +46,16 @@ namespace WeGotOne
         {
             if (CanRunLocalGameLogic == false) return;
 
-            DecreaseHungerOverTime();
+            if (isInWater)
+            {
+                outOfWaterTime = 0f;
+
+                DecreaseStaminaOverTime();
+            }
+            else
+            {
+                RecoverStaminaOverTime();
+            }
         }
 
         private void OnEnable()
@@ -69,42 +87,42 @@ namespace WeGotOne
 
         #endregion
 
-        private void DecreaseHungerOverTime()
+        private void DecreaseStaminaOverTime()
         {
-            if (currentHunger <= 0f)
+            if (currentStamina <= 0f)
                 return;
 
             if (isInWater == false)
                 return;
             
-            // 기본 배고픔 감소량
-            float baseDecreasePerSecond = maxHunger / hungerTime;
+            // 기본 스태미나 감소량
+            float baseDecreasePerSecond = maxStamina / staminaTime;
             
-            // 나중에 배고픔 덜달거나 더다는 이벤트 넣을꺼면 멀티플러만 조절해주는 용도.
-            // 이벤트 추가 안되면 그냥 베이스에 델타 타임만 곱할꺼임
-            float decreaseAmount = baseDecreasePerSecond * hungerDecreaseMultiplier * Time.deltaTime;
-
-            DecreaseHunger(decreaseAmount);
+            float highestForce = playerController.GetHighestHungerForce();
             
-            // UpdateHunger();
+            float decreaseAmount = (baseDecreasePerSecond + (highestForce * forceStaminaMultiplier)) * staminaDecreaseMultiplier * Time.deltaTime;
+            Debug.Log(decreaseAmount);
+            DecreaseStamina(decreaseAmount);
+            
+            // UpdateStamina();
         }
         
         // 나중에 이벤트가 불러올 함수
         public void SetDecreaseMultiplier(float multiplier)
         {
-            hungerDecreaseMultiplier = multiplier;
+            staminaDecreaseMultiplier = multiplier;
         }
         
         /// <summary>
-        /// amount만큼 허기 게이지 증가
+        /// amount만큼 스태미나 게이지 증가
         /// </summary>
         /// <param name="amount"></param>
-        public void IncreaseHunger(float amount)
+        public void IncreaseStamina(float amount)
         {
             if (CanRunLocalGameLogic == false) return;
 
             bool wasStarved = IsStarved;
-            currentHunger = Mathf.Min( currentHunger + amount, maxHunger);
+            currentStamina = Mathf.Min( currentStamina + amount, maxStamina);
 
             // 이전에 굶주린 상태였다가 회복이 되면
             if (wasStarved && IsStarved == false)
@@ -113,31 +131,50 @@ namespace WeGotOne
                 NotifyPlayerStarveStateChanged( false);
             }
 
-            // UpdateHunger();
+            // UpdateStamina();
         }
 
         /// <summary>
-        /// amount만큼 허기 게이지 감소
+        /// amount만큼 스태미나 게이지 감소
         /// </summary>
         /// <param name="amount"></param>
-        public void DecreaseHunger(float amount)
+        public void DecreaseStamina(float amount)
         {
             if (CanRunLocalGameLogic == false) return;
 
             bool wasStarved = IsStarved;
-            currentHunger = Mathf.Max( currentHunger - amount, 0f );
+            currentStamina = Mathf.Max( currentStamina - amount, 0f );
             
-            // 만약 이전에 굶주리지 않았다가 이번 배고픔 감소시 굶주리게 되었다면
+            // 만약 이전에 굶주리지 않았다가 이번 스태미나 감소시 굶주리게 되었다면
             if (wasStarved == false && IsStarved)
             {
                 // 델리게이트로 게임매니저로 통지
                 NotifyPlayerStarveStateChanged( true);
             }
         }
-
-        private void UpdateHunger()
+        
+        private void RecoverStaminaOverTime()
         {
-            //hungerGauge.fillAmount = currentHunger / maxHunger;
+            // 최대 스태미나 넘기기
+            if (currentStamina >= maxStamina)
+                return;
+
+            // 카운트 세기
+            outOfWaterTime += Time.deltaTime;
+
+            // 5초전에 넘기기
+            if (outOfWaterTime < recoverDelay)
+                return;
+
+            // 회복 시작
+            float recoverAmount = recoverPerSecond * Time.deltaTime;
+
+            IncreaseStamina(recoverAmount);
+        }
+
+        private void UpdateStamina()
+        {
+            //staminaGauge.fillAmount = currentStamina / maxStamina;
         }
 
         public void NotifyPlayerStarveStateChanged(bool isStarved)
@@ -147,10 +184,10 @@ namespace WeGotOne
             OnPlayerStarveStateChanged?.Invoke(isStarved);
         }
 
-        public void ApplySnapshot(float snapshotCurrentHunger)
+        public void ApplySnapshot(float snapshotCurrentStamina)
         {
-            currentHunger = Mathf.Clamp(snapshotCurrentHunger, 0f, maxHunger);
-            UpdateHunger();
+            currentStamina = Mathf.Clamp(snapshotCurrentStamina, 0f, maxStamina);
+            UpdateStamina();
         }
 
         private bool CanRunLocalGameLogic
@@ -166,14 +203,14 @@ namespace WeGotOne
         // GameoverTester를 위한 테스트 메소드
         #region test methods
 
-        public void ResetHunger()
+        public void ResetStamina()
         {
-            IncreaseHunger(maxHunger);
+            IncreaseStamina(maxStamina);
         }
 
         public void MakeStarved()
         {
-            DecreaseHunger(maxHunger);
+            DecreaseStamina(maxStamina);
         }
 
         #endregion

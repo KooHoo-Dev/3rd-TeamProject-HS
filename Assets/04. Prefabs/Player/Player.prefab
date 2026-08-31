@@ -779,6 +779,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.PlayerHunger
   maxHunger: 100
   currentHunger: 100
+  playerController: {fileID: 4725110930171532697}
+  forceHungerMultiplier: 0.1
   hungerTime: 150
   hungerDecreaseMultiplier: 1
   hungerGauge: {fileID: 0}
@@ -1180,9 +1182,6 @@ MonoBehaviour:
   grabSprite: {fileID: -1292544488347810331, guid: 7547d6a01073e244bbd3854a6bc6db05, type: 3}
   handSprite: {fileID: 1911668387058735738, guid: 7547d6a01073e244bbd3854a6bc6db05, type: 3}
   spriteRenderer: {fileID: 8635207882154615099}
-  waterLayer:
-    serializedVersion: 2
-    m_Bits: 16
   grabWindowTime: 1.2
 --- !u!1 &5286264238094091870
 GameObject:
@@ -1328,9 +1327,6 @@ MonoBehaviour:
   grabSprite: {fileID: -1292544488347810331, guid: 7547d6a01073e244bbd3854a6bc6db05, type: 3}
   handSprite: {fileID: 1911668387058735738, guid: 7547d6a01073e244bbd3854a6bc6db05, type: 3}
   spriteRenderer: {fileID: 2584043572367064611}
-  waterLayer:
-    serializedVersion: 2
-    m_Bits: 16
   grabWindowTime: 1.2
 --- !u!1 &8559347555218153095
 GameObject:

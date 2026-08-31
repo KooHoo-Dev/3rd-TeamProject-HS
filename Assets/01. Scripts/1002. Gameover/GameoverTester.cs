@@ -8,7 +8,7 @@ namespace WeGotOne
         // PlayerHunger를 가지고 있고
         // 하나씩 순서대로 무력화, 활성화 가능
         // 테스트하려면 playerList에 플레이어의 PlayerHunger 컴포넌트를 주입해야함
-        [SerializeField] private List<PlayerHunger> playerList = new List<PlayerHunger>();
+        [SerializeField] private List<PlayerStamina> playerList = new List<PlayerStamina>();
         
         private void Start()
         {
@@ -22,7 +22,7 @@ namespace WeGotOne
             {
                 if (playerList[i].IsStarved)
                 {
-                    playerList[i].ResetHunger();
+                    playerList[i].ResetStamina();
                     Debug.Log($"active - {GameManager.Instance.ActivePlayerCount}, outOfEnergy - {GameManager.Instance.OutOfEnergyPlayerCount}");
                     return;
                 }
@@ -48,7 +48,7 @@ namespace WeGotOne
         [ContextMenu("Set Total Player Count")]
         public void SetTotalPlayerCount()
         {
-            playerList = new List<PlayerHunger>(FindObjectsOfType<PlayerHunger>());
+            playerList = new List<PlayerStamina>(FindObjectsOfType<PlayerStamina>());
             GameManager.Instance.SetTotalPlayerCount(playerList.Count);
         }
     }

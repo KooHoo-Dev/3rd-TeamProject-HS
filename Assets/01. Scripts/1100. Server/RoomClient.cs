@@ -528,7 +528,7 @@ namespace HelloServer
             playerStates.Add(new PlayerState
             {
                 Id = playerId,
-                CurrentHunger = remotes[playerId].Body.CurrentHunger,
+                CurrentHunger = remotes[playerId].Body.CurrentStamina,
                 Body = new PartState
                 {
                     X = remotes[playerId].Body.transform.position.x,

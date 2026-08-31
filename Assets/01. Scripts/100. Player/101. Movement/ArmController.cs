@@ -28,8 +28,8 @@ namespace WeGotOne
         [SerializeField] private float forceMultiplierOfMass;
         [SerializeField] private float forceLimit;
         
-        // 런타임용. 없앨 가능성 높음
-        [SerializeField] public float currentForce;
+        [SerializeField] private float currentForce;
+        public float CurrentForce => currentForce;
         
         // [수정]: 기존 HandController에서 인터페이스가 적용된 새로운 클래스명으로 변경
         [SerializeField] private HandControllerV2 hand;
@@ -113,7 +113,10 @@ namespace WeGotOne
         private void MoveToDirection(Vector2 direction)
         {
             if (inputDirection == Vector2.zero)
+            {
+                currentForce = 0f;
                 return;
+            }
 
             // float currentForce = CalculateForce(); 런타임용으로 밖으로 빼놨음. 빌드할땐 이거 살리고 밑에 죽일꺼
             currentForce = CalculateForce();
@@ -125,6 +128,27 @@ namespace WeGotOne
             if (rigid.linearVelocity.magnitude > 5f)
             {
                 rigid.AddForce(-inputDirection * currentForce);
+            }
+        }
+        
+        public bool CanConsumeAdditionalHunger
+        {
+            get
+            {
+                // 잡고 있지 않으면 추가 감소 없음
+                if (isGrabbing == false)
+                    return false;
+
+                // Rigidbody가 없으면 Static 취급
+                if (grabbedTarget == null)
+                    return false;
+
+                // Static 또는 Kinematic이면 추가 감소 없음
+                if (grabbedTarget.bodyType == RigidbodyType2D.Static ||
+                    grabbedTarget.bodyType == RigidbodyType2D.Kinematic)
+                    return false;
+
+                return true;
             }
         }
 
