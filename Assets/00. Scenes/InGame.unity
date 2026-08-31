@@ -3395,6 +3395,9 @@ MonoBehaviour:
   bgmVolume: 1
   sfxClips:
   - {fileID: 8300000, guid: ef4376a6c29119e4eb3db92c69e4e04a, type: 3}
+  - {fileID: 8300000, guid: b6523e063a1b12f4aadf9e1689f282ee, type: 3}
+  - {fileID: 8300000, guid: 909f9c49590d75c409fb6456365799cb, type: 3}
+  - {fileID: 8300000, guid: 315a094ba5087f3468018c6576f8a4a2, type: 3}
   sfxVolume: 1
   channels: 16
 --- !u!4 &2030178771
