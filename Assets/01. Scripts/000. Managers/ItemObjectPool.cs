@@ -118,13 +118,15 @@ namespace WeGotOne
             foreach (var pair in PoolObjectDic)
             {
                 Collectible collectible = pair.Value;
-                if (collectible == null || !collectible.gameObject.activeSelf) continue;
+                if (collectible == null) continue;
                 if (collectible.ThisItem.ItemType != ItemType.Fish) continue; // 물고기만 포함
 
+                Debug.Log($"{collectible.gameObject.name} 액티브 상태 " + collectible.gameObject.activeSelf);
                 list.Add(new FishState
                 {
                     Id = $"Slot_{pair.Key}",
                     FishTypeIndex = collectible.ThisItem.Key, // ItemType(대분류)이 아닌 Key(개별 식별값) 사용
+                    IsActive = collectible.gameObject.activeSelf,
                     X = collectible.transform.position.x,
                     Y = collectible.transform.position.y,
                     ScaleX = collectible.transform.localScale.x,
@@ -143,13 +145,14 @@ namespace WeGotOne
             foreach (var pair in PoolObjectDic)
             {
                 Collectible collectible = pair.Value;
-                if (collectible == null || !collectible.gameObject.activeSelf) continue;
+                if (collectible == null) continue;
                 if (collectible.ThisItem.ItemType != ItemType.Plank) continue; // Plank만 포함
                 
 
                 list.Add(new PlankState
                 {
                     Id = $"Slot_{pair.Key}",
+                    IsActive = collectible.gameObject.activeSelf,
                     X = collectible.transform.position.x,
                     Y = collectible.transform.position.y,
                     Angle = collectible.transform.eulerAngles.z,
@@ -211,6 +214,7 @@ namespace WeGotOne
 
                 collectible.transform.position = new Vector3(state.X, state.Y, collectible.transform.position.z);
                 collectible.transform.localScale = new Vector3(state.ScaleX, collectible.transform.localScale.y, collectible.transform.localScale.z);
+                collectible.gameObject.SetActive(state.IsActive);
                 collectible.transform.rotation = Quaternion.Euler(0f, 0f, state.Angle);
             }
         }
@@ -230,6 +234,7 @@ namespace WeGotOne
 
                 collectible.transform.position = new Vector3(state.X, state.Y, collectible.transform.position.z);
                 collectible.transform.rotation = Quaternion.Euler(0f, 0f, state.Angle);
+                collectible.gameObject.SetActive(state.IsActive);
                 collectible.IsPickUp = state.IsPickUp;
             }
         }
