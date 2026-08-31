@@ -130,7 +130,7 @@ private void OnDisable()
             // 잡기에 성공했으므로 더 이상 도망 타이머를 돌릴 필요가 없음
             StopGrabTimer();
 
-            Debug.Log($"머임 {currentTarget.gameObject.name} + {currentTarget.gameObject.layer}");
+            // Debug.Log($"머임 {currentTarget.gameObject.name} + {currentTarget.gameObject.layer}");
             grabbedTarget = currentTarget.attachedRigidbody;
             isGrabbing = true;
             
