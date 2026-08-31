@@ -153,6 +153,7 @@ namespace WeGotOne
                 {
                     Id = $"Slot_{pair.Key}",
                     IsActive = collectible.gameObject.activeSelf,
+                    Index = collectible.ThisItem.Key,
                     X = collectible.transform.position.x,
                     Y = collectible.transform.position.y,
                     Angle = collectible.transform.eulerAngles.z,
@@ -231,6 +232,12 @@ namespace WeGotOne
 
                 if (PoolObjectDic.TryGetValue(slotIndex, out Collectible collectible) == false)
                     continue;
+                
+                if (collectible.ThisItem.Key != state.Index)
+                {
+                    collectible = ReplaceWithCorrectPrefab(slotIndex, collectible, state.Index);
+                    if (collectible == null) continue;
+                }
 
                 collectible.transform.position = new Vector3(state.X, state.Y, collectible.transform.position.z);
                 collectible.transform.rotation = Quaternion.Euler(0f, 0f, state.Angle);
