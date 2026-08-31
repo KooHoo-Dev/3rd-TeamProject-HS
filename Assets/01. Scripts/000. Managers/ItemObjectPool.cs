@@ -120,8 +120,7 @@ namespace WeGotOne
                 Collectible collectible = pair.Value;
                 if (collectible == null) continue;
                 if (collectible.ThisItem.ItemType != ItemType.Fish) continue; // 물고기만 포함
-
-                Debug.Log($"{collectible.gameObject.name} 액티브 상태 " + collectible.gameObject.activeSelf);
+                
                 list.Add(new FishState
                 {
                     Id = $"Slot_{pair.Key}",
