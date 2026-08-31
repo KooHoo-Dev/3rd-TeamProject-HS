@@ -74,10 +74,10 @@ namespace WeGotOne
         #region test methods
 
         // 테스트 메소드 (나무 비용 없이)
-        public void BuildBridgeWithoutCost(int count)
+        public void BuildBridgeWithoutCost()
         {
             if (IsEnd) return;
-            BridgeObjects[count].gameObject.SetActive(true);
+            BridgeObjects[CurrentBridgeCount()].gameObject.SetActive(true);
             OnBridgeBuild?.Invoke();
         }
         

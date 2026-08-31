@@ -165,6 +165,8 @@ namespace WeGotOne
             bool leftGrab,
             bool rightGrab)
         {
+            body.ApplySnapshot(position.CurrentHunger);
+
             // 서버에서 들어온 값 저장
             Vector2 newBodyPosition =
                 ToVector2(position.Body);

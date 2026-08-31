@@ -68,6 +68,79 @@ namespace WeGotOne
 
             return false;
         }
+
+        public void ApplySnapshot(int[] messageItemKeys, int[] messageItemCounts)
+        {
+            if (messageItemKeys == null || messageItemCounts == null ||
+                messageItemKeys.Length != messageItemCounts.Length)
+            {
+                Debug.LogWarning("[Inventory] 올바르지 않은 인벤토리 스냅샷입니다.");
+                return;
+            }
+
+            InventoryItemDB inventoryItemDB = InventoryItemDB.Instance;
+
+            for (int i = 0; i < inventoryItemDB.items.Length; i++)
+            {
+                ItemScriptableObject item = inventoryItemDB.items[i];
+                if (item == null) continue;
+
+                inventoryItemDB.ItemCountDic[item.Key] = 0;
+            }
+
+            for (int i = 0; i < messageItemKeys.Length; i++)
+            {
+                int itemKey = messageItemKeys[i];
+                if (inventoryItemDB.ItemCountDic.ContainsKey(itemKey) == false)
+                {
+                    Debug.LogWarning($"[Inventory] 알 수 없는 아이템 Key = {itemKey}");
+                    continue;
+                }
+
+                inventoryItemDB.ItemCountDic[itemKey] = Mathf.Max(0, messageItemCounts[i]);
+            }
+
+            for (int row = 0; row < SizeRow; row++)
+            {
+                for (int column = 0; column < SizeColumn; column++)
+                {
+                    InventorySlot slot = SlotGrid[row, column];
+                    if (slot == null) continue;
+
+                    slot.SetItem(null);
+                    slot.SetItemCountFromSnapshot(0);
+                }
+            }
+
+            for (int i = 0; i < inventoryItemDB.items.Length; i++)
+            {
+                ItemScriptableObject item = inventoryItemDB.items[i];
+                if (item == null) continue;
+
+                int itemCount = inventoryItemDB.ItemCountDic[item.Key];
+                if (itemCount <= 0) continue;
+
+                bool isSlotAssigned = false;
+                for (int row = 0; row < SizeRow && isSlotAssigned == false; row++)
+                {
+                    for (int column = 0; column < SizeColumn; column++)
+                    {
+                        InventorySlot slot = SlotGrid[row, column];
+                        if (slot == null || slot.IsEmpty == false) continue;
+
+                        slot.SetItem(item);
+                        slot.SetItemCountFromSnapshot(itemCount);
+                        isSlotAssigned = true;
+                        break;
+                    }
+                }
+
+                if (isSlotAssigned == false)
+                {
+                    Debug.LogWarning($"[Inventory] {item.Name}을(를) 표시할 빈 슬롯이 없습니다.");
+                }
+            }
+        }
     }
 
 }

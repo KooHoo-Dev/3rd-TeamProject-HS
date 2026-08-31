@@ -62,6 +62,7 @@ namespace HelloServer
 
         // SSG 커스텀 : 플레이어 맞춰서 편집
         private readonly Dictionary<string, PlayerController> remotes = new Dictionary<string, PlayerController>();
+        private readonly HashSet<string> arrivedPlayerIds = new HashSet<string>();
 
         // 오간 말. 너무 쌓이지 않게 앞에서부터 버린다.
         private readonly List<string> chatLog = new List<string>();
@@ -241,6 +242,9 @@ namespace HelloServer
             BridgeManager.Instance.ApplySnapshot(message.CurrentBridgeCount);
             itemPool.ApplyFishes(message.Fishes);
             itemPool.ApplyPlanks(message.Planks);
+            
+            GameManager.Instance.ApplySnapshot(message.ActivePlayerCount, message.ArrivedPlayerCount);
+            Inventory.Instance.ApplySnapshot(message.ItemKeys, message.ItemCounts);
 
             Debug.Log(GetJson(message));
 
@@ -275,14 +279,19 @@ namespace HelloServer
         {
             Me = message.User;
             RoomCode = message.RoomCode;
+            GameManager.Instance.ResetNetworkPlayerCounts();
+            arrivedPlayerIds.Clear();
 
             // 자기 자신 포함 모두 스폰
             // 자기 자신은 입력값을 전달해줘야함
             // 입력값 전달은 호스트 여부에 따라 달라짐
             // 호스트이면 즉시 반영
             // 게스트이면 호스트 스냅샷만 반영 (입력값 비활성화)
-            Spawn(message.User);
-            foreach (User user in message.Users) Spawn(user);
+            if (Spawn(message.User)) GameManager.Instance.AddPlayer();
+            foreach (User user in message.Users)
+            {
+                if (Spawn(user)) GameManager.Instance.AddPlayer();
+            }
 
             remotes.TryGetValue(Me.Id, out PlayerController localPlayer);
             this.localPlayer = localPlayer;
@@ -292,7 +301,7 @@ namespace HelloServer
 
         private void OnJoin(JoinMessage message)
         {
-            Spawn(message.User);
+            if (Spawn(message.User)) GameManager.Instance.AddPlayer();
             Debug.Log($"[방] {message.User.NickName}({message.User.Id}) 이(가) 들어왔다");
         }
 
@@ -300,16 +309,40 @@ namespace HelloServer
         {
             if (remotes.TryGetValue(message.Id, out PlayerController remote) == false) return;
 
+            if (Me.IsHost)
+            {
+                bool wasArrived = arrivedPlayerIds.Remove(message.Id);
+                GameManager.Instance.RemovePlayer(message.Id, remote.Body.IsStarved, wasArrived);
+            }
+            else
+            {
+                GameManager.Instance.RemovePlayer();
+            }
+
             remotes.Remove(message.Id);
             Destroy(remote.gameObject);
 
             Debug.Log($"[방] {message.Id} 이(가) 나갔다");
         }
 
-        private void Spawn(User user)
+        public void SetPlayerArrived(string playerId, bool isArrived)
+        {
+            if (Me == null || Me.IsHost == false) return;
+
+            if (isArrived)
+            {
+                arrivedPlayerIds.Add(playerId);
+            }
+            else
+            {
+                arrivedPlayerIds.Remove(playerId);
+            }
+        }
+
+        private bool Spawn(User user)
         {
             // 이미 있으면 만들지 않는다. welcome 과 join 이 겹칠 수 있다.
-            if (remotes.ContainsKey(user.Id)) return;
+            if (remotes.ContainsKey(user.Id)) return false;
 
             PlayerController remote = Instantiate(remotePrefab, spawnPoint.position, Quaternion.identity);
             
@@ -324,6 +357,7 @@ namespace HelloServer
             remote.Setup(user);
 
             remotes[user.Id] = remote;
+            return true;
         }
 
         #endregion
@@ -361,6 +395,8 @@ namespace HelloServer
                 // 2. [물고기/아이템 연동]: 씬의 ItemObjectPool에서 활성화된 아이템들을 가져와 배열로 변환
                 if (itemPool != null)
                 {
+                    // 이때 비활성화된 얘들도 가져와서 반영해줘야함
+                    // IsActive 필드도 반영이 안된듯
                     snapshot.Fishes = itemPool.PackActiveFishes().ToArray();
                     snapshot.Planks = itemPool.PackActivePlanks().ToArray();
                 }
@@ -384,13 +420,15 @@ namespace HelloServer
 
                 snapshot.ItemKeys = new int[InventoryItemDB.Instance.ItemCountDic.Count];
                 snapshot.ItemCounts = new int[InventoryItemDB.Instance.ItemCountDic.Count];
-                for (int i = 0; i < InventoryItemDB.Instance.ItemCountDic.Count; i++)
+                foreach (var pair in InventoryItemDB.Instance.ItemCountDic)
                 {
-                    snapshot.ItemKeys[i] = i;
-                    snapshot.ItemCounts[i] = InventoryItemDB.Instance.ItemCountDic[i];
+                    snapshot.ItemKeys[pair.Key] = pair.Key;
+                    snapshot.ItemCounts[pair.Key] = pair.Value;
                 }
 
                 snapshot.CurrentBridgeCount = BridgeManager.Instance.CurrentBridgeCount();
+                snapshot.ActivePlayerCount = GameManager.Instance.ActivePlayerCount;
+                snapshot.ArrivedPlayerCount = GameManager.Instance.ArrivedPlayerCount;
 
                 // 5. 서버로 패킷 전송
                 SnapshotMessage = snapshot;
@@ -478,6 +516,7 @@ namespace HelloServer
             playerStates.Add(new PlayerState
             {
                 Id = playerId,
+                CurrentHunger = remotes[playerId].Body.CurrentHunger,
                 Body = new PartState
                 {
                     X = remotes[playerId].Body.transform.position.x,

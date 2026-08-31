@@ -62,6 +62,11 @@ namespace WeGotOne
             }
         }
 
+        public void SetItemCountFromSnapshot(int itemCount)
+        {
+            ItemCountText.text = itemCount.ToString();
+        }
+
         /// <summary>
         /// Null을 허용하는 함수입니다. Null 전달시 슬롯이 비워집니다.
         /// </summary>
