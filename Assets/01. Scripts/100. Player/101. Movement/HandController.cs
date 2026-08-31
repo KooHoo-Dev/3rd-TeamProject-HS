@@ -37,6 +37,8 @@ namespace WeGotOne
         [SerializeField] private Sprite handSprite;
         [SerializeField] private SpriteRenderer spriteRenderer;
         
+        private int waterLayer;
+        
         // 본인 신체 못잡게 하기 위한 용도
         private PlayerRoot owner;
 
@@ -59,6 +61,7 @@ namespace WeGotOne
             spriteRenderer = GetComponent<SpriteRenderer>();
             
             targets = new List<Collider2D>();
+            waterLayer = LayerMask.NameToLayer("Water");
         }
 
 private void OnDisable()
@@ -76,7 +79,7 @@ private void OnDisable()
                 return;
 
             // private int waterLayer = LayerMask.NameToLayer("Water"); 이거 넣으면 4가 맞는데 안돌아가서 일단 일케하고 미뤄둠
-            if (other.gameObject.layer == 4)
+            if (other.gameObject.layer == waterLayer)
                 return;
             
             targets.Add(other);

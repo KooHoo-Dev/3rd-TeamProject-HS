@@ -150,44 +150,31 @@ namespace WeGotOne
                 cameraController.enabled = true;
         }
 
-        public void ApplyInput(
-            Vector2 moveInput,
-            bool leftGrab,
-            bool rightGrab, bool isBuildKeyHold)
+        public void ApplyInput(Vector2 moveInput, bool leftGrab, bool rightGrab, bool isBuildKeyHold)
         {
             HandleMovement(moveInput);
             HandleGrab(leftGrab, rightGrab);
             IsBuild = isBuildKeyHold;
         }
 
-        public void ApplySnapshot(
-            PlayerState position,
-            bool leftGrab,
-            bool rightGrab)
+        public void ApplySnapshot(PlayerState position, bool leftGrab, bool rightGrab)
         {
             body.ApplySnapshot(position.CurrentHunger);
 
             // 서버에서 들어온 값 저장
-            Vector2 newBodyPosition =
-                ToVector2(position.Body);
+            Vector2 newBodyPosition = ToVector2(position.Body);
 
-            Quaternion newBodyRotation =
-                ToQuaternion(position.Body.Rotation);
+            Quaternion newBodyRotation = ToQuaternion(position.Body.Rotation);
 
-            Vector2 newLeftUpperPosition =
-                ToVector2(position.LeftArmTop);
+            Vector2 newLeftUpperPosition = ToVector2(position.LeftArmTop);
 
-            Quaternion newLeftUpperRotation =
-                ToQuaternion(position.LeftArmTop.Rotation);
+            Quaternion newLeftUpperRotation = ToQuaternion(position.LeftArmTop.Rotation);
 
-            Vector2 newRightUpperPosition =
-                ToVector2(position.RightArmTop);
+            Vector2 newRightUpperPosition = ToVector2(position.RightArmTop);
 
-            Quaternion newRightUpperRotation =
-                ToQuaternion(position.RightArmTop.Rotation);
+            Quaternion newRightUpperRotation = ToQuaternion(position.RightArmTop.Rotation);
 
-            Vector2 newLeftBottomPosition =
-                ToVector2(position.LeftArmBottom);
+            Vector2 newLeftBottomPosition = ToVector2(position.LeftArmBottom);
 
             Quaternion newLeftBottomRotation =
                 ToQuaternion(position.LeftArmBottom.Rotation);
