@@ -346,12 +346,24 @@ namespace HelloServer
 
             PlayerController remote = Instantiate(remotePrefab, spawnPoint.position, Quaternion.identity);
             
+            //---몸체랑 리지드바디랑 따로라서 그거 다 긁어오는 코드임
             Rigidbody2D[] rigid = remote.GetComponentsInChildren<Rigidbody2D>();
-
             for (int i = 0; i < rigid.Length; i++)
             {
                 if (Me.IsHost == false)
+                {
                     rigid[i].bodyType = RigidbodyType2D.Kinematic;
+                }
+            }
+            //---
+
+            if (Me.IsHost == false)
+            {
+                foreach (PlayerController i in remotes.Values)
+                {
+                    foreach (var branch in i.GetComponentsInChildren<PlayerInputBranch>())
+                        branch.enabled = false;
+                }
             }
 
             remote.Setup(user);

@@ -26,7 +26,6 @@ namespace WeGotOne
             // 부딪힌 오브젝트의 레이어가 물 레이어인지 확인
             if (((1 << collision.gameObject.layer) & waterLayer) != 0 && enabled)
             {
-                Debug.Log($"너냐? WaterLayerAlert가 꺼져있어도 너가 실행된다고?");
                 IsInWater = true;
                 OnEnteredWater?.Invoke();// 물에 들어와있음 알림 전송
             }

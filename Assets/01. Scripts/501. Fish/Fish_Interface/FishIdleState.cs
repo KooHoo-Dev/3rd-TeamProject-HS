@@ -18,7 +18,6 @@ namespace WeGotOne.Fish_Interface
         
         public async Task EnterAsync(FishStateManager owner, CancellationToken token)
         {
-            Debug.Log($"[IdleState] : Idle 상태 진입");
             this.owner = owner;
 
             await Task.Delay(TimeSpan.FromSeconds(idleDruation), token);

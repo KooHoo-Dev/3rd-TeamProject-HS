@@ -16,7 +16,6 @@ namespace WeGotOne.Fish_Interface
         public Task EnterAsync(FishStateManager owner, CancellationToken token)
         {
             if (fishMovement == null) return Task.CompletedTask;
-            Debug.Log($"[PatrolState] : Patrol 상태 진입");
             fishMovement.PullingInit(fishMovement.transform.position);
             return Task.CompletedTask;
         }

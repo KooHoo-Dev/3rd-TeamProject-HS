@@ -50,7 +50,6 @@ namespace WeGotOne
 
                 PoolObjectDic[itemId++] = plank;
 
-                Debug.Log($"[Pool] 기존 판자 등록 - 슬롯 인덱스: {i}, 판자: {plank.name}");
             } 
         }
 
@@ -89,7 +88,6 @@ namespace WeGotOne
                     // [개선]: 인덱서([])를 사용하여 중복 키 오류 없이 안전하게 저장
                     PoolObjectDic[itemId++] = collectible; 
             
-                    Debug.Log($"[Pool] 새 아이템 생성 - 슬롯 인덱스: {i}");
                     continue;
                 }
 
