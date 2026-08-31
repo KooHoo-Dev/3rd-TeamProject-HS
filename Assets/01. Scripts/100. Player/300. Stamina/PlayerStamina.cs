@@ -101,7 +101,9 @@ namespace WeGotOne
             float highestForce = playerController.GetHighestHungerForce();
             
             float decreaseAmount = (baseDecreasePerSecond + (highestForce * forceStaminaMultiplier)) * staminaDecreaseMultiplier * Time.deltaTime;
-            Debug.Log(decreaseAmount);
+            
+            // 감소 속도량 시각화 툴 잇으면 좋을 듯
+            // Debug.Log(decreaseAmount);
             DecreaseStamina(decreaseAmount);
             
             UpdateStamina();
