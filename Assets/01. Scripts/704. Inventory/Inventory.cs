@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace WeGotOne
 {
-    public class Inventory : SingletonBase<Inventory>
+    public class Inventory : MonoBehaviour
     {
         // Inventory의 역할?
         // - Slot이 어디에 속한 요소인지 판별
@@ -18,24 +18,22 @@ namespace WeGotOne
         private readonly Dictionary<int, InventorySlot> itemSlots = new();
         private InventoryItemDB inventoryItemDB;
 
-        public void SetupInventory(InventoryItemDB db)
+        public void Start()
         {
-            InitSlotGrid();
-            inventoryItemDB = db;
-            InitItemSlots();
+            inventoryItemDB = InventoryItemDB.Instance;
             inventoryItemDB.ItemCountChanged += RenderItem;
+            InitSlotGrid();
+            InitItemSlots();
             RenderAllItems();
         }
 
-        protected override void OnDispose()
-        {
-            if (inventoryItemDB != null)
-            {
-                inventoryItemDB.ItemCountChanged -= RenderItem;
-            }
-
-            base.OnDispose();
-        }
+        // private void OnDisable()
+        // {
+        //     if (inventoryItemDB != null)
+        //     {
+        //         inventoryItemDB.ItemCountChanged -= RenderItem;
+        //     }
+        // }
 
         private void InitSlotGrid()
         {
@@ -112,6 +110,11 @@ namespace WeGotOne
             if (itemIndex < validItems.Count)
             {
                 Debug.LogWarning("[Inventory] 인벤토리 아이템 수가 사용 가능한 슬롯 수보다 많습니다.");
+                for (int i = 0; i < validItems.Count; i++)
+                {
+                    ItemScriptableObject item = validItems[i];
+                    Debug.LogWarning($"[Inventory] 사용하지 않는 아이템 = {item.Key}");
+                }
             }
         }
         

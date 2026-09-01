@@ -56,11 +56,6 @@ namespace WeGotOne
             }
         }
 
-        private void Start()
-        {
-            Inventory.Instance.SetupInventory(this);
-        }
-
         // 견본(ScriptableObject 참조변수)를 반환하는 함수입니다.
         // - 지금은 단순 참조로 충분하므로 불필요한 인스턴스 생성을 피합니다.
         public ItemScriptableObject GetItem(int id)
