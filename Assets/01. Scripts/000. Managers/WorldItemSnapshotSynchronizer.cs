@@ -9,13 +9,13 @@ namespace WeGotOne
 {
     public sealed class WorldItemSnapshotSynchronizer : MonoBehaviour
     {
-        private ItemObjectPool itemObjectPool;
+        private FishObjectPool itemObjectPool;
         private WorldItemRegistry worldItemRegistry;
         private bool initialFishSpawned;
 
         private void Awake()
         {
-            itemObjectPool = GetComponent<ItemObjectPool>();
+            itemObjectPool = GetComponent<FishObjectPool>();
             worldItemRegistry = GetComponent<WorldItemRegistry>();
         }
 
