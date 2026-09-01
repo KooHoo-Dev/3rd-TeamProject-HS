@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -55,6 +56,7 @@ namespace WeGotOne
             itemCount += isPlus ? 1 : -1;
             InventoryItemDB.Instance.ItemCountDic[itemKey] = itemCount;
             ItemCountText.text = itemCount.ToString();
+            transform.DOPunchScale(Vector3.one * 0.3f, 0.3f);
 
             if (itemCount <= 0)
             {

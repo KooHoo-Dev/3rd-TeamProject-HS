@@ -1,3 +1,4 @@
+using DG.Tweening;
 using HelloServer;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -38,6 +39,7 @@ namespace WeGotOne
                                 grid[i, j].SetItem(db.GetItem(item.Key));
                                 grid[i, j].CountTextUpdate(item.Key, true);
                                 holder.OnPickup();
+                                AudioManager.Instance.PlaySfx(AudioManager.Sfx.ItemGet);
                                 return;
                             }
 
@@ -45,6 +47,7 @@ namespace WeGotOne
                             {
                                 grid[i, j].CountTextUpdate(item.Key, true);
                                 holder.OnPickup();
+                                AudioManager.Instance.PlaySfx(AudioManager.Sfx.ItemGet);
                                 return;
                             }
                         }

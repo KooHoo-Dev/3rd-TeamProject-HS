@@ -23,9 +23,11 @@ namespace WeGotOne
          * 예시 브금4(여기에 아이템 줍는 효과음) = 3 이러고 나중에 PlaySfx(Sfx.예시브금4) 하면 됩니다.
          */
         Pulse = 0,
-        PopGrab,
-        PopRelease,
-        Confused
+        PopGrab = 1,
+        PopRelease = 2,
+        Confused = 3,
+        ItemGet = 4,
+        BridgeBuild = 5
     }
 
     public enum Bgm

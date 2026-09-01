@@ -56,6 +56,7 @@ namespace WeGotOne
                     {
                         grid[i, j].CountTextUpdate(item.Key, false);
                         BridgeObjects[CurrentBridgeCount()].gameObject.SetActive(true);
+                        AudioManager.Instance.PlaySfx(AudioManager.Sfx.BridgeBuild);
                         OnBridgeBuild?.Invoke();
                         return;
                     }
@@ -68,6 +69,7 @@ namespace WeGotOne
             for (int i = 0; i < messageCurrentBridgeCount; i++)
             {
                 BridgeObjects[i].gameObject.SetActive(true);
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.BridgeBuild);
             }
         }
 
