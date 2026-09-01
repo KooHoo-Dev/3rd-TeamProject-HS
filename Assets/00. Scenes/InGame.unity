@@ -248,6 +248,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &147484510 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 1338258927484175681, guid: 5a02b69c832c5484386cc7feeefa0b07, type: 3}
+  m_PrefabInstance: {fileID: 1913523991}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &150964412
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2995,6 +3000,7 @@ MonoBehaviour:
   - {fileID: 202020750}
   - {fileID: 1774214287}
   - {fileID: 499445765}
+  waterArea: {fileID: 147484510}
 --- !u!4 &1561437504
 Transform:
   m_ObjectHideFlags: 0
