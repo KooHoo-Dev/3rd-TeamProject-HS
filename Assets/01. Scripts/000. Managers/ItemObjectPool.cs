@@ -1,28 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
-using HelloServer;
-using Newtonsoft.Json;
 using UnityEngine;
-using WeGotOne.Fish_Interface;
 using Random = UnityEngine.Random;
 
 namespace WeGotOne
 {
     public class ItemObjectPool : MonoBehaviour
     {
-        [field: SerializeField] public int PlankCount { get; set; }
-        
-        [SerializeField] private Collectible[] itemPrefabs;
-        
-        // [개선]: 인덱스(스폰 위치 순서)를 키로 삼아 생성된 아이템을 매핑·관리하는 딕셔너리
-        public Dictionary<int, Collectible> PoolObjectDic { get; private set; } 
-            = new();
-
+        [SerializeField] private WorldItem[] fishPrefabs;
         [SerializeField] private Transform[] itemTransforms;
-        
         // 물고기 소환 시 제한 영역 설정용
         [SerializeField] private Collider2D waterArea;
-        
+
         // 맵에 미리 배치된 나무 정보 가져오기
         private List<Transform> plankList;
 
@@ -84,7 +72,6 @@ namespace WeGotOne
                     {
                         water.SetWaterArea(waterArea);
                     }
-                    
                     
                     // [게스트 전용 - 스폰 즉시 물리/이동 차단] - 신규 (요구사항 1, 2)
                     // Plank는 이동 로직이 없으므로 물고기(ItemType != 0)만 대상으로 함
@@ -173,200 +160,53 @@ namespace WeGotOne
             return list;
         }
 
-        /// <summary>
-        /// 스폰된 클론 오브젝트가 원본 itemPrefabs 배열 중 몇 번 인덱스인지 역추적합니다.
-        /// </summary>
-        /*private int GetPrefabTypeIndex(Collectible target)
+        public void ReleaseFish(WorldItem fish)
         {
-            if (target == null) return 0;
-            
-            for (int i = 0; i < itemPrefabs.Length; i++)
-            {
-                // Instantiate 시 생성되는 '(Clone)' 접미사를 무시하기 위해 Contains 비교를 활용합니다.
-                if (target.name.Contains(itemPrefabs[i].name))
-                {
-                    return i;
-                }
-            }
-            return 0;
-        }*/
+            if (fish == null)
+                return;
 
-        #endregion
-        
-        # region 신성건
-        /// <summary>
-        /// [게스트 전용] 수신한 호스트 측 물고기 스냅샷을 내 화면의 물고기 풀에 반영합니다.
-        /// 스폰 시 게스트가 호스트와 다른 종류를 랜덤으로 뽑았을 경우, 프리팹 자체를
-        /// 올바른 종류로 교체한 뒤 좌표/스케일/회전을 적용합니다.
-        /// </summary>
-        public void ApplyFishes(FishState[] fishes)
-        {
-            if (fishes == null)
+            if (fish.TryGetComponent<Fish>(out _) == false)
             {
-                Debug.LogError("[Pool] 물고기 스냅샷이 비어 있습니다.");
+                Debug.LogError($"[ItemObjectPool] Fish가 아닌 WorldItem은 반환할 수 없습니다: {fish.name}");
                 return;
             }
 
-            for (int i = 0; i < fishes.Length; i++)
+            fish.ResetTransformSnapshot();
+            fish.SetIsPickUp(false);
+            fish.gameObject.SetActive(false);
+
+            if (inactiveFishByItemId.TryGetValue(fish.ItemId, out Queue<WorldItem> inactiveFish) == false)
             {
-                FishState state = fishes[i];
-
-                if (TryGetSlotIndex(state.Id, out int slotIndex) == false)
-                {
-                    Debug.LogError($"[Pool] 물고기 스냅샷 ID 형식이 잘못되었습니다: {state.Id}");
-                    continue;
-                }
-
-                if (PoolObjectDic.TryGetValue(slotIndex, out Collectible collectible) == false)
-                {
-                    Debug.LogError($"[Pool] 물고기 스냅샷 슬롯을 찾을 수 없습니다: {state.Id}");
-                    continue;
-                }
-                
-                if (collectible == null || collectible.ThisItem == null)
-                {
-                    Debug.LogError($"[Pool] 물고기 슬롯 리소스가 비어 있습니다: {state.Id}");
-                    continue;
-                } 
-
-                // ==========================================
-                // [프리팹 종류 불일치 보정] - 신규
-                // 게스트가 스폰 시 랜덤으로 뽑은 물고기 종류(Key)가 호스트와 다를 수 있으므로,
-                // 스냅샷의 FishTypeIndex와 실제 오브젝트의 Key가 다르면 올바른 프리팹으로 교체합니다.
-                // ==========================================
-                if (collectible.ThisItem.Key != state.FishTypeIndex)
-                {
-                    collectible = ReplaceWithCorrectPrefab(slotIndex, collectible, state.FishTypeIndex);
-                    if (collectible == null) continue; // 방어: 해당 Key의 프리팹을 못 찾은 경우
-                }
-
-                Fish fish = collectible as Fish;
-                if (fish == null)
-                {
-                    Debug.LogError($"[Pool] 물고기 슬롯에 Fish 컴포넌트가 없습니다: {state.Id}");
-                    continue;
-                }
-
-                fish.ApplySnapshot(state);
+                inactiveFish = new Queue<WorldItem>();
+                inactiveFishByItemId.Add(fish.ItemId, inactiveFish);
             }
+
+            inactiveFish.Enqueue(fish);
         }
-        
-        
-        public void ApplyPlanks(PlankState[] planks)
+
+        private WorldItem FindFishPrefab(int itemId)
         {
-            for (int i = 0; i < planks.Length; i++)
+            foreach (WorldItem prefab in fishPrefabs)
             {
-                PlankState state = planks[i];
-
-                if (TryGetSlotIndex(state.Id, out int slotIndex) == false)
-                {
-                    Debug.LogError($"[Pool] 나무 스냅샷 ID 형식이 잘못되었습니다: {state.Id}");
-                    continue;
-                }
-
-                if (PoolObjectDic.TryGetValue(slotIndex, out Collectible collectible) == false)
-                {
-                    Debug.LogError($"[Pool] 나무 스냅샷 슬롯을 찾을 수 없습니다: {state.Id}");
-                    continue;
-                }
-
-                if (collectible == null || collectible.ThisItem == null)
-                {
-                    Debug.LogError($"[Pool] 나무 슬롯 리소스가 비어 있습니다: {state.Id}");
-                    continue;
-                }
-                
-                if (collectible.ThisItem.Key != state.Index)
-                {
-                    collectible = ReplaceWithCorrectPrefab(slotIndex, collectible, state.Index);
-                    if (collectible == null) continue;
-                }
-
-                Plank plank = collectible as Plank;
-                if (plank == null)
-                {
-                    Debug.LogError($"[Pool] 나무 슬롯에 Plank 컴포넌트가 없습니다: {state.Id}");
-                    continue;
-                }
-
-                plank.ApplySnapshot(state);
+                if (IsFishPrefab(prefab) && prefab.ItemId == itemId)
+                    return prefab;
             }
+
+            return null;
         }
-        
-        /// <summary>
-        /// [게스트 전용] 슬롯에 이미 스폰된 오브젝트를 파괴하고, FishTypeIndex(Key)에 해당하는
-        /// 올바른 프리팹으로 다시 생성하여 딕셔너리를 갱신합니다.
-        /// </summary>
-        private Collectible ReplaceWithCorrectPrefab(int slotIndex, Collectible oldCollectible, int correctKey)
+
+        private bool IsFishPrefab(WorldItem prefab)
         {
-            if (itemPrefabs == null)
-            {
-                Debug.LogError("[Pool] 아이템 프리팹 배열이 설정되지 않았습니다.");
-                return null;
-            }
-
-            Collectible correctPrefab = null;
-            foreach (var prefab in itemPrefabs)
-            {
-                if (prefab == null || prefab.ThisItem == null)
-                    continue;
-
-                if (prefab.ThisItem.Key == correctKey)
-                {
-                    correctPrefab = prefab;
-                    break;
-                }
-            }
-
-            if (correctPrefab == null)
-            {
-                Debug.LogError($"[Pool] Key {correctKey}에 해당하는 프리팹을 찾을 수 없습니다.");
-                return null;
-            }
-
-            Transform parent = oldCollectible.transform.parent;
-            Vector3 pos = oldCollectible.transform.position;
-
-            // 나중에 수정... (풀링의 본질을 훼손중)
-            Destroy(oldCollectible.gameObject);
-
-            Collectible newCollectible = Instantiate(correctPrefab, parent);
-            newCollectible.transform.position = pos;
-
-            // 게스트이므로 새로 생성된 물고기도 즉시 이동/물리 잠금 적용
-            var movement = newCollectible.GetComponent<FishMovement>();
-            if (movement != null) movement.LockForGuest();
-
-            PoolObjectDic[slotIndex] = newCollectible;
-            return newCollectible;
+            return prefab != null && prefab.ThisItem != null &&
+                   prefab.ThisItem.ItemType == ItemType.Fish &&
+                   prefab.TryGetComponent<Fish>(out _);
         }
-        
-        
-        // 아이템 값 저장할때 Slot_{슬롯번호}식으로 들어가길래 파싱해주는 용.
-        // 그냥 형식 맞나만 보고 앞에서5개 빼버렷어요
-        private bool TryGetSlotIndex(string id, out int slotIndex)
+
+        private void InitializeFish(WorldItem fish)
         {
-            slotIndex = -1;
-
-            if (string.IsNullOrEmpty(id))
-                return false;
-
-            if (id.StartsWith("Slot_") == false)
-                return false;
-
-            return int.TryParse(id.Substring(5), out slotIndex);
-        }
-        
-        # endregion
-        
-        [ContextMenu("Debug ItemObjectPool")]
-        private void DebugItemObjectPool()
-        {
-            foreach (var pair in PoolObjectDic)
-            {
-                Collectible collectible = pair.Value;
-                Debug.Log($"{collectible.enabled} {pair.Key}: {collectible.name}");
-            }
+            fish.ResetTransformSnapshot();
+            fish.SetIsPickUp(false);
+            fish.gameObject.SetActive(true);
         }
     }
 }

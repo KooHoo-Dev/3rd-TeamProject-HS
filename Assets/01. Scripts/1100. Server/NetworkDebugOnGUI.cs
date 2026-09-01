@@ -9,6 +9,7 @@ namespace HelloServer
         private bool _showInputGroupDetails;
         private bool _showPlayerDetails;
         private bool _showFishDetails;
+        private bool _showPlankDetails;
         [SerializeField] private bool isDebugMode = true;
 
         private GUIStyle _labelStyle;
@@ -168,6 +169,7 @@ namespace HelloServer
 
             int playerCount = snapshot.Players?.Length ?? 0;
             int fishCount = snapshot.Fishes?.Length ?? 0;
+            int plankCount = snapshot.Planks?.Length ?? 0;
 
             GUILayout.Label(
                 $"Players : {playerCount}",
@@ -176,6 +178,11 @@ namespace HelloServer
 
             GUILayout.Label(
                 $"Fishes : {fishCount}",
+                _labelStyle
+            );
+
+            GUILayout.Label(
+                $"Planks : {plankCount}",
                 _labelStyle
             );
 
@@ -221,6 +228,16 @@ namespace HelloServer
             if (_showFishDetails)
             {
                 DrawFishes(snapshot.Fishes);
+            }
+
+            _showPlankDetails = GUILayout.Toggle(
+                _showPlankDetails,
+                "Show Plank Details"
+            );
+
+            if (_showPlankDetails)
+            {
+                DrawPlanks(snapshot.Planks);
             }
         }
 
@@ -324,12 +341,35 @@ namespace HelloServer
                     continue;
 
                 GUILayout.Label(
-                    $"[{fish.Id}] " +
-                    $"Type={fish.FishTypeIndex}, " +
+                    $"[WorldItemId={fish.WorldItemId}] " +
+                    $"ItemId={fish.ItemId}, " +
                     $"Pos=({fish.X:F2}, {fish.Y:F2}), " +
                     $"ScaleX={fish.ScaleX:F2}, " +
                     $"Angle={fish.Angle:F2}, " +
                     $"State={fish.CurrentState}",
+                    _labelStyle
+                );
+            }
+        }
+
+        private void DrawPlanks(PlankState[] planks)
+        {
+            if (planks == null)
+                return;
+
+            GUILayout.Space(5);
+
+            foreach (PlankState plank in planks)
+            {
+                if (plank == null)
+                    continue;
+
+                GUILayout.Label(
+                    $"[WorldItemId={plank.WorldItemId}] " +
+                    $"ItemId={plank.ItemId}, " +
+                    $"Pos=({plank.X:F2}, {plank.Y:F2}), " +
+                    $"Angle={plank.Angle:F2}, " +
+                    $"IsPickUp={plank.IsPickUp}",
                     _labelStyle
                 );
             }

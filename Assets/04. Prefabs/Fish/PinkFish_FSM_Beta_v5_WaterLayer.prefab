@@ -80,6 +80,7 @@ GameObject:
   - component: {fileID: 1362629899874228426}
   - component: {fileID: 4442477123058389979}
   - component: {fileID: 2325836844950980227}
+  - component: {fileID: 5130000000000000002}
   - component: {fileID: 3402221713284153257}
   - component: {fileID: 4895819399157256878}
   - component: {fileID: 8964461994870817763}
@@ -322,6 +323,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cf7a713149b463198717d2f9d983671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Fish
+--- !u!114 &5130000000000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8980959750887881090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1c982d3a21742b99f985276dfac5441, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItem
   <ThisItem>k__BackingField: {fileID: 11400000, guid: eaccd67f95915aa44973cd8f1bb51f53, type: 2}
 --- !u!61 &3402221713284153257
 BoxCollider2D:

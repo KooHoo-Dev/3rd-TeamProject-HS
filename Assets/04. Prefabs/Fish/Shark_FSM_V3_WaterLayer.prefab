@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 8492674803049563753}
   - component: {fileID: 3593502157634509562}
   - component: {fileID: 4682603421267273784}
+  - component: {fileID: 5130000000000000003}
   - component: {fileID: 5244812637053690599}
   - component: {fileID: 4534058532086620731}
   m_Layer: 0
@@ -336,6 +337,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cf7a713149b463198717d2f9d983671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Fish
+--- !u!114 &5130000000000000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2427400488336505089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1c982d3a21742b99f985276dfac5441, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItem
   <ThisItem>k__BackingField: {fileID: 11400000, guid: 2354ea3827e164889b64157d3836908b, type: 2}
 --- !u!114 &5244812637053690599
 MonoBehaviour:
