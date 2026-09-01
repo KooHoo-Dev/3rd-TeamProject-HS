@@ -245,7 +245,7 @@ namespace HelloServer
             itemPool.ApplyPlanks(message.Planks);
             
             GameManager.Instance.ApplySnapshot(message.ActivePlayerCount, message.ArrivedPlayerCount);
-            Inventory.Instance.ApplySnapshot(message.ItemKeys, message.ItemCounts);
+            InventoryItemDB.Instance.ApplySnapshot(message.InventoryEntries);
 
             Debug.Log(GetJson(message));
 
@@ -435,13 +435,17 @@ namespace HelloServer
 
                 snapshot.Players = playerStates.ToArray();
 
-                snapshot.ItemKeys = new int[InventoryItemDB.Instance.ItemCountDic.Count];
-                snapshot.ItemCounts = new int[InventoryItemDB.Instance.ItemCountDic.Count];
-                foreach (var pair in InventoryItemDB.Instance.ItemCountDic)
+                List<InventoryEntryState> inventoryEntries = new();
+                foreach (KeyValuePair<int, int> pair in InventoryItemDB.Instance.EnumerateCounts())
                 {
-                    snapshot.ItemKeys[pair.Key] = pair.Key;
-                    snapshot.ItemCounts[pair.Key] = pair.Value;
+                    inventoryEntries.Add(new InventoryEntryState
+                    {
+                        ItemId = pair.Key,
+                        Count = pair.Value,
+                    });
                 }
+
+                snapshot.InventoryEntries = inventoryEntries.ToArray();
 
                 snapshot.CurrentBridgeCount = BridgeManager.Instance.CurrentBridgeCount();
                 snapshot.ActivePlayerCount = GameManager.Instance.ActivePlayerCount;

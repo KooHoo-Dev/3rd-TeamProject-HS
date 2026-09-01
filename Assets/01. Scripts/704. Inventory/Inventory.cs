@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace WeGotOne
@@ -14,31 +15,103 @@ namespace WeGotOne
 
         public InventorySlot[,] SlotGrid { get; private set; }
 
-        protected override void OnInitialize()
+        private readonly Dictionary<int, InventorySlot> itemSlots = new();
+        private InventoryItemDB inventoryItemDB;
+
+        public void SetupInventory(InventoryItemDB db)
         {
-            base.OnInitialize();
-            
             InitSlotGrid();
+            inventoryItemDB = db;
+            InitItemSlots();
+            inventoryItemDB.ItemCountChanged += RenderItem;
+            RenderAllItems();
+        }
 
-            // Inner Method를 사용해서 초기화 로직을 만들어 봅시다.
-            void InitSlotGrid()
+        protected override void OnDispose()
+        {
+            if (inventoryItemDB != null)
             {
-                // 2차원 배열을 인벤토리 크기만큼 선언해 줍니다.
-                SlotGrid = new InventorySlot[SizeRow, SizeColumn];
+                inventoryItemDB.ItemCountChanged -= RenderItem;
+            }
 
-                // 자식 오브젝트들에게서 존재하는 모든 slot을 가져옵니다
-                InventorySlot[] slots = GetComponentsInChildren<InventorySlot>();
+            base.OnDispose();
+        }
 
-                // 2차원 배열을 초기화 해줍니다
-                for(int i = 0; i < slots.Length; ++i)
+        private void InitSlotGrid()
+        {
+            SlotGrid = new InventorySlot[SizeRow, SizeColumn];
+
+            InventorySlot[] slots = GetComponentsInChildren<InventorySlot>();
+            int slotCount = Mathf.Min(slots.Length, SizeRow * SizeColumn);
+
+            if (slots.Length > slotCount)
+            {
+                Debug.LogWarning("[Inventory] SlotGrid 크기보다 InventorySlot이 많습니다.");
+            }
+
+            for (int i = 0; i < slotCount; ++i)
+            {
+                int rowIndex = i / SizeColumn;
+                int columnIndex = i % SizeColumn;
+                SlotGrid[rowIndex, columnIndex] = slots[i];
+            }
+        }
+
+        private void InitItemSlots()
+        {
+            itemSlots.Clear();
+
+            List<ItemScriptableObject> validItems = new();
+            HashSet<int> itemIds = new();
+
+            if (inventoryItemDB.items != null)
+            {
+                for (int i = 0; i < inventoryItemDB.items.Length; ++i)
                 {
-                    // 행과 열의 Index를 계산해서
-                    int rowIndex = i / SizeColumn;
-                    int columnIndex = i % SizeColumn;
+                    ItemScriptableObject item = inventoryItemDB.items[i];
+                    if (item == null)
+                    {
+                        continue;
+                    }
 
-                    // 대입해줍니다
-                    SlotGrid[rowIndex, columnIndex] = slots[i];
+                    if (itemIds.Add(item.Key) == false)
+                    {
+                        Debug.LogWarning($"[Inventory] 중복 ItemId = {item.Key}");
+                        continue;
+                    }
+
+                    validItems.Add(item);
                 }
+            }
+
+            validItems.Sort((left, right) => left.Key.CompareTo(right.Key));
+
+            int itemIndex = 0;
+            for (int row = 0; row < SizeRow; ++row)
+            {
+                for (int column = 0; column < SizeColumn; ++column)
+                {
+                    InventorySlot slot = SlotGrid[row, column];
+                    if (slot == null)
+                    {
+                        continue;
+                    }
+
+                    slot.Render(null, 0);
+
+                    if (itemIndex >= validItems.Count)
+                    {
+                        continue;
+                    }
+
+                    ItemScriptableObject item = validItems[itemIndex++];
+                    itemSlots.Add(item.Key, slot);
+                }
+            }
+
+            if (itemIndex < validItems.Count)
+            {
+                Debug.LogWarning("[Inventory] 인벤토리 아이템 수가 사용 가능한 슬롯 수보다 많습니다.");
             }
         }
         
@@ -69,77 +142,22 @@ namespace WeGotOne
             return false;
         }
 
-        public void ApplySnapshot(int[] messageItemKeys, int[] messageItemCounts)
+        private void RenderAllItems()
         {
-            if (messageItemKeys == null || messageItemCounts == null ||
-                messageItemKeys.Length != messageItemCounts.Length)
+            foreach (KeyValuePair<int, InventorySlot> pair in itemSlots)
             {
-                Debug.LogWarning("[Inventory] 올바르지 않은 인벤토리 스냅샷입니다.");
+                RenderItem(pair.Key, inventoryItemDB.GetCount(pair.Key));
+            }
+        }
+
+        private void RenderItem(int itemId, int count)
+        {
+            if (itemSlots.TryGetValue(itemId, out InventorySlot slot) == false)
+            {
                 return;
             }
 
-            InventoryItemDB inventoryItemDB = InventoryItemDB.Instance;
-
-            for (int i = 0; i < inventoryItemDB.items.Length; i++)
-            {
-                ItemScriptableObject item = inventoryItemDB.items[i];
-                if (item == null) continue;
-
-                inventoryItemDB.ItemCountDic[item.Key] = 0;
-            }
-
-            for (int i = 0; i < messageItemKeys.Length; i++)
-            {
-                int itemKey = messageItemKeys[i];
-                if (inventoryItemDB.ItemCountDic.ContainsKey(itemKey) == false)
-                {
-                    Debug.LogWarning($"[Inventory] 알 수 없는 아이템 Key = {itemKey}");
-                    continue;
-                }
-
-                inventoryItemDB.ItemCountDic[itemKey] = Mathf.Max(0, messageItemCounts[i]);
-            }
-
-            for (int row = 0; row < SizeRow; row++)
-            {
-                for (int column = 0; column < SizeColumn; column++)
-                {
-                    InventorySlot slot = SlotGrid[row, column];
-                    if (slot == null) continue;
-
-                    slot.SetItem(null);
-                    slot.SetItemCountFromSnapshot(0);
-                }
-            }
-
-            for (int i = 0; i < inventoryItemDB.items.Length; i++)
-            {
-                ItemScriptableObject item = inventoryItemDB.items[i];
-                if (item == null) continue;
-
-                int itemCount = inventoryItemDB.ItemCountDic[item.Key];
-                if (itemCount <= 0) continue;
-
-                bool isSlotAssigned = false;
-                for (int row = 0; row < SizeRow && isSlotAssigned == false; row++)
-                {
-                    for (int column = 0; column < SizeColumn; column++)
-                    {
-                        InventorySlot slot = SlotGrid[row, column];
-                        if (slot == null || slot.IsEmpty == false) continue;
-
-                        slot.SetItem(item);
-                        slot.SetItemCountFromSnapshot(itemCount);
-                        isSlotAssigned = true;
-                        break;
-                    }
-                }
-
-                if (isSlotAssigned == false)
-                {
-                    Debug.LogWarning($"[Inventory] {item.Name}을(를) 표시할 빈 슬롯이 없습니다.");
-                }
-            }
+            slot.Render(inventoryItemDB.GetItem(itemId), count);
         }
     }
 

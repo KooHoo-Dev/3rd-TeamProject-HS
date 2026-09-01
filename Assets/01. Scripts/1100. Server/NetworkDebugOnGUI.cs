@@ -228,22 +228,23 @@ namespace HelloServer
         {
             GUILayout.Label("Inventory", _labelStyle);
 
-            if (snapshot.ItemKeys == null ||
-                snapshot.ItemCounts == null)
+            if (snapshot.InventoryEntries == null)
             {
                 GUILayout.Label("  null", _labelStyle);
                 return;
             }
 
-            int count = Mathf.Min(
-                snapshot.ItemKeys.Length,
-                snapshot.ItemCounts.Length
-            );
-
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < snapshot.InventoryEntries.Length; i++)
             {
+                InventoryEntryState entry = snapshot.InventoryEntries[i];
+                if (entry == null)
+                {
+                    GUILayout.Label($"  Entry {i}: null", _labelStyle);
+                    continue;
+                }
+
                 GUILayout.Label(
-                    $"  Item {snapshot.ItemKeys[i]} : {snapshot.ItemCounts[i]}",
+                    $"  Item {entry.ItemId} : {entry.Count}",
                     _labelStyle
                 );
             }
