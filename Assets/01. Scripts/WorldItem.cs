@@ -1,18 +1,16 @@
-﻿using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace WeGotOne
 {
-    public abstract class Collectible : MonoBehaviour
+    public class WorldItem : MonoBehaviour
     {
-        [field: SerializeField] public ItemScriptableObject ThisItem { get; private set; }
-        
-        // 물고기나 나무 현재 붙잡고 있음을 표시하기 위한 용도인가?
-        // 일단 활용가능한 필드이니 그대로 유지
-        public bool IsPickUp { get; set; } = false;
-
         private const float SnapshotInterval = 1f / 20f;
+
+        [field: SerializeField] public ItemScriptableObject ThisItem { get; private set; }
+
+        public int ItemId => ThisItem != null ? ThisItem.Key : -1;
+        public int WorldItemId { get; private set; } = -1;
+        public bool IsPickUp { get; private set; }
 
         private bool isSnapshotInitialized;
         private float interpolationTime;
@@ -23,10 +21,6 @@ namespace WeGotOne
 
         private void Update()
         {
-            // 일단 비활성화 하겠습니다.
-            // if (SimpleInput.GetKeyDown(Key.Digit2))
-            //     OnPickup();
-
             if (isSnapshotInitialized == false)
                 return;
 
@@ -40,7 +34,19 @@ namespace WeGotOne
             transform.rotation = Quaternion.Lerp(previousSnapshotRotation, targetSnapshotRotation, t);
         }
 
-        protected void ApplyTransformSnapshot(Vector2 position, Quaternion rotation, bool applyImmediately)
+        public void AssignWorldItemId(int worldItemId)
+        {
+            WorldItemId = worldItemId;
+        }
+
+        // 안 쓸거 같은데 일단 유지
+        // 나중에 집고 있을때 추가효과 줄때 활용 가능
+        public void SetIsPickUp(bool value)
+        {
+            IsPickUp = value;
+        }
+
+        public void ApplyTransformSnapshot(Vector2 position, Quaternion rotation, bool applyImmediately)
         {
             if (applyImmediately || isSnapshotInitialized == false)
             {
@@ -64,14 +70,22 @@ namespace WeGotOne
             interpolationTime = 0f;
         }
 
-        protected void ResetTransformSnapshot()
+        public void ResetTransformSnapshot()
         {
             isSnapshotInitialized = false;
             interpolationTime = 0f;
         }
 
-        public virtual void OnPickup()
+        public void DeactivateFromSnapshot()
         {
+            ResetTransformSnapshot();
+            gameObject.SetActive(false);
+        }
+
+        public void OnPickup()
+        {
+            IsPickUp = true;
+            ResetTransformSnapshot();
             gameObject.SetActive(false);
         }
     }

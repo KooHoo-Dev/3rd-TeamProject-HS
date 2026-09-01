@@ -3,31 +3,22 @@ using HelloServer;
 
 namespace WeGotOne
 {
-    public class Plank : Collectible
+    public class Plank : MonoBehaviour
     {
-        public void ApplySnapshot(PlankState state)
+        private WorldItem worldItem;
+
+        private void Awake()
         {
-            bool wasActive = gameObject.activeSelf;
-
-            gameObject.SetActive(state.IsActive);
-            IsPickUp = state.IsPickUp;
-
-            if (state.IsActive == false)
-            {
-                ResetTransformSnapshot();
-                return;
-            }
-
-            ApplyTransformSnapshot(
-                new Vector2(state.X, state.Y),
-                Quaternion.Euler(0f, 0f, state.Angle),
-                wasActive == false);
+            worldItem = GetComponent<WorldItem>();
         }
 
-        public override void OnPickup()
+        public void ApplySnapshot(PlankState state, bool applyImmediately)
         {
-            IsPickUp = true;
-            base.OnPickup();
+            worldItem.SetIsPickUp(state.IsPickUp);
+            worldItem.ApplyTransformSnapshot(
+                new Vector2(state.X, state.Y),
+                Quaternion.Euler(0f, 0f, state.Angle),
+                applyImmediately);
         }
     }
 }

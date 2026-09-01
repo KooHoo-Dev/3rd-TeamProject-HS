@@ -16,8 +16,8 @@ namespace HelloServer
         [System.Serializable]
         public struct TestFishState
         {
-            public string id;              // 예: "Slot_0", "Slot_1"
-            public int fishTypeIndex;      // 물고기 종류 번호
+            public int worldItemId;
+            public int itemId;
             public float x;                // 가상 X 위치
             public float y;                // 가상 Y 위치
             public float scaleX;           // 좌우 대칭 (1 or -1)
@@ -90,8 +90,8 @@ namespace HelloServer
                 {
                     fishStates.Add(new FishState
                     {
-                        Id = tf.id,
-                        FishTypeIndex = tf.fishTypeIndex,
+                        WorldItemId = tf.worldItemId,
+                        ItemId = tf.itemId,
                         X = tf.x,
                         Y = tf.y,
                         ScaleX = tf.scaleX,
@@ -102,8 +102,12 @@ namespace HelloServer
                 
                 RoomClient.Instance.SnapshotMessage.Fishes = fishStates.ToArray();
             }
+            else
+            {
+                RoomClient.Instance.SnapshotMessage.Fishes = System.Array.Empty<FishState>();
+            }
 
-            Debug.Log($"[Tester] {testFishes.Count}개의 테스트 물고기 데이터가 가상 스냅샷에 주입되었습니다!");
+            Debug.Log($"[Tester] {(testFishes?.Count ?? 0)}개의 테스트 물고기 데이터가 가상 스냅샷에 주입되었습니다!");
         }
     }
     

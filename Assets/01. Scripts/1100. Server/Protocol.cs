@@ -56,9 +56,8 @@ namespace HelloServer
     // 물고기 코드
     public class FishState
     {
-        public string Id { get; set; }       // 물고기 고유 식별 번호 (풀에서 생성 시 부여)
-        public int FishTypeIndex { get; set; } // 어떤 종류의 물고기인지 구분하는 인덱스
-        public bool IsActive { get; set; }
+        public int WorldItemId { get; set; }
+        public int ItemId { get; set; }
         public float X { get; set; }          // 현재 위치 X
         public float Y { get; set; }          // 현재 위치 Y
         public float ScaleX { get; set; }     // 좌우 반전 스케일값 (ApplyingFacing 결과 동기화용)
@@ -68,9 +67,8 @@ namespace HelloServer
     
     public class PlankState
     {
-        public string Id { get; set; }       // 물고기 고유 식별 번호 (풀에서 생성 시 부여)
-        public int Index { get; set; } // 어떤 종류의 물고기인지 구분하는 인덱스
-        public bool IsActive { get; set; }
+        public int WorldItemId { get; set; }
+        public int ItemId { get; set; }
         public float X { get; set; }          // 현재 위치 X
         public float Y { get; set; }          // 현재 위치 Y
         public float Angle { get; set; }      // 머리 회전 각도 (발버둥 칠 때 회전값 동기화용)
@@ -118,8 +116,8 @@ namespace HelloServer
         
         // 1. 플레이어 물고기 물리 및 위치 상태 
         public PlayerState[] Players { get; set; } // 플레이어 (위치, 무력화 상태)
-        public FishState[] Fishes { get; set; } // 물고기 (위치, 상태)
-        public PlankState[] Planks { get; set; } // 물고기 (위치, 상태)
+        public FishState[] Fishes { get; set; } = Array.Empty<FishState>();
+        public PlankState[] Planks { get; set; } = Array.Empty<PlankState>();
         
         // 2. 공용 인벤토리 정보
         public InventoryEntryState[] InventoryEntries { get; set; }
