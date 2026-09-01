@@ -28,12 +28,16 @@ namespace WeGotOne.Fish_Interface
 
         private float lastEnteredWaterTime = -999f; // 마지막에 물에 들어온 시각
         
+        public Transform PlayerRootPosition { get; set; }
+        [Header("납치 기믹 설정")]
+        [field: SerializeField]
+        public Transform AbductionTarget{ get; set; }
+        
         // 기절 파티클용
         [SerializeField] public ParticleSystem confusedParticle;
 
         private void Awake()
         {
-            
             fishMovement = GetComponent<FishMovement>();
             
             waterLayerAlert = GetComponent<WaterLayerAlert>();
@@ -64,8 +68,9 @@ namespace WeGotOne.Fish_Interface
                 waterLayerAlert.OnExitedWater -= HandleExitedWater;
             }
         }
-        
-        // 물 출입 시 실행할 예외 판단 및 위임 함수
+
+        #region 물 출입 시 실행할 예외 판단 및 위임 함수
+
         private void HandleExitedWater()
         {
             if (Time.time - lastEnteredWaterTime < waterExitCooldown)
@@ -91,6 +96,8 @@ namespace WeGotOne.Fish_Interface
                 fishMovement.SetWaterPhysics();
             }
         }
+        
+        #endregion
         
         #region 저항도 제어 함수
 
@@ -174,10 +181,34 @@ namespace WeGotOne.Fish_Interface
             currentState = newState;
             currentState.EnterAsync(this);
         }
+        
+        public void OnPlayerCaught(Transform playerTransform)
+        {
+            // 이미 납치 중이 아닐 때만 실행
+            if (!(currentState is AbductionState))
+            {
+                PlayerRootPosition = playerTransform;
+        
+                // TODO: 플레이어의 조작을 제한하는 로직 호출 (예: playerTransform.GetComponent<PlayerController>().Lock())
+        
+                // 납치 상태로 전환
+                ChangeState(new AbductionState()); 
+            }
+        }
+
+        public void OnFloorHit()
+        {
+            // 현재 납치 상태라면 바닥에 닿았을 때 상태 종료 (예: 순찰 복귀 상태로 전환)
+            if (currentState is AbductionState abductionState)
+            {
+                abductionState.HandleFloorHit();
+            }
+        }
 
         #endregion
-        
-        // 파티클 켜주는 함수
+
+        #region 파티클 켜주는 함수
+
         public void PlayConfusedParticle()
         {
             // 파티클 없으면 리턴
@@ -200,5 +231,8 @@ namespace WeGotOne.Fish_Interface
             // 안켜져있을때만 켜는거에요
             confusedParticle.gameObject.SetActive(false);
         }
+
+        #endregion
+        
     }
 }
