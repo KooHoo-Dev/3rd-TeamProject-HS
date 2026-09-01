@@ -799,6 +799,10 @@ PrefabInstance:
       value: 6.11
       objectReference: {fileID: 0}
     - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: url
+      value: ws://localhost:5203/room
+      objectReference: {fileID: 0}
+    - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: staminaGauge
       value: 
       objectReference: {fileID: 1625543911}
@@ -2958,6 +2962,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1561437504}
   - component: {fileID: 1561437503}
+  - component: {fileID: 1561437505}
+  - component: {fileID: 1561437506}
   m_Layer: 0
   m_Name: Item Pool
   m_TagString: Untagged
@@ -2977,11 +2983,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 333312abda9e4e146a425562b00d9493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.ItemObjectPool
-  <PlankCount>k__BackingField: 0
-  itemPrefabs:
-  - {fileID: 6691754160653459987, guid: 1194081bb080b624b838ba18eca05a87, type: 3}
-  - {fileID: 2955807939535471609, guid: 4471dd391aefe7841a132e64480e4b08, type: 3}
-  - {fileID: 2325836844950980227, guid: 9f38c5641ae18ed4badf78e3ccb5a155, type: 3}
+  fishPrefabs:
+  - {fileID: 5130000000000000001, guid: 4471dd391aefe7841a132e64480e4b08, type: 3}
+  - {fileID: 5130000000000000002, guid: 9f38c5641ae18ed4badf78e3ccb5a155, type: 3}
   itemTransforms:
   - {fileID: 449402540}
   - {fileID: 1630386388}
@@ -3014,6 +3018,30 @@ Transform:
   - {fileID: 499445765}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1561437505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1561437502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7481be167b943dab9f0cf45518d7f63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItemRegistry
+--- !u!114 &1561437506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1561437502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9f2784cb2d24ff0afbb1fde577b4667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItemSnapshotSynchronizer
 --- !u!114 &1625543911 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1682943535265470491, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}

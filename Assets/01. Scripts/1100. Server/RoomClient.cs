@@ -73,7 +73,7 @@ namespace HelloServer
 
         // 한 소켓에 동시에 두 번 보내면 안 된다.
         private readonly SemaphoreSlim sendLock = new SemaphoreSlim(1, 1);
-        private ItemObjectPool itemPool;
+        private WorldItemSnapshotSynchronizer worldItemSynchronizer;
 
         #region unity method
 
@@ -82,7 +82,7 @@ namespace HelloServer
             base.OnInitialize();
             // true로 해둬야 백그라운드에서도 데이터 수신 가능
             Application.runInBackground = true;
-            itemPool = FindFirstObjectByType<ItemObjectPool>();
+            worldItemSynchronizer = FindFirstObjectByType<WorldItemSnapshotSynchronizer>();
         }
 
         private void OnDestroy()
@@ -241,8 +241,7 @@ namespace HelloServer
             // 스냅샷의 다리 개수만큼 게스트의 다리 오브젝트 활성화
             // BridgeManager.Instance.BuildBridgeWithoutCost(message.CurrentBridgeCount);
             BridgeManager.Instance.ApplySnapshot(message.CurrentBridgeCount);
-            itemPool.ApplyFishes(message.Fishes);
-            itemPool.ApplyPlanks(message.Planks);
+            worldItemSynchronizer?.ApplySnapshot(message);
             
             GameManager.Instance.ApplySnapshot(message.ActivePlayerCount, message.ArrivedPlayerCount);
             InventoryItemDB.Instance.ApplySnapshot(message.InventoryEntries);
@@ -409,14 +408,8 @@ namespace HelloServer
                 // 1. 스냅샷 객체 생성
                 var snapshot = new SnapshotMessage();
 
-                // 2. [물고기/아이템 연동]: 씬의 ItemObjectPool에서 활성화된 아이템들을 가져와 배열로 변환
-                if (itemPool != null)
-                {
-                    // 이때 비활성화된 얘들도 가져와서 반영해줘야함
-                    // IsActive 필드도 반영이 안된듯
-                    snapshot.Fishes = itemPool.PackActiveFishes().ToArray();
-                    snapshot.Planks = itemPool.PackActivePlanks().ToArray();
-                }
+                // 2. 월드 아이템은 Registry 기준으로 활성 객체만 패킹한다.
+                worldItemSynchronizer?.PackActiveWorldItems(snapshot);
 
                 // 3. [플레이어 상태 연동]: 나와 다른 게스트 플레이어들의 상태 채우기
                 var playerStates = new List<PlayerState>();

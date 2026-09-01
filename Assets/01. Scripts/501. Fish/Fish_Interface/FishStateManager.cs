@@ -20,6 +20,19 @@ namespace WeGotOne.Fish_Interface
         public bool IsGrabbed => currentState is FishCaughtState || currentState is FishExhaustedState;
         public float MaxResistance => maxResistance; // 저항도
         public float CurrentResistance { get; private set; }
+        public string CurrentStateName
+        {
+            get
+            {
+                if (currentState is FishIdleState) return "Idle";
+                if (currentState is FishPatrolState) return "Patrol";
+                if (currentState is FishCaughtState) return "Caught";
+                if (currentState is FishExhaustedState) return "Exhausted";
+                if (currentState is FishFaintState) return "Faint";
+                if (currentState is FishRunawayState) return "Runaway";
+                return "Unknown";
+            }
+        }
         
         private WaterLayerAlert waterLayerAlert; // 물 탈출 알리미
         public IFishState currentState;

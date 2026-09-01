@@ -11,7 +11,7 @@ namespace WeGotOne
             if (RoomClient.Instance.Me.IsHost == false) return;
             if (other.gameObject.tag is "Fish" or "Item")
             {
-                if (other.gameObject.TryGetComponent<Collectible>(out var holder))
+                if (other.gameObject.TryGetComponent<WorldItem>(out var holder))
                 {
                     ItemScriptableObject item = holder.ThisItem;
 

@@ -3,25 +3,22 @@ using HelloServer;
 
 namespace WeGotOne
 {
-    public class Fish : Collectible
+    public class Fish : MonoBehaviour
     {
-        public void ApplySnapshot(FishState state)
+        private WorldItem worldItem;
+
+        private void Awake()
         {
-            bool wasActive = gameObject.activeSelf;
+            worldItem = GetComponent<WorldItem>();
+        }
 
+        public void ApplySnapshot(FishState state, bool applyImmediately)
+        {
             transform.localScale = new Vector3(state.ScaleX, transform.localScale.y, transform.localScale.z);
-            gameObject.SetActive(state.IsActive);
-
-            if (state.IsActive == false)
-            {
-                ResetTransformSnapshot();
-                return;
-            }
-
-            ApplyTransformSnapshot(
+            worldItem.ApplyTransformSnapshot(
                 new Vector2(state.X, state.Y),
                 Quaternion.Euler(0f, 0f, state.Angle),
-                wasActive == false);
+                applyImmediately);
         }
     }
 }
