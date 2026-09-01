@@ -15,7 +15,8 @@ namespace WeGotOne
 
         private void Awake()
         {
-            EnsureReferences();
+            itemObjectPool = GetComponent<ItemObjectPool>();
+            worldItemRegistry = GetComponent<WorldItemRegistry>();
         }
 
         private IEnumerator Start()
@@ -43,7 +44,7 @@ namespace WeGotOne
             // EnsureReferences();
             if (worldItemRegistry != null)
             {
-                foreach (WorldItem worldItem in worldItemRegistry.WorldItems)
+                foreach (WorldItem worldItem in worldItemRegistry.WorldItems.Values)
                 {
                     if (worldItem == null || worldItem.gameObject.activeInHierarchy == false)
                         continue;
@@ -83,10 +84,7 @@ namespace WeGotOne
 
         public void ApplySnapshot(SnapshotMessage snapshot)
         {
-            if (snapshot == null)
-                return;
-
-            EnsureReferences();
+            // EnsureReferences();
             if (itemObjectPool == null || worldItemRegistry == null)
             {
                 Debug.LogError("[WorldItemSnapshotSynchronizer] 동기화에 필요한 참조가 없습니다.");
@@ -99,11 +97,6 @@ namespace WeGotOne
 
         private void SpawnInitialFishForHost()
         {
-            if (initialFishSpawned || itemObjectPool == null || worldItemRegistry == null)
-                return;
-
-            initialFishSpawned = true;
-
             foreach (Transform spawnPoint in itemObjectPool.InitialFishSpawnPoints)
             {
                 if (spawnPoint == null)
@@ -136,7 +129,7 @@ namespace WeGotOne
             foreach (int worldItemId in worldItemRegistry.FixedWorldItemIds)
             {
                 if (worldItemRegistry.TryGetWorldItem(worldItemId, out WorldItem worldItem) &&
-                    worldItem.TryGetComponent<Rigidbody2D>(out Rigidbody2D rigidbody))
+                    worldItem.TryGetComponent(out Rigidbody2D rigidbody))
                 {
                     rigidbody.bodyType = RigidbodyType2D.Kinematic;
                 }
@@ -146,12 +139,11 @@ namespace WeGotOne
         private void ApplyFishes(FishState[] fishStates)
         {
             HashSet<int> receivedWorldItemIds = new();
+            HashSet<int> missingFishWorldItemIds = new HashSet<int>(worldItemRegistry.WorldItems.Keys);
+            missingFishWorldItemIds.ExceptWith(worldItemRegistry.FixedWorldItemIds);
 
             foreach (FishState state in fishStates)
             {
-                if (state == null)
-                    continue;
-
                 if (worldItemRegistry.TryGetWorldItem(state.WorldItemId, out WorldItem worldItem) == false)
                 {
                     worldItem = itemObjectPool.GetFish(state.ItemId, null);
@@ -165,7 +157,7 @@ namespace WeGotOne
                     }
                 }
 
-                if (worldItem.TryGetComponent<Fish>(out Fish fish) == false)
+                if (worldItem.TryGetComponent(out Fish fish) == false)
                 {
                     Debug.LogError($"[WorldItemSnapshotSynchronizer] Fish WorldItemId가 Fish가 아닙니다: {state.WorldItemId}");
                     continue;
@@ -183,18 +175,7 @@ namespace WeGotOne
                 LockFishForGuest(fish);
                 fish.ApplySnapshot(state, wasActive == false);
                 receivedWorldItemIds.Add(state.WorldItemId);
-            }
-
-            List<int> missingFishWorldItemIds = new();
-            foreach (WorldItem worldItem in worldItemRegistry.WorldItems)
-            {
-                if (worldItem == null || worldItemRegistry.IsFixedWorldItem(worldItem.WorldItemId))
-                    continue;
-
-                if (worldItem.TryGetComponent<Fish>(out _) && receivedWorldItemIds.Contains(worldItem.WorldItemId) == false)
-                {
-                    missingFishWorldItemIds.Add(worldItem.WorldItemId);
-                }
+                missingFishWorldItemIds.Remove(state.WorldItemId);
             }
 
             foreach (int worldItemId in missingFishWorldItemIds)
@@ -256,19 +237,6 @@ namespace WeGotOne
             if (movement != null)
             {
                 movement.LockForGuest();
-            }
-        }
-
-        private void EnsureReferences()
-        {
-            if (itemObjectPool == null)
-            {
-                itemObjectPool = GetComponent<ItemObjectPool>();
-            }
-
-            if (worldItemRegistry == null)
-            {
-                worldItemRegistry = GetComponent<WorldItemRegistry>();
             }
         }
     }

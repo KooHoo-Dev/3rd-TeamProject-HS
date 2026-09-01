@@ -11,7 +11,7 @@ namespace WeGotOne
         private readonly HashSet<int> fixedWorldItemIds = new();
         private int nextDynamicWorldItemId;
 
-        public IEnumerable<WorldItem> WorldItems => worldItems.Values;
+        public IReadOnlyDictionary<int, WorldItem> WorldItems => worldItems;
         public IEnumerable<int> FixedWorldItemIds => fixedWorldItemIds;
 
         private void Awake()

@@ -11,6 +11,9 @@ namespace WeGotOne
 
         private readonly Dictionary<int, Queue<WorldItem>> inactiveFishByItemId = new();
 
+
+        #region public method
+
         public IReadOnlyList<Transform> InitialFishSpawnPoints => itemTransforms;
 
         public bool TryGetRandomFishItemId(out int itemId)
@@ -74,9 +77,8 @@ namespace WeGotOne
                 return;
             }
 
-            fish.ResetTransformSnapshot();
             fish.SetIsPickUp(false);
-            fish.gameObject.SetActive(false);
+            fish.DeactivateFromSnapshot();
 
             if (inactiveFishByItemId.TryGetValue(fish.ItemId, out Queue<WorldItem> inactiveFish) == false)
             {
@@ -87,6 +89,10 @@ namespace WeGotOne
             inactiveFish.Enqueue(fish);
         }
 
+        #endregion
+
+        #region private method
+
         private WorldItem FindFishPrefab(int itemId)
         {
             foreach (WorldItem prefab in fishPrefabs)
@@ -94,22 +100,24 @@ namespace WeGotOne
                 if (IsFishPrefab(prefab) && prefab.ItemId == itemId)
                     return prefab;
             }
-
+        
             return null;
         }
-
+        
         private bool IsFishPrefab(WorldItem prefab)
         {
             return prefab != null && prefab.ThisItem != null &&
                    prefab.ThisItem.ItemType == ItemType.Fish &&
                    prefab.TryGetComponent<Fish>(out _);
         }
-
+        
         private void InitializeFish(WorldItem fish)
         {
             fish.ResetTransformSnapshot();
             fish.SetIsPickUp(false);
             fish.gameObject.SetActive(true);
         }
+
+        #endregion
     }
 }

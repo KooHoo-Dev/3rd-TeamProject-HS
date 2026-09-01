@@ -39,6 +39,8 @@ namespace WeGotOne
             WorldItemId = worldItemId;
         }
 
+        // 안 쓸거 같은데 일단 유지
+        // 나중에 집고 있을때 추가효과 줄때 활용 가능
         public void SetIsPickUp(bool value)
         {
             IsPickUp = value;
