@@ -20,6 +20,9 @@ namespace WeGotOne
 
         [SerializeField] private Transform[] itemTransforms;
         
+        // 물고기 소환 시 제한 영역 설정용
+        [SerializeField] private Collider2D waterArea;
+        
         // 맵에 미리 배치된 나무 정보 가져오기
         private List<Transform> plankList;
 
@@ -72,6 +75,15 @@ namespace WeGotOne
                         Instantiate(itemPrefabs[prefabIndex], currentTransform);
 
                     collectible.transform.position = currentTransform.position;
+                    
+                    FishMovement water = collectible.GetComponent<FishMovement>();
+                    
+                    Debug.Log(water.gameObject.name);
+
+                    if (water != null)
+                    {
+                        water.SetWaterArea(waterArea);
+                    }
                     
                     
                     // [게스트 전용 - 스폰 즉시 물리/이동 차단] - 신규 (요구사항 1, 2)

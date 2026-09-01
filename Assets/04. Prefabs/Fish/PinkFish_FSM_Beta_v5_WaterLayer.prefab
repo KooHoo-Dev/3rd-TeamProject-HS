@@ -83,7 +83,6 @@ GameObject:
   - component: {fileID: 3402221713284153257}
   - component: {fileID: 4895819399157256878}
   - component: {fileID: 8964461994870817763}
-  - component: {fileID: 1077677452946728957}
   m_Layer: 0
   m_Name: PinkFish_FSM_Beta_v5_WaterLayer
   m_TagString: Fish
@@ -225,7 +224,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -252,7 +251,11 @@ MonoBehaviour:
   fishMovement: {fileID: 4895819399157256878}
   maxResistance: 6
   waterExitCooldown: 1
+  obstacleSensor: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
+  myType: 0
+  baitType: 0
+  BaitPosition: {x: 0, y: 0, z: 0}
   confusedParticle: {fileID: 850257243536264447}
 --- !u!70 &1362629899874228426
 CapsuleCollider2D:
@@ -378,6 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb7d861586d46268621d283e80e495d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishMovement
+  waterArea: {fileID: 0}
   isGuestLocked: 0
 --- !u!114 &8964461994870817763
 MonoBehaviour:
@@ -391,26 +395,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f3422f60eaf45a2bee6e70a12a18155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishObstacleSensor
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 72
-  obstacleCheckSize: {x: 2, y: 2}
-  obstacleCheckDistance: 6
---- !u!114 &1077677452946728957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8980959750887881090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dec1f4903e454e048c98bc56bcdb9b3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WaterLayerAlert
   waterLayer:
     serializedVersion: 2
     m_Bits: 16
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  obstacleCheckSize: {x: 0.8, y: 0.5}
+  obstacleCheckDistance: 1
+  detectCooldown: 0.1
 --- !u!1001 &2151186539490834718
 PrefabInstance:
   m_ObjectHideFlags: 0

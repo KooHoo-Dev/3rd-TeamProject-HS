@@ -25,7 +25,6 @@ namespace WeGotOne.Fish_Interface
             float distance = Vector2.Distance(owner.transform.position, targetPosition);
             if (distance < waypointTolerance)
             {
-                owner.TargetPosition = targetPosition;
                 SetNewWaypoint();
             }
 
@@ -42,11 +41,36 @@ namespace WeGotOne.Fish_Interface
             }
         }
 
-        private void SetNewWaypoint()
+        public void SetNewWaypoint()
         {
-            // 랜덤 반경 안에서 새로운 목적지 설정
-            Vector2 randomCircle = Random.insideUnitCircle * 5f;
-            targetPosition = (Vector2)owner.transform.position + randomCircle;
+            if (owner == null)
+                return;
+
+            Collider2D waterArea = owner.FishMovement.WaterArea;
+
+            if (waterArea == null)
+                return;
+
+            int maxTryCount = 30;
+
+            for (int i = 0; i < maxTryCount; i++)
+            {
+                Vector2 randomCircle = Random.insideUnitCircle * 5f;
+
+                Vector2 candidatePosition = (Vector2)owner.transform.position + randomCircle;
+
+                // 후보 위치가 물 안에 있을 때만 목표로 설정
+                if (waterArea.OverlapPoint(candidatePosition))
+                {
+                    targetPosition = candidatePosition;
+                    owner.TargetPosition = candidatePosition;
+                    return;
+                }
+            }
+
+            // 적당한 목표를 못 찾으면 현재 위치 유지
+            targetPosition = owner.transform.position;
+            owner.TargetPosition = targetPosition;
         }
     }
 }

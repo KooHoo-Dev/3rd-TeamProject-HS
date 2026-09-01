@@ -52,7 +52,6 @@ GameObject:
   - component: {fileID: 4682603421267273784}
   - component: {fileID: 5244812637053690599}
   - component: {fileID: 4534058532086620731}
-  - component: {fileID: 7033299011125173601}
   m_Layer: 0
   m_Name: Shark_FSM_V3_WaterLayer
   m_TagString: Fish
@@ -220,7 +219,11 @@ MonoBehaviour:
   fishMovement: {fileID: 5244812637053690599}
   maxResistance: 20
   waterExitCooldown: 1
+  obstacleSensor: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
+  myType: 0
+  baitType: 0
+  BaitPosition: {x: 0, y: 0, z: 0}
   confusedParticle: {fileID: 0}
 --- !u!114 &225702880943666691
 MonoBehaviour:
@@ -346,6 +349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb7d861586d46268621d283e80e495d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishMovement
+  waterArea: {fileID: 0}
   isGuestLocked: 0
 --- !u!114 &4534058532086620731
 MonoBehaviour:
@@ -359,26 +363,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f3422f60eaf45a2bee6e70a12a18155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishObstacleSensor
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 72
-  obstacleCheckSize: {x: 5, y: 5}
-  obstacleCheckDistance: 15
---- !u!114 &7033299011125173601
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2427400488336505089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dec1f4903e454e048c98bc56bcdb9b3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WaterLayerAlert
   waterLayer:
     serializedVersion: 2
     m_Bits: 16
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  obstacleCheckSize: {x: 0.8, y: 0.5}
+  obstacleCheckDistance: 1
+  detectCooldown: 0.1
 --- !u!1 &6544036976876881251
 GameObject:
   m_ObjectHideFlags: 0

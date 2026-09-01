@@ -8,7 +8,7 @@ namespace WeGotOne.Fish_Interface
     {
         private FishStateManager owner;
         private Vector2 targetPosition;
-        private float patrolSpeed = 2.0f;
+        private float baitSpeed = 2.0f;
         private float waypointTolerance = 0.5f;
 
         public void EnterAsync(FishStateManager owner)
@@ -20,6 +20,9 @@ namespace WeGotOne.Fish_Interface
         public void Tick()
         {
             if (owner == null || owner.FishMovement == null) return;
+            
+            Vector2 direction = (targetPosition - (Vector2)owner.transform.position).normalized;
+            owner.FishMovement.Move(direction, baitSpeed);
             
             float distance = Vector2.Distance(owner.transform.position, targetPosition);
             if (distance < waypointTolerance)

@@ -25,12 +25,13 @@ namespace WeGotOne.Fish_Interface
         [Header("물 출입 쿨타임")] [SerializeField] [Tooltip("물속에 들어온 직후 다시 물밖으로 나가는 감지를 무시할 시간")]
         private float waterExitCooldown = 1.0f;
         
+        // 물 감지 센서
+        [SerializeField] private FishObstacleSensor obstacleSensor;
+        
         // 물 탈출 피드백 함수 예외값을 위한 bool값.
         public bool IsGrabbed => currentState is FishCaughtState || currentState is FishExhaustedState;
         public float MaxResistance => maxResistance; // 저항도
         public float CurrentResistance { get; private set; }
-        
-        private WaterLayerAlert waterLayerAlert; // 물 탈출 알리미
         public IFishState currentState;
 
         public Vector3 TargetPosition;
@@ -46,14 +47,12 @@ namespace WeGotOne.Fish_Interface
 
         private void Awake()
         {
-            
             fishMovement = GetComponent<FishMovement>();
             
-            waterLayerAlert = GetComponent<WaterLayerAlert>();
-            if (waterLayerAlert != null)
+            obstacleSensor = GetComponent<FishObstacleSensor>();
+            if (obstacleSensor != null)
             {
-                waterLayerAlert.OnEnteredWater += HandleEnteredWater;
-                waterLayerAlert.OnExitedWater += HandleExitedWater;
+                obstacleSensor.OnMovementBlocked += HandleWaterBoundary;
             }
         }
 
@@ -66,15 +65,6 @@ namespace WeGotOne.Fish_Interface
         private void Update()
         {
             currentState?.Tick();
-        }
-
-        private void OnDisable()
-        {
-            if (waterLayerAlert != null)
-            {
-                waterLayerAlert.OnEnteredWater -= HandleEnteredWater;
-                waterLayerAlert.OnExitedWater -= HandleExitedWater;
-            }
         }
         
         // 물 출입 시 실행할 예외 판단 및 위임 함수
@@ -93,14 +83,11 @@ namespace WeGotOne.Fish_Interface
             }
         }
 
-        private void HandleEnteredWater()
+        private void HandleWaterBoundary()
         {
-            lastEnteredWaterTime = Time.time;
-            
-            // 플레이어 손에 안 잡혀 있을 때만 물리 복구 위임
-            if (!IsGrabbed && fishMovement != null)
+            if (currentState is FishPatrolState patrolState)
             {
-                fishMovement.SetWaterPhysics();
+                patrolState.SetNewWaypoint();
             }
         }
         

@@ -9,6 +9,9 @@ namespace WeGotOne
 {
     public class FishMovement : MonoBehaviour
     {
+        [SerializeField] private Collider2D waterArea;
+        public Collider2D WaterArea => waterArea;
+        
         private Rigidbody2D rb;
         private Vector2 currentDirection;
         private float currentSpeed;
@@ -55,6 +58,9 @@ namespace WeGotOne
 
         private void FixedUpdate()
         {
+
+            if (CheckInWater() == false) return;
+            
             // Move 명령이 들어왔을 때만 지속적인 속도를 적용
             if (currentSpeed > 0)
             {
@@ -82,7 +88,32 @@ namespace WeGotOne
         {
             if (rb != null) { rb.gravityScale = 0f; rb.linearDamping = 3f; }
         }
+
+        private bool CheckInWater()
+        {
+            Vector2 next = rb.position + currentDirection * currentSpeed * Time.fixedDeltaTime;
+            
+            // 움직임 구간(물영역)이 정해져있고,
+            if (waterArea != null)
+            {
+                // 다음 위치가 물이랑 겹쳐있지 않으면
+                if (waterArea.OverlapPoint(next) == false)
+                {
+                    // 속도 없애고 false
+                    rb.linearVelocity = Vector2.zero;
+                    return false;
+                }
+            }
+
+            // 아니면 가능
+            return true;
+        }
         
+        public void SetWaterArea(Collider2D water)
+        {
+            waterArea = water;
+        }
+
         public void LockForGuest()
         {
             isGuestLocked = true;
