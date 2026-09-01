@@ -40,8 +40,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3522062259582029183}
-  - component: {fileID: 6601164543565669183}
   - component: {fileID: 4355550375103360697}
+  - component: {fileID: 8205786267655057946}
   m_Layer: 0
   m_Name: Collider
   m_TagString: Untagged
@@ -64,20 +64,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 317250453843205295}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6601164543565669183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6164780823200109227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60f9fa6142264d42b099ef8351606b7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishBaitCollider
-  fishStateManager: {fileID: 0}
-  detectingRange: {fileID: 0}
 --- !u!58 &4355550375103360697
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -114,6 +100,20 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 10
+--- !u!114 &8205786267655057946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6164780823200109227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60f9fa6142264d42b099ef8351606b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishBaitCollider
+  fishStateManager: {fileID: 6558782870214251106}
+  detectingRange: {fileID: 4355550375103360697}
 --- !u!1 &8110180998687643332
 GameObject:
   m_ObjectHideFlags: 0
