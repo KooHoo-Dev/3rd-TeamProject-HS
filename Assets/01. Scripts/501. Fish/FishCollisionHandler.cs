@@ -3,14 +3,11 @@ using UnityEngine;
 
 namespace WeGotOne
 {   
-    [RequireComponent(typeof(Collider2D))]
     public class FishCollisionHandler : MonoBehaviour
     {
         // 물고기 지형 충돌 감지를 담당
         // 물리적인 충격(relativeVelocity) 을 감지하고,
         // 지정된 레이어 및 임계치 조건 만족 시 이벤트 발생
-
-
         
         [Header("지형 충돌 설정")]
         [SerializeField] 

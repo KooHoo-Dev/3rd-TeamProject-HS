@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace WeGotOne.Fish_Interface
 {   
     /// <summary>
@@ -5,6 +7,8 @@ namespace WeGotOne.Fish_Interface
     /// </summary>
     public interface ICatchable
     {
+        public Transform PlayerRootPosition { get; set; }
+        
         /// <summary>
         /// 플레이어가 지정된 유예 시간 내에 대상을 성공적으로 붙잡았을 때 호출됩니다.
         /// </summary>
