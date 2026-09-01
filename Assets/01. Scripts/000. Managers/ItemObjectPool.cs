@@ -14,15 +14,31 @@ namespace WeGotOne
         // 맵에 미리 배치된 나무 정보 가져오기
         private List<Transform> plankList;
 
-        private int itemId = 0;
-        
-        private IEnumerator Start()
-        {   
-            // 다리 개수에 맞춰 판자 생성 제한 설정
-            yield return new WaitUntil(() => RoomClient.Instance.SnapshotMessage != null);
-            // 맵에 이미 배치되어 있는 판자들을 풀에 등록
-            RegisterExistingPlanks(); 
-            ItemSpawn();
+
+        #region public method
+
+        public IReadOnlyList<Transform> InitialFishSpawnPoints => itemTransforms;
+
+        public bool TryGetRandomFishItemId(out int itemId)
+        {
+            List<WorldItem> validPrefabs = new();
+            foreach (WorldItem prefab in fishPrefabs)
+            {
+                if (IsFishPrefab(prefab))
+                {
+                    validPrefabs.Add(prefab);
+                }
+            }
+
+            if (validPrefabs.Count == 0)
+            {
+                itemId = -1;
+                Debug.LogError("[ItemObjectPool] Fish 프리팹이 설정되지 않았습니다.");
+                return false;
+            }
+
+            itemId = validPrefabs[Random.Range(0, validPrefabs.Count)].ItemId;
+            return true;
         }
 
         private void RegisterExistingPlanks()
@@ -171,9 +187,8 @@ namespace WeGotOne
                 return;
             }
 
-            fish.ResetTransformSnapshot();
             fish.SetIsPickUp(false);
-            fish.gameObject.SetActive(false);
+            fish.DeactivateFromSnapshot();
 
             if (inactiveFishByItemId.TryGetValue(fish.ItemId, out Queue<WorldItem> inactiveFish) == false)
             {
@@ -184,6 +199,10 @@ namespace WeGotOne
             inactiveFish.Enqueue(fish);
         }
 
+        #endregion
+
+        #region private method
+
         private WorldItem FindFishPrefab(int itemId)
         {
             foreach (WorldItem prefab in fishPrefabs)
@@ -191,22 +210,24 @@ namespace WeGotOne
                 if (IsFishPrefab(prefab) && prefab.ItemId == itemId)
                     return prefab;
             }
-
+        
             return null;
         }
-
+        
         private bool IsFishPrefab(WorldItem prefab)
         {
             return prefab != null && prefab.ThisItem != null &&
                    prefab.ThisItem.ItemType == ItemType.Fish &&
                    prefab.TryGetComponent<Fish>(out _);
         }
-
+        
         private void InitializeFish(WorldItem fish)
         {
             fish.ResetTransformSnapshot();
             fish.SetIsPickUp(false);
             fish.gameObject.SetActive(true);
         }
+
+        #endregion
     }
 }
