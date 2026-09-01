@@ -7,6 +7,15 @@ namespace WeGotOne.Fish_Interface
     
     public class FishStateManager : MonoBehaviour, ICatchable
     {
+        public enum BaitType
+        {
+            None,
+            Player,
+            SmallFish,
+            MediumFish,
+            LargeFish,
+        }
+
         [SerializeField] private FishMovement fishMovement;
         public FishMovement FishMovement => fishMovement;
         
@@ -25,6 +34,10 @@ namespace WeGotOne.Fish_Interface
         public IFishState currentState;
 
         public Vector3 TargetPosition;
+        
+        public BaitType myType;
+        public BaitType baitType;
+        public Vector3 BaitPosition;
 
         private float lastEnteredWaterTime = -999f; // 마지막에 물에 들어온 시각
         
@@ -53,7 +66,6 @@ namespace WeGotOne.Fish_Interface
         private void Update()
         {
             currentState?.Tick();
-            Debug.Log(currentState);
         }
 
         private void OnDisable()
