@@ -23,7 +23,6 @@ namespace WeGotOne.Fish_Interface
         
         private WaterLayerAlert waterLayerAlert; // 물 탈출 알리미
         public IFishState currentState;
-        private CancellationTokenSource stateCts;
 
         public Vector3 TargetPosition;
 
@@ -54,14 +53,11 @@ namespace WeGotOne.Fish_Interface
         private void Update()
         {
             currentState?.Tick();
+            Debug.Log(currentState);
         }
 
         private void OnDisable()
         {
-            stateCts?.Cancel();
-            stateCts?.Dispose();
-            stateCts = null;
-            
             if (waterLayerAlert != null)
             {
                 waterLayerAlert.OnEnteredWater -= HandleEnteredWater;
@@ -166,30 +162,17 @@ namespace WeGotOne.Fish_Interface
             TransitionTo(newState);
         }
         
-        private async void TransitionTo(IFishState newState)
+        private void TransitionTo(IFishState newState)
         {   
             if (newState == null) return;
 
-            stateCts?.Cancel();
-            stateCts?.Dispose();
-            stateCts = new CancellationTokenSource();
-            CancellationToken token = stateCts.Token;
-
-            try
-            {   
-                if (currentState != null)
-                {
-                    await currentState.ExitAsync(token);
-                    if (this == null) return; 
-                }
-
-                currentState = newState;
-                await currentState.EnterAsync(this, token);
-            }
-            catch (OperationCanceledException)
+            if (currentState != null)
             {
-                Debug.Log("상태 전환 취소");
+                currentState.ExitAsync();
             }
+
+            currentState = newState;
+            currentState.EnterAsync(this);
         }
 
         #endregion
@@ -206,6 +189,16 @@ namespace WeGotOne.Fish_Interface
             
             // 안켜져있을때만 켜는거에요
             confusedParticle.gameObject.SetActive(true);
+        }
+        
+        public void StopConfusedParticle()
+        {
+            // 파티클 없으면 리턴
+            if (confusedParticle == null)
+                return;
+            
+            // 안켜져있을때만 켜는거에요
+            confusedParticle.gameObject.SetActive(false);
         }
     }
 }
