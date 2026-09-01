@@ -12,10 +12,13 @@ namespace WeGotOne
         private Rigidbody2D rb;
         private Vector2 currentDirection;
         private float currentSpeed;
+        public bool isGuestLocked;
+        private Vector3 baseLocalScale;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            baseLocalScale = transform.localScale;
         }
 
         // 1. 일반 이동 (Patrol, Runaway 등에서 지속 호출)
@@ -39,7 +42,7 @@ namespace WeGotOne
         {
             currentSpeed = 0f;
             currentDirection = Vector2.zero;
-            if (rb != null) rb.velocity = Vector2.zero;
+            if (rb != null) rb.linearVelocity = Vector2.zero;
         }
 
         // 4. 기절 시 관성 미끄러짐 
@@ -47,7 +50,7 @@ namespace WeGotOne
         {
             StopMove();
             // 필요에 따라 drag(마찰력) 값을 조절해 자연스럽게 미끄러지다 멈추게 연출
-            if (rb != null) rb.drag = 1.5f; 
+            if (rb != null) rb.linearDamping = 1.5f; 
         }
 
         private void FixedUpdate()
@@ -55,7 +58,7 @@ namespace WeGotOne
             // Move 명령이 들어왔을 때만 지속적인 속도를 적용
             if (currentSpeed > 0)
             {
-                rb.velocity = currentDirection * currentSpeed;
+                rb.linearVelocity = currentDirection * currentSpeed;
                 FlipRenderer(currentDirection.x);
             }
         }
@@ -65,19 +68,31 @@ namespace WeGotOne
         {
             if (Mathf.Abs(xDir) > 0.01f)
             {
-                transform.localScale = new Vector3(Mathf.Sign(xDir), 1, 1);
+                transform.localScale = new Vector3(Mathf.Sign(xDir * baseLocalScale.x), baseLocalScale.y, baseLocalScale.z);
             }
         }
 
         // 물 안/밖 물리 속성 (기존 유지)
         public void SetAirPhysics()
         {
-            if (rb != null) { rb.gravityScale = 1f; rb.drag = 0f; }
+            if (rb != null) { rb.gravityScale = 1f; rb.linearDamping = 0f; }
         }
         
         public void SetWaterPhysics()
         {
-            if (rb != null) { rb.gravityScale = 0f; rb.drag = 3f; }
+            if (rb != null) { rb.gravityScale = 0f; rb.linearDamping = 3f; }
+        }
+        
+        public void LockForGuest()
+        {
+            isGuestLocked = true;
+
+            StopMove(); // 혹시 이미 걸려있던 트윈이 있다면 즉시 정리
+
+            // [요구사항 2] Rigidbody Dynamic -> Kinematic 전환
+            if (rb != null) rb.bodyType = RigidbodyType2D.Kinematic;
+
+            enabled = false; // Update 등 자동 콜백까지 이중 차단
         }
     }
 }

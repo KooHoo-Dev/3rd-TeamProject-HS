@@ -216,9 +216,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7746cb164f44662970bead08d0a34e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Fish_Interface.FishStateManager
-  fishMovement: {fileID: 0}
+  fishMovement: {fileID: 7288073790878514883}
   maxResistance: 5
   waterExitCooldown: 1
+  TargetPosition: {x: 0, y: 0, z: 0}
   confusedParticle: {fileID: 460550644456355994}
 --- !u!114 &6642005358976696119
 MonoBehaviour:
@@ -298,14 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb7d861586d46268621d283e80e495d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishMovement
-  moveSpeed: 3
-  patrolRange: 10
-  runawaySpeedMultiplier: 2.5
-  runawayDistance: 6
-  maxStruggleForce: 10
-  directionChangeInterval: 0.3
-  airGravityScale: 5
-  patrolRestartDelay: 3
+  isGuestLocked: 0
 --- !u!114 &4232708847999419296
 MonoBehaviour:
   m_ObjectHideFlags: 0

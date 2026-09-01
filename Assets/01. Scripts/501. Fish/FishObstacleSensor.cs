@@ -39,7 +39,7 @@ namespace WeGotOne
         private void CheckForObstacles()
         {
             // 물고기의 현재 목표 지점 방향으로 BoxCast를 발사합니다.
-            Vector3 targetPos = movement.;
+            Vector3 targetPos = movement.TargetPosition;
             Vector2 moveDirection = (targetPos - transform.position).normalized;
 
             RaycastHit2D hit = Physics2D.BoxCast(
@@ -61,7 +61,7 @@ namespace WeGotOne
         // 디버깅용 기즈모 드로잉 코드가 이리로 이사 왔습니다.
         private void OnDrawGizmosSelected()
         {
-            if (movement == null) movement = GetComponent<FishMovement>();
+            if (movement == null) movement = GetComponent<FishStateManager>();
             if (movement == null) return;
 
             Gizmos.color = Color.red;
