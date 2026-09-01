@@ -25,7 +25,9 @@ namespace WeGotOne.Fish_Interface
         public IFishState currentState;
         private CancellationTokenSource stateCts;
 
-        private float lastEnteredWaterTime = -999f; // 마지막에 물에 들어온 시각 
+        public Vector3 TargetPosition;
+
+        private float lastEnteredWaterTime = -999f; // 마지막에 물에 들어온 시각
         
         // 기절 파티클용
         [SerializeField] public ParticleSystem confusedParticle;
@@ -67,8 +69,6 @@ namespace WeGotOne.Fish_Interface
             }
         }
         
-        
-        
         // 물 출입 시 실행할 예외 판단 및 위임 함수
         private void HandleExitedWater()
         {
@@ -95,9 +95,7 @@ namespace WeGotOne.Fish_Interface
                 fishMovement.SetWaterPhysics();
             }
         }
-
         
-
         #region 저항도 제어 함수
 
         public void DecreaseResistance(float amount)

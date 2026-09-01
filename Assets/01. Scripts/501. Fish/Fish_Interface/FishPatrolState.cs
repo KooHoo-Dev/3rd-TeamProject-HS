@@ -26,6 +26,7 @@ namespace WeGotOne.Fish_Interface
             float distance = Vector2.Distance(owner.transform.position, targetPosition);
             if (distance < waypointTolerance)
             {
+                owner.TargetPosition = targetPosition;
                 SetNewWaypoint();
             }
 
