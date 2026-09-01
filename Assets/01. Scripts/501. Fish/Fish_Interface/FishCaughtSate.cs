@@ -8,18 +8,20 @@ namespace WeGotOne.Fish_Interface
     {
         private FishStateManager owner;
         private FishCollisionHandler collisionHandler;
+        private float collisionRatio = 0.2f;
 
-        private float collisionRatio = 0.2f; // 충격량 값 계산비
+        private Vector2 struggleDirection;
+        private float struggleForceMultiplier = 10f;
+        private float directionChangeTimer;
 
         public Task EnterAsync(FishStateManager owner, CancellationToken token)
         {
             this.owner = owner;
             Debug.Log($"{owner.name} : 힘겨루기 상태(Caught) 진입.");
 
-            // 1. [진입 시점]: 발버둥 타이머 및 첫 도망 방향을 초기화합니다.
-            owner.FishMovement.InitStruggle();
-            
-            // 2. 충돌 컴포넌트 이벤트 구독 
+            SetNewStruggleDirection();
+
+            // 충돌 이벤트 구독
             collisionHandler = owner.GetComponent<FishCollisionHandler>();
             if (collisionHandler != null)
             {
@@ -33,53 +35,52 @@ namespace WeGotOne.Fish_Interface
         {
             if (owner == null) return;
 
-            // 1. 저항도 깎기 (매 프레임 감소)
+            // 1. 발버둥 방향 전환 타이머
+            directionChangeTimer -= Time.deltaTime;
+            if (directionChangeTimer <= 0f)
+            {
+                SetNewStruggleDirection();
+            }
+
+            // 2. 저항도 감소 및 비율 계산
             owner.DecreaseResistance(Time.deltaTime);
             float ratio = owner.CurrentResistance / owner.MaxResistance;
 
-            // 2. [물리 연출 위임]: Runaway와 공유하는 도망 방향 알고리즘으로 Rigidbody2D에 힘을 가합니다.
-            owner.FishMovement.ApplyStruggleForce(ratio);
+            // 3. 남은 저항도 비율에 맞춰 물리적인 반발력(Struggle Force)을 계산해 명령
+            Vector2 appliedForce = struggleDirection * (struggleForceMultiplier * ratio);
+            owner.FishMovement.ApplyForce(appliedForce);
 
-            // 3. 탈진 체크 (저항도가 0이 되면 잡힌 채 힘을 잃는 샌드백 상태로 전환)
+            // 4. 탈진 체크
             if (owner.CurrentResistance <= 0f)
             {
                 owner.ChangeState(new FishExhaustedState());
             }
         }
 
+        private void SetNewStruggleDirection()
+        {
+            // 0.5초 ~ 1.5초마다 무작위 방향으로 발버둥
+            struggleDirection = Random.insideUnitCircle.normalized;
+            directionChangeTimer = Random.Range(0.5f, 1.5f);
+        }
+
         private void HandleTerrainSmashed(float impactStrength)
         {
             if (owner == null) return;
             
-            // 충격이 강할 수록 더 많은 저항도를 즉각 소진
-            // 계수(0.5f) 는 플레이 테스트를 거치며 밸런싱 조절 하면 됨
-
             float damageToResistance = impactStrength * collisionRatio; 
             owner.DecreaseResistance(damageToResistance);
-            
-            Debug.Log($"<color=orange>[지형 충격]</color> <b>{owner.name}</b> 지형 충돌! " + 
-                      $"저항도 <b>{damageToResistance:F1}</b> 급감! (남은 저항도: {owner.CurrentResistance:F1})");
+            Debug.Log($"지형 충돌! 저항도 {damageToResistance:F1} 감소.");
         }
-        
-        
-        
         
         public Task ExitAsync(CancellationToken token)
         {   
-            
-            // / 3. [퇴장 시점]: 힘겨루기 상태를 벗어날 때, 이벤트 안전 해제와
-            // 잔여 물리 속도와 힘을 안전하게 정지시킵니다.
-
             if (collisionHandler != null)
             {
                 collisionHandler.OnTerrainSmashed -= HandleTerrainSmashed;
-                collisionHandler = null;
-                
             }
-            
-            if (owner != null)
+            if (owner != null && owner.FishMovement != null)
             {
-                
                 owner.FishMovement.StopMove();
             }
             return Task.CompletedTask;

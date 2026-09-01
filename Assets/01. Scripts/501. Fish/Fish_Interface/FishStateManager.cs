@@ -22,7 +22,7 @@ namespace WeGotOne.Fish_Interface
         public float CurrentResistance { get; private set; }
         
         private WaterLayerAlert waterLayerAlert; // 물 탈출 알리미
-        private IFishState currentState;
+        public IFishState currentState;
         private CancellationTokenSource stateCts;
 
         private float lastEnteredWaterTime = -999f; // 마지막에 물에 들어온 시각 
