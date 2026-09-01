@@ -10,8 +10,10 @@ namespace WeGotOne.Fish_Interface
     /// </summary>
     public class FishExhaustedState : IFishState
     {
-        public Task EnterAsync(FishStateManager owner, CancellationToken token)
+        private FishStateManager owner;
+        public void EnterAsync(FishStateManager owner)
         {
+            this.owner = owner;
             Debug.Log($"{owner.name} : 완전히 탈진했습니다. 손쉽게 낚아올릴 수 있는 기회입니다!");
             
             // 저항을 멈추고 얌전하게 힘을 뺍니다.
@@ -20,7 +22,6 @@ namespace WeGotOne.Fish_Interface
             // 파티클 있을때만 실행
             if(owner.confusedParticle != null)
                 owner.PlayConfusedParticle();
-            return Task.CompletedTask;
         }
 
         public void Tick()
@@ -28,12 +29,10 @@ namespace WeGotOne.Fish_Interface
             // 탈진했으므로 아무런 매 프레임 업데이트 행동을 하지 않습니다.
         }
 
-        public Task ExitAsync(CancellationToken token)
-        {   
-            
-            return Task.CompletedTask;
+        public void ExitAsync()
+        {
+            if(owner.confusedParticle != null)
+                owner.StopConfusedParticle();
         }
-        
-        
     }
 }

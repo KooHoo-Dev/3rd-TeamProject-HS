@@ -11,11 +11,10 @@ namespace WeGotOne.Fish_Interface
         private float patrolSpeed = 2.0f;
         private float waypointTolerance = 0.5f;
 
-        public Task EnterAsync(FishStateManager owner, CancellationToken token)
+        public void EnterAsync(FishStateManager owner)
         {
             this.owner = owner;
             SetNewWaypoint(); // 첫 목적지 설정
-            return Task.CompletedTask;
         }
 
         public void Tick()
@@ -35,13 +34,12 @@ namespace WeGotOne.Fish_Interface
             owner.FishMovement.Move(direction, patrolSpeed);
         }
 
-        public Task ExitAsync(CancellationToken token)
+        public void ExitAsync()
         {
             if (owner != null && owner.FishMovement != null)
             {
                 owner.FishMovement.StopMove();
             }
-            return Task.CompletedTask;
         }
 
         private void SetNewWaypoint()

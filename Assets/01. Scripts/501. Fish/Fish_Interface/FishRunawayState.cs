@@ -12,8 +12,10 @@ namespace WeGotOne.Fish_Interface
         private Vector2 runawayDirection;
         private float runawaySpeed = 6.0f;
         private float runawayDuration = 3.0f;
+        
+        private float runawayTimer;
 
-        public async Task EnterAsync(FishStateManager owner, CancellationToken token)
+        public void EnterAsync(FishStateManager owner)
         {
             this.owner = owner;
             Debug.Log($"{owner.name} : 도망 상태(Runaway) 시작.");
@@ -21,20 +23,7 @@ namespace WeGotOne.Fish_Interface
             // 도망칠 방향 계산 (예시: 플레이어의 반대 방향이나 랜덤 방향)
             runawayDirection = Random.insideUnitCircle.normalized;
 
-            try
-            {
-                // 비동기 대기로 도망 유지 시간 제어
-                await Task.Delay(TimeSpan.FromSeconds(runawayDuration), token);
-
-                if (owner == null || token.IsCancellationRequested) return;
-
-                // 무사히 도망쳤다면 Idle 상태로 복귀
-                owner.ChangeState(new FishIdleState());
-            }
-            catch (OperationCanceledException)
-            {
-                Debug.Log($"{owner.name} : 도망 상태 취소됨.");
-            }
+            runawayTimer = 0;
         }
 
         public void Tick()
@@ -43,15 +32,21 @@ namespace WeGotOne.Fish_Interface
             
             // 매 프레임 모터(Movement)에 도망 지시
             owner.FishMovement.Move(runawayDirection, runawaySpeed);
+            
+            runawayTimer += Time.deltaTime;
+            
+            if (runawayTimer >= runawayDuration)
+            {
+                owner.ChangeState(new FishIdleState());
+            }
         }
 
-        public Task ExitAsync(CancellationToken token)
+        public void ExitAsync()
         {
             if (owner != null && owner.FishMovement != null)
             {
                 owner.FishMovement.StopMove();
             }
-            return Task.CompletedTask;
         }
     }
 }

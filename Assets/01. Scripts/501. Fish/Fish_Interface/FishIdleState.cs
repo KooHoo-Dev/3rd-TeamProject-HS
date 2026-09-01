@@ -10,30 +10,32 @@ namespace WeGotOne.Fish_Interface
     {
         private readonly float idleDruation;
         private FishStateManager owner;
+        private float idleTimer;
 
         public FishIdleState(float idleDruation = 1.5f)
         {
             this.idleDruation = idleDruation;
         }
         
-        public async Task EnterAsync(FishStateManager owner, CancellationToken token)
+        public void EnterAsync(FishStateManager owner)
         {
             this.owner = owner;
-
-            await Task.Delay(TimeSpan.FromSeconds(idleDruation), token);
-            
-            token.ThrowIfCancellationRequested();
-            owner.ChangeState(new FishPatrolState());
         }
 
         public void Tick()
         {
+            if (owner == null || owner.FishMovement == null) return;
             
+            idleTimer += Time.deltaTime;
+            
+            if (idleTimer >= idleDruation)
+            {
+                owner.ChangeState(new FishPatrolState());
+            }
         }
 
-        public Task ExitAsync(CancellationToken token)
+        public void ExitAsync()
         {
-            return Task.CompletedTask;
         }
     }
 }

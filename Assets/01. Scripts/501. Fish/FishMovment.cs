@@ -68,7 +68,7 @@ namespace WeGotOne
         {
             if (Mathf.Abs(xDir) > 0.01f)
             {
-                transform.localScale = new Vector3(Mathf.Sign(xDir * baseLocalScale.x), baseLocalScale.y, baseLocalScale.z);
+                transform.localScale = new Vector3(Mathf.Sign(-xDir) * baseLocalScale.x, baseLocalScale.y, baseLocalScale.z);
             }
         }
 

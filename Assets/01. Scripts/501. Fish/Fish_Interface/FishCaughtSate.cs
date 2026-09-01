@@ -14,7 +14,7 @@ namespace WeGotOne.Fish_Interface
         private float struggleForceMultiplier = 10f;
         private float directionChangeTimer;
 
-        public Task EnterAsync(FishStateManager owner, CancellationToken token)
+        public void EnterAsync(FishStateManager owner)
         {
             this.owner = owner;
             Debug.Log($"{owner.name} : 힘겨루기 상태(Caught) 진입.");
@@ -27,8 +27,6 @@ namespace WeGotOne.Fish_Interface
             {
                 collisionHandler.OnTerrainSmashed += HandleTerrainSmashed;
             }
-
-            return Task.CompletedTask;
         }
 
         public void Tick()
@@ -73,7 +71,7 @@ namespace WeGotOne.Fish_Interface
             Debug.Log($"지형 충돌! 저항도 {damageToResistance:F1} 감소.");
         }
         
-        public Task ExitAsync(CancellationToken token)
+        public void ExitAsync()
         {   
             if (collisionHandler != null)
             {
@@ -83,7 +81,6 @@ namespace WeGotOne.Fish_Interface
             {
                 owner.FishMovement.StopMove();
             }
-            return Task.CompletedTask;
         }
     }
 }
