@@ -42,7 +42,7 @@ namespace WeGotOne
         private int waterLayer;
         
         // 본인 신체 못잡게 하기 위한 용도
-        private PlayerRoot owner;
+        public PlayerRoot owner;
 
         [Header("잡기 타이머 설정")]
         [SerializeField] 
@@ -144,6 +144,7 @@ private void OnDisable()
             if (currentTarget.TryGetComponent<ICatchable>(out var catchable))
             {
                 catchable.OnGrabbed();
+                catchable.PlayerRootPosition.position = transform.position;
             }
             
             if (currentTarget.CompareTag("Fish"))
