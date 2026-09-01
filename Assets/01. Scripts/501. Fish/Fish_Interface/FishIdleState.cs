@@ -23,7 +23,7 @@ namespace WeGotOne.Fish_Interface
             await Task.Delay(TimeSpan.FromSeconds(idleDruation), token);
             
             token.ThrowIfCancellationRequested();
-            owner.ChangeState(new FishPatrolState(owner.FishMovement));
+            owner.ChangeState(new FishPatrolState());
         }
 
         public void Tick()

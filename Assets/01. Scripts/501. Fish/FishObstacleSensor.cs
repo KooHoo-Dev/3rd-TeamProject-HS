@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using WeGotOne.Fish_Interface;
 
 namespace WeGotOne
 {
@@ -14,14 +15,14 @@ namespace WeGotOne
         [SerializeField] private Vector2 obstacleCheckSize = new Vector2(0.8f, 0.5f);
         [SerializeField] private float obstacleCheckDistance = 1.0f;
 
-        private FishMovement movement;
+        private FishStateManager movement;
 
         // 장애물이 감지되었을 때 외부에 알릴 이벤트
         public event Action OnObstacleDetected;
 
         private void Awake()
         {
-            movement = GetComponent<FishMovement>();
+            movement = GetComponent<FishStateManager>();
         }
 
         private void Update()
@@ -29,7 +30,7 @@ namespace WeGotOne
             if (movement == null) return;
 
             // 물고기가 순찰 중일 때만 실시간으로 장애물 체크를 실행합니다.
-            if (movement.IsPatrolling)
+            if (movement.currentState is FishPatrolState)
             {
                 CheckForObstacles();
             }
@@ -38,7 +39,7 @@ namespace WeGotOne
         private void CheckForObstacles()
         {
             // 물고기의 현재 목표 지점 방향으로 BoxCast를 발사합니다.
-            Vector3 targetPos = movement.TargetPosition;
+            Vector3 targetPos = movement.;
             Vector2 moveDirection = (targetPos - transform.position).normalized;
 
             RaycastHit2D hit = Physics2D.BoxCast(
