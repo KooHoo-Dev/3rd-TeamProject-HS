@@ -76,6 +76,12 @@ namespace HelloServer
         public float Angle { get; set; }      // 머리 회전 각도 (발버둥 칠 때 회전값 동기화용)
         public bool IsPickUp { get; set; }
     }
+
+    public class InventoryEntryState
+    {
+        public int ItemId { get; set; }
+        public int Count { get; set; }
+    }
     
     #region 클라이언트 -> 서버 (C2S)
 
@@ -116,8 +122,7 @@ namespace HelloServer
         public PlankState[] Planks { get; set; } // 물고기 (위치, 상태)
         
         // 2. 공용 인벤토리 정보
-        public int[] ItemKeys { get; set; }
-        public int[] ItemCounts { get; set; }
+        public InventoryEntryState[] InventoryEntries { get; set; }
         
         // 3. 맵 오브젝트 건설 정보
         public int CurrentBridgeCount { get; set; } // 현재 다리가 몇 개 건설 됐는지

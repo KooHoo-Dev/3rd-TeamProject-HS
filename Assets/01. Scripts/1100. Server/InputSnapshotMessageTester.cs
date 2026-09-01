@@ -5,6 +5,13 @@ namespace HelloServer
 {
     public class InputSnapshotMessageTester : MonoBehaviour
     {
+        [System.Serializable]
+        private struct TestInventoryEntry
+        {
+            public int itemId;
+            public int count;
+        }
+
         // 1. [보완] 유니티 인스펙터에서 물고기 데이터를 쉽게 편집할 수 있도록 헬퍼 구조체 선언
         [System.Serializable]
         public struct TestFishState
@@ -22,8 +29,7 @@ namespace HelloServer
         [SerializeField] private List<TestFishState> testFishes = new List<TestFishState>();
         
         [Header("Snapshot Message Test Data")]
-        [SerializeField] private int[] itemKeys;
-        [SerializeField] private int[] itemCounts;
+        [SerializeField] private TestInventoryEntry[] inventoryEntries;
         [SerializeField] private int currentBridgeCount;
 
         [Header("Guest Input Message Test Data")]
@@ -56,8 +62,24 @@ namespace HelloServer
             if (RoomClient.Instance.SnapshotMessage == null) return;
 
             // 기존 데이터 세팅
-            RoomClient.Instance.SnapshotMessage.ItemKeys = itemKeys;
-            RoomClient.Instance.SnapshotMessage.ItemCounts = itemCounts;
+            if (inventoryEntries == null)
+            {
+                RoomClient.Instance.SnapshotMessage.InventoryEntries = new InventoryEntryState[0];
+            }
+            else
+            {
+                InventoryEntryState[] entries = new InventoryEntryState[inventoryEntries.Length];
+                for (int i = 0; i < inventoryEntries.Length; i++)
+                {
+                    entries[i] = new InventoryEntryState
+                    {
+                        ItemId = inventoryEntries[i].itemId,
+                        Count = inventoryEntries[i].count,
+                    };
+                }
+
+                RoomClient.Instance.SnapshotMessage.InventoryEntries = entries;
+            }
             RoomClient.Instance.SnapshotMessage.CurrentBridgeCount = currentBridgeCount;
             
             // 3. [보완] 인스펙터의 편집용 데이터를 실제 프로토콜 규격(FishState) 배열로 변환하여 삽입

@@ -1,13 +1,12 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace WeGotOne
 {
     public class BridgeManager : SingletonBase<BridgeManager>
     {
         [field: SerializeField] public Bridge[] BridgeObjects { get; private set; }
-        private Inventory targetInventory;
+        private const int PLANK_ITEM_KEY = 0;
 
         public bool IsEnd => CurrentBridgeCount() == BridgeObjects.Length;
 
@@ -18,7 +17,6 @@ namespace WeGotOne
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            targetInventory = Inventory.Instance;
             BridgeObjects = GetComponentsInChildren<Bridge>(true);
         }
 
@@ -39,27 +37,12 @@ namespace WeGotOne
 
         public void BridgeBuild()
         {
-            InventorySlot[,] grid = targetInventory.SlotGrid;
-            
-            for (int i = 0; i < targetInventory.SizeRow; i++)
-            {
-                for (int j = 0; j < targetInventory.SizeColumn; j++)
-                {
-                    // 아이템 그리드
-                    ItemScriptableObject item = grid[i, j].Item;
-                    
-                    // 슬롯이 중간에 하나라도 비어있으면 종료 (승구님이 나중에 해주세용)
-                    if (item == null) return;
+            if (IsEnd) return;
 
-                    if (item.ItemType == ItemType.Plank &&
-                        InventoryItemDB.instance.ItemCountDic[item.Key] > 0)
-                    {
-                        grid[i, j].CountTextUpdate(item.Key, false);
-                        BridgeObjects[CurrentBridgeCount()].gameObject.SetActive(true);
-                        OnBridgeBuild?.Invoke();
-                        return;
-                    }
-                }
+            if (InventoryItemDB.Instance.TryConsume(PLANK_ITEM_KEY, 1))
+            {
+                BridgeObjects[CurrentBridgeCount()].gameObject.SetActive(true);
+                OnBridgeBuild?.Invoke();
             }
         }
 
