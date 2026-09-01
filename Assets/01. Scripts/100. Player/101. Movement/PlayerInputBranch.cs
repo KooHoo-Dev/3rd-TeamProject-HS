@@ -20,15 +20,12 @@ namespace WeGotOne
             if (controller.User == null) return;
             
             // 호스트는 직접 키보드 입력으로 계산
-            if (controller.User.IsHost)
-            {
-                Vector2 moveInput = SimpleInput.GetMoveAxisRaw();
-                bool leftGrab = SimpleInput.GetKey(Key.LeftShift);
-                bool rightGrab = SimpleInput.GetKey(Key.RightShift);
-                bool buildKey = SimpleInput.GetKey(Key.F);
-                    
-                controller.ApplyInput(moveInput, leftGrab, rightGrab, buildKey);
-            }
+            Vector2 moveInput = SimpleInput.GetMoveAxisRaw();
+            bool leftGrab = SimpleInput.GetKey(Key.LeftShift);
+            bool rightGrab = SimpleInput.GetKey(Key.RightShift);
+            bool buildKey = SimpleInput.GetKey(Key.F);
+                
+            controller.ApplyInput(moveInput, leftGrab, rightGrab, buildKey);
         }
     }
 }

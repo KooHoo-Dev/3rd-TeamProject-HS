@@ -345,10 +345,21 @@ namespace HelloServer
         private bool Spawn(User user)
         {
             // 이미 있으면 만들지 않는다. welcome 과 join 이 겹칠 수 있다.
+            // 호스트 O / Me O
+            // InputBranch O
+            // 호스트 O / Me X
+            // InputBranch X
+            // 호스트 X / Me O
+            // InputBranch X
+            // 호스트 X / Me X
+            // InputBranch X
             if (remotes.ContainsKey(user.Id)) return false;
 
             PlayerController remote = Instantiate(remotePrefab, spawnPoint.position, Quaternion.identity);
-            
+            if (Me.IsHost == false || (user.IsHost == false && Me.IsHost))
+            {
+                remote.GetComponentInChildren<PlayerInputBranch>().enabled = false;
+            }
             //---몸체랑 리지드바디랑 따로라서 그거 다 긁어오는 코드임
             Rigidbody2D[] rigid = remote.GetComponentsInChildren<Rigidbody2D>();
             for (int i = 0; i < rigid.Length; i++)
@@ -359,15 +370,6 @@ namespace HelloServer
                 }
             }
             //---
-
-            if (Me.IsHost == false)
-            {
-                foreach (PlayerController i in remotes.Values)
-                {
-                    foreach (var branch in i.GetComponentsInChildren<PlayerInputBranch>())
-                        branch.enabled = false;
-                }
-            }
 
             remote.Setup(user);
 
