@@ -384,7 +384,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1c982d3a21742b99f985276dfac5441, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItem
   <ThisItem>k__BackingField: {fileID: 11400000, guid: 77ba8dfe9083b6e448ecc9b14b9b8692, type: 2}
 --- !u!114 &7288073790878514883
@@ -418,9 +418,9 @@ MonoBehaviour:
     m_Bits: 16
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 8
-  obstacleCheckSize: {x: 0.8, y: 0.5}
-  obstacleCheckDistance: 1
+    m_Bits: 200
+  obstacleCheckSize: {x: 1, y: 1}
+  obstacleCheckDistance: 2
   detectCooldown: 0.1
 --- !u!1 &9166612466740588733
 GameObject:

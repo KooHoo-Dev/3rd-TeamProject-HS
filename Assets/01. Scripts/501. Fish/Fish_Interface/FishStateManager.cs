@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -48,16 +46,16 @@ namespace WeGotOne.Fish_Interface
             }
         }
         
-        private FishObstacleSensor waterLayerAlert; // 물 탈출 알리미
         public IFishState currentState;
 
         public Vector3 TargetPosition;
         
-        public BaitType myType;
-        public BaitType baitType;
-        public Vector3 BaitPosition;
+        public BaitType myType;     // 내 타입 (내가 대상일 경우 어떤 취급인지)
+        public BaitType baitType;   // 먹이 타입 (내가 타겟으로 삼을 대상)
+        public float Hunger;   // 배고픔 시간 (이걸로 먹을지 말지 결정)
+        public Vector3 BaitPosition;// 먹이 위치
 
-        private float lastEnteredWaterTime = -999f; // 마지막에 물에 들어온 시각
+        private float lastEnteredWaterTime; // 마지막에 물에 들어온 시각
         
         public Transform PlayerRootPosition { get; set; }
         [Header("납치 기믹 설정")]
@@ -67,21 +65,24 @@ namespace WeGotOne.Fish_Interface
         
         // 기절 파티클용
         [SerializeField] public ParticleSystem confusedParticle;
-
-        private void Awake()
+        
+        private void OnEnable()
         {
             fishMovement = GetComponent<FishMovement>();
-            
             obstacleSensor = GetComponent<FishObstacleSensor>();
             if (obstacleSensor != null)
             {
                 obstacleSensor.OnMovementBlocked += HandleWaterBoundary;
             }
-        }
 
-        private void Start()
-        {
             ResetResistance();
+            maxResistance = 0f;
+            waterExitCooldown = 0f;
+            TargetPosition = Vector3.zero;
+            BaitPosition = Vector3.zero;
+            Hunger = Random.Range(60f, 100f);
+            lastEnteredWaterTime = -1;
+            
             ChangeState(new FishIdleState());
         }
 
@@ -190,11 +191,6 @@ namespace WeGotOne.Fish_Interface
         private void TransitionTo(IFishState newState)
         {   
             if (newState == null) return;
-
-            if (currentState != null)
-            {
-                currentState.ExitAsync();
-            }
 
             currentState = newState;
             currentState.EnterAsync(this);
