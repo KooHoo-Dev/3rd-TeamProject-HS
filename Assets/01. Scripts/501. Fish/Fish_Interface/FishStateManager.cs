@@ -52,8 +52,10 @@ namespace WeGotOne.Fish_Interface
         
         public BaitType myType;     // 내 타입 (내가 대상일 경우 어떤 취급인지)
         public BaitType baitType;   // 먹이 타입 (내가 타겟으로 삼을 대상)
-        public float Hunger;   // 배고픔 시간 (이걸로 먹을지 말지 결정)
-        public Vector3 BaitPosition;// 먹이 위치
+        public float Hunger;   // 배고픔 게이지 (이걸로 먹을지 말지 결정)
+        public float HungerLimit;   // 이거 이하면 먹는거
+        public float HungerAmount;   // 내가 먹히면 얼마나 채워주는지
+        public FishStateManager BaitInfo;// 먹이 정보
 
         private float lastEnteredWaterTime; // 마지막에 물에 들어온 시각
         
@@ -79,7 +81,7 @@ namespace WeGotOne.Fish_Interface
             maxResistance = 0f;
             waterExitCooldown = 0f;
             TargetPosition = Vector3.zero;
-            BaitPosition = Vector3.zero;
+            BaitInfo = null;
             Hunger = Random.Range(60f, 100f);
             lastEnteredWaterTime = -1;
             
@@ -88,24 +90,8 @@ namespace WeGotOne.Fish_Interface
 
         private void Update()
         {
+            DecreaseFishHunger();
             currentState?.Tick();
-        }
-
-        #region 물 출입 시 실행할 예외 판단 및 위임 함수
-
-        private void HandleExitedWater()
-        {
-            if (Time.time - lastEnteredWaterTime < waterExitCooldown)
-            {
-                Debug.Log($"{name} 물 속 진입 쿨타임: 물 밖 판정 무시");
-                return;
-            }
-            
-            // 플레이어 손에 안 잡혀 있을 때만 물리 처리 위임
-            if (!IsGrabbed && fishMovement != null)
-            {
-                fishMovement.SetAirPhysics();
-            }
         }
 
         private void HandleWaterBoundary()
@@ -116,8 +102,35 @@ namespace WeGotOne.Fish_Interface
             }
         }
         
-        #endregion
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            // 현재 상태 먹이 추적 + other에 물고기 상태머신 잇으면
+            if (currentState is FishBaitState && other.TryGetComponent(out FishStateManager fishState))
+            {
+                // 배고픔 관련. 다른 물고기 들어왔을때 배고프면 먹게
+                if (fishState == BaitInfo && Hunger > HungerLimit)
+                {
+                    IncreaseFishHunger(fishState.HungerAmount);
+                    BaitInfo = null;
+                    ChangeState(new FishIdleState());
+                }
+            }
+        }
         
+        # region 배고픔 관련
+
+        private void DecreaseFishHunger()
+        {
+            Hunger = Mathf.Max(0f, Hunger -= Time.deltaTime);
+        }
+        
+        public void IncreaseFishHunger(float amount)
+        {
+            Hunger += amount;
+        }
+        
+        # endregion
+
         #region 저항도 제어 함수
 
         public void DecreaseResistance(float amount)
@@ -211,9 +224,9 @@ namespace WeGotOne.Fish_Interface
         }
 
         #endregion
-
-        #region 파티클 켜주는 함수
-
+        
+        # region 상태이상 파티클
+        // 파티클 켜주는 함수
         public void PlayConfusedParticle()
         {
             // 파티클 없으면 리턴
@@ -236,8 +249,7 @@ namespace WeGotOne.Fish_Interface
             // 안켜져있을때만 켜는거에요
             confusedParticle.gameObject.SetActive(false);
         }
-
-        #endregion
         
+        # endregion
     }
 }

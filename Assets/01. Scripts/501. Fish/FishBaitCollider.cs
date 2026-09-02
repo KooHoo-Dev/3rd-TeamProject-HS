@@ -7,6 +7,7 @@ namespace WeGotOne
     public class FishBaitCollider : MonoBehaviour
     {
         [SerializeField] private FishStateManager fishStateManager;
+        private FishStateManager target;
         [SerializeField] private Collider2D detectingRange;
 
         private void Awake()
@@ -19,10 +20,21 @@ namespace WeGotOne
         {
             if (other.TryGetComponent(out FishStateManager fishState))
             {
-                if (fishState.baitType == fishStateManager.baitType)
+                if (fishState.myType == fishStateManager.baitType)
                 {
-                    fishStateManager.BaitPosition = fishState.transform.position;
+                    fishStateManager.BaitInfo = fishState;
                     fishStateManager.ChangeState(new FishBaitState());
+                }
+            }
+        }
+        
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.TryGetComponent(out FishStateManager fishState))
+            {
+                if (fishState == fishStateManager.BaitInfo)
+                {
+                    fishStateManager.BaitInfo = null;
                 }
             }
         }
