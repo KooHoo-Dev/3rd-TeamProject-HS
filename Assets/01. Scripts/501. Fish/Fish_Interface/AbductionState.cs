@@ -42,7 +42,8 @@ namespace WeGotOne.Fish_Interface
 
             if (direction.sqrMagnitude <= (floorDistance * floorDistance)) // 이거 이미 동일해서 무한 반복
             {
-                owner.ChangeState(new FishPatrolState());
+
+                ExitAsync();
             }
         }
 
@@ -55,6 +56,7 @@ namespace WeGotOne.Fish_Interface
             
             playerRig.bodyType = RigidbodyType2D.Dynamic;
             caughtPlayer = null;
+            owner.ChangeState(new FishPatrolState());
         }
     }
 }
