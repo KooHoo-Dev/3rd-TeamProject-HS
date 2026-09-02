@@ -46,7 +46,7 @@ namespace WeGotOne.Fish_Interface
             }
         }
         
-        private WaterLayerAlert waterLayerAlert; // 물 탈출 알리미
+        private FishObstacleSensor waterLayerAlert; // 물 탈출 알리미
         public IFishState currentState;
 
         public Vector3 TargetPosition;

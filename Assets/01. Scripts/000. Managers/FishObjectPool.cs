@@ -8,6 +8,9 @@ namespace WeGotOne
     {
         [SerializeField] private WorldItem[] fishPrefabs;
         [SerializeField] private Transform[] itemTransforms;
+        
+        // 물고기 소환 시 제한 영역 설정용
+        [SerializeField] private Collider2D waterArea;
 
         private readonly Dictionary<int, Queue<WorldItem>> inactiveFishByItemId = new();
 
@@ -62,6 +65,14 @@ namespace WeGotOne
             }
 
             WorldItem fish = Instantiate(prefab, parent);
+            FishMovement water = fish.GetComponent<FishMovement>();
+                    
+            Debug.Log(water.gameObject.name);
+
+            if (water != null)
+            {
+                water.SetWaterArea(waterArea);
+            }
             InitializeFish(fish);
             return fish;
         }
