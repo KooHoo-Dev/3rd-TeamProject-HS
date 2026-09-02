@@ -108,7 +108,8 @@ namespace WeGotOne
                     if (itemObjectPool.TryGetRandomFishItemId(out int itemId) == false)
                         continue;
 
-                    fishWorldItem = itemObjectPool.GetFish(itemId, spawnPoint);
+                    fishWorldItem = itemObjectPool.GetFish(itemId);
+                    fishWorldItem.transform.SetParent(spawnPoint);
                 }
 
                 if (fishWorldItem == null || fishWorldItem.TryGetComponent<Fish>(out _) == false)
@@ -146,7 +147,7 @@ namespace WeGotOne
             {
                 if (worldItemRegistry.TryGetWorldItem(state.WorldItemId, out WorldItem worldItem) == false)
                 {
-                    worldItem = itemObjectPool.GetFish(state.ItemId, null);
+                    worldItem = itemObjectPool.GetFish(state.ItemId);
                     if (worldItem == null)
                         continue;
 

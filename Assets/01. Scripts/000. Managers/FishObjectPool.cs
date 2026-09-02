@@ -41,7 +41,7 @@ namespace WeGotOne
             return true;
         }
 
-        public WorldItem GetFish(int itemId, Transform parent)
+        public WorldItem GetFish(int itemId)
         {
             if (inactiveFishByItemId.TryGetValue(itemId, out Queue<WorldItem> inactiveFish))
             {
@@ -51,7 +51,6 @@ namespace WeGotOne
                     if (pooledFish == null)
                         continue;
 
-                    pooledFish.transform.SetParent(parent, true);
                     InitializeFish(pooledFish);
                     return pooledFish;
                 }
@@ -64,7 +63,7 @@ namespace WeGotOne
                 return null;
             }
 
-            WorldItem fish = Instantiate(prefab, parent);
+            WorldItem fish = Instantiate(prefab);
             FishMovement water = fish.GetComponent<FishMovement>();
                     
             Debug.Log(water.gameObject.name);
