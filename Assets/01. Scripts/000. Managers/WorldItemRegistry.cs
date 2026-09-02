@@ -85,7 +85,7 @@ namespace WeGotOne
             for (int i = 0; i < parent.childCount; i++)
             {
                 Transform child = parent.GetChild(i);
-                if (child.TryGetComponent<Plank>(out _) && child.TryGetComponent<WorldItem>(out WorldItem worldItem))
+                if (child.TryGetComponent<Plank>(out _) && child.TryGetComponent(out WorldItem worldItem))
                 {
                     int worldItemId = nextFixedWorldItemId++;
                     worldItems.Add(worldItemId, worldItem);

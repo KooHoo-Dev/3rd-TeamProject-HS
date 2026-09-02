@@ -11,7 +11,6 @@ namespace WeGotOne
     {
         private FishObjectPool itemObjectPool;
         private WorldItemRegistry worldItemRegistry;
-        private bool initialFishSpawned;
 
         private void Awake()
         {
@@ -23,13 +22,7 @@ namespace WeGotOne
         {
             yield return new WaitUntil(() => RoomClient.Instance != null && RoomClient.Instance.Me != null);
 
-            // 호스트이면 물고기 스폰
-            if (RoomClient.Instance.Me.IsHost)
-            {
-                SpawnInitialFishForHost();
-            }
-            // 게스트이면 판자 비활성화
-            else
+            if (RoomClient.Instance.Me.IsHost == false)
             {
                 LockFixedPlanksForGuest();
             }
@@ -95,36 +88,6 @@ namespace WeGotOne
             ApplyPlanks(snapshot.Planks ?? Array.Empty<PlankState>());
         }
 
-        private void SpawnInitialFishForHost()
-        {
-            foreach (Transform spawnPoint in itemObjectPool.InitialFishSpawnPoints)
-            {
-                if (spawnPoint == null)
-                    continue;
-
-                WorldItem fishWorldItem = spawnPoint.GetComponentInChildren<WorldItem>(true);
-                if (fishWorldItem == null)
-                {
-                    if (itemObjectPool.TryGetRandomFishItemId(out int itemId) == false)
-                        continue;
-
-                    fishWorldItem = itemObjectPool.GetFish(itemId);
-                    fishWorldItem.transform.SetParent(spawnPoint);
-                }
-
-                if (fishWorldItem == null || fishWorldItem.TryGetComponent<Fish>(out _) == false)
-                {
-                    Debug.LogError($"[WorldItemSnapshotSynchronizer] 초기 Fish 스폰 지점이 올바르지 않습니다: {spawnPoint.name}");
-                    continue;
-                }
-
-                fishWorldItem.SetIsPickUp(false);
-                fishWorldItem.transform.position = spawnPoint.position;
-                fishWorldItem.gameObject.SetActive(true);
-                worldItemRegistry.RegisterNewDynamic(fishWorldItem, out _);
-            }
-        }
-
         private void LockFixedPlanksForGuest()
         {
             foreach (int worldItemId in worldItemRegistry.FixedWorldItemIds)
@@ -147,13 +110,13 @@ namespace WeGotOne
             {
                 if (worldItemRegistry.TryGetWorldItem(state.WorldItemId, out WorldItem worldItem) == false)
                 {
-                    worldItem = itemObjectPool.GetFish(state.ItemId);
+                    worldItem = itemObjectPool.Get(state.ItemId);
                     if (worldItem == null)
                         continue;
 
                     if (worldItemRegistry.RegisterDynamic(worldItem, state.WorldItemId) == false)
                     {
-                        itemObjectPool.ReleaseFish(worldItem);
+                        itemObjectPool.Release(worldItem);
                         continue;
                     }
                 }
@@ -183,7 +146,7 @@ namespace WeGotOne
             {
                 if (worldItemRegistry.UnregisterDynamic(worldItemId, out WorldItem worldItem))
                 {
-                    itemObjectPool.ReleaseFish(worldItem);
+                    itemObjectPool.Release(worldItem);
                 }
             }
         }
