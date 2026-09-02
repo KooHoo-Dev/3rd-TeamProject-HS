@@ -290,7 +290,7 @@ Transform:
   m_GameObject: {fileID: 115954746}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 30.34, y: -10.116844, z: 0}
+  m_LocalPosition: {x: 124.51, y: -30.74, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -934,11 +934,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8206142639208193814, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.01
+      value: 107.72
       objectReference: {fileID: 0}
     - target: {fileID: 8206142639208193814, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.11
+      value: -1.74
       objectReference: {fileID: 0}
     - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: url
@@ -2219,6 +2219,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 982114959}
+  - component: {fileID: 982114960}
+  - component: {fileID: 982114961}
+  - component: {fileID: 982114962}
   m_Layer: 0
   m_Name: MineChain
   m_TagString: Untagged
@@ -2241,6 +2244,84 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1455956770}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.272}
+--- !u!58 &982114960
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982114958}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 7.1655993, y: 0.14193061}
+  m_Radius: 1.636955
+--- !u!50 &982114961
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982114958}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &982114962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982114958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6367be9b3c7247179183c1d10a507d4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.MineController
+  knockbackForce: 50
+  forceMode: 1
+  cooldown: 1
 --- !u!1001 &1004077483
 PrefabInstance:
   m_ObjectHideFlags: 0
