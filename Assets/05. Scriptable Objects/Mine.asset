@@ -16,4 +16,4 @@ MonoBehaviour:
   Name: Mine
   Icon: {fileID: 0}
   Fullness: 0
-  ItemType: 1
+  ItemType: 0

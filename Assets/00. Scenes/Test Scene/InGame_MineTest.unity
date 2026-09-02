@@ -940,6 +940,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1561437504}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &627207911 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6097662354195088799, guid: 4e16eb1d8525406468f45512e6066e0e, type: 3}
+  m_PrefabInstance: {fileID: 1170047647742651166}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &627207913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627207911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9dba67fa23d55843814345fafefb3b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Plank
 --- !u!1001 &651125907
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3586,7 +3603,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6097662354195088799, guid: 4e16eb1d8525406468f45512e6066e0e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 627207913}
   m_SourcePrefab: {fileID: 100100000, guid: 4e16eb1d8525406468f45512e6066e0e, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
