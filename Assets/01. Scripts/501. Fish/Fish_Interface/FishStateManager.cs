@@ -111,7 +111,6 @@ namespace WeGotOne.Fish_Interface
                 if (fishState == BaitInfo && Hunger < HungerLimit)
                 {
                     IncreaseFishHunger(fishState.HungerAmount);
-                    Debug.Log(1);
                     BaitInfo = null;
                     ChangeState(new FishIdleState());
                 }
