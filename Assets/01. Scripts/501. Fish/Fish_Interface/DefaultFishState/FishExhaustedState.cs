@@ -11,7 +11,7 @@ namespace WeGotOne.Fish_Interface
     public class FishExhaustedState : IFishState
     {
         private FishStateManager owner;
-        public void EnterAsync(FishStateManager owner)
+        public void Enter(FishStateManager owner)
         {
             this.owner = owner;
             Debug.Log($"{owner.name} : 완전히 탈진했습니다. 손쉽게 낚아올릴 수 있는 기회입니다!");
@@ -29,7 +29,7 @@ namespace WeGotOne.Fish_Interface
             // 탈진했으므로 아무런 매 프레임 업데이트 행동을 하지 않습니다.
         }
 
-        public void ExitAsync()
+        public void Exit()
         {
             if(owner.confusedParticle != null)
                 owner.StopConfusedParticle();

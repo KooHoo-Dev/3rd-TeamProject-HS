@@ -15,7 +15,7 @@ namespace WeGotOne.Fish_Interface
         
         private float runawayTimer;
 
-        public void EnterAsync(FishStateManager owner)
+        public void Enter(FishStateManager owner)
         {
             this.owner = owner;
             Debug.Log($"{owner.name} : 도망 상태(Runaway) 시작.");
@@ -41,7 +41,7 @@ namespace WeGotOne.Fish_Interface
             }
         }
 
-        public void ExitAsync()
+        public void Exit()
         {
             if (owner != null && owner.FishMovement != null)
             {

@@ -14,7 +14,7 @@ namespace WeGotOne.Fish_Interface
         private float struggleForceMultiplier = 10f;
         private float directionChangeTimer;
 
-        public void EnterAsync(FishStateManager owner)
+        public void Enter(FishStateManager owner)
         {
             this.owner = owner;
             Debug.Log($"{owner.name} : 힘겨루기 상태(Caught) 진입.");
@@ -71,7 +71,7 @@ namespace WeGotOne.Fish_Interface
             Debug.Log($"지형 충돌! 저항도 {damageToResistance:F1} 감소.");
         }
         
-        public void ExitAsync()
+        public void Exit()
         {   
             if (collisionHandler != null)
             {

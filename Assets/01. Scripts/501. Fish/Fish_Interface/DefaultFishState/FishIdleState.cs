@@ -17,7 +17,7 @@ namespace WeGotOne.Fish_Interface
             this.idleDruation = idleDruation;
         }
         
-        public void EnterAsync(FishStateManager owner)
+        public void Enter(FishStateManager owner)
         {
             this.owner = owner;
         }
@@ -34,7 +34,7 @@ namespace WeGotOne.Fish_Interface
             }
         }
 
-        public void ExitAsync()
+        public void Exit()
         {
         }
     }

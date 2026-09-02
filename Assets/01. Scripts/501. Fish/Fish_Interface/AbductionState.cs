@@ -17,7 +17,7 @@ namespace WeGotOne.Fish_Interface
         private Transform targetPosition;
         private float destinationTolerance = 0.5f;
 
-        public void EnterAsync(FishStateManager owner)
+        public void Enter(FishStateManager owner)
         {
             this.owner = owner;
             caughtPlayer = owner.PlayerRootPosition.GetChild(0).GetComponent<Transform>(); // 매니저에 저장된 플레이어 정보 가져오기
@@ -44,11 +44,11 @@ namespace WeGotOne.Fish_Interface
             if (direction.sqrMagnitude <= (floorDistance * floorDistance)) // 이거 이미 동일해서 무한 반복
             {
 
-                ExitAsync();
+                Exit();
             }
         }
 
-        public void ExitAsync()
+        public void Exit()
         {
             if (owner != null && owner.FishMovement != null)
             {
