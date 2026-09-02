@@ -13,7 +13,6 @@ public class ShrimpPunch : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Rigidbody2D bodyRb= other.transform.GetComponent<Rigidbody2D>();
-            Debug.Log(bodyRb.bodyType);
             StartCoroutine(PlayConfusedParticle()); 
            bodyRb.AddForce(new Vector2(direction.x, direction.y) * knockbackForce,  ForceMode2D.Impulse);
         }
