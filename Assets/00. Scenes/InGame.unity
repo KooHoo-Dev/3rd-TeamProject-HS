@@ -2570,6 +2570,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8437480414046816564, guid: d25647ee378c8f14aa01f40830fc61fe, type: 3}
+      propertyPath: fishItem
+      value: 
+      objectReference: {fileID: 11400000, guid: aa4f8eefe827fd942b581e820c903679, type: 2}
     - target: {fileID: 9104403235465381837, guid: d25647ee378c8f14aa01f40830fc61fe, type: 3}
       propertyPath: fishItem
       value: 
@@ -2939,6 +2943,7 @@ MonoBehaviour:
   - {fileID: 5130000000000000002, guid: 9f38c5641ae18ed4badf78e3ccb5a155, type: 3}
   - {fileID: 5130000000000000003, guid: 8ceba3a66e4413c449e53e0e95e09393, type: 3}
   - {fileID: -5159987235780601807, guid: bc83b3f640eae954599cc972e33b0761, type: 3}
+  - {fileID: 6392807594458476488, guid: 344e9e3f5cdb8b44b8d5125b65282775, type: 3}
 --- !u!4 &1561437504
 Transform:
   m_ObjectHideFlags: 0
