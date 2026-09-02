@@ -183,9 +183,11 @@ GameObject:
   - component: {fileID: 6191839658946768321}
   - component: {fileID: 1413941806736380152}
   - component: {fileID: 5252592357397533843}
+  - component: {fileID: -5159987235780601807}
+  - component: {fileID: 5560157644525639928}
   m_Layer: 0
   m_Name: squid
-  m_TagString: Untagged
+  m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -199,7 +201,7 @@ Transform:
   m_GameObject: {fileID: 2018563211108686658}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -5.13, y: 1.26, z: 0}
   m_LocalScale: {x: 2.3103049, y: 3.16147, z: 2.4319}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -338,6 +340,7 @@ MonoBehaviour:
   TargetPosition: {x: 0, y: 0, z: 0}
   myType: 0
   baitType: 0
+  Hunger: 0
   BaitPosition: {x: 0, y: 0, z: 0}
   <AbductionDestination>k__BackingField: {fileID: 0}
   confusedParticle: {fileID: 0}
@@ -357,3 +360,37 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   minImpactThreshold: 5
+--- !u!114 &-5159987235780601807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2018563211108686658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1c982d3a21742b99f985276dfac5441, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItem
+  <ThisItem>k__BackingField: {fileID: 11400000, guid: 6b278b4b7effb5c45b39dda38b9dd85c, type: 2}
+--- !u!114 &5560157644525639928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2018563211108686658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3422f60eaf45a2bee6e70a12a18155, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishObstacleSensor
+  waterLayer:
+    serializedVersion: 2
+    m_Bits: 16
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 200
+  obstacleCheckSize: {x: 12, y: 17}
+  obstacleCheckDistance: 3
+  detectCooldown: 0.1

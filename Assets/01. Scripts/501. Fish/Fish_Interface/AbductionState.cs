@@ -28,7 +28,10 @@ namespace WeGotOne.Fish_Interface
         public void Tick()
         {
             // 매니저(owner)가 가지고 있는 목적지 정보를 참조하여 방향 계산
-            Vector2 direction = (owner.AbductionDestination.position - owner.transform.position);
+            // 나중에 스폰 매니저 결정되면 스폰매니저가 납치 장소 주입해주기
+            // 지금은 인게임씬 활성화 용으로 납치 좌표 하드코딩
+            Vector2 hardCodedAbductionTarget = new Vector2(150, -45);
+            Vector2 direction = (hardCodedAbductionTarget - (Vector2) owner.transform.position);
     
             owner.FishMovement.Move(direction, moveSpeed);
     
