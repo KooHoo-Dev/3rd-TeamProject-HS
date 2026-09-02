@@ -56,7 +56,12 @@ namespace WeGotOne.Fish_Interface
         public float HungerLimit;   // 이거 이하면 먹는거
         public float HungerAmount;   // 내가 먹히면 얼마나 채워주는지
         public FishStateManager BaitInfo;// 먹이 정보
-
+        public PlayerController TargetInfo;// 먹이 정보
+        
+        // 문어 발사체 정보
+        [SerializeField] private GameObject bulletPrefab;
+        public GameObject BulletPrefab => bulletPrefab;
+        
         private float lastEnteredWaterTime; // 마지막에 물에 들어온 시각
         
         public Transform PlayerRootPosition { get; set; }
@@ -206,7 +211,7 @@ namespace WeGotOne.Fish_Interface
             if (newState == null) return;
 
             currentState = newState;
-            currentState.EnterAsync(this);
+            currentState.Enter(this);
         }
         
         public void OnPlayerCaught(Transform playerTransform)

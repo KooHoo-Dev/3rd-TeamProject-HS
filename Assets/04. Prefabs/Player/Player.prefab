@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4165808939821591650}
   - component: {fileID: 4804860982359286992}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spot Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 2418327588423444690}
   - component: {fileID: 301989187574472818}
   - component: {fileID: 4012869575883389570}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LArmBottom
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -358,7 +358,7 @@ GameObject:
   - component: {fileID: 2336957343091321679}
   - component: {fileID: 550219610112428236}
   - component: {fileID: 3268682740396023765}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RArmBottom
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -615,7 +615,7 @@ GameObject:
   - component: {fileID: 1836112645504577546}
   - component: {fileID: 6291487196056199621}
   - component: {fileID: 7086020965851340501}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Body
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -828,7 +828,7 @@ GameObject:
   - component: {fileID: 4009199454919560409}
   - component: {fileID: 5190216333834068254}
   - component: {fileID: 2222835129270145667}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LArmTop
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1052,7 +1052,7 @@ GameObject:
   - component: {fileID: 8635207882154615099}
   - component: {fileID: 4486202388607047204}
   - component: {fileID: 8584682757191233501}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LHand
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1200,7 +1200,7 @@ GameObject:
   - component: {fileID: 2584043572367064611}
   - component: {fileID: 2329025104108696655}
   - component: {fileID: 5922048834760823945}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RHand
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1350,7 +1350,7 @@ GameObject:
   - component: {fileID: 8502905824449650423}
   - component: {fileID: 425272060853108967}
   - component: {fileID: 6730427511394347284}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RArmTop
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1572,7 +1572,7 @@ GameObject:
   - component: {fileID: 3406981031449218974}
   - component: {fileID: 528338847005338557}
   - component: {fileID: 4725110930171532697}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1635,6 +1635,10 @@ PrefabInstance:
     - target: {fileID: 1606648664194177568, guid: ad6fb785fdae6bf4c9bdd76fa9f3f13a, type: 3}
       propertyPath: m_Name
       value: Bubble
+      objectReference: {fileID: 0}
+    - target: {fileID: 1606648664194177568, guid: ad6fb785fdae6bf4c9bdd76fa9f3f13a, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1606648664194177568, guid: ad6fb785fdae6bf4c9bdd76fa9f3f13a, type: 3}
       propertyPath: m_IsActive
@@ -1706,6 +1710,10 @@ PrefabInstance:
     - target: {fileID: 1606648664194177568, guid: ad6fb785fdae6bf4c9bdd76fa9f3f13a, type: 3}
       propertyPath: m_Name
       value: Bubble
+      objectReference: {fileID: 0}
+    - target: {fileID: 1606648664194177568, guid: ad6fb785fdae6bf4c9bdd76fa9f3f13a, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1606648664194177568, guid: ad6fb785fdae6bf4c9bdd76fa9f3f13a, type: 3}
       propertyPath: m_IsActive

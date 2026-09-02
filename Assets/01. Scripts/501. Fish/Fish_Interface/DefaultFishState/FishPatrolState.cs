@@ -11,7 +11,7 @@ namespace WeGotOne.Fish_Interface
         private float patrolSpeed = 2.0f;
         private float waypointTolerance = 0.5f;
 
-        public void EnterAsync(FishStateManager owner)
+        public void Enter(FishStateManager owner)
         {
             this.owner = owner;
             SetNewWaypoint(); // 첫 목적지 설정
@@ -33,7 +33,7 @@ namespace WeGotOne.Fish_Interface
             owner.FishMovement.Move(direction, patrolSpeed);
         }
 
-        public void ExitAsync()
+        public void Exit()
         {
             if (owner != null && owner.FishMovement != null)
             {

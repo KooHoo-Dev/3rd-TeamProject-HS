@@ -13,7 +13,7 @@ namespace WeGotOne.Fish_Interface
         
         private float finalFaintDuration;
         private float faintTimer;
-        public void EnterAsync(FishStateManager owner)
+        public void Enter(FishStateManager owner)
         {
             this.owner = owner;
             recoveryOffset = owner.MaxResistance * 0.15f;
@@ -34,7 +34,7 @@ namespace WeGotOne.Fish_Interface
             }
         }
 
-        public void ExitAsync()
+        public void Exit()
         {
         }
     }

@@ -11,7 +11,7 @@ namespace WeGotOne.Fish_Interface
         private float baitSpeed = 2.0f;
         private float waypointTolerance = 0.5f;
 
-        public void EnterAsync(FishStateManager owner)
+        public void Enter(FishStateManager owner)
         {
             this.owner = owner;
         }
@@ -24,7 +24,7 @@ namespace WeGotOne.Fish_Interface
             
             if(owner.BaitInfo == null)
             {
-                ExitAsync();
+                Exit();
                 return;
             }
             
@@ -35,11 +35,11 @@ namespace WeGotOne.Fish_Interface
             float distance = Vector2.Distance(owner.transform.position, targetStateManager.transform.position);
             if (distance < waypointTolerance)
             {
-                ExitAsync();
+                Exit();
             }
         }
 
-        public void ExitAsync()
+        public void Exit()
         {
             targetStateManager = null;
             owner.FishMovement.StopMove();
