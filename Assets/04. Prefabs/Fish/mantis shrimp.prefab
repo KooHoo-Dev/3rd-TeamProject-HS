@@ -272,6 +272,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2472721469570617402}
   - component: {fileID: 1856456135879610273}
+  - component: {fileID: 2775776298552685902}
   m_Layer: 0
   m_Name: Punch Area
   m_TagString: Untagged
@@ -288,8 +289,8 @@ Transform:
   m_GameObject: {fileID: 5222690797306602521}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.26, y: 0.57, z: 0}
-  m_LocalScale: {x: 1.8132, y: 1.8132, z: 1.8132}
+  m_LocalPosition: {x: 3.86, y: 0.57, z: 0}
+  m_LocalScale: {x: 4.345334, y: 4.345334, z: 4.345334}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2272016268120837021}
@@ -340,3 +341,17 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2775776298552685902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5222690797306602521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 483a3e2dbc222dc439f1458023b4062c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShrimpPunch
+  knockbackForce: 3
+  direction: {x: 1, y: 1, z: 0}
