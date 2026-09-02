@@ -250,7 +250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Fish_Interface.FishStateManager
   fishMovement: {fileID: 4895819399157256878}
-  maxResistance: 6
+  maxResistance: 7
   waterExitCooldown: 1
   obstacleSensor: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
@@ -333,7 +333,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1c982d3a21742b99f985276dfac5441, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItem
   <ThisItem>k__BackingField: {fileID: 11400000, guid: eaccd67f95915aa44973cd8f1bb51f53, type: 2}
 --- !u!61 &3402221713284153257
@@ -413,9 +413,9 @@ MonoBehaviour:
     m_Bits: 16
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 8
-  obstacleCheckSize: {x: 0.8, y: 0.5}
-  obstacleCheckDistance: 1
+    m_Bits: 200
+  obstacleCheckSize: {x: 1, y: 1}
+  obstacleCheckDistance: 2
   detectCooldown: 0.1
 --- !u!1001 &2151186539490834718
 PrefabInstance:
