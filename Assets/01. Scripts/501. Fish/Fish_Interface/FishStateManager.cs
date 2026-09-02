@@ -108,9 +108,10 @@ namespace WeGotOne.Fish_Interface
             if (currentState is FishBaitState && other.TryGetComponent(out FishStateManager fishState))
             {
                 // 배고픔 관련. 다른 물고기 들어왔을때 배고프면 먹게
-                if (fishState == BaitInfo && Hunger > HungerLimit)
+                if (fishState == BaitInfo && Hunger < HungerLimit)
                 {
                     IncreaseFishHunger(fishState.HungerAmount);
+                    Debug.Log(1);
                     BaitInfo = null;
                     ChangeState(new FishIdleState());
                 }
