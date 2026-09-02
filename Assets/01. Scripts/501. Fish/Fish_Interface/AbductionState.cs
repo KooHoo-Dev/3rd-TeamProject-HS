@@ -1,6 +1,4 @@
-﻿using Unity.Android.Gradle;
-using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
+﻿using UnityEngine;
 
 namespace WeGotOne.Fish_Interface
 {

@@ -1,47 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace WeGotOne
 {
-    public class FishObjectPool : MonoBehaviour
+    public sealed class FishObjectPool : MonoBehaviour
     {
         [SerializeField] private WorldItem[] fishPrefabs;
-        [SerializeField] private Transform[] itemTransforms;
-        
-        // 물고기 소환 시 제한 영역 설정용
-        [SerializeField] private Collider2D waterArea;
 
         private readonly Dictionary<int, Queue<WorldItem>> inactiveFishByItemId = new();
 
-
-        #region public method
-
-        public IReadOnlyList<Transform> InitialFishSpawnPoints => itemTransforms;
-
-        public bool TryGetRandomFishItemId(out int itemId)
-        {
-            List<WorldItem> validPrefabs = new();
-            foreach (WorldItem prefab in fishPrefabs)
-            {
-                if (IsFishPrefab(prefab))
-                {
-                    validPrefabs.Add(prefab);
-                }
-            }
-
-            if (validPrefabs.Count == 0)
-            {
-                itemId = -1;
-                Debug.LogError("[ItemObjectPool] Fish 프리팹이 설정되지 않았습니다.");
-                return false;
-            }
-
-            itemId = validPrefabs[Random.Range(0, validPrefabs.Count)].ItemId;
-            return true;
-        }
-
-        public WorldItem GetFish(int itemId, Transform parent)
+        public WorldItem Get(int itemId)
         {
             if (inactiveFishByItemId.TryGetValue(itemId, out Queue<WorldItem> inactiveFish))
             {
@@ -51,7 +19,6 @@ namespace WeGotOne
                     if (pooledFish == null)
                         continue;
 
-                    pooledFish.transform.SetParent(parent, true);
                     InitializeFish(pooledFish);
                     return pooledFish;
                 }
@@ -64,20 +31,12 @@ namespace WeGotOne
                 return null;
             }
 
-            WorldItem fish = Instantiate(prefab, parent);
-            FishMovement water = fish.GetComponent<FishMovement>();
-                    
-            Debug.Log(water.gameObject.name);
-
-            if (water != null)
-            {
-                water.SetWaterArea(waterArea);
-            }
+            WorldItem fish = Instantiate(prefab);
             InitializeFish(fish);
             return fish;
         }
 
-        public void ReleaseFish(WorldItem fish)
+        public void Release(WorldItem fish)
         {
             if (fish == null)
                 return;
@@ -99,10 +58,6 @@ namespace WeGotOne
 
             inactiveFish.Enqueue(fish);
         }
-
-        #endregion
-
-        #region private method
 
         private WorldItem FindFishPrefab(int itemId)
         {
@@ -128,7 +83,5 @@ namespace WeGotOne
             fish.SetIsPickUp(false);
             fish.gameObject.SetActive(true);
         }
-
-        #endregion
     }
 }
