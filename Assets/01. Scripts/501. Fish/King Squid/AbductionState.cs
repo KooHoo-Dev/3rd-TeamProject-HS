@@ -43,7 +43,6 @@ namespace WeGotOne.Fish_Interface
 
             if (direction.sqrMagnitude <= (floorDistance * floorDistance)) // 이거 이미 동일해서 무한 반복
             {
-
                 ExitAsync();
             }
         }
