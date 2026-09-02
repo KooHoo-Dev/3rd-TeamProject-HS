@@ -20,30 +20,36 @@ namespace WeGotOne
         [SerializeField] private float cooldown = 1.0f;
         private float lastTriggeredTime = -999f;
 
-        private bool isHost;
+        private bool IsHost => RoomClient.Instance != null && 
+                                                      RoomClient.Instance.Me != null && 
+                                                      RoomClient.Instance.Me.IsHost;
 
-        private void Start()
-        {
-            isHost = RoomClient.Instance.Me != null && RoomClient.Instance.Me.IsHost;
-        }
-
+        
         private void OnTriggerEnter2D(Collider2D other)
         {
-            Debug.Log($"[Mine] 트리거 진입: {other.name}, isHost: {isHost}"); // 임시로 추가
+            Debug.Log($"[Mine] 트리거 진입: {other.name}, isHost: {IsHost}"); // 임시로 추가
             // 물리 판정은 호스트 전용 - 게스트는 스냅샷으로 결과만 반영받음
-            if (!isHost) return;
+            if (IsHost == false) return;
             if (Time.time - lastTriggeredTime < cooldown) return;
 
             // 닿은 콜라이더가 어느 플레이어 소속인지 확인 (물고기/판자 등은 무시)
             PlayerController player = other.GetComponentInParent<PlayerController>();
             if (player == null) return;
-
-            Rigidbody2D bodyRb = player.Body.GetComponent<Rigidbody2D>();
-            if (bodyRb == null) return;
-
+            
+            // Rigidbody2D 부품을 가장 안전하게 검색해옵니다.
+            Rigidbody2D bodyRb = player.GetComponentInChildren<Rigidbody2D>();
+            if (bodyRb == null)
+            {
+                Debug.LogWarning($"[Mine] {player.name}의 하위 계층에서 Rigidbody2D를 찾을 수 없습니다.");
+                return;
+            }
+            
+            // 3. 실제 물리 엔진이 달린 bodyRb의 좌표를 기준으로 넉백 방향을 계산합니다.
             Vector2 direction = (bodyRb.position - (Vector2)transform.position).normalized;
             if (direction == Vector2.zero) direction = Vector2.up; // 완전히 겹친 경우 방어
-
+            
+            
+            // 4. 찾은 Rigidbody2D에 힘을 즉각 가합니다.
             bodyRb.AddForce(direction * knockbackForce, forceMode);
 
             lastTriggeredTime = Time.time;
