@@ -7,37 +7,43 @@ namespace WeGotOne.Fish_Interface
     public class FishBaitState : IFishState
     {
         private FishStateManager owner;
-        private Vector2 targetPosition;
+        private FishStateManager targetStateManager;
         private float baitSpeed = 2.0f;
         private float waypointTolerance = 0.5f;
 
         public void EnterAsync(FishStateManager owner)
         {
             this.owner = owner;
-            targetPosition = owner.BaitPosition;
         }
 
         public void Tick()
         {
             if (owner == null || owner.FishMovement == null) return;
+
+            if (owner.Hunger > owner.HungerLimit) return;
             
-            Vector2 direction = (targetPosition - (Vector2)owner.transform.position).normalized;
+            if(owner.BaitInfo == null)
+            {
+                ExitAsync();
+                return;
+            }
+            
+            targetStateManager = owner.BaitInfo;
+            Vector2 direction = (targetStateManager.transform.position - owner.transform.position).normalized;
             owner.FishMovement.Move(direction, baitSpeed);
             
-            float distance = Vector2.Distance(owner.transform.position, targetPosition);
+            float distance = Vector2.Distance(owner.transform.position, targetStateManager.transform.position);
             if (distance < waypointTolerance)
             {
-                targetPosition = new Vector2(0,0);
-                Debug.Log("도착");
+                ExitAsync();
             }
         }
 
         public void ExitAsync()
         {
-            if (owner != null && owner.FishMovement != null)
-            {
-                owner.FishMovement.StopMove();
-            }
+            targetStateManager = null;
+            owner.FishMovement.StopMove();
+            owner.ChangeState(new FishIdleState());
         }
     }
 }

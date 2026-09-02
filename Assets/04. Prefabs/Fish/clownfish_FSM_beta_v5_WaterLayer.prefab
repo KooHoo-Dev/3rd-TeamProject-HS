@@ -305,9 +305,12 @@ MonoBehaviour:
   waterExitCooldown: 1
   obstacleSensor: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
-  myType: 2
-  baitType: 2
-  BaitPosition: {x: 0, y: 0, z: 0}
+  myType: 0
+  baitType: 0
+  Hunger: 0
+  HungerLimit: 0
+  HungerAmount: 0
+  BaitInfo: {fileID: 0}
   confusedParticle: {fileID: 460550644456355994}
 --- !u!114 &6642005358976696119
 MonoBehaviour:

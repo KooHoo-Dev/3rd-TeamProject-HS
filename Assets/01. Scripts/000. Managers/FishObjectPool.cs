@@ -66,8 +66,6 @@ namespace WeGotOne
 
             WorldItem fish = Instantiate(prefab, parent);
             FishMovement water = fish.GetComponent<FishMovement>();
-                    
-            Debug.Log(water.gameObject.name);
 
             if (water != null)
             {
