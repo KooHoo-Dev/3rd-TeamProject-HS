@@ -25,22 +25,22 @@ namespace WeGotOne
                                                       RoomClient.Instance.Me.IsHost;
 
         
-        private void OnTriggerEnter2D(Collider2D other)
+        private void OnCollisionEnter2D(Collision2D collision)
         {
-            Debug.Log($"[Mine] 트리거 진입: {other.name}, isHost: {IsHost}"); // 임시로 추가
+            
             // 물리 판정은 호스트 전용 - 게스트는 스냅샷으로 결과만 반영받음
             if (IsHost == false) return;
             if (Time.time - lastTriggeredTime < cooldown) return;
 
             // 닿은 콜라이더가 어느 플레이어 소속인지 확인 (물고기/판자 등은 무시)
-            PlayerController player = other.GetComponentInParent<PlayerController>();
+            PlayerController player = collision.gameObject.GetComponentInParent<PlayerController>();
             if (player == null) return;
             
             // Rigidbody2D 부품을 가장 안전하게 검색해옵니다.
             Rigidbody2D bodyRb = player.GetComponentInChildren<Rigidbody2D>();
             if (bodyRb == null)
             {
-                Debug.LogWarning($"[Mine] {player.name}의 하위 계층에서 Rigidbody2D를 찾을 수 없습니다.");
+                
                 return;
             }
             
@@ -48,13 +48,11 @@ namespace WeGotOne
             Vector2 direction = (bodyRb.position - (Vector2)transform.position).normalized;
             if (direction == Vector2.zero) direction = Vector2.up; // 완전히 겹친 경우 방어
             
-            
             // 4. 찾은 Rigidbody2D에 힘을 즉각 가합니다.
-            bodyRb.AddForce(direction * knockbackForce, forceMode);
+            bodyRb.linearVelocity = new Vector2(direction.x * knockbackForce, direction.y * knockbackForce);
 
             lastTriggeredTime = Time.time;
-
-            Debug.Log($"[Mine] {player.name} 몸통 넉백 발동 - 방향: {direction}");
+            
         }
     }
 }
