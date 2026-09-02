@@ -140,13 +140,6 @@ private void OnDisable()
 
             AudioManager.Instance.PlaySfx(AudioManager.Sfx.PopGrab);
             
-            // 2. 잡은 대상(물고기, 도구 등)에게 직접 잡혔음을 실시간 통보
-            if (currentTarget.TryGetComponent<ICatchable>(out var catchable))
-            {
-                catchable.OnGrabbed();
-                catchable.PlayerRootPosition.position = transform.position;
-            }
-            
             if (currentTarget.CompareTag("Fish"))
             {
                 PlayFishGrabParticle();

@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace WeGotOne.Fish_Interface
 {   
@@ -42,6 +43,7 @@ namespace WeGotOne.Fish_Interface
                 if (currentState is FishExhaustedState) return "Exhausted";
                 if (currentState is FishFaintState) return "Faint";
                 if (currentState is FishRunawayState) return "Runaway";
+                if (currentState is AbductionState) return "Abduction";
                 return "Unknown";
             }
         }
@@ -59,8 +61,9 @@ namespace WeGotOne.Fish_Interface
         
         public Transform PlayerRootPosition { get; set; }
         [Header("납치 기믹 설정")]
+        [field: FormerlySerializedAs("<AbductionTarget>k__BackingField")]
         [field: SerializeField]
-        public Transform AbductionTarget{ get; set; }
+        public Transform AbductionDestination{ get; set; }
         
         // 기절 파티클용
         [SerializeField] public ParticleSystem confusedParticle;
@@ -208,15 +211,6 @@ namespace WeGotOne.Fish_Interface
         
                 // 납치 상태로 전환
                 ChangeState(new AbductionState()); 
-            }
-        }
-
-        public void OnFloorHit()
-        {
-            // 현재 납치 상태라면 바닥에 닿았을 때 상태 종료 (예: 순찰 복귀 상태로 전환)
-            if (currentState is AbductionState abductionState)
-            {
-                abductionState.HandleFloorHit();
             }
         }
 

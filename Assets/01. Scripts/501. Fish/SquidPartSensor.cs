@@ -34,12 +34,7 @@ namespace WeGotOne
             // 2. 몸통(Body) 센서: 바닥 감지
             else if (partType == SquidPartType.Body)
             {
-                // 바닥 태그를 "Floor"라고 가정
-                if (collision.CompareTag("Floor"))
-                {
-                    // 매니저에게 바닥에 닿았다고 알림
-                    manager.OnFloorHit();
-                }
+
             }
         }
     }
