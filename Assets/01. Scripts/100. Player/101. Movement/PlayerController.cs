@@ -91,6 +91,7 @@ namespace WeGotOne
                 return;
             }
 
+
             interpolationTime += Time.deltaTime;
 
             float t = Mathf.Clamp01(interpolationTime / SnapshotInterval);
