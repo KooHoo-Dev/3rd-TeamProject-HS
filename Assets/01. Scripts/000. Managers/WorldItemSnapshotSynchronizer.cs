@@ -9,12 +9,10 @@ namespace WeGotOne
 {
     public sealed class WorldItemSnapshotSynchronizer : MonoBehaviour
     {
-        private FishObjectPool itemObjectPool;
         private WorldItemRegistry worldItemRegistry;
 
         private void Awake()
         {
-            itemObjectPool = GetComponent<FishObjectPool>();
             worldItemRegistry = GetComponent<WorldItemRegistry>();
         }
 
@@ -78,7 +76,7 @@ namespace WeGotOne
         public void ApplySnapshot(SnapshotMessage snapshot)
         {
             // EnsureReferences();
-            if (itemObjectPool == null || worldItemRegistry == null)
+            if (FishObjectPool.Instance == null || worldItemRegistry == null)
             {
                 Debug.LogError("[WorldItemSnapshotSynchronizer] 동기화에 필요한 참조가 없습니다.");
                 return;
@@ -110,13 +108,13 @@ namespace WeGotOne
             {
                 if (worldItemRegistry.TryGetWorldItem(state.WorldItemId, out WorldItem worldItem) == false)
                 {
-                    worldItem = itemObjectPool.Get(state.ItemId);
+                    worldItem = FishObjectPool.Instance.Get(state.ItemId);
                     if (worldItem == null)
                         continue;
 
                     if (worldItemRegistry.RegisterDynamic(worldItem, state.WorldItemId) == false)
                     {
-                        itemObjectPool.Release(worldItem);
+                        FishObjectPool.Instance.Release(worldItem);
                         continue;
                     }
                 }
@@ -146,7 +144,7 @@ namespace WeGotOne
             {
                 if (worldItemRegistry.UnregisterDynamic(worldItemId, out WorldItem worldItem))
                 {
-                    itemObjectPool.Release(worldItem);
+                    FishObjectPool.Instance.Release(worldItem);
                 }
             }
         }

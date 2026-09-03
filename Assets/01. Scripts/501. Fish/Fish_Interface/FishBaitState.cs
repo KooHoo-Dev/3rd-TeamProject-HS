@@ -1,6 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace WeGotOne.Fish_Interface
 {
@@ -36,6 +34,7 @@ namespace WeGotOne.Fish_Interface
             float distance = Vector2.Distance(owner.transform.position, targetStateManager.transform.position);
             if (distance < waypointTolerance)
             {
+                FishObjectPool.Instance.Release(targetStateManager.GetComponent<WorldItem>());
                 Exit();
             }
         }
