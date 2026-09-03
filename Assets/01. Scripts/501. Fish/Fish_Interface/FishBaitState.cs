@@ -29,6 +29,7 @@ namespace WeGotOne.Fish_Interface
             }
             
             targetStateManager = owner.BaitInfo;
+            
             Vector2 direction = (targetStateManager.transform.position - owner.transform.position).normalized;
             owner.FishMovement.Move(direction, baitSpeed);
             

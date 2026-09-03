@@ -133,6 +133,16 @@ namespace WeGotOne.Fish_Interface
         {
             Hunger += amount;
         }
+
+        public bool CanEat(BaitType type)
+        {
+            if (type < baitType)
+            {
+                return true;
+            }
+
+            return false;
+        }
         
         # endregion
 
