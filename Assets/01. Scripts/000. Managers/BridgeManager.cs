@@ -7,7 +7,8 @@ namespace WeGotOne
     {
         [field: SerializeField] public Bridge[] BridgeObjects { get; private set; }
         private const int PLANK_ITEM_KEY = 0;
-
+        [SerializeField] private Transform bridgeTransform;
+        
         public bool IsEnd => CurrentBridgeCount() == BridgeObjects.Length;
 
         // 게임 매니저나 나중에 다른 UI에게 전파하는 용도 델리게이트
@@ -17,7 +18,7 @@ namespace WeGotOne
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            BridgeObjects = GetComponentsInChildren<Bridge>(true);
+            BridgeObjects = bridgeTransform.GetComponentsInChildren<Bridge>(true);
         }
 
         public int CurrentBridgeCount()
