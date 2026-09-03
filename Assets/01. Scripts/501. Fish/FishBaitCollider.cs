@@ -20,9 +20,8 @@ namespace WeGotOne
         {
             if (other.TryGetComponent(out FishStateManager fishState))
             {
-                if (fishStateManager.CanEat(fishState.myType))
+                if (fishStateManager.CanEat(fishState))
                 {
-                    fishStateManager.BaitInfo = fishState;
                     fishStateManager.ChangeState(new FishBaitState());
                 }
             }
