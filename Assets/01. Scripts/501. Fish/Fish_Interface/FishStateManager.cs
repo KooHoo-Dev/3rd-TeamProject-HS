@@ -134,10 +134,11 @@ namespace WeGotOne.Fish_Interface
             Hunger += amount;
         }
 
-        public bool CanEat(BaitType type)
+        public bool CanEat(FishStateManager fish)
         {
-            if (type < baitType)
+            if (fish.myType < baitType)
             {
+                BaitInfo = fish;
                 return true;
             }
 
