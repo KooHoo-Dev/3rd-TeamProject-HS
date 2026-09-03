@@ -18,6 +18,8 @@ namespace WeGotOne
         private void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
+            Content = GetComponentInChildren<Image>();
+            ItemCountText = GetComponentInChildren<TMP_Text>();
         }
 
         public void Render(ItemScriptableObject item, int count)

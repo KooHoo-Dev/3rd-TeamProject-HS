@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -5,7 +6,7 @@ using UnityEngine;
 
 namespace WeGotOne
 {
-    public class BridgeBuildRequirementUI : MonoBehaviour
+    public class BridgeRequirementUI : MonoBehaviour
     {
         [SerializeField] private InventorySlot[] requirementSlots;
         [SerializeField] private TMP_Text buildValueText;
@@ -14,6 +15,11 @@ namespace WeGotOne
 
         private InventoryItemDB inventoryItemDB;
         private BridgeManager bridgeManager;
+
+        private void Awake()
+        {
+            requirementSlots = GetComponentsInChildren<InventorySlot>();
+        }
 
         private IEnumerator Start()
         {

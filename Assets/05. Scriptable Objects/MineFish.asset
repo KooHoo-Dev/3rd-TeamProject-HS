@@ -16,4 +16,5 @@ MonoBehaviour:
   Name: MineFish
   Icon: {fileID: 21300000, guid: fd493036fae6c9c46910998d78175b6d, type: 3}
   Fullness: 0
+  BuildValue: 10
   ItemType: 2
