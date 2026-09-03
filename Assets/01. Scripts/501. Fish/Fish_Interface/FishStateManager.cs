@@ -1,6 +1,8 @@
+using System;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace WeGotOne.Fish_Interface
 {   
@@ -16,9 +18,8 @@ namespace WeGotOne.Fish_Interface
             LargeFish,
         }
 
-        [field: SerializeField] public string fishName { get; private set; }
-        
         [SerializeField] private FishMovement fishMovement;
+        public WorldItem WorldItem { get; private set; }
         public FishMovement FishMovement => fishMovement;
         
         [Header("저항도(Resistance) 설정")]
@@ -70,7 +71,12 @@ namespace WeGotOne.Fish_Interface
         
         // 기절 파티클용
         [SerializeField] public ParticleSystem confusedParticle;
-        
+
+        private void Awake()
+        {
+            WorldItem = GetComponent<WorldItem>();
+        }
+
         private void OnEnable()
         {
             fishMovement = GetComponent<FishMovement>();

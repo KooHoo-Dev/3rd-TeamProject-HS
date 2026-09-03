@@ -256,7 +256,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7746cb164f44662970bead08d0a34e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Fish_Interface.FishStateManager
-  <fishName>k__BackingField: 
   fishMovement: {fileID: 0}
   maxResistance: 20
   waterExitCooldown: 1
