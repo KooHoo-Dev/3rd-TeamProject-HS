@@ -245,10 +245,13 @@ namespace HelloServer
             
             GameManager.Instance.ApplySnapshot(message.ActivePlayerCount, message.ArrivedPlayerCount);
             InventoryItemDB.Instance.ApplySnapshot(message.InventoryEntries);
-            DayLoop.Instance.DayApplyFromNetwrok(message.IsDay); // 낮밤 적용
-            
+            if (DayLoop.Instance != null)
+            {
+                // 앞서 작성한 DayApplyFromNetwork 메서드를 호출해 상태가 다를 때만 연출을 깨웁니다.
+                DayLoop.Instance.DayApplyFromNetwork(message.IsDay);
+            }
             Debug.Log(GetJson(message));
-
+            Debug.Log($"[Client Send] isDay: {message.IsDay}");
             SnapshotMessage = message;
         }
 
@@ -428,7 +431,10 @@ namespace HelloServer
                 }
 
                 snapshot.Players = playerStates.ToArray();
-                snapshot.IsDay = DayLoop.Instance.CurrentDayType == DayLoop.DayType.Day; // 낮밤을 스냅샷에 적용
+                if (DayLoop.Instance != null)
+                {
+                    snapshot.IsDay = (DayLoop.Instance.CurrentDayType == DayLoop.DayType.Day);
+                }
 
                 List<InventoryEntryState> inventoryEntries = new();
                 foreach (KeyValuePair<int, int> pair in InventoryItemDB.Instance.EnumerateCounts())
@@ -447,6 +453,7 @@ namespace HelloServer
                 snapshot.ArrivedPlayerCount = GameManager.Instance.ArrivedPlayerCount;
 
                 // 5. 서버로 패킷 전송
+                Debug.Log($"[Client Send] isDay: {snapshot.IsDay}");
                 SnapshotMessage = snapshot;
                 await SendAsync(snapshot);
             }
