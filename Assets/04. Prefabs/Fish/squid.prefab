@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: -5159987235780601807}
   - component: {fileID: 5560157644525639928}
   m_Layer: 0
-  m_Name: squid
+  m_Name: Squid
   m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -8,16 +8,19 @@ public class ShrimpPunch : MonoBehaviour
     [SerializeField] private Vector3 direction;
     [SerializeField] private ParticleSystem punchParticle;
     [SerializeField] private float punchTime;
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            Rigidbody2D bodyRb= other.transform.GetComponent<Rigidbody2D>();
-            StartCoroutine(PlayConfusedParticle()); 
-           bodyRb.AddForce(new Vector2(direction.x, direction.y) * knockbackForce,  ForceMode2D.Impulse);
+            Rigidbody2D bodyRb = other.transform.GetComponent<Rigidbody2D>();
+            bool isRight = transform.GetComponentInParent<Transform>().position.x - other.transform.position.x < 0;
+            knockbackForce = isRight ? knockbackForce : -knockbackForce;
+            StartCoroutine(PlayConfusedParticle());
+            bodyRb.AddForce(new Vector2(direction.x, 0) * knockbackForce, ForceMode2D.Impulse);
         }
     }
-    
+
     private IEnumerator PlayConfusedParticle()
     {
         if (punchParticle == null)

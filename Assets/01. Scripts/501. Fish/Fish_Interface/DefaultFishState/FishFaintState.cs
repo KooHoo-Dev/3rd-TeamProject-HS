@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace WeGotOne.Fish_Interface
@@ -18,6 +15,8 @@ namespace WeGotOne.Fish_Interface
             this.owner = owner;
             recoveryOffset = owner.MaxResistance * 0.15f;
             finalFaintDuration = Mathf.Max(1.5f, baseFaintTime - recoveryOffset);
+            this.owner.FaintDuration = finalFaintDuration;
+            Debug.Log("Faint Enter");
         }
 
         public void Tick()

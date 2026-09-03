@@ -1,3 +1,5 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -14,6 +16,10 @@ namespace WeGotOne.Fish_Interface
             MediumFish,
             LargeFish,
         }
+        
+        [Header("물고기 이름")]
+        [field: SerializeField]
+        public string FishName { get; private set; }
 
         [SerializeField] private FishMovement fishMovement;
         public FishMovement FishMovement => fishMovement;
@@ -64,11 +70,15 @@ namespace WeGotOne.Fish_Interface
         
         private float lastEnteredWaterTime; // 마지막에 물에 들어온 시각
         
+        [Header("납치 기믹 설정")] // 왕징어 납치 설정
         public Transform PlayerRootPosition { get; set; }
-        [Header("납치 기믹 설정")]
-        [field: FormerlySerializedAs("<AbductionTarget>k__BackingField")]
         [field: SerializeField]
         public Transform AbductionDestination{ get; set; }
+        
+        [Header("감전 기믹 설정")] // 가오리 감전 설정
+        public ParticleSystem ElectronicParticle;
+        public bool IsAttack = true;
+        public float FaintDuration;
         
         // 기절 파티클용
         [SerializeField] public ParticleSystem confusedParticle;
@@ -89,6 +99,7 @@ namespace WeGotOne.Fish_Interface
             BaitInfo = null;
             Hunger = Random.Range(60f, 100f);
             lastEnteredWaterTime = -1;
+            FishName = gameObject.name;
             
             ChangeState(new FishIdleState());
         }
@@ -237,6 +248,21 @@ namespace WeGotOne.Fish_Interface
                 // 납치 상태로 전환
                 ChangeState(new AbductionState()); 
             }
+        }
+
+        #endregion
+
+        #region 가오리
+
+        public async UniTask ElectronicAttackActive(CancellationToken token)
+        {
+            ElectronicParticle.gameObject.SetActive(false);
+            IsAttack = false;
+            
+            await UniTask.Delay(System.TimeSpan.FromSeconds(FaintDuration), cancellationToken: token);
+            
+            ElectronicParticle.gameObject.SetActive(true);
+            IsAttack = true;
         }
 
         #endregion

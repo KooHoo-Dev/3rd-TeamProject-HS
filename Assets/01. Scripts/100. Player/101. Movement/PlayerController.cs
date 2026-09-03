@@ -32,6 +32,7 @@ namespace WeGotOne
         public bool IsLeftGrab { get; private set; }
         public bool IsRightGrab { get; private set; }
         public bool IsBuild { get; private set; }
+        public bool IsParalysis = false; // 마비 상태인지 판단
 
         public User User { get; private set; }
 
@@ -134,6 +135,9 @@ namespace WeGotOne
 
         public void ApplyInput(Vector2 moveInput, bool leftGrab, bool rightGrab, bool isBuildKeyHold)
         {
+            if (IsParalysis)
+                return;
+            
             HandleMovement(moveInput);
             HandleGrab(leftGrab, rightGrab);
             IsBuild = isBuildKeyHold;
@@ -202,7 +206,7 @@ namespace WeGotOne
                 ClearArmDirections();
                 return;
             }
-
+            
             SetArmDirections(moveInput);
         }
 

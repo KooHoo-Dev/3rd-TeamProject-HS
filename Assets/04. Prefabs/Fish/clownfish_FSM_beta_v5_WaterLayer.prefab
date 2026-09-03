@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 7288073790878514883}
   - component: {fileID: 4232708847999419296}
   m_Layer: 0
-  m_Name: clownfish_FSM_beta_v5_WaterLayer
+  m_Name: Clownfish_FSM_beta_v5_WaterLayer
   m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
