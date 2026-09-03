@@ -14,7 +14,7 @@ namespace WeGotOne
         [SerializeField] private Collider2D[] mineColliders;
 
         [Header("Joint")]
-        [SerializeField] private float ropeLength = 8f;
+        // [SerializeField] private float ropeLength = 8f;
 
         private Rigidbody2D fishBody;
         private Rigidbody2D mineBody;
@@ -103,7 +103,7 @@ namespace WeGotOne
             mineJoint.autoConfigureConnectedAnchor = false;
             mineJoint.autoConfigureDistance = false;
             mineJoint.maxDistanceOnly = true;
-            mineJoint.distance = ropeLength;
+            // mineJoint.distance = ropeLength;
             mineJoint.connectedBody = fishBody;
             SyncConnectedAnchor();
             IgnoreFishMineCollisions();

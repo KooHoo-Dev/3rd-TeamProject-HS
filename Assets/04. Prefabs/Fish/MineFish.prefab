@@ -115,9 +115,12 @@ GameObject:
   - component: {fileID: 1120491028450288300}
   - component: {fileID: 3434930965110296000}
   - component: {fileID: 8969463098176891044}
+  - component: {fileID: 7375914041610192205}
+  - component: {fileID: 6286656989662160650}
+  - component: {fileID: 5335603790001178013}
   m_Layer: 0
   m_Name: MineFish
-  m_TagString: Untagged
+  m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -132,7 +135,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 64964921510612741}
@@ -253,6 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7746cb164f44662970bead08d0a34e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Fish_Interface.FishStateManager
+  <fishName>k__BackingField: 
   fishMovement: {fileID: 0}
   maxResistance: 20
   waterExitCooldown: 1
@@ -335,10 +339,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishObstacleSensor
   waterLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 16
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 200
   obstacleCheckSize: {x: 0.8, y: 0.5}
   obstacleCheckDistance: 1
   detectCooldown: 0.1
@@ -406,6 +410,49 @@ CapsuleCollider2D:
   m_Offset: {x: -0.17363635, y: -0.08604496}
   m_Size: {x: 3.7084153, y: 1.8279816}
   m_Direction: 1
+--- !u!114 &7375914041610192205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4539963565553445544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17c6ed5a25934fbcb75975fe46f1b209, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.MineFishController
+  mine: {fileID: 5742745481497039085}
+  ropeAnchor: {fileID: 1832905242415989026}
+  fishColliders:
+  - {fileID: 8969463098176891044}
+  mineColliders: []
+  ropeLength: 8
+--- !u!114 &6286656989662160650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4539963565553445544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1c982d3a21742b99f985276dfac5441, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItem
+  <ThisItem>k__BackingField: {fileID: 11400000, guid: 896989ea23b5bec4191ba0c1d6266ef4, type: 2}
+--- !u!114 &5335603790001178013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4539963565553445544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cf7a713149b463198717d2f9d983671, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Fish
 --- !u!1 &8739361646100706075
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,7 +482,7 @@ Transform:
   m_GameObject: {fileID: 8739361646100706075}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -8.39, z: 0}
+  m_LocalPosition: {x: 0, y: -3.92, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -515,7 +562,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 0
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -581,5 +628,5 @@ DistanceJoint2D:
   m_Anchor: {x: 0, y: 3.7034378}
   m_ConnectedAnchor: {x: 0, y: -1.1}
   m_AutoConfigureDistance: 1
-  m_Distance: 7.4641414
-  m_MaxDistanceOnly: 0
+  m_Distance: 1.4970703
+  m_MaxDistanceOnly: 1

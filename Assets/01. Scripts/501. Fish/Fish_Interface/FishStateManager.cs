@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -15,6 +16,8 @@ namespace WeGotOne.Fish_Interface
             LargeFish,
         }
 
+        [field: SerializeField] public string fishName { get; private set; }
+        
         [SerializeField] private FishMovement fishMovement;
         public FishMovement FishMovement => fishMovement;
         

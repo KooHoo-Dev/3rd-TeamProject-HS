@@ -23,6 +23,20 @@ namespace WeGotOne
             rb = GetComponent<Rigidbody2D>();
             baseLocalScale = transform.localScale;
         }
+        
+        private void FixedUpdate()
+        {
+
+            if (CheckInWater() == false) return;
+            
+            // Move 명령이 들어왔을 때만 지속적인 속도를 적용
+            if (currentSpeed > 0)
+            {
+                rb.linearVelocity = currentDirection * currentSpeed;
+                FlipRenderer(currentDirection.x);
+            }
+        }
+
 
         // 1. 일반 이동 (Patrol, Runaway 등에서 지속 호출)
         public void Move(Vector2 direction, float speed)
@@ -54,19 +68,6 @@ namespace WeGotOne
             StopMove();
             // 필요에 따라 drag(마찰력) 값을 조절해 자연스럽게 미끄러지다 멈추게 연출
             if (rb != null) rb.linearDamping = 1.5f; 
-        }
-
-        private void FixedUpdate()
-        {
-
-            if (CheckInWater() == false) return;
-            
-            // Move 명령이 들어왔을 때만 지속적인 속도를 적용
-            if (currentSpeed > 0)
-            {
-                rb.linearVelocity = currentDirection * currentSpeed;
-                FlipRenderer(currentDirection.x);
-            }
         }
 
         // 이동 방향에 맞춰 스프라이트 좌우 반전
