@@ -51,6 +51,11 @@ namespace WeGotOne.Fish_Interface
             // 4. 탈진 체크
             if (owner.CurrentResistance <= 0f)
             {
+                if (collisionHandler != null)
+                {
+                    collisionHandler.OnTerrainSmashed -= HandleTerrainSmashed;
+                }
+                
                 owner.ChangeState(new FishExhaustedState());
             }
         }
