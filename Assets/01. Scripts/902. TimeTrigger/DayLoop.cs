@@ -4,6 +4,7 @@ using DG.Tweening;
 using HelloServer;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 namespace WeGotOne
 {
@@ -23,7 +24,8 @@ namespace WeGotOne
         [Header("시간 주기 설정")] [SerializeField] 
         private float cycleDuration = 10f;
         
-        
+        [Header("낮/밤 타이머 UI")]
+        [SerializeField] public Image DayTimer;
         
         private DayType currentDayType = DayType.Day;
         private float elapsedTime;
@@ -43,23 +45,28 @@ namespace WeGotOne
             yield return new WaitUntil(() => RoomClient.Instance != null && RoomClient.Instance.Me != null);
 
             isHost = RoomClient.Instance.Me != null && RoomClient.Instance.Me.IsHost;
-
+            UpdateClockUI();
         }
         
 
         private void Update()
-        {
-            // 판정은 호스트에서만 하고 결과(IsDay) 만 스냅샷으로 전파 
-            if (isHost == false) return;
-
+        {   
             elapsedTime += Time.deltaTime;
             
-            if (elapsedTime < cycleDuration) return;
-
+            // 오직 호스트만 "주기 끝에 다다랐을 때 밤낮을 바꾸는 물리적 판정"을 주도합니다.
+            if (isHost)
+            {
+                if (elapsedTime >= cycleDuration)
+                {
+                    elapsedTime -= cycleDuration; // -= 처리를 해야 프레임 잔여 시간 누수가 없습니다.
+                    DayType next = currentDayType == DayType.Day ? DayType.Night : DayType.Day;
+                    SetDayType(next);
+                }
+            }
             
-            DayType next = currentDayType == DayType.Day ? DayType.Night : DayType.Day;
+            // 매 프레임의 시간의 흐름에 맞춰서 UI 이미지 갱신
+            UpdateClockUI();
             
-            SetDayType(next);
         }
         
         
@@ -91,7 +98,32 @@ namespace WeGotOne
             }
             
         }
+        
+        /// <summary>
+        /// [신규 추가] 경과 시간을 기반으로 Filled UI 이미지의 채우기 비율을 실시간 계산하여 대입합니다.
+        /// </summary>
+        private void UpdateClockUI()
+        {
+            if (DayTimer == null) return;
 
+            // 현재 주기의 진행 비율 계산 (0.0 ~ 1.0) 
+            float ratio = Mathf.Clamp01(elapsedTime / cycleDuration);
+
+            if (currentDayType == DayType.Day)
+            {
+                // 대낮 시작(ratio=0)일 때 fillAmount는 1 
+                // 대낮 종료(ratio=1) 직전 밤이 다가오면 fillAmount는 0으로 부드럽게 감소 
+                DayTimer.fillAmount = 1f - ratio;
+            }
+            else
+            {
+                // 밤 시작(ratio=0)일 때 fillAmount는 0 
+                // 밤 종료(ratio=1) 직전 대낮이 다가오면 fillAmount는 1로 부드럽게 증가
+                DayTimer.fillAmount = ratio;
+            }
+        }
+        
+        
         private void PlayTransitionDayChange(DayType dayType)
         {
             float targetAlpha = dayType == DayType.Night ? 1f : 0f;
