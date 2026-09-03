@@ -245,7 +245,8 @@ namespace HelloServer
             
             GameManager.Instance.ApplySnapshot(message.ActivePlayerCount, message.ArrivedPlayerCount);
             InventoryItemDB.Instance.ApplySnapshot(message.InventoryEntries);
-
+            DayLoop.Instance.DayApplyFromNetwrok(message.IsDay); // 낮밤 적용
+            
             Debug.Log(GetJson(message));
 
             SnapshotMessage = message;
@@ -427,6 +428,7 @@ namespace HelloServer
                 }
 
                 snapshot.Players = playerStates.ToArray();
+                snapshot.IsDay = DayLoop.Instance.CurrentDayType == DayLoop.DayType.Day; // 낮밤을 스냅샷에 적용
 
                 List<InventoryEntryState> inventoryEntries = new();
                 foreach (KeyValuePair<int, int> pair in InventoryItemDB.Instance.EnumerateCounts())

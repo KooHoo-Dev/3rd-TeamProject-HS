@@ -3803,8 +3803,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: FullMap_V5
       objectReference: {fileID: 0}
+    - target: {fileID: 7791226768055211786, guid: 060000810382ce944a04acc2feace7e4, type: 3}
+      propertyPath: cycleDuration
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5448948976742870531, guid: 060000810382ce944a04acc2feace7e4, type: 3}
+    - {fileID: 2368849365416426948, guid: 060000810382ce944a04acc2feace7e4, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 060000810382ce944a04acc2feace7e4, type: 3}
