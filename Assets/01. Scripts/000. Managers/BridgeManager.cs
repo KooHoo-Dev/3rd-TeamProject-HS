@@ -53,6 +53,22 @@ namespace WeGotOne
                 BridgeObjects[i].gameObject.SetActive(true);
             }
         }
+        
+        public void HandleItemPickup(Collision2D other)
+        {
+            if (other.gameObject.TryGetComponent<WorldItem>(out var holder))
+            {
+                ItemScriptableObject item = holder.ThisItem;
+
+                if (item == null) return;
+
+                if (InventoryItemDB.Instance.Add(item.Key, 1))
+                {
+                    holder.OnPickup();
+                }
+            }
+        }
+
 
         #region test methods
 
