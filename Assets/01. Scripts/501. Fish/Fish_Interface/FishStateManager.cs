@@ -83,7 +83,7 @@ namespace WeGotOne.Fish_Interface
             }
 
             ResetResistance();
-            maxResistance = 0f;
+            maxResistance = 20f;
             waterExitCooldown = 0f;
             TargetPosition = Vector3.zero;
             BaitInfo = null;
