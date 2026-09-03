@@ -251,7 +251,6 @@ namespace HelloServer
                 DayLoop.Instance.DayApplyFromNetwork(message.IsDay);
             }
             Debug.Log(GetJson(message));
-            Debug.Log($"[Client Send] isDay: {message.IsDay}");
             SnapshotMessage = message;
         }
 
@@ -453,7 +452,6 @@ namespace HelloServer
                 snapshot.ArrivedPlayerCount = GameManager.Instance.ArrivedPlayerCount;
 
                 // 5. 서버로 패킷 전송
-                Debug.Log($"[Client Send] isDay: {snapshot.IsDay}");
                 SnapshotMessage = snapshot;
                 await SendAsync(snapshot);
             }

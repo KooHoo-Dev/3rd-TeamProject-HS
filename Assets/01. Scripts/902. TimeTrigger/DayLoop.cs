@@ -53,7 +53,7 @@ namespace WeGotOne
             if (isHost == false) return;
 
             elapsedTime += Time.deltaTime;
-            Debug.Log($"남은시간 {elapsedTime} , 주기 {cycleDuration}");
+            
             if (elapsedTime < cycleDuration) return;
 
             
