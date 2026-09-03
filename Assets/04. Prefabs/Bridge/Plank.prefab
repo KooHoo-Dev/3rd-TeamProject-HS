@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1686955461754075424}
   - component: {fileID: 6691754160653459987}
   - component: {fileID: 5130000000000000004}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plank
   m_TagString: Item
   m_Icon: {fileID: 0}

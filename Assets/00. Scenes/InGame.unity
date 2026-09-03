@@ -2746,6 +2746,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eaccd67f95915aa44973cd8f1bb51f53, type: 2}
   - {fileID: 11400000, guid: 2354ea3827e164889b64157d3836908b, type: 2}
   - {fileID: 11400000, guid: 6b278b4b7effb5c45b39dda38b9dd85c, type: 2}
+  - {fileID: 11400000, guid: 896989ea23b5bec4191ba0c1d6266ef4, type: 2}
 --- !u!4 &1091046113
 Transform:
   m_ObjectHideFlags: 0
@@ -3558,6 +3559,7 @@ MonoBehaviour:
   - {fileID: 5130000000000000003, guid: 8ceba3a66e4413c449e53e0e95e09393, type: 3}
   - {fileID: -5159987235780601807, guid: bc83b3f640eae954599cc972e33b0761, type: 3}
   - {fileID: 6392807594458476488, guid: 344e9e3f5cdb8b44b8d5125b65282775, type: 3}
+  - {fileID: 949827582317125252, guid: 5d5d2f0c8574ae94a895b990a5ef1fe2, type: 3}
 --- !u!4 &1561437504
 Transform:
   m_ObjectHideFlags: 0
@@ -6667,6 +6669,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -7.32
       objectReference: {fileID: 0}
+    - target: {fileID: 221889018652478814, guid: ad3abefe24e37c643be0f55945acddaf, type: 3}
+      propertyPath: fishItem
+      value: 
+      objectReference: {fileID: 11400000, guid: 896989ea23b5bec4191ba0c1d6266ef4, type: 2}
     - target: {fileID: 2124131035972747368, guid: ad3abefe24e37c643be0f55945acddaf, type: 3}
       propertyPath: m_LocalPosition.x
       value: -17.7
@@ -6767,6 +6773,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -33.4
       objectReference: {fileID: 0}
+    - target: {fileID: 7413918977111039719, guid: ad3abefe24e37c643be0f55945acddaf, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fd493036fae6c9c46910998d78175b6d, type: 3}
     - target: {fileID: 7419725421062587539, guid: ad3abefe24e37c643be0f55945acddaf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 121.5
@@ -6800,6 +6810,7 @@ SceneRoots:
   - {fileID: 1863929588}
   - {fileID: 9184211013492398991}
   - {fileID: 1135309631}
+  - {fileID: 696515073}
   - {fileID: 128926970}
   - {fileID: 940507613}
   - {fileID: 1072383652}
@@ -6819,4 +6830,3 @@ SceneRoots:
   - {fileID: 1303722707}
   - {fileID: 1661108131}
   - {fileID: 2030178771}
-  - {fileID: 696515073}

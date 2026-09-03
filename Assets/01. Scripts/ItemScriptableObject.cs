@@ -10,7 +10,7 @@ namespace WeGotOne
     }
     
     [CreateAssetMenu(fileName = "ItemScriptableObject", 
-        menuName = "Study SAO/InventoryItem", order = 1)]
+        menuName = "WeGotOne SAO/ItemSAO", order = 1)]
     public class ItemScriptableObject : ScriptableObject
     {
         public int      Key;            // 아이템을 찾을 Key
