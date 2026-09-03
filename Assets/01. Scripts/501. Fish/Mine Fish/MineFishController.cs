@@ -70,10 +70,10 @@ namespace WeGotOne
             {
                 ResetForHostPhysics();
                 isHostResetPending = false;
-                return;
+                // return;
             }
 
-            SyncConnectedAnchor();
+            // SyncConnectedAnchor();
         }
 
         public void EnterGuestVisualMode()

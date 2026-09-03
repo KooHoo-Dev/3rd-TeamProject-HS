@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1686955461754075424}
   - component: {fileID: 6691754160653459987}
   - component: {fileID: 5130000000000000004}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plank
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -190,6 +190,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1c982d3a21742b99f985276dfac5441, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItem
   <ThisItem>k__BackingField: {fileID: 11400000, guid: 29b355851099c164caebfa384ee8e836, type: 2}

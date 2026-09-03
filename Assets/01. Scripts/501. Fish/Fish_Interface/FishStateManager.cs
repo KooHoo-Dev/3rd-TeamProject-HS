@@ -1,8 +1,5 @@
-using System;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
 
 namespace WeGotOne.Fish_Interface
 {   
@@ -30,6 +27,7 @@ namespace WeGotOne.Fish_Interface
         
         // 물 감지 센서
         [SerializeField] private FishObstacleSensor obstacleSensor;
+        public FishObstacleSensor ObstacleSensor => obstacleSensor;
         
         // 물 탈출 피드백 함수 예외값을 위한 bool값.
         public bool IsGrabbed => currentState is FishCaughtState || currentState is FishExhaustedState;
@@ -71,6 +69,8 @@ namespace WeGotOne.Fish_Interface
         
         // 기절 파티클용
         [SerializeField] public ParticleSystem confusedParticle;
+        
+        public float StartPosY { get; set; }
 
         private void Awake()
         {
@@ -96,17 +96,22 @@ namespace WeGotOne.Fish_Interface
             ChangeState(new FishIdleState());
         }
 
+        private void Start()
+        {
+            StartPosY = transform.position.y;
+        }
+
         private void Update()
         {
             DecreaseFishHunger();
             currentState?.Tick();
         }
 
-        private void HandleWaterBoundary()
+        private void HandleWaterBoundary(RaycastHit2D obstacleHit)
         {
             if (currentState is FishPatrolState patrolState)
             {
-                patrolState.SetNewWaypoint();
+                patrolState.SetNewWaypoint(obstacleHit);
             }
         }
         

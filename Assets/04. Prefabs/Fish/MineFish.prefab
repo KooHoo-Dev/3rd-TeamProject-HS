@@ -342,8 +342,8 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 200
-  obstacleCheckSize: {x: 0.8, y: 0.5}
-  obstacleCheckDistance: 1
+  obstacleCheckSize: {x: 1.86, y: 1.08}
+  obstacleCheckDistance: 1.98
   detectCooldown: 0.1
 --- !u!50 &3434930965110296000
 Rigidbody2D:

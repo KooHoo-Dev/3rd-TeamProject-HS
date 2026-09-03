@@ -11,12 +11,10 @@ namespace WeGotOne.Fish_Interface
         private float waypointTolerance = 0.5f;
         private float vericalRangeForLinearWaypoint = 0.5f;
         private float horizontalRangeForLinearWaypoint = 15f;
-        private float startPosY;
 
         public void EnterAsync(FishStateManager owner)
         {
             this.owner = owner;
-            startPosY = owner.transform.position.y;
             SetNewWaypoint(); // 첫 목적지 설정
         }
 
@@ -44,7 +42,7 @@ namespace WeGotOne.Fish_Interface
             }
         }
 
-        public void SetNewWaypoint()
+        public void SetNewWaypoint(RaycastHit2D obstacleHit = default)
         {
             if (owner == null)
                 return;
@@ -61,7 +59,7 @@ namespace WeGotOne.Fish_Interface
                 case 6:
                     // 해보니까 더 천천히 움직여야함
                     // 그리고 일정시간마다 지가 알아서 방향 틀어야
-                    SetTargetPositionToRandomLinearWaypoint(waterArea);
+                    SetTargetPositionToRandomLinearWaypoint(waterArea, obstacleHit);
                     break;
                 default:
                     SetTargetPositionToRandomWaypoint(waterArea);
@@ -93,18 +91,19 @@ namespace WeGotOne.Fish_Interface
 
         #region MineFish Patrol logic
 
-        private void SetTargetPositionToRandomLinearWaypoint(Collider2D waterArea)
+        private void SetTargetPositionToRandomLinearWaypoint(Collider2D waterArea, RaycastHit2D obstacleHit)
         {
             for (int i = 0; i < MaxTryCount; i++)
             {
                 float x = Random.Range(horizontalRangeForLinearWaypoint, horizontalRangeForLinearWaypoint+1) * (Random.value < 0.5f ? -1f : 1f);
                 float y = Random.Range(-vericalRangeForLinearWaypoint, vericalRangeForLinearWaypoint);
-                if (Mathf.Abs(owner.transform.position.y - startPosY) > 1f)
-                    y = startPosY;
+                if (Mathf.Abs(owner.transform.position.y - owner.StartPosY) > 1f)
+                    y = owner.StartPosY;
                 Vector2 candidatePosition = (Vector2)owner.transform.position + 
                                             new Vector2(x, y);
 
-                if (waterArea.OverlapPoint(candidatePosition))
+                if (waterArea.OverlapPoint(candidatePosition) &&
+                    owner.ObstacleSensor.IsObstacleAt(candidatePosition) == false)
                 {
                     targetPosition = candidatePosition;
                     owner.TargetPosition = candidatePosition;
@@ -112,7 +111,16 @@ namespace WeGotOne.Fish_Interface
                 }
             }
 
-            targetPosition = owner.transform.position;
+            if (obstacleHit.collider != null)
+            {
+                targetPosition = (Vector2)owner.transform.position +
+                                 obstacleHit.normal * horizontalRangeForLinearWaypoint;
+            }
+            else
+            {
+                targetPosition = owner.transform.position;
+            }
+
             owner.TargetPosition = targetPosition;
         }
 
