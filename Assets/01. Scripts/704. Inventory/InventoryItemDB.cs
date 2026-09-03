@@ -30,21 +30,9 @@ namespace WeGotOne
         {
             base.OnInitialize();
 
-            if (items == null)
-            {
-                Debug.LogWarning("[InventoryItemDB] items가 설정되지 않았습니다.");
-                return;
-            }
-
             for (int i = 0; i < items.Length; ++i)
             {
                 ItemScriptableObject item = items[i];
-                if (item == null)
-                {
-                    Debug.LogWarning($"[InventoryItemDB] items[{i}]가 비어 있습니다.");
-                    continue;
-                }
-
                 if (itemDic.ContainsKey(item.Key))
                 {
                     Debug.LogWarning($"[InventoryItemDB] 중복 ItemId = {item.Key}");
@@ -110,10 +98,32 @@ namespace WeGotOne
 
             if (currentCount < amount)
             {
+                Debug.LogWarning($"[InventoryItemDB] 소비 가능한 수량이 부족합니다. ItemId = {itemId}, Amount = {amount}");
                 return false;
             }
 
             SetCount(itemId, currentCount - amount);
+            return true;
+        }
+
+        public bool TryConsumeAll(IReadOnlyDictionary<int, int> consumePlan)
+        {
+            // foreach (KeyValuePair<int, int> consume in consumePlan)
+            // {
+            //     // consumePlan의 유효여부 검사
+            //     if (consume.Value <= 0 ||
+            //         itemCountDic.TryGetValue(consume.Key, out int currentCount) == false ||
+            //         currentCount < consume.Value)
+            //     {
+            //         return false;
+            //     }
+            // }
+
+            foreach (KeyValuePair<int, int> consume in consumePlan)
+            {
+                SetCount(consume.Key, itemCountDic[consume.Key] - consume.Value);
+            }
+
             return true;
         }
 
