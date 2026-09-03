@@ -50,7 +50,7 @@ namespace WeGotOne
         
         public void Grab()
         {
-            Hand.Grab();
+            Hand.Grab(); 
         }
 
         public void Release()

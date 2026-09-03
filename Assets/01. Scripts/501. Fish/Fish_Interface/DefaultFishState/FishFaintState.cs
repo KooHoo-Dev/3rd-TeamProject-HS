@@ -17,7 +17,6 @@ namespace WeGotOne.Fish_Interface
             recoveryOffset = owner.MaxResistance * 0.15f;
             finalFaintDuration = Mathf.Max(1.5f, baseFaintTime - recoveryOffset);
             this.owner.FaintDuration = finalFaintDuration;
-            Debug.Log("Faint Enter");
         }
 
         public void Tick()
