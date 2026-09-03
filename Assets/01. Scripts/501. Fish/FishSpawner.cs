@@ -12,8 +12,25 @@ namespace WeGotOne
         private FishObjectPool fishObjectPool;
         private WorldItemRegistry worldItemRegistry;
 
+        private SpriteRenderer spriteRenderer;
+
+        private void OnValidate()
+        {
+            SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+
+            if (renderer == null)
+                return;
+
+            renderer.sprite = fishItem?.Icon;
+            renderer.color = new Color(1f, 1f, 1f, 0.35f);
+            renderer.enabled = true;
+        } 
+        
         private void Awake()
         {
+            if (Application.isPlaying)
+                GetComponent<SpriteRenderer>().enabled = false; 
+            
             fishObjectPool = FindFirstObjectByType<FishObjectPool>();
             
             worldItemRegistry = FindFirstObjectByType<WorldItemRegistry>();
