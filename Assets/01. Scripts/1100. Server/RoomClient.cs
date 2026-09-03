@@ -245,9 +245,12 @@ namespace HelloServer
             
             GameManager.Instance.ApplySnapshot(message.ActivePlayerCount, message.ArrivedPlayerCount);
             InventoryItemDB.Instance.ApplySnapshot(message.InventoryEntries);
-
+            if (DayLoop.Instance != null)
+            {
+                // 앞서 작성한 DayApplyFromNetwork 메서드를 호출해 상태가 다를 때만 연출을 깨웁니다.
+                DayLoop.Instance.DayApplyFromNetwork(message.IsDay);
+            }
             Debug.Log(GetJson(message));
-
             SnapshotMessage = message;
         }
 
@@ -427,6 +430,10 @@ namespace HelloServer
                 }
 
                 snapshot.Players = playerStates.ToArray();
+                if (DayLoop.Instance != null)
+                {
+                    snapshot.IsDay = (DayLoop.Instance.CurrentDayType == DayLoop.DayType.Day);
+                }
 
                 List<InventoryEntryState> inventoryEntries = new();
                 foreach (KeyValuePair<int, int> pair in InventoryItemDB.Instance.EnumerateCounts())
