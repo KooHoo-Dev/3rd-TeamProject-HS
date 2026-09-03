@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace WeGotOne.Fish_Interface
@@ -13,6 +12,7 @@ namespace WeGotOne.Fish_Interface
 
         public void Enter(FishStateManager owner)
         {
+            Debug.Log("Start Bait");
             this.owner = owner;
         }
 
@@ -32,6 +32,7 @@ namespace WeGotOne.Fish_Interface
             
             Vector2 direction = (targetStateManager.transform.position - owner.transform.position).normalized;
             owner.FishMovement.Move(direction, baitSpeed);
+            Debug.Log(direction);
             
             float distance = Vector2.Distance(owner.transform.position, targetStateManager.transform.position);
             if (distance < waypointTolerance)
@@ -44,7 +45,17 @@ namespace WeGotOne.Fish_Interface
         {
             targetStateManager = null;
             owner.FishMovement.StopMove();
-            owner.ChangeState(new FishIdleState());
+            
+            if (owner.FishName.Contains("Manta"))
+            {
+                Debug.Log("Attack false");
+                owner.ObjectPool.Release(owner.BaitInfo.gameObject.GetComponent<WorldItem>());
+                owner.ChangeState(new FishFaintState());   
+                owner.ElectronicAttackActive(owner.destroyCancellationToken).Forget();
+                
+            }
+            else
+                owner.ChangeState(new FishIdleState());
         }
     }
 }
