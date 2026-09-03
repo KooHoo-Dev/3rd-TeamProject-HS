@@ -51,7 +51,21 @@ namespace WeGotOne.Fish_Interface
             if (waterArea == null)
                 return;
 
-            int maxTryCount = 30;
+            // fish 종류에 따라 분기처리 (FishStateManager의 fishName이 설정되어 있지 않다면 기본 웨이포인트 설정 (수면 아래 랜덤한 위치로 설정)
+            switch (owner.fishName)
+            {
+                case "MineFish":
+                    // 해보니까 더 천천히 움직여야함
+                    // 그리고 일정시간마다 지가 알아서 방향 틀어야
+                default:
+                    GenerateRandomWaypoint(waterArea, out var maxTryCount);
+                    break;
+            }
+        }
+
+        private void GenerateRandomWaypoint(Collider2D waterArea, out int maxTryCount)
+        {
+            maxTryCount = 30;
 
             for (int i = 0; i < maxTryCount; i++)
             {
