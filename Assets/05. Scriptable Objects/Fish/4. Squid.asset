@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 223c35a36a5b0a94b94fdd791ab42924, type: 3}
-  m_Name: MantisShrimp
-  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.ItemScriptableObject
-  Key: 5
-  Name: MantisShrimp
-  Icon: {fileID: 1357370589685489666, guid: cbb54c62beab7184f87f03f38e96a4c7, type: 3}
+  m_Name: 4. Squid
+  m_EditorClassIdentifier: Assembly-CSharp::Study_Inventory.ItemScriptableObject
+  Key: 4
+  Name: Squid
+  Icon: {fileID: 21300000, guid: e0c4c6237459be24d9ad5388becf1986, type: 3}
   Fullness: 0
   ItemType: 2
