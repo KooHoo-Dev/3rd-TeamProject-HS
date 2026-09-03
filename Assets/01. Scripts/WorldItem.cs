@@ -86,7 +86,6 @@ namespace WeGotOne
         {
             IsPickUp = true;
             ResetTransformSnapshot();
-            gameObject.SetActive(false);
             FishObjectPool.Instance.Release(this);
         }
     }
