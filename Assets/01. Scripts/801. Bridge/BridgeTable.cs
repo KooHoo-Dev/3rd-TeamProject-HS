@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading.Tasks;
+using Jay.FileIO;
 
 namespace WeGotOne
 {
@@ -9,6 +11,13 @@ namespace WeGotOne
         private const int BridgeCount = 15;
 
         private readonly Dictionary<int, BridgeRef> bridges;
+
+        public static async Task<BridgeTable> LoadAsync(
+            IEnumerable<ItemScriptableObject> items)
+        {
+            List<BridgeDto> bridgeDtos = await TSVReader.ReadTableAsync<BridgeDto>("BridgeData", true);
+            return new BridgeTable(bridgeDtos, items);
+        }
 
         public BridgeTable(List<BridgeDto> bridgeDtos, IEnumerable<ItemScriptableObject> items)
         {
