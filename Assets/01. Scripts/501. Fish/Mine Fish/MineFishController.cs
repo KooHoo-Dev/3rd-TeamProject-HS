@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace WeGotOne
@@ -22,6 +23,7 @@ namespace WeGotOne
 
         private Vector3 initialMineLocalPosition;
         private Quaternion initialMineLocalRotation;
+        private bool isMineDetached;
         private bool isGuestVisualMode;
         private bool isHostResetPending;
 
@@ -33,8 +35,6 @@ namespace WeGotOne
 
             initialMineLocalPosition = transform.InverseTransformPoint(mine.position);
             initialMineLocalRotation = Quaternion.Inverse(transform.rotation) * mine.rotation;
-
-            mine.SetParent(null, true);
         }
 
         private void OnEnable()
@@ -54,6 +54,11 @@ namespace WeGotOne
             mineBody.angularVelocity = 0f;
             mineBody.simulated = false;
             mine.gameObject.SetActive(false);
+        }
+
+        private void Start()
+        {
+            mine.SetParent(null, true);
         }
 
         private void FixedUpdate()
@@ -96,6 +101,7 @@ namespace WeGotOne
 
             mineBody.position = transform.TransformPoint(initialMineLocalPosition);
             mineBody.rotation = (transform.rotation * initialMineLocalRotation).eulerAngles.z;
+
             mineBody.linearVelocity = Vector2.zero;
             mineBody.angularVelocity = 0f;
             mineBody.bodyType = RigidbodyType2D.Dynamic;

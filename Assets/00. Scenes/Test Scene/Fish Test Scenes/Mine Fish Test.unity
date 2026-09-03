@@ -655,7 +655,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2761927342734356287, guid: 5d5d2f0c8574ae94a895b990a5ef1fe2, type: 3}
       propertyPath: m_Distance
-      value: 1.4970703
+      value: 2.5370703
       objectReference: {fileID: 0}
     - target: {fileID: 4539963565553445544, guid: 5d5d2f0c8574ae94a895b990a5ef1fe2, type: 3}
       propertyPath: m_Name
@@ -1775,6 +1775,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eaccd67f95915aa44973cd8f1bb51f53, type: 2}
   - {fileID: 11400000, guid: 2354ea3827e164889b64157d3836908b, type: 2}
   - {fileID: 11400000, guid: 6b278b4b7effb5c45b39dda38b9dd85c, type: 2}
+  - {fileID: 11400000, guid: 896989ea23b5bec4191ba0c1d6266ef4, type: 2}
 --- !u!4 &1091046113
 Transform:
   m_ObjectHideFlags: 0
@@ -2022,6 +2023,10 @@ PrefabInstance:
       propertyPath: fishItem
       value: 
       objectReference: {fileID: 11400000, guid: 6b278b4b7effb5c45b39dda38b9dd85c, type: 2}
+    - target: {fileID: 6506899987829652990, guid: d25647ee378c8f14aa01f40830fc61fe, type: 3}
+      propertyPath: fishItem
+      value: 
+      objectReference: {fileID: 11400000, guid: 896989ea23b5bec4191ba0c1d6266ef4, type: 2}
     - target: {fileID: 7873990889199996957, guid: d25647ee378c8f14aa01f40830fc61fe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
