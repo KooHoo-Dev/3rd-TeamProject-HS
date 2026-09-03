@@ -11,20 +11,10 @@ namespace WeGotOne
             if (RoomClient.Instance.Me.IsHost == false) return;
             if (other.gameObject.tag is "Fish" or "Item")
             {
-                if (other.gameObject.TryGetComponent<WorldItem>(out var holder))
-                {
-                    ItemScriptableObject item = holder.ThisItem;
-
-                    if (item == null) return;
-
-                    if (InventoryItemDB.Instance.Add(item.Key, 1))
-                    {
-                        holder.OnPickup();
-                    }
-                }   
+                BridgeManager.Instance.HandleItemPickup(other);
             }
         }
-        
+
         private void OnCollisionStay2D(Collision2D other)
         {
             if (RoomClient.Instance.Me.IsHost == false) return;

@@ -29,7 +29,7 @@ namespace WeGotOne
         private FishStateManager movement;
 
         // 이동할 수 없는 방향을 감지했을 때 알림
-        public event Action OnMovementBlocked;
+        public event Action<RaycastHit2D> OnMovementBlocked;
 
         private void Awake()
         {
@@ -76,7 +76,16 @@ namespace WeGotOne
 
             lastDetectedTime = Time.time;
 
-            OnMovementBlocked?.Invoke();
+            OnMovementBlocked?.Invoke(obstacleHit);
+        }
+
+        public bool IsObstacleAt(Vector2 position)
+        {
+            Vector2 castOffset = position - (Vector2)transform.position;
+            RaycastHit2D obstacleHit = Physics2D.BoxCast(transform.position, obstacleCheckSize, 0f,
+                castOffset.normalized, castOffset.magnitude, obstacleLayer);
+
+            return obstacleHit.collider != null;
         }
 
         private void OnDrawGizmosSelected()

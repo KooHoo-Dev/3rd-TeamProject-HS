@@ -16,6 +16,7 @@ namespace WeGotOne.Fish_Interface
         }
 
         [SerializeField] private FishMovement fishMovement;
+        public WorldItem WorldItem { get; private set; }
         public FishMovement FishMovement => fishMovement;
         
         [Header("저항도(Resistance) 설정")]
@@ -26,6 +27,7 @@ namespace WeGotOne.Fish_Interface
         
         // 물 감지 센서
         [SerializeField] private FishObstacleSensor obstacleSensor;
+        public FishObstacleSensor ObstacleSensor => obstacleSensor;
         
         // 물 탈출 피드백 함수 예외값을 위한 bool값.
         public bool IsGrabbed => currentState is FishCaughtState || currentState is FishExhaustedState;
@@ -68,6 +70,13 @@ namespace WeGotOne.Fish_Interface
         // 기절 파티클용
         [SerializeField] public ParticleSystem confusedParticle;
         
+        public float StartPosY { get; set; }
+
+        private void Awake()
+        {
+            WorldItem = GetComponent<WorldItem>();
+        }
+
         private void OnEnable()
         {
             fishMovement = GetComponent<FishMovement>();
@@ -78,7 +87,6 @@ namespace WeGotOne.Fish_Interface
             }
 
             ResetResistance();
-            maxResistance = 0f;
             waterExitCooldown = 0f;
             TargetPosition = Vector3.zero;
             BaitInfo = null;
@@ -88,17 +96,22 @@ namespace WeGotOne.Fish_Interface
             ChangeState(new FishIdleState());
         }
 
+        private void Start()
+        {
+            StartPosY = transform.position.y;
+        }
+
         private void Update()
         {
             DecreaseFishHunger();
             currentState?.Tick();
         }
 
-        private void HandleWaterBoundary()
+        private void HandleWaterBoundary(RaycastHit2D obstacleHit)
         {
             if (currentState is FishPatrolState patrolState)
             {
-                patrolState.SetNewWaypoint();
+                patrolState.SetNewWaypoint(obstacleHit);
             }
         }
         
