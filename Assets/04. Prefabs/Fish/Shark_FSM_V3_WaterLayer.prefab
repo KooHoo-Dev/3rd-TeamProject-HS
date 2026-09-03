@@ -24,8 +24,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1925885285640645856}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.059372623, w: 0.99823594}
-  m_LocalPosition: {x: -3.564408, y: 2.289718, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -48,7 +48,6 @@ GameObject:
   - component: {fileID: 2007675662536610119}
   - component: {fileID: 225702880943666691}
   - component: {fileID: 8492674803049563753}
-  - component: {fileID: 3593502157634509562}
   - component: {fileID: 4682603421267273784}
   - component: {fileID: 5130000000000000003}
   - component: {fileID: 5244812637053690599}
@@ -69,9 +68,9 @@ Transform:
   m_GameObject: {fileID: 2427400488336505089}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 146.5, y: -15.6, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1405958588296524583}
   m_Father: {fileID: 0}
@@ -193,7 +192,7 @@ Rigidbody2D:
   m_Mass: 20
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -224,7 +223,13 @@ MonoBehaviour:
   TargetPosition: {x: 0, y: 0, z: 0}
   myType: 0
   baitType: 0
-  BaitPosition: {x: 0, y: 0, z: 0}
+  Hunger: 0
+  HungerLimit: 0
+  HungerAmount: 0
+  BaitInfo: {fileID: 0}
+  TargetInfo: {fileID: 0}
+  bulletPrefab: {fileID: 0}
+  <AbductionDestination>k__BackingField: {fileID: 0}
   confusedParticle: {fileID: 0}
 --- !u!114 &225702880943666691
 MonoBehaviour:
@@ -276,55 +281,9 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.049999714, y: 1.5649999}
-  m_Size: {x: 9.74, y: 5.85}
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 8.15, y: 3}
   m_Direction: 1
---- !u!61 &3593502157634509562
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2427400488336505089}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0.049999714, y: 1.5649999}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 10.24, y: 10.24}
-    newSize: {x: 10.24, y: 10.24}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 9.74, y: 5.85}
-  m_EdgeRadius: 0
 --- !u!114 &4682603421267273784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,8 +341,8 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 200
-  obstacleCheckSize: {x: 7, y: 7}
-  obstacleCheckDistance: 10
+  obstacleCheckSize: {x: 7, y: 2.5}
+  obstacleCheckDistance: 1
   detectCooldown: 0.1
 --- !u!1 &6544036976876881251
 GameObject:
