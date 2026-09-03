@@ -1,5 +1,7 @@
 using HelloServer;
 using UnityEngine;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace WeGotOne
 {
@@ -136,7 +138,10 @@ namespace WeGotOne
         public void ApplyInput(Vector2 moveInput, bool leftGrab, bool rightGrab, bool isBuildKeyHold)
         {
             if (IsParalysis)
+            {
+                Debug.Log("IsParalysis");
                 return;
+            }
             
             HandleMovement(moveInput);
             HandleGrab(leftGrab, rightGrab);

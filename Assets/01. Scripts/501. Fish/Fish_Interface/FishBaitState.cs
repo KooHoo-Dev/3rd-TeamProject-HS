@@ -49,8 +49,10 @@ namespace WeGotOne.Fish_Interface
             if (owner.FishName.Contains("Manta"))
             {
                 Debug.Log("Attack false");
-                owner.ElectronicAttackActive(owner.destroyCancellationToken).Forget();
+                owner.ObjectPool.Release(owner.BaitInfo.gameObject.GetComponent<WorldItem>());
                 owner.ChangeState(new FishFaintState());   
+                owner.ElectronicAttackActive(owner.destroyCancellationToken).Forget();
+                
             }
             else
                 owner.ChangeState(new FishIdleState());

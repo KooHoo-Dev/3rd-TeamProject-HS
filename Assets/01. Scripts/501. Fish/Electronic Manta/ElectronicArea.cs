@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using Cysharp.Threading.Tasks;
+﻿using System.Collections;
 using UnityEngine;
 using WeGotOne.Fish_Interface;
 
@@ -21,19 +19,17 @@ namespace WeGotOne.Electronic_Manta
             if (other.CompareTag("Player") && stateManager.IsAttack)
             {
                 Debug.Log("Paralysis Enter");
-                PlayerParalysis(other, other.GetCancellationTokenOnDestroy()).Forget();
+                StartCoroutine(PlayerParalysis(other));
             }
         }
-
-        // duration 초 단위로 시간을 받습니다.
-        public async UniTask PlayerParalysis(Collider2D other, CancellationToken token)
+        
+        private IEnumerator PlayerParalysis(Collider2D other)
         {
-            PlayerController player = other.GetComponent<PlayerController>();
+            PlayerController player = other.GetComponentInParent<PlayerController>();
             
             player.IsParalysis = true;
 
-            // 지정된 시간만큼 대기 (이 동안 다른 프레임 진행)
-            await UniTask.Delay(System.TimeSpan.FromSeconds(duration), cancellationToken: token);
+            yield return new WaitForSeconds(duration);
 
             player.IsParalysis = false;
         }

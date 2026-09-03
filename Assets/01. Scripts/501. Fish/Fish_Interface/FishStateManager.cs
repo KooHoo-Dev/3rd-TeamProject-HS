@@ -1,7 +1,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace WeGotOne.Fish_Interface
 {   
@@ -20,6 +19,8 @@ namespace WeGotOne.Fish_Interface
         [Header("물고기 이름")]
         [field: SerializeField]
         public string FishName { get; private set; }
+
+        public FishObjectPool ObjectPool;
 
         [SerializeField] private FishMovement fishMovement;
         public FishMovement FishMovement => fishMovement;
@@ -62,7 +63,7 @@ namespace WeGotOne.Fish_Interface
         public float HungerLimit;   // 이거 이하면 먹는거
         public float HungerAmount;   // 내가 먹히면 얼마나 채워주는지
         public FishStateManager BaitInfo;// 먹이 정보
-        public PlayerController TargetInfo;// 먹이 정보
+        public PlayerController TargetInfo;// 플레이어 정보
         
         // 문어 발사체 정보
         [SerializeField] private GameObject bulletPrefab;
@@ -101,6 +102,7 @@ namespace WeGotOne.Fish_Interface
             lastEnteredWaterTime = -1;
             FishName = gameObject.name;
             
+            ObjectPool = FindFirstObjectByType<FishObjectPool>();
             ChangeState(new FishIdleState());
         }
 
@@ -256,11 +258,13 @@ namespace WeGotOne.Fish_Interface
 
         public async UniTask ElectronicAttackActive(CancellationToken token)
         {
+            Debug.Log("Task Enter" + FaintDuration);
             ElectronicParticle.gameObject.SetActive(false);
             IsAttack = false;
             
             await UniTask.Delay(System.TimeSpan.FromSeconds(FaintDuration), cancellationToken: token);
             
+            Debug.Log("Task Exit");
             ElectronicParticle.gameObject.SetActive(true);
             IsAttack = true;
         }
