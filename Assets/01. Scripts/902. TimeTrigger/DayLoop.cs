@@ -51,7 +51,7 @@ namespace WeGotOne
 
             elapsedTime -= cycleDuration;
             DayType next = currentDayType == DayType.Day ? DayType.Night : DayType.Day;
-            Debug.Log($"낮밤 전환 대기 시간 {cycleDuration} , 밤낮 전환 ");
+            
             SetDayType(next);
         }
         
@@ -64,7 +64,7 @@ namespace WeGotOne
 
             currentDayType = dayType;
             elapsedTime = 0f; // 전환 시점 기준으로 주기를 다시 맞춤
-
+            Debug.Log($" 밤낮 전환 ");
             PlayTransitionDayChange(dayType);
             OnDayTypeChanged?.Invoke(dayType);
 
