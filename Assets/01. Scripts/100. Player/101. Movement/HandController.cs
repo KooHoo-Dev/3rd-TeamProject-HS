@@ -65,8 +65,8 @@ namespace WeGotOne
             targets = new List<Collider2D>();
             waterLayer = LayerMask.NameToLayer("Water");
         }
-
-private void OnDisable()
+        
+        private void OnDisable()
         {
             // 비활성화 시 작동 중인 타이머 안전하게 정리
             StopGrabTimer();
@@ -135,6 +135,11 @@ private void OnDisable()
             grabbedTarget = currentTarget.attachedRigidbody;
             isGrabbing = true;
             
+            if (grabbedTarget.TryGetComponent<Seahorse>(out var seahorse))
+            {
+                seahorse.SeahorseGrab(gameObject);
+            }
+            
             // 1. 상위 팔(ArmController)의 추가 힘 연산을 위한 이벤트 알림
             Grabbed?.Invoke(grabbedTarget);
 
@@ -168,6 +173,11 @@ private void OnDisable()
             if (grabbedTarget != null && grabbedTarget.TryGetComponent<ICatchable>(out var catchable))
             {
                 catchable.OnReleased();
+            }
+            
+            if (grabbedTarget.TryGetComponent<Seahorse>(out var seahorse))
+            {
+                seahorse.SeahorseRelease();
             }
             
             grabbedTarget = null;

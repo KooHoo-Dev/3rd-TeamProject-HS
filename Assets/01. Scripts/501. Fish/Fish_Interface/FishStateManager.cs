@@ -28,32 +28,34 @@ namespace WeGotOne.Fish_Interface
         [Header("저항도(Resistance) 설정")]
         [SerializeField] private float maxResistance = 20f;
 
-        [Header("물 출입 쿨타임")] [SerializeField] [Tooltip("물속에 들어온 직후 다시 물밖으로 나가는 감지를 무시할 시간")]
+        [Header("물 출입 쿨타임")] 
+        [SerializeField] [Tooltip("물속에 들어온 직후 다시 물밖으로 나가는 감지를 무시할 시간")]
         private float waterExitCooldown = 1.0f;
         
         // 물 감지 센서
         [SerializeField] private FishObstacleSensor obstacleSensor;
         
         // 물 탈출 피드백 함수 예외값을 위한 bool값.
-        public bool IsGrabbed => currentState is FishCaughtState || currentState is FishExhaustedState;
+        public bool IsGrabbed => CurrentState is FishCaughtState || CurrentState is FishExhaustedState;
         public float MaxResistance => maxResistance; // 저항도
         public float CurrentResistance { get; private set; }
         public string CurrentStateName
         {
             get
             {
-                if (currentState is FishIdleState) return "Idle";
-                if (currentState is FishPatrolState) return "Patrol";
-                if (currentState is FishCaughtState) return "Caught";
-                if (currentState is FishExhaustedState) return "Exhausted";
-                if (currentState is FishFaintState) return "Faint";
-                if (currentState is FishRunawayState) return "Runaway";
-                if (currentState is AbductionState) return "Abduction";
+                if (CurrentState is FishIdleState) return "Idle";
+                if (CurrentState is FishPatrolState) return "Patrol";
+                if (CurrentState is FishCaughtState) return "Caught";
+                if (CurrentState is FishExhaustedState) return "Exhausted";
+                if (CurrentState is FishFaintState) return "Faint";
+                if (CurrentState is FishRunawayState) return "Runaway";
+                if (CurrentState is AbductionState) return "Abduction";
+                if (CurrentState is FishItemState) return "FishItem";
                 return "Unknown";
             }
         }
         
-        public IFishState currentState;
+        public IFishState CurrentState;
 
         public Vector3 TargetPosition;
         
@@ -109,12 +111,12 @@ namespace WeGotOne.Fish_Interface
         private void Update()
         {
             DecreaseFishHunger();
-            currentState?.Tick();
+            CurrentState?.Tick();
         }
 
         private void HandleWaterBoundary()
         {
-            if (currentState is FishPatrolState patrolState)
+            if (CurrentState is FishPatrolState patrolState)
             {
                 patrolState.SetNewWaypoint();
             }
@@ -123,7 +125,7 @@ namespace WeGotOne.Fish_Interface
         private void OnTriggerEnter2D(Collider2D other)
         {
             // 현재 상태 먹이 추적 + other에 물고기 상태머신 잇으면
-            if (currentState is FishBaitState && other.TryGetComponent(out FishStateManager fishState))
+            if (CurrentState is FishBaitState && other.TryGetComponent(out FishStateManager fishState))
             {
                 // 배고픔 관련. 다른 물고기 들어왔을때 배고프면 먹게
                 if (fishState == BaitInfo && Hunger < HungerLimit)
@@ -180,7 +182,7 @@ namespace WeGotOne.Fish_Interface
         {
             // [기믹 반영]: 물고기가 물 위에서 기절(Faint)해 있을 때 다시 잡으면,
             // 저항 없이 즉시 탈진(Exhausted) 상태로 파지되게 처리합니다.
-            if (currentState is FishFaintState)
+            if (CurrentState is FishFaintState)
             {
                 TransitionTo(new FishExhaustedState());
             }
@@ -215,7 +217,7 @@ namespace WeGotOne.Fish_Interface
 
         public void OnMissed()
         {
-            if (currentState is FishIdleState)
+            if (CurrentState is FishIdleState)
             {
                 TransitionTo(new FishRunawayState());
             }
@@ -234,14 +236,14 @@ namespace WeGotOne.Fish_Interface
         {   
             if (newState == null) return;
 
-            currentState = newState;
-            currentState.Enter(this);
+            CurrentState = newState;
+            CurrentState.Enter(this);
         }
         
         public void OnPlayerCaught(Transform playerTransform)
         {
             // 이미 납치 중이 아닐 때만 실행
-            if (!(currentState is AbductionState))
+            if (!(CurrentState is AbductionState))
             {
                 PlayerRootPosition = playerTransform;
         
