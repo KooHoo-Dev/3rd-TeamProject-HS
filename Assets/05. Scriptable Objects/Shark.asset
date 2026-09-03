@@ -16,4 +16,5 @@ MonoBehaviour:
   Name: Shark
   Icon: {fileID: 21300000, guid: 3f32751a69655b14aa267ab4c3ed5f67, type: 3}
   Fullness: 0
+  BuildValue: 10
   ItemType: 2

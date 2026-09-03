@@ -16,4 +16,5 @@ MonoBehaviour:
   Name: Wood
   Icon: {fileID: -7492097170800067375, guid: 5cff56dd873dacc48858b46f9c1b67e7, type: 3}
   Fullness: 0
+  BuildValue: 1
   ItemType: 0
