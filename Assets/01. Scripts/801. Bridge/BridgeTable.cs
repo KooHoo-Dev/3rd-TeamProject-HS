@@ -1,26 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using UnityEngine;
 
 namespace WeGotOne
 {
     public class BridgeTable
     {
         private const int BridgeCount = 15;
-        private const string Header = "BridgeIndex\tRequiredValue\tMinimumItems";
 
         private readonly Dictionary<int, BridgeRef> bridges;
 
-        public BridgeTable(TextAsset bridgeTsv, IEnumerable<ItemScriptableObject> items)
+        public BridgeTable(List<BridgeDto> bridgeDtos, IEnumerable<ItemScriptableObject> items)
         {
-            if (bridgeTsv == null)
+            if (bridgeDtos == null)
             {
-                throw new ArgumentNullException(nameof(bridgeTsv));
+                throw new ArgumentNullException(nameof(bridgeDtos));
             }
 
             Dictionary<int, ItemScriptableObject> itemById = CreateItemLookup(items);
-            List<BridgeDto> bridgeDtos = ParseBridgeDtos(bridgeTsv.text);
             bridges = CreateBridgeReferences(bridgeDtos, itemById);
         }
 
@@ -59,58 +56,6 @@ namespace WeGotOne
             }
 
             return itemById;
-        }
-
-        private static List<BridgeDto> ParseBridgeDtos(string tsvText)
-        {
-            if (string.IsNullOrEmpty(tsvText))
-            {
-                throw new InvalidOperationException("Bridge TSV가 비어 있습니다.");
-            }
-
-            string[] rows = tsvText.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n');
-            int rowCount = rows.Length;
-            while (rowCount > 0 && rows[rowCount - 1] == string.Empty)
-            {
-                rowCount--;
-            }
-
-            if (rowCount == 0)
-            {
-                throw new InvalidOperationException("Bridge TSV가 비어 있습니다.");
-            }
-
-            string header = rows[0];
-            if (header.Length > 0 && header[0] == '\uFEFF')
-            {
-                header = header.Substring(1);
-            }
-
-            if (header != Header)
-            {
-                throw new InvalidOperationException("Bridge TSV 헤더가 올바르지 않습니다.");
-            }
-
-            var bridgeDtos = new List<BridgeDto>();
-            for (int i = 1; i < rowCount; i++)
-            {
-                string[] values = rows[i].Split('\t');
-                if (values.Length != 3 ||
-                    !int.TryParse(values[0], out int bridgeIndex) ||
-                    !int.TryParse(values[1], out int requiredValue))
-                {
-                    throw new InvalidOperationException($"Bridge TSV {i + 1}번째 행이 올바르지 않습니다.");
-                }
-
-                bridgeDtos.Add(new BridgeDto
-                {
-                    BridgeIndex = bridgeIndex,
-                    RequiredValue = requiredValue,
-                    MinimumItems = values[2],
-                });
-            }
-
-            return bridgeDtos;
         }
 
         private static Dictionary<int, BridgeRef> CreateBridgeReferences(
@@ -183,6 +128,12 @@ namespace WeGotOne
             if (minimumItems == string.Empty)
             {
                 return minimumRequirements;
+            }
+
+            if (minimumItems == null)
+            {
+                throw new InvalidOperationException(
+                    $"BridgeIndex {bridgeIndex}의 MinimumItems가 없습니다.");
             }
 
             string[] entries = minimumItems.Split(',');
