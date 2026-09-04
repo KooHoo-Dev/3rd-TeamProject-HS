@@ -10,7 +10,9 @@ namespace WeGotOne
         private const int PLANK_ITEM_KEY = 0;
         [SerializeField] private Transform bridgeTransform;
         
-        public bool IsEnd => CurrentBridgeCount() == BridgeObjects.Length;
+        private BridgeTable bridgeTable;
+
+        public bool IsEnd => CurrentBridgeCount() >= BridgeObjects.Length;
 
         // 게임 매니저나 나중에 다른 UI에게 전파하는 용도 델리게이트
         public event Action OnBridgeBuild;
@@ -20,6 +22,18 @@ namespace WeGotOne
         {
             base.OnInitialize();
             BridgeObjects = bridgeTransform.GetComponentsInChildren<Bridge>(true);
+        }
+
+        private async void Start()
+        {
+            try
+            {
+                bridgeTable = await BridgeTable.LoadAsync(InventoryItemDB.Instance.items);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
+            }
         }
 
         public int CurrentBridgeCount()
@@ -37,15 +51,42 @@ namespace WeGotOne
             return currentCount;
         }
 
+        public bool TryGetNextBridgeRef(out BridgeRef bridgeRef)
+        {
+            bridgeRef = null;
+
+            if (bridgeTable == null || IsEnd)
+            {
+                return false;
+            }
+
+            return bridgeTable.TryGet(CurrentBridgeCount() + 1, out bridgeRef);
+        }
+
         public void BridgeBuild()
         {
             if (IsEnd) return;
 
-            if (InventoryItemDB.Instance.TryConsume(PLANK_ITEM_KEY, 1))
+            int currentBridgeCount = CurrentBridgeCount();
+            int nextBridgeIndex = currentBridgeCount + 1;
+            if (bridgeTable.TryGet(nextBridgeIndex, out BridgeRef bridgeRef) == false)
             {
-                BridgeObjects[CurrentBridgeCount()].gameObject.SetActive(true);
-                OnBridgeBuild?.Invoke();
+                return;
             }
+
+            InventoryItemDB inventoryItemDB = InventoryItemDB.Instance;
+            if (BridgeBuildCostCalculator.TryCreateConsumePlan(
+                    bridgeRef,
+                    inventoryItemDB.EnumerateCounts(),
+                    inventoryItemDB.items,
+                    out System.Collections.Generic.IReadOnlyDictionary<int, int> consumePlan) == false ||
+                inventoryItemDB.TryConsumeAll(consumePlan) == false)
+            {
+                return;
+            }
+
+            BridgeObjects[currentBridgeCount].gameObject.SetActive(true);
+            OnBridgeBuild?.Invoke();
         }
 
         public void ApplySnapshot(int messageCurrentBridgeCount)

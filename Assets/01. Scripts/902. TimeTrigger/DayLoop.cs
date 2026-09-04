@@ -35,10 +35,11 @@ namespace WeGotOne
         
         // 호스트의 경과 시간을 외부에 노출하기 위한 프로퍼티 (스냅샷 전송용)
         public float ElapsedTime => elapsedTime;
+        public bool IsElapsedMoreThanHalfDuration => elapsedTime >= cycleDuration * 0.5f;
         
         // DayLoop는 "지금 낮/밤 이 바뀐 사실만 발행 
         // 스폰 로직, 연출 등 실제 처리는 구독자가 판단
-
+        public event Action<DayType> OnDayTypeChanged;
        
         private IEnumerator Start()
         {

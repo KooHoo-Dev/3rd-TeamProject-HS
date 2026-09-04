@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/04. Prefabs/Fish/Bullet.prefab.meta
 guid: 59766b02ffc620c41826838eed15a7ae
+========
+guid: 5d5d2f0c8574ae94a895b990a5ef1fe2
+>>>>>>>> feature/S8-4-upgrade-bridge-construction-condition:Assets/04. Prefabs/Fish/MineFish.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 
