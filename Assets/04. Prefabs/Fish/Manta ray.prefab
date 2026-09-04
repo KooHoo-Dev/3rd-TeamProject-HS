@@ -202,11 +202,11 @@ MonoBehaviour:
   <FishName>k__BackingField: 
   ObjectPool: {fileID: 0}
   fishMovement: {fileID: 0}
-  maxResistance: 5
+  maxResistance: 13
   waterExitCooldown: 1
   obstacleSensor: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
-  myType: 0
+  myType: 4
   baitType: 3
   Hunger: 0
   HungerLimit: 1000000
@@ -233,7 +233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishCollisionHandler
   terrainLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 136
   minImpactThreshold: 5
 --- !u!114 &5917257742392871944
 MonoBehaviour:
@@ -292,8 +292,8 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 200
-  obstacleCheckSize: {x: 1, y: 1}
-  obstacleCheckDistance: 2
+  obstacleCheckSize: {x: 4, y: 4}
+  obstacleCheckDistance: 5
   detectCooldown: 0.1
 --- !u!114 &1702131265456152194
 MonoBehaviour:
@@ -375,7 +375,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0

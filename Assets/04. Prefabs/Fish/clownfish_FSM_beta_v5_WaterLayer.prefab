@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 7288073790878514883}
   - component: {fileID: 4232708847999419296}
   m_Layer: 0
-  m_Name: Clownfish_FSM_beta_v5_WaterLayer
+  m_Name: clownfish_FSM_beta_v5_WaterLayer
   m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -300,17 +300,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7746cb164f44662970bead08d0a34e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Fish_Interface.FishStateManager
+  <FishName>k__BackingField: 
+  ObjectPool: {fileID: 0}
   fishMovement: {fileID: 7288073790878514883}
   maxResistance: 5
   waterExitCooldown: 1
   obstacleSensor: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
-  myType: 0
+  myType: 2
   baitType: 0
   Hunger: 0
   HungerLimit: 0
   HungerAmount: 0
   BaitInfo: {fileID: 0}
+  TargetInfo: {fileID: 0}
+  bulletPrefab: {fileID: 0}
+  <AbductionDestination>k__BackingField: {fileID: 0}
+  ElectronicParticle: {fileID: 0}
+  IsAttack: 1
+  FaintDuration: 0
   confusedParticle: {fileID: 460550644456355994}
 --- !u!114 &6642005358976696119
 MonoBehaviour:
@@ -326,7 +334,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishCollisionHandler
   terrainLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 136
   minImpactThreshold: 5
 --- !u!70 &1345562958095740116
 CapsuleCollider2D:

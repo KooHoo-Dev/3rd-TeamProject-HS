@@ -140,12 +140,12 @@ MonoBehaviour:
   <FishName>k__BackingField: 
   ObjectPool: {fileID: 0}
   fishMovement: {fileID: 0}
-  maxResistance: 20
+  maxResistance: 10
   waterExitCooldown: 1
   obstacleSensor: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
   myType: 0
-  baitType: 0
+  baitType: 4
   Hunger: 0
   HungerLimit: 0
   HungerAmount: 0
@@ -189,8 +189,8 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 200
-  obstacleCheckSize: {x: 0.8, y: 0.5}
-  obstacleCheckDistance: 1
+  obstacleCheckSize: {x: 2, y: 2}
+  obstacleCheckDistance: 3
   detectCooldown: 0.1
 --- !u!114 &5981077509093271822
 MonoBehaviour:
