@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 3402221713284153257}
   - component: {fileID: 4895819399157256878}
   - component: {fileID: 8964461994870817763}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PinkFish_FSM_Beta_v5_WaterLayer
   m_TagString: Fish
   m_Icon: {fileID: 0}
