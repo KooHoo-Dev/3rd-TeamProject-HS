@@ -23,17 +23,16 @@ namespace WeGotOne
 
         private IEnumerator Start()
         {
+            yield return new WaitUntil(() => InventoryItemDB.Instance.IsInitialized);
+
             inventoryItemDB = InventoryItemDB.Instance;
             bridgeManager = BridgeManager.Instance;
 
             inventoryItemDB.ItemCountChanged += HandleItemCountChanged;
             bridgeManager.OnBridgeBuild += Refresh;
 
-            yield return new WaitUntil(() => bridgeManager.TryGetNextBridgeRef(out _) == false && bridgeManager.IsEnd == false);
-            // while (bridgeManager.TryGetNextBridgeRef(out _) == false && bridgeManager.IsEnd == false)
-            // {
-            //     yield return null;
-            // }
+            yield return new WaitUntil(() =>
+                bridgeManager.TryGetNextBridgeRef(out _) || bridgeManager.IsEnd);
 
             Refresh();
         }
@@ -94,12 +93,7 @@ namespace WeGotOne
                 }
 
                 KeyValuePair<int, int> requirement = sortedRequirements[i];
-                ItemScriptableObject item = inventoryItemDB.GetItem(requirement.Key);
-                if (item == null)
-                {
-                    slot.Render(null, 0);
-                    continue;
-                }
+                ItemRef item = inventoryItemDB.GetItem(requirement.Key);
 
                 int currentCount = inventoryItemDB.GetCount(requirement.Key);
                 slot.Render(item, requirement.Value);
@@ -118,8 +112,8 @@ namespace WeGotOne
                     continue;
                 }
 
-                ItemScriptableObject item = inventoryItemDB.GetItem(inventoryEntry.Key);
-                if (item != null && item.BuildValue > 0)
+                ItemRef item = inventoryItemDB.GetItem(inventoryEntry.Key);
+                if (item.BuildValue > 0)
                 {
                     currentBuildValue += (long)item.BuildValue * inventoryEntry.Value;
                 }

@@ -15,7 +15,7 @@ namespace WeGotOne
         public static bool TryCreateConsumePlan(
             BridgeRef bridgeRef,
             IEnumerable<KeyValuePair<int, int>> inventoryCounts,
-            IEnumerable<ItemScriptableObject> items,
+            IEnumerable<ItemRef> items,
             out IReadOnlyDictionary<int, int> consumePlan)
         {
             consumePlan = null;
@@ -28,15 +28,15 @@ namespace WeGotOne
                 return false;
             }
 
-            var itemById = new Dictionary<int, ItemScriptableObject>();
-            foreach (ItemScriptableObject item in items)
+            var itemById = new Dictionary<int, ItemRef>();
+            foreach (ItemRef item in items)
             {
-                if (item == null || itemById.ContainsKey(item.Key))
+                if (item == null || itemById.ContainsKey(item.ItemId))
                 {
                     return false;
                 }
 
-                itemById.Add(item.Key, item);
+                itemById.Add(item.ItemId, item);
             }
 
             var countById = new Dictionary<int, int>();
@@ -57,7 +57,7 @@ namespace WeGotOne
                 if (minimumRequirement.Value <= 0 ||
                     !countById.TryGetValue(minimumRequirement.Key, out int inventoryCount) ||
                     inventoryCount < minimumRequirement.Value ||
-                    !itemById.TryGetValue(minimumRequirement.Key, out ItemScriptableObject item) ||
+                    !itemById.TryGetValue(minimumRequirement.Key, out ItemRef item) ||
                     item.BuildValue <= 0)
                 {
                     return false;
@@ -76,13 +76,13 @@ namespace WeGotOne
 
             var candidates = new List<CandidateItem>();
             int maxBuildValue = 0;
-            foreach (KeyValuePair<int, ItemScriptableObject> itemPair in itemById)
+            foreach (KeyValuePair<int, ItemRef> itemPair in itemById)
             {
-                ItemScriptableObject item = itemPair.Value;
-                int plannedCount = plannedCounts.TryGetValue(item.Key, out int minimumCount)
+                ItemRef item = itemPair.Value;
+                int plannedCount = plannedCounts.TryGetValue(item.ItemId, out int minimumCount)
                     ? minimumCount
                     : 0;
-                int inventoryCount = countById.TryGetValue(item.Key, out int count) ? count : 0;
+                int inventoryCount = countById.TryGetValue(item.ItemId, out int count) ? count : 0;
                 int availableCount = inventoryCount - plannedCount;
 
                 if (item.BuildValue <= 0 || availableCount <= 0)
@@ -95,7 +95,7 @@ namespace WeGotOne
                     (remainingValue + item.BuildValue - 1) / item.BuildValue);
                 candidates.Add(new CandidateItem
                 {
-                    ItemId = item.Key,
+                    ItemId = item.ItemId,
                     BuildValue = item.BuildValue,
                     MaxCount = maxCount,
                 });

@@ -259,7 +259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1c982d3a21742b99f985276dfac5441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItem
-  <ThisItem>k__BackingField: {fileID: 11400000, guid: b4c45dcaa4849aa4baeb08a35ee9f648, type: 2}
+  itemId: 8
 --- !u!114 &-677358933537273645
 MonoBehaviour:
   m_ObjectHideFlags: 0

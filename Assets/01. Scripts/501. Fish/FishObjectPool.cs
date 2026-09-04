@@ -8,6 +8,14 @@ namespace WeGotOne
         [SerializeField] private WorldItem[] fishPrefabs;
 
         private readonly Dictionary<int, Queue<WorldItem>> inactiveFishByItemId = new();
+        private readonly HashSet<WorldItem> activeFish = new();
+        private WorldItemRegistry worldItemRegistry;
+
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+            worldItemRegistry = GetComponent<WorldItemRegistry>();
+        }
 
         public WorldItem Get(int itemId)
         {
@@ -20,6 +28,7 @@ namespace WeGotOne
                         continue;
 
                     InitializeFish(pooledFish);
+                    activeFish.Add(pooledFish);
                     return pooledFish;
                 }
             }
@@ -33,6 +42,7 @@ namespace WeGotOne
 
             WorldItem fish = Instantiate(prefab);
             InitializeFish(fish);
+            activeFish.Add(fish);
             return fish;
         }
 
@@ -50,6 +60,13 @@ namespace WeGotOne
             fish.SetIsPickUp(false);
             fish.DeactivateFromSnapshot();
 
+            if (fish.WorldItemId >= 0)
+            {
+                worldItemRegistry.UnregisterDynamic(fish.WorldItemId, out _);
+            }
+
+            activeFish.Remove(fish);
+
             if (inactiveFishByItemId.TryGetValue(fish.ItemId, out Queue<WorldItem> inactiveFish) == false)
             {
                 inactiveFish = new Queue<WorldItem>();
@@ -57,6 +74,15 @@ namespace WeGotOne
             }
 
             inactiveFish.Enqueue(fish);
+        }
+
+        public void ReleaseAllActiveFish()
+        {
+            var fishes = new List<WorldItem>(activeFish);
+            foreach (WorldItem fish in fishes)
+            {
+                Release(fish);
+            }
         }
 
         private WorldItem FindFishPrefab(int itemId)
@@ -72,9 +98,7 @@ namespace WeGotOne
         
         private bool IsFishPrefab(WorldItem prefab)
         {
-            return prefab != null && prefab.ThisItem != null &&
-                   prefab.ThisItem.ItemType == ItemType.Fish &&
-                   prefab.TryGetComponent<Fish>(out _);
+            return prefab != null && prefab.TryGetComponent<Fish>(out _);
         }
         
         private void InitializeFish(WorldItem fish)
