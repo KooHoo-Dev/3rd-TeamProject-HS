@@ -34,6 +34,8 @@ namespace WeGotOne.Fish_Interface
         public void Exit()
         {
             // 정신 차리고 회복
+            if(owner.confusedParticle != null)
+                owner.StopConfusedParticle();
             owner.ResetResistance();
             owner.ChangeState(new FishIdleState());
         }

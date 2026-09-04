@@ -396,14 +396,15 @@ namespace HelloServer
         private async UniTaskVoid SendLoop()
         {
             int delay = (int)(1000f / sendPerSecond);
+            var token = destroyCancellationToken;
 
-            while (destroyCancellationToken.IsCancellationRequested == false)
+            while (token.IsCancellationRequested == false)
             {
                 // Update, FixedUpdate 이후 (게임 로직 처리 이후) 
                 // 호스트는 스냅샷
                 // 게스트는 게스트 인풋 전송
                 // WhenAll로하면 Delay가 나중에 완료되어서 PostLateUpdate 시점에 실행될거라 보장할 수 없음
-                await UniTask.Delay(delay, cancellationToken: destroyCancellationToken);
+                await UniTask.Delay(delay, cancellationToken: token);
                 await UniTask.Yield(PlayerLoopTiming.LastUpdate);
 
                 // 아직 번호를 못 받았으면 보낼 것이 없다.
