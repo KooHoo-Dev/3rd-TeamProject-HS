@@ -8,7 +8,7 @@ namespace WeGotOne
      */
     public class BottomArmController : ArmController
     {
-        [SerializeField] private HingeJoint2D grabJoint;
+        [SerializeField] public HingeJoint2D grabJoint;
         [Header("0 넣으면 안됨")]
         [SerializeField] private float divideNum = 1f;
         
@@ -36,7 +36,7 @@ namespace WeGotOne
             {
                 grabJoint.connectedBody = null;
             }
-
+            
             // 잡기 Joint 활성화
             grabJoint.enabled = true;
         }

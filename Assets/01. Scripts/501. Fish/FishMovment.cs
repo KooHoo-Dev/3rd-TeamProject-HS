@@ -37,6 +37,8 @@ namespace WeGotOne
             {
                 Rb.linearVelocity = currentDirection * currentSpeed;
                 FlipRenderer(currentDirection.x);
+                Debug.Log(currentSpeed);
+                Debug.Log(Rb.name);
             }
         }
 

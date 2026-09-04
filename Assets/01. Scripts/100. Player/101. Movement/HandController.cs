@@ -135,11 +135,6 @@ namespace WeGotOne
             grabbedTarget = currentTarget.attachedRigidbody;
             isGrabbing = true;
             
-            /*if (grabbedTarget.TryGetComponent<Seahorse>(out var seahorse))
-            {
-                seahorse.SeahorseGrab(gameObject);
-            }*/
-            
             // 1. 상위 팔(ArmController)의 추가 힘 연산을 위한 이벤트 알림
             Grabbed?.Invoke(grabbedTarget);
 
@@ -147,6 +142,7 @@ namespace WeGotOne
             
             if (grabbedTarget != null && grabbedTarget.TryGetComponent<ICatchable>(out var catchable))
             {
+                grabbedTarget.gameObject.GetComponent<FishStateManager>().PlayerRootPosition = transform.root;
                 catchable.OnGrabbed();
             }
             
@@ -179,11 +175,6 @@ namespace WeGotOne
             {
                 catchable.OnReleased();
             }
-            
-            /*if (grabbedTarget.TryGetComponent<Seahorse>(out var seahorse))
-            {
-                seahorse.SeahorseRelease();
-            }*/
             
             grabbedTarget = null;
             isGrabbing = false;
