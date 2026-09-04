@@ -2985,7 +2985,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eaccd67f95915aa44973cd8f1bb51f53, type: 2}
   - {fileID: 11400000, guid: 2354ea3827e164889b64157d3836908b, type: 2}
   - {fileID: 11400000, guid: 6b278b4b7effb5c45b39dda38b9dd85c, type: 2}
-  - {fileID: 11400000, guid: 896989ea23b5bec4191ba0c1d6266ef4, type: 2}
+  - {fileID: 11400000, guid: dc967ec403f30b24e9f7dba331e127f1, type: 2}
   - {fileID: 11400000, guid: 295ea9f4040f2c5449a670c1bc902026, type: 2}
   - {fileID: 11400000, guid: aa4f8eefe827fd942b581e820c903679, type: 2}
   - {fileID: 11400000, guid: b4c45dcaa4849aa4baeb08a35ee9f648, type: 2}
@@ -7095,7 +7095,7 @@ PrefabInstance:
     - target: {fileID: 221889018652478814, guid: ad3abefe24e37c643be0f55945acddaf, type: 3}
       propertyPath: fishItem
       value: 
-      objectReference: {fileID: 11400000, guid: 896989ea23b5bec4191ba0c1d6266ef4, type: 2}
+      objectReference: {fileID: 11400000, guid: dc967ec403f30b24e9f7dba331e127f1, type: 2}
     - target: {fileID: 508468119585522971, guid: ad3abefe24e37c643be0f55945acddaf, type: 3}
       propertyPath: fishItem
       value: 

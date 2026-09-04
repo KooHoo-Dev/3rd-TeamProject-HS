@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 223c35a36a5b0a94b94fdd791ab42924, type: 3}
-  m_Name: MineFish
+  m_Name: Octo Ink
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.ItemScriptableObject
-  Key: 6
-  Name: MineFish
-  Icon: {fileID: 21300000, guid: fd493036fae6c9c46910998d78175b6d, type: 3}
+  Key: 120
+  Name: Octo Ink
+  Icon: {fileID: 21300000, guid: ed22d9ecaf3924458853ce7d07372d0b, type: 3}
   Fullness: 0
-  BuildValue: 10
-  ItemType: 2
+  BuildValue: 0
+  ItemType: 0
