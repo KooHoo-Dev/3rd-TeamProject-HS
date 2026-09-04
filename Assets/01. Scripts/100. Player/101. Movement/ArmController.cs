@@ -37,6 +37,7 @@ namespace WeGotOne
         
         private Rigidbody2D rigid;
         private Vector2 inputDirection;
+        public Vector2 InDirection => inputDirection;
 
         // Hand에서 받아와서 타겟이랑 잡은 상태인지 판단하기. 추가힘 쓸때 사용함
         [SerializeField] private Rigidbody2D grabbedTarget;
@@ -122,13 +123,6 @@ namespace WeGotOne
             currentForce = CalculateForce();
             
             rigid.AddForce(inputDirection * currentForce);
-
-            // 임시 코드. 공중같이 중력 영향 외 물리력 안받는 상황에서
-            // 팔로 무한 가속 되는거 막는 용도
-            if (rigid.linearVelocity.magnitude > 5f)
-            {
-                rigid.AddForce(-inputDirection * currentForce);
-            }
         }
         
         public bool CanConsumeAdditionalHunger
