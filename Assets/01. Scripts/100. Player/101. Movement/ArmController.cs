@@ -54,6 +54,7 @@ namespace WeGotOne
         {
             hand.Grabbed += OnGrabbed;
             hand.Released += OnReleased;
+            Debug.Log($"{gameObject.name}x: {transform.rotation.x}, {gameObject.name}y: {transform.rotation.y}, {gameObject.name}z: {transform.rotation.z}");
         }
 
         private void OnDisable()
