@@ -329,7 +329,11 @@ namespace HelloServer
             Destroy(remote.gameObject);
 
             // 씬 다시 로드하도록 설정
-            SceneManager.LoadScene(0);
+            if (message.Id == Me.Id)
+            {
+                // 자기 자신이 나갔다면 씬 재로드
+                SceneManager.LoadScene(0);
+            }
             Debug.Log($"[방] {message.Id} 이(가) 나갔다");
         }
 
