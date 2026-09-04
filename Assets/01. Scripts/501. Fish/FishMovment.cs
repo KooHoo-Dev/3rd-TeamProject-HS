@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DG.Tweening;
+using HelloServer;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -12,16 +13,18 @@ namespace WeGotOne
         [SerializeField] private Collider2D waterArea;
         public Collider2D WaterArea => waterArea;
         
-        private Rigidbody2D rb;
+        public Rigidbody2D Rb { get; private set; }
         private Vector2 currentDirection;
         private float currentSpeed;
         public bool isGuestLocked;
         private Vector3 baseLocalScale;
+        private LayerMask waterLayer;
 
         private void Awake()
         {
-            rb = GetComponent<Rigidbody2D>();
+            Rb = GetComponent<Rigidbody2D>();
             baseLocalScale = transform.localScale;
+            waterLayer = LayerMask.GetMask("Water");
         }
         
         private void FixedUpdate()
@@ -32,8 +35,26 @@ namespace WeGotOne
             // Move 명령이 들어왔을 때만 지속적인 속도를 적용
             if (currentSpeed > 0)
             {
-                rb.linearVelocity = currentDirection * currentSpeed;
+                Rb.linearVelocity = currentDirection * currentSpeed;
                 FlipRenderer(currentDirection.x);
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (RoomClient.Instance.Me.IsHost && waterLayer.Contains(other.gameObject.layer))
+            {
+                Rb.gravityScale = 0f;
+            }
+        }
+        
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            //
+            // 특정 단일 레이어인지 검사
+            if (RoomClient.Instance.Me.IsHost && waterLayer.Contains(other.gameObject.layer))
+            {
+                Rb.gravityScale = 1f;
             }
         }
 
@@ -48,9 +69,9 @@ namespace WeGotOne
         // 2. 물리적 힘 가하기 (Caught 상태의 발버둥 등에서 단발성 호출)
         public void ApplyForce(Vector2 forceVector)
         {
-            if (rb != null)
+            if (Rb != null)
             {
-                rb.AddForce(forceVector, ForceMode2D.Force);
+                Rb.AddForce(forceVector, ForceMode2D.Force);
             }
         }
 
@@ -59,7 +80,7 @@ namespace WeGotOne
         {
             currentSpeed = 0f;
             currentDirection = Vector2.zero;
-            if (rb != null) rb.linearVelocity = Vector2.zero;
+            if (Rb != null) Rb.linearVelocity = Vector2.zero;
         }
 
         // 4. 기절 시 관성 미끄러짐 
@@ -67,7 +88,7 @@ namespace WeGotOne
         {
             StopMove();
             // 필요에 따라 drag(마찰력) 값을 조절해 자연스럽게 미끄러지다 멈추게 연출
-            if (rb != null) rb.linearDamping = 1.5f; 
+            if (Rb != null) Rb.linearDamping = 1.5f; 
         }
 
         // 이동 방향에 맞춰 스프라이트 좌우 반전
@@ -82,17 +103,17 @@ namespace WeGotOne
         // 물 안/밖 물리 속성 (기존 유지)
         public void SetAirPhysics()
         {
-            if (rb != null) { rb.gravityScale = 1f; rb.linearDamping = 0f; }
+            if (Rb != null) { Rb.gravityScale = 1f; Rb.linearDamping = 0f; }
         }
         
         public void SetWaterPhysics()
         {
-            if (rb != null) { rb.gravityScale = 0f; rb.linearDamping = 3f; }
+            if (Rb != null) { Rb.gravityScale = 0f; Rb.linearDamping = 3f; }
         }
 
         private bool CheckInWater()
         {
-            Vector2 next = rb.position + currentDirection * currentSpeed * Time.fixedDeltaTime;
+            Vector2 next = Rb.position + currentDirection * currentSpeed * Time.fixedDeltaTime;
             
             // 움직임 구간(물영역)이 정해져있고,
             if (waterArea != null)
@@ -101,7 +122,7 @@ namespace WeGotOne
                 if (waterArea.OverlapPoint(next) == false)
                 {
                     // 속도 없애고 false
-                    rb.linearVelocity = Vector2.zero;
+                    Rb.linearVelocity = Vector2.zero;
                     return false;
                 }
             }
@@ -122,7 +143,7 @@ namespace WeGotOne
             StopMove(); // 혹시 이미 걸려있던 트윈이 있다면 즉시 정리
 
             // [요구사항 2] Rigidbody Dynamic -> Kinematic 전환
-            if (rb != null) rb.bodyType = RigidbodyType2D.Kinematic;
+            if (Rb != null) Rb.bodyType = RigidbodyType2D.Kinematic;
 
             enabled = false; // Update 등 자동 콜백까지 이중 차단
         }
