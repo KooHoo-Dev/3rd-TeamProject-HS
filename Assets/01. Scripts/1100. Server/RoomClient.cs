@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using WeGotOne;
 
@@ -327,6 +328,8 @@ namespace HelloServer
             remotes.Remove(message.Id);
             Destroy(remote.gameObject);
 
+            // 씬 다시 로드하도록 설정
+            SceneManager.LoadScene(0);
             Debug.Log($"[방] {message.Id} 이(가) 나갔다");
         }
 
