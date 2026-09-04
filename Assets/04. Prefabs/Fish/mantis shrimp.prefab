@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 5993584799265644213}
   - component: {fileID: 8731362427978471613}
   m_Layer: 0
-  m_Name: Mantis Shrimp
+  m_Name: mantis shrimp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -130,7 +130,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -162,7 +162,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &8175518061872668808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,7 +235,7 @@ MonoBehaviour:
     m_Bits: 16
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 200
   obstacleCheckSize: {x: 0.8, y: 0.5}
   obstacleCheckDistance: 1
   detectCooldown: 0.1
@@ -251,6 +251,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7746cb164f44662970bead08d0a34e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Fish_Interface.FishStateManager
+  <FishName>k__BackingField: 
+  ObjectPool: {fileID: 0}
   fishMovement: {fileID: 0}
   maxResistance: 20
   waterExitCooldown: 1
@@ -259,8 +261,15 @@ MonoBehaviour:
   myType: 0
   baitType: 0
   Hunger: 0
-  BaitPosition: {x: 0, y: 0, z: 0}
+  HungerLimit: 0
+  HungerAmount: 0
+  BaitInfo: {fileID: 0}
+  TargetInfo: {fileID: 0}
+  bulletPrefab: {fileID: 0}
   <AbductionDestination>k__BackingField: {fileID: 0}
+  ElectronicParticle: {fileID: 0}
+  IsAttack: 1
+  FaintDuration: 0
   confusedParticle: {fileID: 0}
 --- !u!1 &5222690797306602521
 GameObject:
@@ -289,10 +298,11 @@ Transform:
   m_GameObject: {fileID: 5222690797306602521}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.86, y: 0.57, z: 0}
+  m_LocalPosition: {x: 3.86, y: 0.34, z: 0}
   m_LocalScale: {x: 4.345334, y: 4.345334, z: 4.345334}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1901540215248811626}
   m_Father: {fileID: 2272016268120837021}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1856456135879610273
@@ -353,5 +363,94 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 483a3e2dbc222dc439f1458023b4062c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShrimpPunch
-  knockbackForce: 3
+  knockbackForce: 500
   direction: {x: 1, y: 1, z: 0}
+  punchParticle: {fileID: 4641729118614081362}
+  punchTime: 1
+--- !u!1001 &8348597938936590338
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2472721469570617402}
+    m_Modifications:
+    - target: {fileID: 5354901731050110573, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_Name
+      value: Hit4_Red
+      objectReference: {fileID: 0}
+    - target: {fileID: 5354901731050110573, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: add3384580870485c85ba8243fad43c6, type: 3}
+--- !u!4 &1901540215248811626 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7619964503544415848, guid: add3384580870485c85ba8243fad43c6, type: 3}
+  m_PrefabInstance: {fileID: 8348597938936590338}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4641729118614081362 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 3726325848954634064, guid: add3384580870485c85ba8243fad43c6, type: 3}
+  m_PrefabInstance: {fileID: 8348597938936590338}
+  m_PrefabAsset: {fileID: 0}
