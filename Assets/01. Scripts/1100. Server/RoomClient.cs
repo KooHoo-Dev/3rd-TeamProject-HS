@@ -181,6 +181,9 @@ namespace HelloServer
                 catch (WebSocketException)
                 {
                     Debug.LogWarning("[방] 연결이 끊겼다");
+                    // 나가기 메시지를 받지 못했는데 먼저 예외처리되면 OnLeave 실행해주기
+                    // 자기 자신이 나갔다면 씬 재로드
+                    OnLeave(new LeaveMessage { Id = Me.Id });
                     return;
                 }
 
