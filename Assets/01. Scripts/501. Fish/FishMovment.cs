@@ -19,6 +19,7 @@ namespace WeGotOne
         public bool isGuestLocked;
         private Vector3 baseLocalScale;
         private LayerMask waterLayer;
+        private bool isWater;
 
         private void Awake()
         {
@@ -30,7 +31,8 @@ namespace WeGotOne
         private void FixedUpdate()
         {
 
-            if (CheckInWater() == false) return;
+            // if (CheckInWater() == false) return;
+            if (isWater) return;
             
             // Move 명령이 들어왔을 때만 지속적인 속도를 적용
             if (currentSpeed > 0)
@@ -45,6 +47,7 @@ namespace WeGotOne
             if (RoomClient.Instance.Me.IsHost && waterLayer.Contains(other.gameObject.layer))
             {
                 Rb.gravityScale = 0f;
+                isWater = true;
             }
         }
         
@@ -55,6 +58,7 @@ namespace WeGotOne
             if (RoomClient.Instance.Me.IsHost && waterLayer.Contains(other.gameObject.layer))
             {
                 Rb.gravityScale = 1f;
+                isWater = false;
             }
         }
 
