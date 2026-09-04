@@ -1052,7 +1052,7 @@ GameObject:
   - component: {fileID: 8635207882154615099}
   - component: {fileID: 4486202388607047204}
   - component: {fileID: 8584682757191233501}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: LHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1200,7 +1200,7 @@ GameObject:
   - component: {fileID: 2584043572367064611}
   - component: {fileID: 2329025104108696655}
   - component: {fileID: 5922048834760823945}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: RHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
