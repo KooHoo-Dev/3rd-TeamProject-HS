@@ -18,9 +18,9 @@ GameObject:
   - component: {fileID: 8052925322600425502}
   - component: {fileID: 5993584799265644213}
   - component: {fileID: 8731362427978471613}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: mantis shrimp
-  m_TagString: Untagged
+  m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -130,7 +130,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -236,8 +236,8 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 200
-  obstacleCheckSize: {x: 0.8, y: 0.5}
-  obstacleCheckDistance: 1
+  obstacleCheckSize: {x: 1.5, y: 1.5}
+  obstacleCheckDistance: 3
   detectCooldown: 0.1
 --- !u!114 &8731362427978471613
 MonoBehaviour:
