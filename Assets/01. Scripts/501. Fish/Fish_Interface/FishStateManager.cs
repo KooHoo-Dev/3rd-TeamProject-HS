@@ -9,11 +9,11 @@ namespace WeGotOne.Fish_Interface
     {
         public enum BaitType
         {
-            None,
             Player,
             SmallFish,
             MediumFish,
             LargeFish,
+            None,
         }
         
         [Header("물고기 이름")]
