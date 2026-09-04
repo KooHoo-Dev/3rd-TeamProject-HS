@@ -145,6 +145,11 @@ namespace WeGotOne
 
             AudioManager.Instance.PlaySfx(AudioManager.Sfx.PopGrab);
             
+            if (grabbedTarget != null && grabbedTarget.TryGetComponent<ICatchable>(out var catchable))
+            {
+                catchable.OnGrabbed();
+            }
+            
             if (currentTarget.CompareTag("Fish"))
             {
                 PlayFishGrabParticle();
