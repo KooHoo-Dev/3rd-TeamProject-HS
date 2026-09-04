@@ -248,8 +248,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d02dde903453b649813d12bc305e023, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.InventorySlot
-  <Content>k__BackingField: {fileID: 0}
-  <ItemCountText>k__BackingField: {fileID: 0}
+  <Content>k__BackingField: {fileID: 3019127601240737571}
+  <ItemCountText>k__BackingField: {fileID: 2841219231400378526}
 --- !u!1 &7990244176547744776
 GameObject:
   m_ObjectHideFlags: 0

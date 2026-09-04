@@ -29,10 +29,11 @@ namespace WeGotOne
             inventoryItemDB.ItemCountChanged += HandleItemCountChanged;
             bridgeManager.OnBridgeBuild += Refresh;
 
-            while (bridgeManager.TryGetNextBridgeRef(out _) == false && bridgeManager.IsEnd == false)
-            {
-                yield return null;
-            }
+            yield return new WaitUntil(() => bridgeManager.TryGetNextBridgeRef(out _) == false && bridgeManager.IsEnd == false);
+            // while (bridgeManager.TryGetNextBridgeRef(out _) == false && bridgeManager.IsEnd == false)
+            // {
+            //     yield return null;
+            // }
 
             Refresh();
         }
