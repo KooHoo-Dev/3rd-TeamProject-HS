@@ -523,7 +523,7 @@ MonoBehaviour:
     m_Bits: 16
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 200
+    m_Bits: 136
   obstacleCheckSize: {x: 1.86, y: 1.08}
   obstacleCheckDistance: 1.98
   detectCooldown: 0.1
