@@ -52,7 +52,7 @@ GameObject:
   - component: {fileID: 5130000000000000003}
   - component: {fileID: 5244812637053690599}
   - component: {fileID: 4534058532086620731}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Shark_FSM_V3_WaterLayer
   m_TagString: Fish
   m_Icon: {fileID: 0}

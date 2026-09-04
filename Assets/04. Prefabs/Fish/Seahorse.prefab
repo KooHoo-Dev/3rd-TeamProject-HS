@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 3380978747869298007}
   - component: {fileID: 5822293520149872469}
   - component: {fileID: 2683312444320732614}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Seahorse
   m_TagString: Fish
   m_Icon: {fileID: 0}
