@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 2472721469570617402}
   - component: {fileID: 1856456135879610273}
   - component: {fileID: 2775776298552685902}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Punch Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
