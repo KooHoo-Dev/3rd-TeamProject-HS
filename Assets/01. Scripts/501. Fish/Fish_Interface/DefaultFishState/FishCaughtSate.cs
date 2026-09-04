@@ -73,7 +73,7 @@ namespace WeGotOne.Fish_Interface
             
             float damageToResistance = impactStrength * collisionRatio; 
             owner.DecreaseResistance(damageToResistance);
-            Debug.Log($"지형 충돌! 저항도 {damageToResistance:F1} 감소.");
+            Debug.Log($"지형 충돌! 저항도 {owner.name} :{damageToResistance:F1} 감소.");
         }
         
         public void Exit()
