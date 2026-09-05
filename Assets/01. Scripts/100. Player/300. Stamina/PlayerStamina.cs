@@ -72,7 +72,8 @@ namespace WeGotOne
         
         private void OnDisable()
         {
-            GameManager.Instance.UnsubscribeStarveStateChanged(this);
+            if (GameManager.Instance != null)
+                GameManager.Instance.UnsubscribeStarveStateChanged(this);
         }
 
         private void OnTriggerEnter2D(Collider2D other)
