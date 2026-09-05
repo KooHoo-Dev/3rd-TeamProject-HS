@@ -130,7 +130,6 @@ GameObject:
   - component: {fileID: 6893504519318531557}
   - component: {fileID: 3176635651316487356}
   - component: {fileID: 5981077509093271822}
-  - component: {fileID: 3380978747869298007}
   - component: {fileID: 5822293520149872469}
   - component: {fileID: 2683312444320732614}
   m_Layer: 6
@@ -326,18 +325,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   minImpactThreshold: 5
---- !u!114 &3380978747869298007
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9218924052347507054}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00e8ea17373b46fa9bcb772fad020c0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Seahorse
 --- !u!70 &5822293520149872469
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
