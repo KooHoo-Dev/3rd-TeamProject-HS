@@ -31,9 +31,17 @@ namespace WeGotOne
         [SerializeField] private BottomArmController leftBottomArm;
         [SerializeField] private BottomArmController rightBottomArm;
         [SerializeField] private PlayerStamina body;
-
+        
         public bool IsLeftGrab { get; private set; }
         public bool IsRightGrab { get; private set; }
+        
+        [SerializeField] private float defaultArmForce = 10f;
+        [SerializeField] private float highArmForce = 35f;
+        public float HighArmForce => highArmForce;
+        
+        private float currentArmForce;
+        public float CurrentArmForce => currentArmForce;
+        
         public bool IsBuild { get; private set; }
         public bool IsParalysis = false; // 마비 상태인지 판단
 
@@ -175,6 +183,11 @@ namespace WeGotOne
             ApplyInterpolatedTransform(rightBottomArm.transform, previousRightBottomPosition, targetRightBottomPosition, previousRightBottomRotation, targetRightBottomRotation, t);
         }
 
+        private void FixedUpdate()
+        {
+            UpdateArmForce();
+        }
+        
         public void Setup(User user)
         {
             User = user;
@@ -311,6 +324,7 @@ namespace WeGotOne
 
             IsLeftGrab = leftGrab;
             IsRightGrab = rightGrab;
+            UpdateArmForce();
         }
 
         private void SetArmDirections(Vector2 direction)
@@ -327,6 +341,62 @@ namespace WeGotOne
             rightUpperArm.ClearDirection();
             leftBottomArm.ClearDirection();
             rightBottomArm.ClearDirection();
+        }
+        
+        private void UpdateArmForce()
+        {
+            if (leftBottomArm.UseForce || rightBottomArm.UseForce)
+            {
+                currentArmForce = highArmForce;
+            }
+            else
+            {
+                currentArmForce = defaultArmForce;
+
+                Rigidbody2D leftTarget = leftBottomArm.GrabbedTarget;
+
+                if (leftTarget != null && leftTarget.CompareTag("Body"))
+                {
+                    PlayerController targetPlayer = leftTarget.GetComponent<PlayerController>();
+
+                    if (targetPlayer == null)
+                    {
+                        targetPlayer = leftTarget.GetComponentInParent<PlayerController>();
+                    }
+
+                    if (targetPlayer != null &&
+                        targetPlayer.CurrentArmForce == targetPlayer.HighArmForce)
+                    {
+                        currentArmForce = highArmForce;
+                    }
+                }
+
+                if (currentArmForce != highArmForce)
+                {
+                    Rigidbody2D rightTarget = rightBottomArm.GrabbedTarget;
+
+                    if (rightTarget != null && rightTarget.CompareTag("Body"))
+                    {
+                        PlayerController targetPlayer = rightTarget.GetComponent<PlayerController>();
+
+                        if (targetPlayer == null)
+                        {
+                            targetPlayer = rightTarget.GetComponentInParent<PlayerController>();
+                        }
+
+                        if (targetPlayer != null &&
+                            targetPlayer.CurrentArmForce == targetPlayer.HighArmForce)
+                        {
+                            currentArmForce = highArmForce;
+                        }
+                    }
+                }
+            }
+
+            leftUpperArm.SetCurrentForce(currentArmForce);
+            rightUpperArm.SetCurrentForce(currentArmForce);
+            leftBottomArm.SetCurrentForce(currentArmForce);
+            rightBottomArm.SetCurrentForce(currentArmForce);
         }
         
         #region Snapshot 보간 유틸

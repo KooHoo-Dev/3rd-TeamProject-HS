@@ -9,8 +9,6 @@ namespace WeGotOne
     public class BottomArmController : ArmController
     {
         [SerializeField] public HingeJoint2D grabJoint;
-        [Header("0 넣으면 안됨")]
-        [SerializeField] private float divideNum = 1f;
         
         private void Start()
         {
