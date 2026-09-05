@@ -254,7 +254,7 @@ MonoBehaviour:
   grabbedTarget: {fileID: 0}
   isGrabbing: 0
   grabJoint: {fileID: 301989187574472818}
-  divideNum: 3
+  divideNum: 10
 --- !u!233 &301989187574472818
 HingeJoint2D:
   m_ObjectHideFlags: 0
@@ -484,7 +484,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.09125055, y: 0.07331794}
-  m_ConnectedAnchor: {x: 0.057580553, y: -0.3065554}
+  m_ConnectedAnchor: {x: 0.051267616, y: -0.081230626}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -779,12 +779,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69f8346fdd68a4443be0add0d2bd3571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.PlayerHunger
-  maxStamina: 200
-  currentStamina: 200
+  maxStamina: 500
+  currentStamina: 500
   playerController: {fileID: 4725110930171532697}
-  forceStaminaMultiplier: 0.1
+  forceStaminaMultiplier: 0.01
   recoverDelay: 5
-  recoverPerSecond: 20
+  recoverPerSecond: 50
   staminaTime: 150
   staminaDecreaseMultiplier: 1
   StaminaGauge: {fileID: 0}
