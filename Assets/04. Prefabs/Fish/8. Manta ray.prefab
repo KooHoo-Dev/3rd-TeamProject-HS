@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7000120750121587760}
   - component: {fileID: 3939663410204906561}
   - component: {fileID: 6437036077041621563}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Electronic Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
