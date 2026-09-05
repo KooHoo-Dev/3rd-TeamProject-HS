@@ -43,12 +43,12 @@ GameObject:
   - component: {fileID: 4355550375103360697}
   - component: {fileID: 8205786267655057946}
   m_Layer: 8
-  m_Name: Collider
+  m_Name: Bait Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3522062259582029183
 Transform:
   m_ObjectHideFlags: 0
@@ -99,7 +99,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 10
+  m_Radius: 13.2
 --- !u!114 &8205786267655057946
 MonoBehaviour:
   m_ObjectHideFlags: 0

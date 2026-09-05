@@ -13,7 +13,6 @@ namespace WeGotOne
         private void Awake()
         {
             fishStateManager = GetComponentInParent<FishStateManager>();
-            detectingRange = GetComponent<Collider2D>();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
