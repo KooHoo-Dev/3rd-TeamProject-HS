@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 5993584799265644213}
   - component: {fileID: 8731362427978471613}
   m_Layer: 0
-  m_Name: mantis shrimp
+  m_Name: 5. mantis shrimp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

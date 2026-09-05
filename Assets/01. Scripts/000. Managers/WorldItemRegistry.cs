@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace WeGotOne
 {
-    public sealed class WorldItemRegistry : MonoBehaviour
+    public class WorldItemRegistry : MonoBehaviour
     {
         private const string PlankGroupName = "Plank Group";
 

@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 6286656989662160650}
   - component: {fileID: 5335603790001178013}
   m_Layer: 0
-  m_Name: MineFish
+  m_Name: 6. MineFish
   m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

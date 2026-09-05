@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace WeGotOne
 {
-    public sealed class SpawnManager : MonoBehaviour
+    public class SpawnManager : MonoBehaviour
     {
         [Serializable]
-        private sealed class StageEntry
+        private class StageEntry
         {
             [SerializeField] private int minBridgeCount;
             [SerializeField] private FishSpawnerGroup[] groups;

@@ -159,7 +159,7 @@ GameObject:
   - component: {fileID: 6392807594458476488}
   - component: {fileID: 1811129425961258825}
   m_Layer: 0
-  m_Name: Octopus
+  m_Name: 7. Octopus
   m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

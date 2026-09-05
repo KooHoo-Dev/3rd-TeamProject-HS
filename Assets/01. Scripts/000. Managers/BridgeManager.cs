@@ -116,6 +116,7 @@ namespace WeGotOne
         #region test methods
 
         // 테스트 메소드 (나무 비용 없이)
+        [ContextMenu("Build Bridge Without Cost")]
         public void BuildBridgeWithoutCost()
         {
             if (IsEnd) return;
