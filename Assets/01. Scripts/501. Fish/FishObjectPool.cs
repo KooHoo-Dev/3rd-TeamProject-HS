@@ -53,7 +53,7 @@ namespace WeGotOne
 
             if (fish.TryGetComponent<Fish>(out _) == false)
             {
-                Debug.LogError($"[ItemObjectPool] Fish가 아닌 WorldItem은 반환할 수 없습니다: {fish.name}");
+                Debug.LogWarning($"[ItemObjectPool] Fish가 아닌 WorldItem은 반환할 수 없습니다: {fish.name}");
                 return;
             }
 
