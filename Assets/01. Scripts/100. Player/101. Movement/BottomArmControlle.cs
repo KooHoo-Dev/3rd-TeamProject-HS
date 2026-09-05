@@ -28,8 +28,6 @@ namespace WeGotOne
             if (target != null)
             {
                 grabJoint.connectedBody = target;
-                
-                target.AddForce(InDirection * (CurrentForce / divideNum));
             }
             // 타겟에 리지드 바디가 없을 경우. 정적 물체(벽, 바닥등) 처리
             else
