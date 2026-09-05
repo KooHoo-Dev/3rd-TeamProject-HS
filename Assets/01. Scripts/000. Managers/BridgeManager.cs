@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using HelloServer;
 using UnityEngine;
 
 namespace WeGotOne
@@ -124,7 +125,7 @@ namespace WeGotOne
         [ContextMenu("Build Bridge Without Cost")]
         public void BuildBridgeWithoutCost()
         {
-            if (IsEnd) return;
+            if (IsEnd || RoomClient.Instance.Me.IsHost == false) return;
             BridgeObjects[CurrentBridgeCount()].gameObject.SetActive(true);
             OnBridgeBuild?.Invoke();
         }
