@@ -197,6 +197,9 @@ namespace WeGotOne
             SimpleFollowCamera cameraController = GetComponentInChildren<SimpleFollowCamera>(true);
             if (user.Id == RoomClient.Instance.Me.Id)
                 cameraController.enabled = true;
+            
+            // 일단 임시용
+            body.SetSpawnPoint(this.transform);
         }
         
         public float GetHighestHungerForce()
