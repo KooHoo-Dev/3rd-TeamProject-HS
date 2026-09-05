@@ -59,6 +59,7 @@ namespace WeGotOne
 
         private void Start()
         {
+            currentArmForce = defaultArmForce;
             // 게임 시작 시 자신의 첫 온전한 자세를 스스로 캡처해서 저장
             InitialPlayerState = CaptureCurrentPlayerState();
         }
@@ -343,8 +344,24 @@ namespace WeGotOne
             rightBottomArm.ClearDirection();
         }
         
+        private PlayerController GetTargetPlayer(Rigidbody2D target)
+        {
+            if (target == null)
+                return null;
+
+            PlayerController targetPlayer = target.GetComponent<PlayerController>();
+
+            if (targetPlayer == null)
+            {
+                targetPlayer = target.GetComponentInParent<PlayerController>();
+            }
+
+            return targetPlayer;
+        }
+        
         private void UpdateArmForce()
         {
+            
             if (leftBottomArm.UseForce || rightBottomArm.UseForce)
             {
                 currentArmForce = highArmForce;
@@ -353,42 +370,20 @@ namespace WeGotOne
             {
                 currentArmForce = defaultArmForce;
 
-                Rigidbody2D leftTarget = leftBottomArm.GrabbedTarget;
+                PlayerController leftTargetPlayer = GetTargetPlayer(leftBottomArm.GrabbedTarget);
 
-                if (leftTarget != null && leftTarget.CompareTag("Body"))
+                if (leftTargetPlayer != null && leftTargetPlayer.CurrentArmForce == leftTargetPlayer.HighArmForce)
                 {
-                    PlayerController targetPlayer = leftTarget.GetComponent<PlayerController>();
-
-                    if (targetPlayer == null)
-                    {
-                        targetPlayer = leftTarget.GetComponentInParent<PlayerController>();
-                    }
-
-                    if (targetPlayer != null &&
-                        targetPlayer.CurrentArmForce == targetPlayer.HighArmForce)
-                    {
-                        currentArmForce = highArmForce;
-                    }
+                    currentArmForce = highArmForce;
                 }
 
                 if (currentArmForce != highArmForce)
                 {
-                    Rigidbody2D rightTarget = rightBottomArm.GrabbedTarget;
+                    PlayerController rightTargetPlayer = GetTargetPlayer(rightBottomArm.GrabbedTarget);
 
-                    if (rightTarget != null && rightTarget.CompareTag("Body"))
+                    if (rightTargetPlayer != null && rightTargetPlayer.CurrentArmForce == rightTargetPlayer.HighArmForce)
                     {
-                        PlayerController targetPlayer = rightTarget.GetComponent<PlayerController>();
-
-                        if (targetPlayer == null)
-                        {
-                            targetPlayer = rightTarget.GetComponentInParent<PlayerController>();
-                        }
-
-                        if (targetPlayer != null &&
-                            targetPlayer.CurrentArmForce == targetPlayer.HighArmForce)
-                        {
-                            currentArmForce = highArmForce;
-                        }
+                        currentArmForce = highArmForce;
                     }
                 }
             }
