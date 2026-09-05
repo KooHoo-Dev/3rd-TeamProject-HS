@@ -142,5 +142,11 @@ namespace WeGotOne
                     )
                 );
         }
+
+        [ContextMenu("Day-Night auto change")]
+        public void DayNightTransition()
+        {
+            SetDayType(currentDayType == DayType.Day ? DayType.Night : DayType.Day);
+        }
     }
 }
