@@ -165,7 +165,10 @@ namespace WeGotOne
         
         public void Release()
         {
-            spriteRenderer.sprite = handSprite;
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.sprite = handSprite;
+            }
             
             if (isGrabbing == false)
                 return;
