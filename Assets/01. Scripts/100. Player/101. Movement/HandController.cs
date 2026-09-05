@@ -179,11 +179,6 @@ namespace WeGotOne
                 catchable.OnReleased();
             }
             
-            if (grabbedTarget != null && grabbedTarget.TryGetComponent<Seahorse>(out var seahorse))
-            {
-                seahorse.SeahorseRelease();
-            }
-            
             grabbedTarget = null;
             isGrabbing = false;
             
