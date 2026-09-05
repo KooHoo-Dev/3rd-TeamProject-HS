@@ -185,8 +185,8 @@ GameObject:
   - component: {fileID: 5252592357397533843}
   - component: {fileID: -5159987235780601807}
   - component: {fileID: 5560157644525639928}
-  m_Layer: 6
-  m_Name: squid
+  m_Layer: 0
+  m_Name: 4. squid
   m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -333,7 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7746cb164f44662970bead08d0a34e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Fish_Interface.FishStateManager
-  <FishName>k__BackingField: Squid
+  <FishName>k__BackingField: 
   ObjectPool: {fileID: 0}
   fishMovement: {fileID: 0}
   maxResistance: 15
@@ -349,7 +349,6 @@ MonoBehaviour:
   TargetInfo: {fileID: 0}
   bulletPrefab: {fileID: 0}
   <AbductionDestination>k__BackingField: {fileID: 0}
-  <PlayerAttachPosition>k__BackingField: {fileID: 0}
   ElectronicParticle: {fileID: 0}
   IsAttack: 1
   FaintDuration: 0
@@ -382,7 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1c982d3a21742b99f985276dfac5441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItem
-  <ThisItem>k__BackingField: {fileID: 11400000, guid: 6b278b4b7effb5c45b39dda38b9dd85c, type: 2}
+  itemId: 4
 --- !u!114 &5560157644525639928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,7 +399,7 @@ MonoBehaviour:
     m_Bits: 16
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 136
+    m_Bits: 200
   obstacleCheckSize: {x: 12, y: 17}
   obstacleCheckDistance: 3
   detectCooldown: 0.1

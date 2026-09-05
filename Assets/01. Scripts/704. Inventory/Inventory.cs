@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,8 +19,10 @@ namespace WeGotOne
         private readonly Dictionary<int, InventorySlot> itemSlots = new();
         private InventoryItemDB inventoryItemDB;
 
-        public void Start()
+        private IEnumerator Start()
         {
+            yield return new WaitUntil(() => InventoryItemDB.Instance.IsInitialized);
+
             inventoryItemDB = InventoryItemDB.Instance;
             inventoryItemDB.ItemCountChanged += RenderItem;
             InitSlotGrid();
@@ -59,30 +62,13 @@ namespace WeGotOne
         {
             itemSlots.Clear();
 
-            List<ItemScriptableObject> validItems = new();
-            HashSet<int> itemIds = new();
-
-            if (inventoryItemDB.items != null)
+            List<ItemRef> validItems = new();
+            foreach (ItemRef item in ItemManager.Instance.Items)
             {
-                for (int i = 0; i < inventoryItemDB.items.Length; ++i)
-                {
-                    ItemScriptableObject item = inventoryItemDB.items[i];
-                    if (item == null)
-                    {
-                        continue;
-                    }
-
-                    if (itemIds.Add(item.Key) == false)
-                    {
-                        Debug.LogWarning($"[Inventory] 중복 ItemId = {item.Key}");
-                        continue;
-                    }
-
-                    validItems.Add(item);
-                }
+                validItems.Add(item);
             }
 
-            validItems.Sort((left, right) => left.Key.CompareTo(right.Key));
+            validItems.Sort((left, right) => left.ItemId.CompareTo(right.ItemId));
 
             int itemIndex = 0;
             for (int row = 0; row < SizeRow; ++row)
@@ -102,8 +88,8 @@ namespace WeGotOne
                         continue;
                     }
 
-                    ItemScriptableObject item = validItems[itemIndex++];
-                    itemSlots.Add(item.Key, slot);
+                    ItemRef item = validItems[itemIndex++];
+                    itemSlots.Add(item.ItemId, slot);
                 }
             }
 
@@ -112,8 +98,8 @@ namespace WeGotOne
                 Debug.LogWarning("[Inventory] 인벤토리 아이템 수가 사용 가능한 슬롯 수보다 많습니다.");
                 for (int i = 0; i < validItems.Count; i++)
                 {
-                    ItemScriptableObject item = validItems[i];
-                    Debug.LogWarning($"[Inventory] 사용하지 않는 아이템 = {item.Key}");
+                    ItemRef item = validItems[i];
+                    Debug.LogWarning($"[Inventory] 사용하지 않는 아이템 = {item.ItemId}");
                 }
             }
         }

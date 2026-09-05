@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace WeGotOne
@@ -28,10 +30,12 @@ namespace WeGotOne
         {
             try
             {
-                bridgeTable = await BridgeTable.LoadAsync(InventoryItemDB.Instance.items);
+                await UniTask.WaitUntil(() => ItemManager.Instance.IsInitialized);
+                bridgeTable = await BridgeTable.LoadAsync(ItemManager.Instance.Items);
             }
             catch (Exception exception)
             {
+                Debug.LogError($"{gameObject.name}: BridgeTable.LoadAsync() Failed");
                 Debug.LogException(exception);
             }
         }
@@ -75,10 +79,11 @@ namespace WeGotOne
             }
 
             InventoryItemDB inventoryItemDB = InventoryItemDB.Instance;
+            ItemManager itemManager = ItemManager.Instance;
             if (BridgeBuildCostCalculator.TryCreateConsumePlan(
                     bridgeRef,
                     inventoryItemDB.EnumerateCounts(),
-                    inventoryItemDB.items,
+                    itemManager.Items,
                     out System.Collections.Generic.IReadOnlyDictionary<int, int> consumePlan) == false ||
                 inventoryItemDB.TryConsumeAll(consumePlan) == false)
             {
@@ -101,11 +106,11 @@ namespace WeGotOne
         {
             if (other.gameObject.TryGetComponent<WorldItem>(out var holder))
             {
-                ItemScriptableObject item = holder.ThisItem;
+                ItemRef item = holder.ThisItem;
 
                 if (item == null) return;
 
-                if (InventoryItemDB.Instance.Add(item.Key, 1))
+                if (InventoryItemDB.Instance.Add(item.ItemId, 1))
                 {
                     holder.OnPickup();
                 }
@@ -116,6 +121,7 @@ namespace WeGotOne
         #region test methods
 
         // 테스트 메소드 (나무 비용 없이)
+        [ContextMenu("Build Bridge Without Cost")]
         public void BuildBridgeWithoutCost()
         {
             if (IsEnd) return;

@@ -13,20 +13,20 @@ namespace WeGotOne
         private readonly Dictionary<int, BridgeRef> bridges;
 
         public static async Task<BridgeTable> LoadAsync(
-            IEnumerable<ItemScriptableObject> items)
+            IEnumerable<ItemRef> items)
         {
             List<BridgeDto> bridgeDtos = await TSVReader.ReadTableAsync<BridgeDto>("BridgeData", true);
             return new BridgeTable(bridgeDtos, items);
         }
 
-        public BridgeTable(List<BridgeDto> bridgeDtos, IEnumerable<ItemScriptableObject> items)
+        public BridgeTable(List<BridgeDto> bridgeDtos, IEnumerable<ItemRef> items)
         {
             if (bridgeDtos == null)
             {
                 throw new ArgumentNullException(nameof(bridgeDtos));
             }
 
-            Dictionary<int, ItemScriptableObject> itemById = CreateItemLookup(items);
+            Dictionary<int, ItemRef> itemById = CreateItemLookup(items);
             bridges = CreateBridgeReferences(bridgeDtos, itemById);
         }
 
@@ -40,28 +40,28 @@ namespace WeGotOne
             return bridges.TryGetValue(bridgeIndex, out bridgeRef);
         }
 
-        private static Dictionary<int, ItemScriptableObject> CreateItemLookup(
-            IEnumerable<ItemScriptableObject> items)
+        private static Dictionary<int, ItemRef> CreateItemLookup(
+            IEnumerable<ItemRef> items)
         {
             if (items == null)
             {
                 throw new ArgumentNullException(nameof(items));
             }
 
-            var itemById = new Dictionary<int, ItemScriptableObject>();
-            foreach (ItemScriptableObject item in items)
+            var itemById = new Dictionary<int, ItemRef>();
+            foreach (ItemRef item in items)
             {
                 if (item == null)
                 {
-                    throw new InvalidOperationException("ItemScriptableObject 목록에 null이 포함되어 있습니다.");
+                    throw new InvalidOperationException("ItemRef 목록에 null이 포함되어 있습니다.");
                 }
 
-                if (itemById.ContainsKey(item.Key))
+                if (itemById.ContainsKey(item.ItemId))
                 {
-                    throw new InvalidOperationException($"중복된 Item Key가 있습니다: {item.Key}");
+                    throw new InvalidOperationException($"중복된 ItemId가 있습니다: {item.ItemId}");
                 }
 
-                itemById.Add(item.Key, item);
+                itemById.Add(item.ItemId, item);
             }
 
             return itemById;
@@ -69,7 +69,7 @@ namespace WeGotOne
 
         private static Dictionary<int, BridgeRef> CreateBridgeReferences(
             List<BridgeDto> bridgeDtos,
-            Dictionary<int, ItemScriptableObject> itemById)
+            Dictionary<int, ItemRef> itemById)
         {
             var bridgeByIndex = new Dictionary<int, BridgeRef>();
 
@@ -97,7 +97,7 @@ namespace WeGotOne
 
                 foreach (KeyValuePair<int, int> requirement in minimumRequirements)
                 {
-                    if (!itemById.TryGetValue(requirement.Key, out ItemScriptableObject item))
+                    if (!itemById.TryGetValue(requirement.Key, out ItemRef item))
                     {
                         throw new InvalidOperationException(
                             $"존재하지 않는 ItemId가 요구됩니다: {requirement.Key}");

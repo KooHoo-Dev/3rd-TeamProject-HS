@@ -1,31 +1,15 @@
 using System.Collections;
-using HelloServer;
 using UnityEngine;
 
 namespace WeGotOne
 {
     public sealed class FishSpawner : MonoBehaviour
     {
-        [SerializeField] private ItemScriptableObject fishItem;
+        [SerializeField] private int itemId;
         [SerializeField] private Collider2D waterArea;
 
-        private WorldItem fish;
-        
+        private ItemRef fishItem;
         private WorldItemRegistry worldItemRegistry;
-
-        private SpriteRenderer spriteRenderer;
-
-        private void OnValidate()
-        {
-            SpriteRenderer renderer = GetComponent<SpriteRenderer>();
-
-            if (renderer == null)
-                return;
-
-            renderer.sprite = fishItem?.Icon;
-            renderer.color = new Color(1f, 1f, 1f, 0.35f);
-            renderer.enabled = true;
-        } 
         
         private void Awake()
         {
@@ -37,35 +21,15 @@ namespace WeGotOne
             waterArea = GameObject.Find("WaterBorderLine").GetComponent<Collider2D>();
         }
 
-        /*private IEnumerator Start()
+        private IEnumerator Start()
         {
-            yield return new WaitUntil(() => RoomClient.Instance != null && RoomClient.Instance.Me != null);
-
-            if (RoomClient.Instance.Me.IsHost)
-            {
-                Spawn();
-            }
-        }*/
-        
-        private void OnEnable()
-        {
-            StartCoroutine(WaitAndSpawn());
+            yield return new WaitUntil(() => ItemManager.Instance.IsInitialized);
+            fishItem = ItemManager.Instance.Get(itemId);
         }
 
-        private IEnumerator WaitAndSpawn()
+        public void Spawn()
         {
-            yield return new WaitUntil(() => RoomClient.Instance != null && RoomClient.Instance.Me != null);
-
-            if (RoomClient.Instance.Me.IsHost)
-            {
-                Spawn();
-            }
-        }
-
-        private void Spawn()
-        {
-            if (fish == null)
-                fish = FishObjectPool.Instance.Get(fishItem.Key);
+            WorldItem fish = FishObjectPool.Instance.Get(fishItem.ItemId);
 
             fish.transform.position = transform.position;
             if (fish.TryGetComponent(out FishMovement fishMovement))

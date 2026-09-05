@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using HelloServer;
 using UnityEngine;
@@ -7,13 +8,9 @@ namespace WeGotOne
 {
     public class InventoryItemDB : SingletonBase<InventoryItemDB>
     {
-        private const int DEFAULT_ITEM_KEY = 0;
-
-        public ItemScriptableObject[] items;
-
-        private readonly Dictionary<int, ItemScriptableObject> itemDic = new();
         private readonly Dictionary<int, int> itemCountDic = new();
 
+        public new bool IsInitialized { get; private set; }
         public event Action<int, int> ItemCountChanged;
 
         public IEnumerable<KeyValuePair<int, int>> EnumerateCounts()
@@ -21,42 +18,21 @@ namespace WeGotOne
             return itemCountDic;
         }
 
-        // 제공해드린 싱글톤을 상속받은 개체의 초기화는
-        // OnInitialize(), Start()를 중심으로 하되
-        // Awake 꼭 필요한 상황에서는 override를 하시고
-        // base.Awake()를 호출해 주세요
-
-        protected override void OnInitialize()
+        private IEnumerator Start()
         {
-            base.OnInitialize();
+            yield return new WaitUntil(() => ItemManager.Instance.IsInitialized);
 
-            for (int i = 0; i < items.Length; ++i)
+            foreach (ItemRef item in ItemManager.Instance.Items)
             {
-                ItemScriptableObject item = items[i];
-                if (itemDic.ContainsKey(item.Key))
-                {
-                    Debug.LogWarning($"[InventoryItemDB] 중복 ItemId = {item.Key}");
-                    continue;
-                }
-
-                itemDic.Add(item.Key, item);
-                itemCountDic.Add(item.Key, 0);
+                itemCountDic.Add(item.ItemId, 0);
             }
+
+            IsInitialized = true;
         }
 
-        // 견본(ScriptableObject 참조변수)를 반환하는 함수입니다.
-        // - 지금은 단순 참조로 충분하므로 불필요한 인스턴스 생성을 피합니다.
-        public ItemScriptableObject GetItem(int id)
+        public ItemRef GetItem(int id)
         {
-            if (itemDic.TryGetValue(id, out ItemScriptableObject item))
-            {
-                return item;
-            }
-
-            Debug.LogWarning($"[InventoryItemDB] 없는 Key = {id}");
-            return itemDic.TryGetValue(DEFAULT_ITEM_KEY, out ItemScriptableObject defaultItem)
-                ? defaultItem
-                : null;
+            return ItemManager.Instance.Get(id);
         }
 
         public int GetCount(int itemId)

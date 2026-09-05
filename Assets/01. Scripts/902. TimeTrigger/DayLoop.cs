@@ -39,7 +39,7 @@ namespace WeGotOne
         
         // DayLoop는 "지금 낮/밤 이 바뀐 사실만 발행 
         // 스폰 로직, 연출 등 실제 처리는 구독자가 판단
-        public event Action<DayType> OnDayTypeChanged;
+        public event Action OnDayChanged;
        
         private IEnumerator Start()
         {
@@ -80,6 +80,7 @@ namespace WeGotOne
             currentDayType = dayType;
             elapsedTime = 0f; // 전환 시점 기준으로 주기를 다시 맞춤
             Debug.Log($"[DayLoop] 밤낮 전환: {dayType}");
+            OnDayChanged?.Invoke();
             PlayTransitionDayChange(dayType);
             
 
@@ -140,6 +141,12 @@ namespace WeGotOne
                         transitionTime
                     )
                 );
+        }
+
+        [ContextMenu("Day-Night auto change")]
+        public void DayNightTransition()
+        {
+            SetDayType(currentDayType == DayType.Day ? DayType.Night : DayType.Day);
         }
     }
 }
