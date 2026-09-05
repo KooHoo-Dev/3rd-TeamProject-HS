@@ -246,9 +246,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51d0717f691544a884f0d5bca8c63a96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.BottomArmControllerWithInterface
-  defaultForce: 30
-  forceMultiplierOfMass: 5
-  forceLimit: 200
+  defaultForce: 20
+  forceMultiplierOfMass: 10
+  forceLimit: 250
   currentForce: 0
   hand: {fileID: 8584682757191233501}
   grabbedTarget: {fileID: 0}
@@ -506,9 +506,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51d0717f691544a884f0d5bca8c63a96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.BottomArmControllerWithInterface
-  defaultForce: 30
-  forceMultiplierOfMass: 5
-  forceLimit: 200
+  defaultForce: 20
+  forceMultiplierOfMass: 10
+  forceLimit: 250
   currentForce: 0
   hand: {fileID: 5922048834760823945}
   grabbedTarget: {fileID: 0}
@@ -950,9 +950,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a31e300a4b04fbfaf3c7726790c1894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.ArmControllerWithINterface
-  defaultForce: 20
-  forceMultiplierOfMass: 5
-  forceLimit: 200
+  defaultForce: 10
+  forceMultiplierOfMass: 8
+  forceLimit: 250
   currentForce: 0
   hand: {fileID: 8584682757191233501}
   grabbedTarget: {fileID: 0}
@@ -1472,9 +1472,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a31e300a4b04fbfaf3c7726790c1894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.ArmControllerWithINterface
-  defaultForce: 20
-  forceMultiplierOfMass: 5
-  forceLimit: 200
+  defaultForce: 10
+  forceMultiplierOfMass: 8
+  forceLimit: 250
   currentForce: 0
   hand: {fileID: 5922048834760823945}
   grabbedTarget: {fileID: 0}
