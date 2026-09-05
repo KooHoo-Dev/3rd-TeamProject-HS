@@ -99,8 +99,16 @@ namespace WeGotOne
             arrivedPlayerCount = 0;
             arrivedPlayerIds.Clear();
             isGameFinished = false;
-            gameOverUI?.gameObject.SetActive(false);
-            gameWinUI?.gameObject.SetActive(false);
+            
+            if (gameOverUI != null)
+            {
+                gameOverUI.gameObject.SetActive(false);
+            }
+
+            if (gameWinUI != null)
+            {
+                gameWinUI.gameObject.SetActive(false);
+            }
         }
 
         public void AddPlayer()
