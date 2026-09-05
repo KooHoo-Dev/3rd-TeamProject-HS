@@ -53,7 +53,7 @@ namespace WeGotOne
             if (instance == null)
             {
                 instance = this as T;
-                DontDestroyOnLoad(gameObject);
+                // DontDestroyOnLoad(gameObject);
 
                 OnInitialize();
                 isInitialized = true;
