@@ -98,6 +98,11 @@ namespace WeGotOne
             this.spawnPoint = spawnPoint;
         }
 
+        public void GoSpawnPoint()
+        {
+            transform.position = spawnPoint.position;
+        }
+
         private void UpdateStaminaUI()
         {
             if (StaminaGauge == null) return;
