@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 8860470257295711364}
   - component: {fileID: 8902882701052381400}
   - component: {fileID: 7367153974404243902}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: 8. Manta ray
   m_TagString: Untagged
   m_Icon: {fileID: 0}

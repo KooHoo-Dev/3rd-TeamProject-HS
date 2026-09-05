@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 8052925322600425502}
   - component: {fileID: 5993584799265644213}
   - component: {fileID: 8731362427978471613}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: 5. mantis shrimp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 2472721469570617402}
   - component: {fileID: 1856456135879610273}
   - component: {fileID: 2775776298552685902}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Punch Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
