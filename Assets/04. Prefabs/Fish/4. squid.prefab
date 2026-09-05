@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: -5159987235780601807}
   - component: {fileID: 5560157644525639928}
   m_Layer: 6
-  m_Name: 4. Squid
+  m_Name: 4. squid
   m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -402,7 +402,7 @@ MonoBehaviour:
     m_Bits: 16
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 200
+    m_Bits: 136
   obstacleCheckSize: {x: 12, y: 17}
   obstacleCheckDistance: 3
   detectCooldown: 0.1
