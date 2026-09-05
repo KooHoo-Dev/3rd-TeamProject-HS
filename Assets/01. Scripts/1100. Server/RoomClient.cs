@@ -17,7 +17,7 @@ namespace HelloServer
     // RoomClient가 서버와의 네트워크 작업을 담당한다.
     // 송신, 수신 등을 모두 처리하는 객체
     // 씬에 종속적이지 않음
-    public class RoomClient : SingletonBase<RoomClient>
+    public class RoomClient : SceneSingleton<RoomClient>
     {
         [Header("서버")]
         // 웹소켓 주소. http 가 아니라 ws로 시작.

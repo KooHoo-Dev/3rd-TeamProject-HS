@@ -5,7 +5,7 @@ using HelloServer;
 
 namespace WeGotOne
 {
-    public class GameManager: SingletonBase<GameManager>
+    public class GameManager: SceneSingleton<GameManager>
     {
         public bool IsBridgeComplete => BridgeManager.Instance.IsEnd;
         public bool IsAllPlayerArrivedAtLand => arrivedPlayerCount == totalPlayerCount;
@@ -99,8 +99,8 @@ namespace WeGotOne
             arrivedPlayerCount = 0;
             arrivedPlayerIds.Clear();
             isGameFinished = false;
-            gameOverUI.gameObject.SetActive(false);
-            gameWinUI.gameObject.SetActive(false);
+            gameOverUI?.gameObject.SetActive(false);
+            gameWinUI?.gameObject.SetActive(false);
         }
 
         public void AddPlayer()

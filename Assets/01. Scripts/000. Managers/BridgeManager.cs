@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace WeGotOne
 {
-    public class BridgeManager : SingletonBase<BridgeManager>
+    public class BridgeManager : SceneSingleton<BridgeManager>
     {
         [field: SerializeField] public Bridge[] BridgeObjects { get; private set; }
         private Transform bridgeParent;
