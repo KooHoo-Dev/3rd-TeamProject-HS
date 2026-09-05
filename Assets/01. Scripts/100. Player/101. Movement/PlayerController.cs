@@ -1,3 +1,4 @@
+using System;
 using HelloServer;
 using UnityEngine;
 using System.Threading;
@@ -43,6 +44,78 @@ namespace WeGotOne
         public BottomArmController LeftBottomArm => leftBottomArm;
         public BottomArmController RightBottomArm => rightBottomArm;
         public PlayerStamina Body => body;
+
+        #region Ai추가
+
+        public PlayerState InitialPlayerState { get; private set; }
+
+        private void Start()
+        {
+            // 게임 시작 시 자신의 첫 온전한 자세를 스스로 캡처해서 저장
+            InitialPlayerState = CaptureCurrentPlayerState();
+        }
+
+// 보여주신 AddPlayerState 코드를 자기 자신(this) 기준으로 단순화한 함수
+        private PlayerState CaptureCurrentPlayerState()
+        {
+            return new PlayerState
+            {
+                Body = CreatePartState(body.transform),
+                LeftArmTop = CreatePartState(leftUpperArm.transform),
+                RightArmTop = CreatePartState(rightUpperArm.transform),
+                LeftArmBottom = CreatePartState(leftBottomArm.transform),
+                RightArmBottom = CreatePartState(rightBottomArm.transform),
+            };
+        }
+
+        private PartState CreatePartState(Transform target)
+        {
+            return new PartState
+            {
+                X = target.position.x,
+                Y = target.position.y,
+                Rotation = new Rotation
+                {
+                    X = target.rotation.x,
+                    Y = target.rotation.y,
+                    Z = target.rotation.z,
+                    W = target.rotation.w
+                }
+            };
+        }
+        
+        public void RestoreToInitialPose(PlayerState initialPose)
+        {
+            if (initialPose == null) return;
+
+            // 1. 현재 납치된 위치(몸통)와 저장 당시 몸통 위치의 차이(델타 오프셋) 계산
+            Vector2 currentBodyPos = body.transform.position; //[cite: 5]
+            Vector2 savedBodyPos = new Vector2(initialPose.Body.X, initialPose.Body.Y); //[cite: 5]
+            Vector2 deltaOffset = currentBodyPos - savedBodyPos;
+
+            // 2. 물리 튐 방지를 위해 모든 관절의 속도 초기화
+            Rigidbody2D[] allRbs = GetComponentsInChildren<Rigidbody2D>();
+            foreach (var rb in allRbs)
+            {
+                rb.linearVelocity = Vector2.zero; //
+                rb.angularVelocity = 0f;
+            }
+
+            // 3. 델타 오프셋을 더해 현재 몸통 주변에 초기 관절 위치와 회전을 복원
+            ApplyPartTransform(leftUpperArm.transform, initialPose.LeftArmTop, deltaOffset); //[cite: 5]
+            ApplyPartTransform(rightUpperArm.transform, initialPose.RightArmTop, deltaOffset); //[cite: 5]
+            ApplyPartTransform(leftBottomArm.transform, initialPose.LeftArmBottom, deltaOffset); //[cite: 5]
+            ApplyPartTransform(rightBottomArm.transform, initialPose.RightArmBottom, deltaOffset); //[cite: 5]
+        }
+
+        private void ApplyPartTransform(Transform target, PartState partState, Vector2 offset)
+        {
+            // 위치는 오프셋을 더해 현재 위치에 맞추고, 각도는 초기 각도로 복원
+            target.position = new Vector2(partState.X, partState.Y) + offset; //[cite: 5]
+            target.rotation = new Quaternion(partState.Rotation.X, partState.Rotation.Y, partState.Rotation.Z, partState.Rotation.W); //[cite: 5]
+        }
+
+        #endregion
 
         #region 보간용
 
@@ -255,7 +328,7 @@ namespace WeGotOne
             leftBottomArm.ClearDirection();
             rightBottomArm.ClearDirection();
         }
-
+        
         #region Snapshot 보간 유틸
 
         private void StorePreviousSnapshot()

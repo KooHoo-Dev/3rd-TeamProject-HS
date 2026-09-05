@@ -18,46 +18,32 @@ namespace WeGotOne
         private float currentSpeed;
         public bool isGuestLocked;
         private Vector3 baseLocalScale;
-        private LayerMask waterLayer;
+        private bool isWater;
 
         private void Awake()
         {
             Rb = GetComponent<Rigidbody2D>();
             baseLocalScale = transform.localScale;
-            waterLayer = LayerMask.GetMask("Water");
         }
         
         private void FixedUpdate()
         {
-
+            // 게스트이면 무시
+            if (isGuestLocked) return;
+            
+            // 물 밖에 있다면 이동하지 않음
             if (CheckInWater() == false) return;
+            // if (isWater == false) return;
             
             // Move 명령이 들어왔을 때만 지속적인 속도를 적용
             if (currentSpeed > 0)
             {
                 Rb.linearVelocity = currentDirection * currentSpeed;
                 FlipRenderer(currentDirection.x);
+                Debug.Log(currentSpeed);
+                Debug.Log(Rb.name);
             }
         }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (RoomClient.Instance.Me.IsHost && waterLayer.Contains(other.gameObject.layer))
-            {
-                Rb.gravityScale = 0f;
-            }
-        }
-        
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            //
-            // 특정 단일 레이어인지 검사
-            if (RoomClient.Instance.Me.IsHost && waterLayer.Contains(other.gameObject.layer))
-            {
-                Rb.gravityScale = 1f;
-            }
-        }
-
 
         // 1. 일반 이동 (Patrol, Runaway 등에서 지속 호출)
         public void Move(Vector2 direction, float speed)
@@ -122,12 +108,14 @@ namespace WeGotOne
                 if (waterArea.OverlapPoint(next) == false)
                 {
                     // 속도 없애고 false
-                    Rb.linearVelocity = Vector2.zero;
+                    // Rb.linearVelocity = Vector2.zero;
+                    Rb.gravityScale = 1f;
                     return false;
                 }
             }
 
             // 아니면 가능
+            Rb.gravityScale = 0f;
             return true;
         }
         
