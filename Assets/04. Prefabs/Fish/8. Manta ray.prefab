@@ -184,7 +184,6 @@ GameObject:
   - component: {fileID: -677358933537273645}
   - component: {fileID: -8931828668092451657}
   - component: {fileID: 1702131265456152194}
-  - component: {fileID: 8860470257295711364}
   - component: {fileID: 8902882701052381400}
   - component: {fileID: 7367153974404243902}
   m_Layer: 6
@@ -394,43 +393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishBaitCollider
   fishStateManager: {fileID: 0}
-  detectingRange: {fileID: 8860470257295711364}
---- !u!58 &8860470257295711364
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8776392959758584489}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 16.36
+  detectingRange: {fileID: 0}
 --- !u!60 &8902882701052381400
 PolygonCollider2D:
   m_ObjectHideFlags: 0
