@@ -129,7 +129,7 @@ namespace WeGotOne
         private void PlayTransitionDayChange(DayType dayType)
         {
             float targetAlpha = dayType == DayType.Night ? 1f : 0f;
-            float targetIntensity = dayType == DayType.Night ? 0f : 1f;
+            float targetIntensity = dayType == DayType.Night ? 0.1f : 1f;
 
             DOTween.Sequence()
                 .Append(nightSprite.DOFade(targetAlpha, transitionTime))
