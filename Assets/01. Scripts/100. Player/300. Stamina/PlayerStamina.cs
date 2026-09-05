@@ -8,7 +8,7 @@ namespace WeGotOne
 {
     public class PlayerStamina : MonoBehaviour
     {
-        [SerializeField] private Transform spawnPoint;
+        [SerializeField] private Vector3 spawnPosition;
         
         [Header("스태미나 기본 설정")]
         [SerializeField] private float maxStamina = 100f;
@@ -95,12 +95,12 @@ namespace WeGotOne
 
         public void SetSpawnPoint(Transform spawnPoint)
         {
-            this.spawnPoint = spawnPoint;
+            spawnPosition = spawnPoint.position;
         }
 
         public void GoSpawnPoint()
         {
-            transform.position = spawnPoint.position;
+            transform.position = spawnPosition;
         }
 
         private void UpdateStaminaUI()
@@ -197,13 +197,7 @@ namespace WeGotOne
             // 만약 이전에 굶주리지 않았다가 이번 스태미나 감소시 굶주리게 되었다면
             if (wasStarved == false && IsStarved)
             {
-                if (spawnPoint == null)
-                {
-                    Debug.LogWarning("스테미나업슴");
-                    return;
-                }
-
-                transform.position = spawnPoint.position;
+                transform.position = spawnPosition;
                 
                 // 델리게이트로 게임매니저로 통지
                 NotifyPlayerStarveStateChanged( true);

@@ -1,9 +1,6 @@
 using System;
 using HelloServer;
 using UnityEngine;
-using System.Threading;
-using Cysharp.Threading.Tasks;
-using UnityEngine.InputSystem;
 
 namespace WeGotOne
 {
@@ -169,12 +166,6 @@ namespace WeGotOne
 
         private void Update()
         {
-            // 임시용
-            if (SimpleInput.GetKeyDown(Key.Escape))
-            {
-                body.GoSpawnPoint();
-            }
-            
             if (initialized == false)
             {
                 return;
