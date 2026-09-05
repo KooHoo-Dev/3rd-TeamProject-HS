@@ -303,6 +303,7 @@ namespace HelloServer
             this.localPlayer = localPlayer;
             
             localPlayer.Setup(Me);
+            TutorialManager.Instance.StartTutorial(); // 들어오면 튜토리얼 시작
         }
 
         private void OnJoin(JoinMessage message)

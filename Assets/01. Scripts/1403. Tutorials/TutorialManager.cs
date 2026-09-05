@@ -1,17 +1,187 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using HelloServer;
+using UnityEngine.InputSystem;
+
 
 namespace WeGotOne
 {
-    public class TutorialManager : MonoBehaviour
-    {
-        public Image[] TutorialImages;
-        public Text TutorialText;
+    public class TutorialManager : SingletonBase<TutorialManager>
+    {   
+        public enum TutorialStep
+        {
+            NotStarted,
+            KeyboardGuide,    // 1. 키 안내 단계
+            WaitAllReady,     // 3. F키 동시에 꾹 누르기 대기 단계
+            StormActive,      // 4. 폭풍 이미지 활성화 (3초 타이머) 단계
+            Falling,          // 5. 바닥 꺼지고 낙하하는 단계
+            Completed         // 7. 착륙 후 최종 가이드 단계
+        }
         
+        [Header("Tutorial UI Components")]
+        [SerializeField] private GameObject tutorialCanvas;
+        [SerializeField] private GameObject keyboardImage;
+        [SerializeField] private GameObject stormImage;
+        [SerializeField] private GameObject arrivedIslandImage; // (예비용)
+        [SerializeField] private GameObject textBoxPanel;
+        [SerializeField] private TMP_Text instructionText;
         
+        [Header("World Elements")]
+        [SerializeField] private GameObject floor; // Lobby Floor
+        [SerializeField] private Collider2D landingZoneTrigger; // LandingZoneTrigger
+        [SerializeField] private GameObject[] shipBoundaries; // 진입 장벽 콜라이더들
         
+        private TutorialStep currentStep = TutorialStep.NotStarted;
+        private bool isHost;
+        private bool isStormCoroutineRunning = false;
+
+        private bool IsHost => RoomClient.Instance != null && 
+                               RoomClient.Instance.Me != null && 
+                               RoomClient.Instance.Me.IsHost;
         
+        private void Start()
+        {
+            // 0. 게임 시작 시에는 튜토리얼 UI Canvas 비활성화
+            if (tutorialCanvas != null) tutorialCanvas.SetActive(false);
+            
+            // 방 입장 동기화 시점에 활성화하려면 외부(RoomClient 등)에서 
+            // TutorialManager.Instance.StartTutorial()을 호출해 주면 편리합니다.
+            StartCoroutine(WaitAndCheckHost());
+        }
+
+        private IEnumerator WaitAndCheckHost()
+        {
+            yield return new WaitUntil(() => RoomClient.Instance != null && RoomClient.Instance.Me != null);
+            isHost = IsHost;
+        }
         
+        // [외부 호출용] 처음 호스트/게스트가 룸에 입장했을 때 호출
+        public void StartTutorial()
+        {
+            currentStep = TutorialStep.KeyboardGuide;
+            
+            tutorialCanvas.SetActive(true);
+            keyboardImage.SetActive(true);
+            textBoxPanel.SetActive(true);
+            
+            // 1. 텍스트 문장 보여줌
+            instructionText.text = "좌, 우 Shift 로 벽을 집고 W,S,A,D 으로 \n팔 방향을 조정하여 이동 할 수 있습니다. ";
+        }
         
+        private void Update()
+        {
+            if (currentStep == TutorialStep.NotStarted || currentStep == TutorialStep.Completed) return;
+
+            // 키보드 상태 감지 (새 인풋 시스템)
+            if (Keyboard.current == null) return;
+
+            switch (currentStep)
+            {
+                case TutorialStep.KeyboardGuide:
+                    // 2. F키를 누를 경우 키 안내 이미지 비활성화
+                    if (Keyboard.current.fKey.wasPressedThisFrame)
+                    {
+                        keyboardImage.SetActive(false);
+                        
+                        // 3. 텍스트 변경
+                        instructionText.text = "플레이 준비가 완료되면 [F] 키를 꾹 눌러주세요.";
+                        currentStep = TutorialStep.WaitAllReady;
+                    }
+                    break;
+
+                case TutorialStep.WaitAllReady:
+                    // 판정 및 상태 전이는 호스트 컴퓨터에서만 수행
+                    if (!IsHost) return;
+
+                    // 4. 호스트와 게스트가 모두 F키를 꾹 누르고 있는지 확인
+                    bool hostHolding = Keyboard.current.fKey.isPressed;
+                    bool guestHolding = IsGuestHoldingF(); // 게스트 입력값 확인
+
+                    if (hostHolding && guestHolding)
+                    {
+                        // 5. 두 명 모두 입력 확인 시 폭풍(Storm) 연출 시작
+                        StartCoroutine(PlayStormSequence());
+                    }
+                    break;
+            }
+        }
+
+        // 2. [요청 사양] Storm 이미지 3초 작동 코루틴
+        private IEnumerator PlayStormSequence()
+        {
+            if (isStormCoroutineRunning) yield break;
+            isStormCoroutineRunning = true;
+            
+            currentStep = TutorialStep.StormActive;
+
+            // Storm 이미지 활성화
+            stormImage.SetActive(true);
+            instructionText.text = "폭풍이 몰아칩니다!";
+
+            // 3초 대기
+            yield return new WaitForSeconds(3f);
+
+            // Storm 이미지 비활성화
+            stormImage.SetActive(false);
+
+            // 5. GameLobyArea의 Floor 비활성화 (낙하 유도)
+            if (floor != null) floor.SetActive(false);
+            
+            instructionText.text = "";
+            currentStep = TutorialStep.Falling;
+            
+            isStormCoroutineRunning = false;
+        }
+
+        // 3. [요청 사양] 호스트 컴퓨터에서만 낙하 트리거 판정
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (!IsHost) return;
+            if (currentStep != TutorialStep.Falling) return;
+
+            // 낙하 중 LandingZoneTrigger에 플레이어가 닿았는지 판정
+            if (other.CompareTag("Player") || other.GetComponentInChildren<PlayerController>() != null)
+            {
+                
+                foreach (GameObject boundary in shipBoundaries)
+                {
+                    if (boundary != null) boundary.SetActive(false);
+                }
+
+                // 7. 땅에 떨어진 후 텍스트 문구 교체 (카메라 연출은 생략)
+                instructionText.text = "이제 힘을 합쳐 물고기와 나무를 건져서 육지로 향해야 한다!";
+                currentStep = TutorialStep.Completed;
+                
+                // 필요시 일정 시간 뒤 UI 패널을 꺼주는 처리를 추가할 수 있습니다.
+                StartCoroutine(CloseTutorialUIPanel(5f));
+            }
+        }
+
+        private IEnumerator CloseTutorialUIPanel(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            tutorialCanvas.SetActive(false);
+        }
+
+        // 1. [요청 사양] GuestInputGroupMessage를 통해 게스트가 F키를 꾹 누르고 있는지 판정
+        private bool IsGuestHoldingF()
+        {
+            if (RoomClient.Instance == null) return false;
+
+            // TODO: 프로젝트의 RoomClient 혹은 패킷 보관함 구조에 맞게 변경해 주세요.
+            // 예시: RoomClient가 받은 최근 GuestInputGroupMessage에서 F키 상태를 반환하도록 설계
+            /*
+            if (RoomClient.Instance.LastGuestInput != null)
+            {
+                return RoomClient.Instance.LastGuestInput.isHoldingF;
+            }
+            */
+            
+            return true; // 테스트를 위해 우선 기본값을 true로 설정해 둡니다.
+        }
     }
 }
+        
+   
