@@ -1450,11 +1450,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8206142639208193814, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4
+      value: 102.6
       objectReference: {fileID: 0}
     - target: {fileID: 8206142639208193814, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: url
@@ -1505,9 +1505,7 @@ MonoBehaviour:
   stages:
   - minBridgeCount: 0
     groups:
-    - {fileID: 1161131019}
-    - {fileID: 1152639219}
-    - {fileID: 1004300526}
+    - {fileID: 1498978660}
 --- !u!4 &569276766
 Transform:
   m_ObjectHideFlags: 0
@@ -2640,6 +2638,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fish Spawner Stage 2 Group 6
       objectReference: {fileID: 0}
+    - target: {fileID: 5602621839135935693, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5901751301092631409, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
       propertyPath: itemId
       value: 9
@@ -2657,17 +2659,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 921769707349101341, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
   m_PrefabInstance: {fileID: 1004300524}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1004300526 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 746495926916189941, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
-  m_PrefabInstance: {fileID: 1004300524}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ce177a33a5143a28b9576630b8f21c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishSpawnerGroup
 --- !u!1 &1072383649
 GameObject:
   m_ObjectHideFlags: 0
@@ -3152,6 +3143,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1749701662784034705, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3718385172898289224, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
       propertyPath: itemId
       value: 8
@@ -3164,9 +3159,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fish Spawner Stage 2 Group 5
       objectReference: {fileID: 0}
+    - target: {fileID: 5602621839135935693, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5901751301092631409, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
       propertyPath: itemId
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8331791966950782018, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8806033103120949928, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -3181,17 +3188,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 921769707349101341, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
   m_PrefabInstance: {fileID: 1152639217}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1152639219 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 746495926916189941, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
-  m_PrefabInstance: {fileID: 1152639217}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ce177a33a5143a28b9576630b8f21c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishSpawnerGroup
 --- !u!1001 &1161131017
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3252,6 +3248,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fish Spawner Stage 2 Group 4
       objectReference: {fileID: 0}
+    - target: {fileID: 5602621839135935693, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5901751301092631409, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
       propertyPath: itemId
       value: 7
@@ -3269,17 +3269,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 921769707349101341, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
   m_PrefabInstance: {fileID: 1161131017}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1161131019 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 746495926916189941, guid: 9baa735f1d5ea7e46afb10f7e0ba268f, type: 3}
-  m_PrefabInstance: {fileID: 1161131017}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ce177a33a5143a28b9576630b8f21c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishSpawnerGroup
 --- !u!1001 &1183592342
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3847,7 +3836,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4863765165762031542, guid: cfe5017191bab504ca272d8224157642, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5676252445563249305, guid: cfe5017191bab504ca272d8224157642, type: 3}
       propertyPath: itemId
@@ -3889,6 +3878,14 @@ PrefabInstance:
       propertyPath: itemId
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 8520393421422752171, guid: cfe5017191bab504ca272d8224157642, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 147.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8520393421422752171, guid: cfe5017191bab504ca272d8224157642, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -48.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8622450026903665864, guid: cfe5017191bab504ca272d8224157642, type: 3}
       propertyPath: itemId
       value: 9
@@ -3916,6 +3913,17 @@ PrefabInstance:
       addedObject: {fileID: 1004300525}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfe5017191bab504ca272d8224157642, type: 3}
+--- !u!114 &1498978660 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2725931972382745905, guid: cfe5017191bab504ca272d8224157642, type: 3}
+  m_PrefabInstance: {fileID: 1498978659}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ce177a33a5143a28b9576630b8f21c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishSpawnerGroup
 --- !u!4 &1498978664 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3671919204306712592, guid: cfe5017191bab504ca272d8224157642, type: 3}
@@ -5299,7 +5307,7 @@ Transform:
   m_GameObject: {fileID: 5336403205574035203}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -133.01, y: 15.0709305, z: 0}
+  m_LocalPosition: {x: -132.2, y: 15.29, z: 0}
   m_LocalScale: {x: 1.7, y: 1.7, z: 1.7}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -5671,7 +5679,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &1825555182511261489
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5891,7 +5899,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &2786380869012141413
 SpriteRenderer:
   serializedVersion: 2
@@ -6159,7 +6167,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &4200490247824457378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6413,7 +6421,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &5336403205574035203
 GameObject:
   m_ObjectHideFlags: 0
@@ -6895,7 +6903,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &6925380542094001624
 BoxCollider2D:
   m_ObjectHideFlags: 0
