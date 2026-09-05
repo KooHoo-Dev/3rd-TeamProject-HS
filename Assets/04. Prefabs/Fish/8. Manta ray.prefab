@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 8860470257295711364}
   - component: {fileID: 8902882701052381400}
   - component: {fileID: 7367153974404243902}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: 8. Manta ray
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,6 +215,7 @@ MonoBehaviour:
   TargetInfo: {fileID: 0}
   bulletPrefab: {fileID: 0}
   <AbductionDestination>k__BackingField: {fileID: 0}
+  <PlayerAttachPosition>k__BackingField: {fileID: 0}
   ElectronicParticle: {fileID: 2673784737444988017}
   IsAttack: 1
   FaintDuration: 0

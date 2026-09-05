@@ -52,7 +52,7 @@ GameObject:
   - component: {fileID: 5130000000000000003}
   - component: {fileID: 5244812637053690599}
   - component: {fileID: 4534058532086620731}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: 3. Shark
   m_TagString: Fish
   m_Icon: {fileID: 0}
@@ -232,6 +232,7 @@ MonoBehaviour:
   TargetInfo: {fileID: 0}
   bulletPrefab: {fileID: 0}
   <AbductionDestination>k__BackingField: {fileID: 0}
+  <PlayerAttachPosition>k__BackingField: {fileID: 0}
   ElectronicParticle: {fileID: 0}
   IsAttack: 1
   FaintDuration: 0

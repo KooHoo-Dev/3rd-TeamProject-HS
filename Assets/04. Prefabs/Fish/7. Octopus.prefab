@@ -158,7 +158,7 @@ GameObject:
   - component: {fileID: 8287304691859933930}
   - component: {fileID: 6392807594458476488}
   - component: {fileID: 1811129425961258825}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: 7. Octopus
   m_TagString: Fish
   m_Icon: {fileID: 0}
@@ -321,6 +321,7 @@ MonoBehaviour:
   TargetInfo: {fileID: 0}
   bulletPrefab: {fileID: 7537192424525346134, guid: 59766b02ffc620c41826838eed15a7ae, type: 3}
   <AbductionDestination>k__BackingField: {fileID: 0}
+  <PlayerAttachPosition>k__BackingField: {fileID: 0}
   ElectronicParticle: {fileID: 0}
   IsAttack: 1
   FaintDuration: 0
