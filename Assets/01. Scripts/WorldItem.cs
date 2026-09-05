@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace WeGotOne
@@ -6,9 +7,10 @@ namespace WeGotOne
     {
         private const float SnapshotInterval = 1f / 20f;
 
-        [field: SerializeField] public ItemScriptableObject ThisItem { get; private set; }
+        [SerializeField] private int itemId;
 
-        public int ItemId => ThisItem != null ? ThisItem.Key : -1;
+        public ItemRef ThisItem { get; private set; }
+        public int ItemId => itemId;
         public int WorldItemId { get; private set; } = -1;
         public bool IsPickUp { get; private set; }
 
@@ -18,6 +20,12 @@ namespace WeGotOne
         private Quaternion previousSnapshotRotation;
         private Vector2 targetSnapshotPosition;
         private Quaternion targetSnapshotRotation;
+
+        private IEnumerator Start()
+        {
+            yield return new WaitUntil(() => ItemManager.Instance.IsInitialized);
+            ThisItem = ItemManager.Instance.Get(itemId);
+        }
 
         private void Update()
         {

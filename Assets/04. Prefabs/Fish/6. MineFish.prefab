@@ -119,8 +119,8 @@ GameObject:
   - component: {fileID: 7375914041610192205}
   - component: {fileID: 6286656989662160650}
   - component: {fileID: 5335603790001178013}
-  m_Layer: 6
-  m_Name: MineFish
+  m_Layer: 0
+  m_Name: 6. MineFish
   m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -491,7 +491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1c982d3a21742b99f985276dfac5441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItem
-  <ThisItem>k__BackingField: {fileID: 11400000, guid: 896989ea23b5bec4191ba0c1d6266ef4, type: 2}
+  itemId: 6
 --- !u!114 &4165691979904388851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,7 +523,7 @@ MonoBehaviour:
     m_Bits: 16
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 136
+    m_Bits: 200
   obstacleCheckSize: {x: 1.86, y: 1.08}
   obstacleCheckDistance: 1.98
   detectCooldown: 0.1
@@ -556,7 +556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1c982d3a21742b99f985276dfac5441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItem
-  <ThisItem>k__BackingField: {fileID: 11400000, guid: 896989ea23b5bec4191ba0c1d6266ef4, type: 2}
+  itemId: 6
 --- !u!114 &5335603790001178013
 MonoBehaviour:
   m_ObjectHideFlags: 0

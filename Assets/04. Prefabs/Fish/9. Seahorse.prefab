@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8735413795785231491
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 116864040694796986}
-  m_Layer: 6
-  m_Name: Player Attach Position
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &116864040694796986
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8735413795785231491}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.36, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8141467539683017845}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9218924052347507054
 GameObject:
   m_ObjectHideFlags: 0
@@ -50,8 +19,8 @@ GameObject:
   - component: {fileID: 3380978747869298007}
   - component: {fileID: 5822293520149872469}
   - component: {fileID: 2683312444320732614}
-  m_Layer: 6
-  m_Name: Seahorse
+  m_Layer: 0
+  m_Name: 9. Seahorse
   m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,8 +38,7 @@ Transform:
   m_LocalPosition: {x: 10, y: -0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 116864040694796986}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8337539319613898223
@@ -156,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1c982d3a21742b99f985276dfac5441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItem
-  <ThisItem>k__BackingField: {fileID: 11400000, guid: 2d52c35884b98594b879f62049c88bd7, type: 2}
+  itemId: 9
 --- !u!114 &8940329067492078390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,7 +153,6 @@ MonoBehaviour:
   TargetInfo: {fileID: 0}
   bulletPrefab: {fileID: 0}
   <AbductionDestination>k__BackingField: {fileID: 0}
-  <PlayerAttachPosition>k__BackingField: {fileID: 116864040694796986}
   ElectronicParticle: {fileID: 0}
   IsAttack: 1
   FaintDuration: 0
@@ -221,7 +188,7 @@ MonoBehaviour:
     m_Bits: 16
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 136
+    m_Bits: 200
   obstacleCheckSize: {x: 2, y: 2}
   obstacleCheckDistance: 3
   detectCooldown: 0.1
@@ -283,7 +250,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -316,4 +283,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0

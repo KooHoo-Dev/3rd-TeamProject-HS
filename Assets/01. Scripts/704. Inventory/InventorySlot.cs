@@ -20,7 +20,7 @@ namespace WeGotOne
             rectTransform = GetComponent<RectTransform>();
         }
 
-        public void Render(ItemScriptableObject item, int count)
+        public void Render(ItemRef item, int count)
         {
             bool shouldDisplay = item != null && count > 0;
 

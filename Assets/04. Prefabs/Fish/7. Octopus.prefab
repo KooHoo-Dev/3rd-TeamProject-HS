@@ -158,9 +158,8 @@ GameObject:
   - component: {fileID: 8287304691859933930}
   - component: {fileID: 6392807594458476488}
   - component: {fileID: 1811129425961258825}
-  - component: {fileID: 5802308649146517236}
-  m_Layer: 6
-  m_Name: Octopus
+  m_Layer: 0
+  m_Name: 7. Octopus
   m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -354,7 +353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1c982d3a21742b99f985276dfac5441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.WorldItem
-  <ThisItem>k__BackingField: {fileID: 11400000, guid: aa4f8eefe827fd942b581e820c903679, type: 2}
+  itemId: 7
 --- !u!114 &1811129425961258825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,95 +371,7 @@ MonoBehaviour:
     m_Bits: 16
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 136
+    m_Bits: 200
   obstacleCheckSize: {x: 5, y: 5}
   obstacleCheckDistance: 1
   detectCooldown: 0.1
---- !u!60 &5802308649146517236
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1964512351212114731}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5.12, y: 5.12}
-    newSize: {x: 5.12, y: 5.12}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 1.3524594, y: -1.4921031}
-      - {x: 1.6186355, y: -1.432673}
-      - {x: 1.9758002, y: -1.4829805}
-      - {x: 2.2296653, y: -1.1963341}
-      - {x: 2.2617285, y: -0.94543517}
-      - {x: 2.0613694, y: -0.5720732}
-      - {x: 1.664274, y: -0.42874485}
-      - {x: 1.7146769, y: -0.17970818}
-      - {x: 1.6356696, y: 0.02442208}
-      - {x: 1.8652147, y: 0.35572428}
-      - {x: 1.6557276, y: 0.68167156}
-      - {x: 1.3844751, y: 0.6981704}
-      - {x: 1.2128799, y: 0.6179785}
-      - {x: 1.1367191, y: 1.0929244}
-      - {x: 0.95976835, y: 1.2728608}
-      - {x: 0.8276997, y: 1.7899317}
-      - {x: 0.44259962, y: 2.1276414}
-      - {x: -0.12152004, y: 2.2645855}
-      - {x: -0.7121527, y: 2.089419}
-      - {x: -1.0388951, y: 1.7491939}
-      - {x: -1.107569, y: 1.2728432}
-      - {x: -0.9325983, y: 0.91312236}
-      - {x: -0.7744433, y: 0.69463503}
-      - {x: -1.274158, y: 0.66787887}
-      - {x: -1.432025, y: 0.9829133}
-      - {x: -1.7307599, y: 1.0908073}
-      - {x: -2.1153479, y: 0.8884357}
-      - {x: -2.2549338, y: 0.48212865}
-      - {x: -2.0526977, y: -0.13702159}
-      - {x: -1.6489981, y: -0.67711943}
-      - {x: -1.9167583, y: -0.9060883}
-      - {x: -1.9213837, y: -1.2714974}
-      - {x: -1.6593275, y: -1.5989132}
-      - {x: -1.1208599, y: -1.7684507}
-      - {x: -0.6029748, y: -1.627942}
-      - {x: -0.36421695, y: -1.8741559}
-      - {x: -0.090595424, y: -2.0144448}
-      - {x: 0.32812938, y: -1.9191363}
-      - {x: 0.4909027, y: -1.6282929}
-      - {x: 0.79999995, y: -1.78}
-      - {x: 1.1468534, y: -1.7403531}
-  m_UseDelaunayMesh: 1
