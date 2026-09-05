@@ -4,7 +4,7 @@ using Jay.FileIO;
 
 namespace WeGotOne
 {
-    public class ItemManager : SingletonBase<ItemManager>
+    public class ItemManager : SceneSingleton<ItemManager>
     {
         private readonly Dictionary<int, ItemRef> itemRefsById = new();
         private bool isLoading;

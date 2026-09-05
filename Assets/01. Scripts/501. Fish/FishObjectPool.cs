@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace WeGotOne
 {
-    public sealed class FishObjectPool : SingletonBase<FishObjectPool>
+    public sealed class FishObjectPool : SceneSingleton<FishObjectPool>
     {
         [SerializeField] private WorldItem[] fishPrefabs;
 

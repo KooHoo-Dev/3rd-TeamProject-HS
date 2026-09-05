@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace WeGotOne
 {
-    public class InventoryItemDB : SingletonBase<InventoryItemDB>
+    public class InventoryItemDB : SceneSingleton<InventoryItemDB>
     {
         private readonly Dictionary<int, int> itemCountDic = new();
 

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace WeGotOne
 {
-    public class DayLoop : SingletonBase<DayLoop>
+    public class DayLoop : SceneSingleton<DayLoop>
     {
         public enum DayType
         {

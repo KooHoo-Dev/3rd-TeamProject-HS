@@ -112,6 +112,7 @@ namespace WeGotOne.Fish_Interface
             }
 
             ResetResistance();
+            StopConfusedParticle();
             waterExitCooldown = 0f;
             TargetPosition = Vector3.zero;
             BaitInfo = null;
