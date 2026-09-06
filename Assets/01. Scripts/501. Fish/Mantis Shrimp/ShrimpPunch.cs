@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using WeGotOne.Fish_Interface;
 
 public class ShrimpPunch : MonoBehaviour
 {
@@ -8,10 +9,29 @@ public class ShrimpPunch : MonoBehaviour
     [SerializeField] private Vector3 direction;
     [SerializeField] private ParticleSystem punchParticle;
     [SerializeField] private float punchTime;
+    
+    private bool canPunch;
+    private FishStateManager manager;
+
+    private void Start()
+    {
+        manager = GetComponentInParent<FishStateManager>();
+    }
+
+    private void Update()
+    {
+        if (manager.CurrentState is FishFaintState or FishExhaustedState)
+        {
+            canPunch = false;
+            return;
+        }
+
+        canPunch = true;
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && canPunch)
         {
             Rigidbody2D bodyRb = other.transform.GetComponent<Rigidbody2D>();
             bool isRight = transform.GetComponentInParent<Transform>().position.x - other.transform.position.x < 0;
