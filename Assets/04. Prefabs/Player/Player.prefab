@@ -1240,7 +1240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.HandControllerWithInterface
   fishGrabParticle: {fileID: 8698129467814766770}
-  grabSprite: {fileID: -1292544488347810331, guid: 7547d6a01073e244bbd3854a6bc6db05, type: 3}
+  grabSprite: {fileID: 3108339784984931305, guid: 7547d6a01073e244bbd3854a6bc6db05, type: 3}
   handSprite: {fileID: 2237634345278487000, guid: 8ebc6d601ca4780478c38e87c4edde1c, type: 3}
   spriteRenderer: {fileID: 2584043572367064611}
   owner: {fileID: 0}
