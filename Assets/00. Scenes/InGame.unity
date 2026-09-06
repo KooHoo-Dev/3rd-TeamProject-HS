@@ -4240,7 +4240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1efcb4b9cb440148a5556e9ec720aa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.EasyRoomClient
-  code: 1234
+  code: 1515
   who: HiHi
 --- !u!4 &1679873783
 Transform:
@@ -5779,9 +5779,17 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2593596691956640967, guid: 630ad85aa448f4d19aabfc1b95d5b5fb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.212
+      objectReference: {fileID: 0}
     - target: {fileID: 3756060078106134440, guid: 630ad85aa448f4d19aabfc1b95d5b5fb, type: 3}
       propertyPath: m_SortingOrder
       value: -110
+      objectReference: {fileID: 0}
+    - target: {fileID: 3825857712637868755, guid: 630ad85aa448f4d19aabfc1b95d5b5fb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.31
       objectReference: {fileID: 0}
     - target: {fileID: 4299891695960218471, guid: 630ad85aa448f4d19aabfc1b95d5b5fb, type: 3}
       propertyPath: m_LocalScale.y
@@ -5790,6 +5798,14 @@ PrefabInstance:
     - target: {fileID: 4299891695960218471, guid: 630ad85aa448f4d19aabfc1b95d5b5fb, type: 3}
       propertyPath: m_LocalPosition.y
       value: -34.3399
+      objectReference: {fileID: 0}
+    - target: {fileID: 4477921430219246146, guid: 630ad85aa448f4d19aabfc1b95d5b5fb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 5432547952650477497, guid: 630ad85aa448f4d19aabfc1b95d5b5fb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.31
       objectReference: {fileID: 0}
     - target: {fileID: 5641314850165933277, guid: 630ad85aa448f4d19aabfc1b95d5b5fb, type: 3}
       propertyPath: m_SortingOrder
@@ -5810,6 +5826,10 @@ PrefabInstance:
     - target: {fileID: 6808077971464161104, guid: 630ad85aa448f4d19aabfc1b95d5b5fb, type: 3}
       propertyPath: m_SortingOrder
       value: -110
+      objectReference: {fileID: 0}
+    - target: {fileID: 6893043101866595537, guid: 630ad85aa448f4d19aabfc1b95d5b5fb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.408
       objectReference: {fileID: 0}
     - target: {fileID: 6997884198077557868, guid: 630ad85aa448f4d19aabfc1b95d5b5fb, type: 3}
       propertyPath: m_SortingOrder
@@ -5898,6 +5918,14 @@ PrefabInstance:
     - target: {fileID: 7924191233079420974, guid: 630ad85aa448f4d19aabfc1b95d5b5fb, type: 3}
       propertyPath: m_LocalPosition.y
       value: -64.9878
+      objectReference: {fileID: 0}
+    - target: {fileID: 8140406302660596846, guid: 630ad85aa448f4d19aabfc1b95d5b5fb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9048807020723028939, guid: 630ad85aa448f4d19aabfc1b95d5b5fb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.925
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
