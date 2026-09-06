@@ -987,7 +987,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7122542950194939116, guid: 3672fad52f0c347b7bb947f3109d14d2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1603741835}
   m_SourcePrefab: {fileID: 100100000, guid: 3672fad52f0c347b7bb947f3109d14d2, type: 3}
 --- !u!1 &155681064 stripped
 GameObject:
@@ -3953,6 +3956,23 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1570439689715895664, guid: 1194081bb080b624b838ba18eca05a87, type: 3}
   m_PrefabInstance: {fileID: 1581359676}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1603741833 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7122542950194939116, guid: 3672fad52f0c347b7bb947f3109d14d2, type: 3}
+  m_PrefabInstance: {fileID: 155681063}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1603741835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603741833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af9f6c2eec604c93ba944e6da50287e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.LandingZoneTrigger
 --- !u!114 &1625543911 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1682943535265470491, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}

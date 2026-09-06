@@ -81,7 +81,7 @@ namespace WeGotOne
             {
                 case TutorialStep.KeyboardGuide:
                     // 2. F키를 누를 경우 키 안내 이미지 비활성화
-                    if (Keyboard.current.fKey.wasPressedThisFrame)
+                    if (Keyboard.current.spaceKey.wasPressedThisFrame)
                     {
                         keyboardImage.SetActive(false);
                         
@@ -136,27 +136,22 @@ namespace WeGotOne
         }
 
         // 3. [요청 사양] 호스트 컴퓨터에서만 낙하 트리거 판정
-        private void OnTriggerEnter2D(Collider2D other)
+        public void OnPlayerLanded()
         {
-            if (!IsHost) return;
             if (currentStep != TutorialStep.Falling) return;
 
-            // 낙하 중 LandingZoneTrigger에 플레이어가 닿았는지 판정
-            if (other.CompareTag("Player") || other.GetComponentInChildren<PlayerController>() != null)
+            // 6. 경계 콜라이더들 모두 비활성화
+            foreach (GameObject boundary in shipBoundaries)
             {
-                
-                foreach (GameObject boundary in shipBoundaries)
-                {
-                    if (boundary != null) boundary.SetActive(false);
-                }
-
-                // 7. 땅에 떨어진 후 텍스트 문구 교체 (카메라 연출은 생략)
-                instructionText.text = "이제 힘을 합쳐 물고기와 나무를 건져서 육지로 향해야 한다!";
-                currentStep = TutorialStep.Completed;
-                
-                // 필요시 일정 시간 뒤 UI 패널을 꺼주는 처리를 추가할 수 있습니다.
-                StartCoroutine(CloseTutorialUIPanel(5f));
+                if (boundary != null) boundary.SetActive(false);
             }
+
+            // 7. 땅에 떨어진 후 텍스트 문구 교체
+            //instructionText.text = "이제 힘을 합쳐 물고기와 나무를 건져서 육지로 향해야 한다!";
+            currentStep = TutorialStep.Completed;
+    
+            // 5초 뒤 UI 패널을 꺼줍니다.
+            StartCoroutine(CloseTutorialUIPanel(5f));
         }
 
         private IEnumerator CloseTutorialUIPanel(float delay)
