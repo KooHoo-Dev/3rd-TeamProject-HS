@@ -1,0 +1,254 @@
+fileFormatVersion: 2
+guid: 8ebc6d601ca4780478c38e87c4edde1c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4078664176306213102
+    second: Cut_Arms2_0
+  - first:
+      213: -3221360165570814970
+    second: Cut_Arms2_1
+  - first:
+      213: 5556911605846803071
+    second: Cut_Arms2_2
+  - first:
+      213: -1358563982069776476
+    second: Cut_Arms2_3
+  - first:
+      213: -6033694201410880181
+    second: Cut_Arms2_4
+  - first:
+      213: -3397379474318206377
+    second: Cut_Arms2_5
+  - first:
+      213: 4749119324014321874
+    second: Cut_Arms2_6
+  - first:
+      213: -8056402285341226943
+    second: Cut_Arms2_7
+  - first:
+      213: 1737577527824642875
+    second: Cut_Arms2_8
+  - first:
+      213: -3647833303713199715
+    second: Cut_Arms2_9
+  - first:
+      213: -8160140749803019945
+    second: Cut_Arms2_10
+  - first:
+      213: 1359888421344638862
+    second: Cut_Arms2_11
+  - first:
+      213: -6359123891535816743
+    second: Cut_Arms2_12
+  - first:
+      213: 2237634345278487000
+    second: Cut_Arms2_13
+  - first:
+      213: 4432992186446996742
+    second: Cut_Arms2_14
+  - first:
+      213: -4342413003705165744
+    second: Cut_Arms2_15
+  - first:
+      213: 2203156628606667581
+    second: Cut_Arms2_16
+  - first:
+      213: -5903959599218667701
+    second: Cut_Arms2_17
+  - first:
+      213: -7591225522989640523
+    second: Cut_Arms2_18
+  - first:
+      213: -7300493246227954217
+    second: Cut_Arms2_19
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1000
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Cut_Arms2_8
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 269
+        width: 179
+        height: 219
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3370b33e8d1d1810800000000000000
+      internalID: 1737577527824642875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cut_Arms2_13
+      rect:
+        serializedVersion: 2
+        x: 1318
+        y: 267
+        width: 182
+        height: 216
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d9b98fd49cad0f10800000000000000
+      internalID: 2237634345278487000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 19d1a23ccaba47c42b9e4759d3420229
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Cut_Arms2_0: 4078664176306213102
+      Cut_Arms2_1: -3221360165570814970
+      Cut_Arms2_10: -8160140749803019945
+      Cut_Arms2_11: 1359888421344638862
+      Cut_Arms2_12: -6359123891535816743
+      Cut_Arms2_13: 2237634345278487000
+      Cut_Arms2_14: 4432992186446996742
+      Cut_Arms2_15: -4342413003705165744
+      Cut_Arms2_16: 2203156628606667581
+      Cut_Arms2_17: -5903959599218667701
+      Cut_Arms2_18: -7591225522989640523
+      Cut_Arms2_19: -7300493246227954217
+      Cut_Arms2_2: 5556911605846803071
+      Cut_Arms2_3: -1358563982069776476
+      Cut_Arms2_4: -6033694201410880181
+      Cut_Arms2_5: -3397379474318206377
+      Cut_Arms2_6: 4749119324014321874
+      Cut_Arms2_7: -8056402285341226943
+      Cut_Arms2_8: 1737577527824642875
+      Cut_Arms2_9: -3647833303713199715
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

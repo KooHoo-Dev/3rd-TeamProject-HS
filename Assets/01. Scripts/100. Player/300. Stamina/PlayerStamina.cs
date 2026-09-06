@@ -11,20 +11,20 @@ namespace WeGotOne
         [SerializeField] private Vector3 spawnPosition;
         
         [Header("스태미나 기본 설정")]
-        [SerializeField] private float maxStamina = 100f;
-        [SerializeField] private float currentStamina = 100f;
+        [SerializeField] private float maxStamina = 500f;
+        [SerializeField] private float currentStamina = 500f;
         
         // 무게에 따른 추가 배율
         [SerializeField] private PlayerController playerController;
-        [SerializeField] private float forceStaminaMultiplier = 0.1f;
+        [SerializeField] private float forceStaminaMultiplier = 0.01f;
 
         [SerializeField] private float recoverDelay = 5f;
-        [SerializeField] private float recoverPerSecond = 10f;
+        [SerializeField] private float recoverPerSecond = 50f;
 
         private float outOfWaterTime;
         
         [Header("제한사항")]
-        [SerializeField] private float staminaTime = 100f;
+        [SerializeField] private float staminaTime = 150f;
         private int waterLayer;
         private bool isInWater = false;
         
