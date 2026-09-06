@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace WeGotOne
@@ -15,6 +17,12 @@ namespace WeGotOne
         {
             base.OnInitialize();
             worldItemRegistry = GetComponent<WorldItemRegistry>();
+        }
+
+        private async void Start()
+        {
+            await UniTask.WaitUntil(() => WorldItemRegistry.IsInitialized);
+            worldItemRegistry = WorldItemRegistry.Instance;
         }
 
         public WorldItem Get(int itemId)

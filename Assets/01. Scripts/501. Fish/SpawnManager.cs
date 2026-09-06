@@ -27,7 +27,7 @@ namespace WeGotOne
 
         private IEnumerator Start()
         {
-            yield return new WaitUntil(() => ItemManager.Instance.IsInitialized);
+            yield return new WaitUntil(() => ItemManager.Instance.IsLoaded);
             yield return new WaitUntil(() => RoomClient.Instance != null && RoomClient.Instance.Me != null);
 
             if (RoomClient.Instance.Me.IsHost == false)

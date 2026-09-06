@@ -1,4 +1,6 @@
 using System;
+using Cysharp.Threading.Tasks;
+using HelloServer;
 using UnityEngine;
 
 namespace WeGotOne
@@ -60,8 +62,19 @@ namespace WeGotOne
             mine.gameObject.SetActive(false);
         }
         
-        private void Start()
+        private async void Start()
         {
+            await UniTask.WaitUntil(() => RoomClient.Instance != null && RoomClient.Instance.Me != null && WorldItemRegistry.IsInitialized);
+            if (RoomClient.Instance.Me.IsHost)
+            {
+                EnterHostPhysicsMode();
+                WorldItemRegistry.Instance.RegisterNewDynamic(mine.GetComponent<WorldItem>(), out var _);
+            }
+            else
+            {
+                EnterGuestVisualMode();
+            }
+            
             mine.SetParent(null, true);
         }
         

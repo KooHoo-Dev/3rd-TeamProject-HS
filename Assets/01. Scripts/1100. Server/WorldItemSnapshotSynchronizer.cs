@@ -7,19 +7,14 @@ using WeGotOne.Fish_Interface;
 
 namespace WeGotOne
 {
-    public sealed class WorldItemSnapshotSynchronizer : MonoBehaviour
+    public class WorldItemSnapshotSynchronizer : MonoBehaviour
     {
         private WorldItemRegistry worldItemRegistry;
-
-        private void Awake()
-        {
-            worldItemRegistry = GetComponent<WorldItemRegistry>();
-        }
-
         private IEnumerator Start()
         {
-            yield return new WaitUntil(() => RoomClient.Instance != null && RoomClient.Instance.Me != null);
+            yield return new WaitUntil(() => RoomClient.IsInitialized && RoomClient.Instance.Me != null && WorldItemRegistry.IsInitialized);
 
+            worldItemRegistry = WorldItemRegistry.Instance;
             if (RoomClient.Instance.Me.IsHost == false)
             {
                 LockFixedPlanksForGuest();
@@ -158,14 +153,13 @@ namespace WeGotOne
                 if (state == null)
                     continue;
 
-                if (worldItemRegistry.TryGetWorldItem(state.WorldItemId, out WorldItem worldItem) == false ||
-                    worldItemRegistry.IsFixedWorldItem(state.WorldItemId) == false)
+                if (worldItemRegistry.TryGetWorldItem(state.WorldItemId, out WorldItem worldItem) == false)
                 {
                     Debug.LogWarning($"[WorldItemSnapshotSynchronizer] 고정 Plank WorldItemId를 찾을 수 없습니다: {state.WorldItemId}");
                     continue;
                 }
 
-                if (worldItem.TryGetComponent<Plank>(out Plank plank) == false)
+                if (worldItem.TryGetComponent(out Plank plank) == false)
                 {
                     Debug.LogWarning($"[WorldItemSnapshotSynchronizer] WorldItemId가 Plank가 아닙니다: {state.WorldItemId}");
                     continue;

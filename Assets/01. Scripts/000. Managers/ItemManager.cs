@@ -7,21 +7,15 @@ namespace WeGotOne
     public class ItemManager : SceneSingleton<ItemManager>
     {
         private readonly Dictionary<int, ItemRef> itemRefsById = new();
-        private bool isLoading;
+        public bool IsLoaded => isLoaded;
+        private bool isLoaded;
 
-        public new bool IsInitialized { get; private set; }
         public IEnumerable<ItemRef> Items => itemRefsById.Values;
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            if (isLoading)
-            {
-                return;
-            }
-
-            isLoading = true;
             LoadItemsAsync();
         }
 
@@ -58,7 +52,7 @@ namespace WeGotOne
                 itemRefsById.Add(itemDto.ItemId, new ItemRef(itemDto));
             }
 
-            IsInitialized = true;
+            isLoaded = true;
         }
     }
 }

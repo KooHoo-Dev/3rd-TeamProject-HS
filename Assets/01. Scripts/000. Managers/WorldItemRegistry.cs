@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace WeGotOne
 {
-    public class WorldItemRegistry : MonoBehaviour
+    public class WorldItemRegistry : SceneSingleton<WorldItemRegistry>
     {
         private const string PlankGroupName = "Plank Group";
 
@@ -14,8 +14,9 @@ namespace WeGotOne
         public IReadOnlyDictionary<int, WorldItem> WorldItems => worldItems;
         public IEnumerable<int> FixedWorldItemIds => fixedWorldItemIds;
 
-        private void Awake()
+        protected override void OnInitialize()
         {
+            base.OnInitialize();
             RegisterFixedPlanks();
         }
 

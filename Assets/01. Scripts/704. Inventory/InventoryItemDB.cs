@@ -20,7 +20,7 @@ namespace WeGotOne
 
         private IEnumerator Start()
         {
-            yield return new WaitUntil(() => ItemManager.Instance.IsInitialized);
+            yield return new WaitUntil(() => ItemManager.Instance.IsLoaded);
 
             foreach (ItemRef item in ItemManager.Instance.Items)
             {

@@ -23,7 +23,7 @@ namespace WeGotOne
 
         private IEnumerator Start()
         {
-            yield return new WaitUntil(() => ItemManager.Instance.IsInitialized);
+            yield return new WaitUntil(() => ItemManager.Instance.IsLoaded);
             ThisItem = ItemManager.Instance.Get(itemId);
         }
 

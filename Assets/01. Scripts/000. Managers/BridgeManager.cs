@@ -31,7 +31,7 @@ namespace WeGotOne
         {
             try
             {
-                await UniTask.WaitUntil(() => ItemManager.Instance.IsInitialized);
+                await UniTask.WaitUntil(() => ItemManager.Instance.IsLoaded);
                 bridgeTable = await BridgeTable.LoadAsync(ItemManager.Instance.Items);
             }
             catch (Exception exception)
