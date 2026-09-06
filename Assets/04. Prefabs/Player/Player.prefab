@@ -1531,6 +1531,7 @@ MonoBehaviour:
   leftBottomArm: {fileID: 2418327588423444690}
   rightBottomArm: {fileID: 2336957343091321679}
   body: {fileID: 1836112645504577546}
+  nick: {fileID: 3074995230057644118}
   defaultArmForce: 15
   highArmForce: 35
   IsParalysis: 0
@@ -1640,7 +1641,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC774\uB984"
+  m_text: "\uAF2C\uB9C8\uB3CC"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 09b4fe6064b8e824f97681e05fb47bbc, type: 2}
   m_sharedMaterial: {fileID: 6898141960898469622, guid: 09b4fe6064b8e824f97681e05fb47bbc, type: 2}

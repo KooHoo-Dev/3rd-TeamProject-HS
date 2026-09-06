@@ -9,6 +9,9 @@ namespace HelloServer
         public string NickName { get; set; }
         public bool IsHost { get; set; }
 
+        public float R { get; set; }
+        public float G { get; set; }
+        public float B { get; set; }
     }
 
     // 받은 글자가 어떤 종류인지 나타내는 데이터 객체
@@ -87,6 +90,10 @@ namespace HelloServer
     {
         public string Type { get; set; } = "hello";
         public string NickName { get; set; }
+        
+        public float R { get; set; }
+        public float G { get; set; }
+        public float B { get; set; }
     }
 
     public class GuestInputMessage

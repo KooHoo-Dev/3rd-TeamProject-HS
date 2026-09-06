@@ -10,6 +10,9 @@ namespace HelloServer
         [Header("처음 값")]
         [SerializeField] private string nickName = "이름없음";
         [SerializeField] private string roomCode = "ABCD";
+        [SerializeField] private Color playerColor = Color.white;
+        
+        private Texture2D colorPreviewTexture;
 
         private RoomClient client;
 
@@ -20,6 +23,10 @@ namespace HelloServer
         private void Awake()
         {
             client = GetComponent<RoomClient>();
+            
+            colorPreviewTexture = new Texture2D(1, 1);
+            colorPreviewTexture.SetPixel(0, 0, Color.white);
+            colorPreviewTexture.Apply();
         }
 
         private void OnGUI()
@@ -30,20 +37,74 @@ namespace HelloServer
 
         private void DrawLobby()
         {
-            GUI.Box(new Rect(20, 20, 320, 150), "방에 들어가기");
+            GUI.Box(new Rect(20, 20, 320, 280), "방에 들어가기");
 
             GUI.Label(new Rect(35, 50, 70, 22), "이름");
             nickName = GUI.TextField(new Rect(105, 50, 220, 22), nickName, 12);
 
             GUI.Label(new Rect(35, 80, 70, 22), "방 코드");
             roomCode = GUI.TextField(new Rect(105, 80, 220, 22), roomCode, 8);
+            
+            // =========================
+            // 컬러 선택
+            // =========================
+
+            GUI.Label(new Rect(35, 110, 70, 22), "색상");
+
+            // Red
+            GUI.Label(new Rect(35, 140, 20, 22), "R");
+
+            float r = GUI.HorizontalSlider(
+                new Rect(60, 145, 200, 20),
+                playerColor.r,
+                0f,
+                1f
+            );
+            
+            // Green
+            GUI.Label(new Rect(35, 170, 20, 22), "G");
+
+            float g = GUI.HorizontalSlider(
+                new Rect(60, 175, 200, 20),
+                playerColor.g,
+                0f,
+                1f
+            );
+            
+            // Blue
+            GUI.Label(new Rect(35, 200, 20, 22), "B");
+
+            float b = GUI.HorizontalSlider(
+                new Rect(60, 205, 200, 20),
+                playerColor.b,
+                0f,
+                1f
+            );
+            
+            // 선택된 색 적용
+            playerColor = new Color(r, g, b);
+            
+            GUI.Box(
+                new Rect(268, 138, 44, 84),
+                ""
+            );
+
+            // 선택된 색상 적용
+            colorPreviewTexture.SetPixel(0, 0, playerColor);
+            colorPreviewTexture.Apply();
+
+            // 실제 색상
+            GUI.DrawTexture(
+                new Rect(270, 140, 40, 80),
+                colorPreviewTexture
+            );
 
             // 붙는 중에는 다시 누르지 못하게 막는다.
             GUI.enabled = client.IsBusy == false;
 
             if (GUI.Button(new Rect(35, 112, 290, 30), client.IsBusy ? "들어가는 중…" : "들어가기"))
             {
-                client.Join(roomCode, nickName);
+                client.Join(roomCode, nickName, playerColor);
             }
 
             GUI.enabled = true;

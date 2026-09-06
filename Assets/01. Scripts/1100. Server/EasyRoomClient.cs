@@ -17,7 +17,7 @@ namespace WeGotOne
 
         private void Start()
         {
-            roomClient.Join(code, who);
+            roomClient.Join(code, who, Color.white);
         }
     }
 }

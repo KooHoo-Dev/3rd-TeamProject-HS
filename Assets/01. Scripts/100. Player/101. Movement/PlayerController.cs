@@ -1,5 +1,6 @@
 using System;
 using HelloServer;
+using TMPro;
 using UnityEngine;
 
 namespace WeGotOne
@@ -29,6 +30,8 @@ namespace WeGotOne
         [SerializeField] private BottomArmController leftBottomArm;
         [SerializeField] private BottomArmController rightBottomArm;
         [SerializeField] private PlayerStamina body;
+        
+        [SerializeField] private TMP_Text nick;
         
         public bool IsLeftGrab { get; private set; }
         public bool IsRightGrab { get; private set; }
@@ -189,6 +192,14 @@ namespace WeGotOne
         public void Setup(User user)
         {
             User = user;
+
+            nick.text = user.NickName;
+            
+            Color playerColor = new Color(
+                user.R,
+                user.G,
+                user.B
+            );
             
             // Body에 붙은 카메라 재설정
             SimpleFollowCamera cameraController = GetComponentInChildren<SimpleFollowCamera>(true);
@@ -197,6 +208,13 @@ namespace WeGotOne
             
             // 일단 임시용
             body.SetSpawnPoint(this.transform);
+            
+            SpriteRenderer[] sprites = GetComponentsInChildren<SpriteRenderer>();
+
+            for (int i = 0; i < sprites.Length; i++)
+            {
+                sprites[i].color = playerColor;
+            }
         }
         
         public float GetHighestHungerForce()

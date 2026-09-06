@@ -29,6 +29,8 @@ namespace HelloServer
 
         // 들어갈 방.
         [SerializeField] private string roomCode = "ABCD";
+        
+        [SerializeField] private Color playerColor = Color.white;
 
         [Header("장면")]
         // 내가 조종하는 캐릭터. 씬에 미리 놓아 둔다.
@@ -95,12 +97,13 @@ namespace HelloServer
 
         #endregion
 
-        public void Join(string code, string who)
+        public void Join(string code, string who, Color color)
         {
             if (IsBusy) return;
 
             roomCode = code;
             nickName = who;
+            playerColor = color;
 
             RunAsync().Forget();
         }
@@ -139,7 +142,7 @@ namespace HelloServer
 
             Debug.Log($"[방] {full} 에 접속.  : {nickName}");
             // 첫 마디는 반드시 hello 다. 서버가 이걸 받아야 번호를 줌.
-            await SendAsync(new HelloMessage { NickName = nickName });
+            await SendAsync(new HelloMessage { NickName = nickName , R = playerColor.r, G = playerColor.g, B = playerColor.b});
             // 보내기는 따로 돈다. 듣는 동안에도 계속 보내야함.
             SendLoop().Forget();
             await ReceiveLoopAsync();
