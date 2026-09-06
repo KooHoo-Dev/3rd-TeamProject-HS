@@ -27,18 +27,20 @@ namespace WeGotOne
         private bool isGuestVisualMode;
         private bool isHostResetPending;
 
+        #region unity methods
+
         private void Awake()
         {
             fishBody = GetComponent<Rigidbody2D>();
             mineLineRenderer = GetComponent<LineRenderer>();
             mineBody = mine.GetComponent<Rigidbody2D>();
             mineJoint = mine.GetComponent<DistanceJoint2D>();
-
+        
             initialMineLocalPosition = transform.InverseTransformPoint(mine.position);
             initialMineLocalRotation = Quaternion.Inverse(transform.rotation) * mine.rotation;
-
+        
         }
-
+        
         private void OnEnable()
         {
             isGuestVisualMode = false;
@@ -47,7 +49,7 @@ namespace WeGotOne
             mineJoint.enabled = false;
             isHostResetPending = true;
         }
-
+        
         private void OnDisable()
         {
             isHostResetPending = false;
@@ -57,33 +59,35 @@ namespace WeGotOne
             mineBody.simulated = false;
             mine.gameObject.SetActive(false);
         }
-
+        
         private void Start()
         {
             mine.SetParent(null, true);
         }
-
+        
         private void FixedUpdate()
         {
             if (isGuestVisualMode)
                 return;
-
+        
             if (isHostResetPending)
             {
                 ResetForHostPhysics();
                 isHostResetPending = false;
                 // return;
             }
-
+        
             // SyncConnectedAnchor();
         }
-
+        
         private void LateUpdate()
         {
             // mineJoint의 anchor의 x, y
             mineLineRenderer.SetPosition(0, transform.position);
             mineLineRenderer.SetPosition(1, mine.transform.position);
         }
+
+        #endregion
 
         public void EnterGuestVisualMode()
         {
