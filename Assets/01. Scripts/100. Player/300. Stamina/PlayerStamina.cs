@@ -39,6 +39,9 @@ namespace WeGotOne
         public float CurrentStamina => currentStamina;
         public float MaxStamina => maxStamina;
         private float staminaSoundTimer;
+        [SerializeField] public GameObject up;
+        [SerializeField] public GameObject down;
+        
         
         // 움직임 제어용
         public bool CanMove => currentStamina > 0f;
@@ -48,6 +51,8 @@ namespace WeGotOne
 
         private void Update()
         {
+            float beforeStamina = currentStamina;
+            
             if (CanRunLocalGameLogic)
             {
                 if (isInWater)
@@ -61,6 +66,8 @@ namespace WeGotOne
                 }
             }
 
+            UpdateStaminaDirection(beforeStamina);
+            
             UpdateStaminaUI();
         }
 
@@ -118,9 +125,22 @@ namespace WeGotOne
             }
 
             staminaSoundTimer = 0f;
-
+            
             StaminaGauge.transform.parent.DOPunchScale(Vector3.one * 0.2f, 0.3f);
             AudioManager.Instance.PlaySfx(AudioManager.Sfx.Pulse);
+        }
+        
+        private void UpdateStaminaDirection(float beforeStamina)
+        {
+            if (up != null)
+            {
+                up.SetActive(currentStamina > beforeStamina);
+            }
+
+            if (down != null)
+            {
+                down.SetActive(currentStamina < beforeStamina);
+            }
         }
         
         private float GetStaminaUpdateInterval()
@@ -173,7 +193,7 @@ namespace WeGotOne
 
             bool wasStarved = IsStarved;
             currentStamina = Mathf.Min( currentStamina + amount, maxStamina);
-
+            
             // 이전에 굶주린 상태였다가 회복이 되면
             if (wasStarved && IsStarved == false)
             {

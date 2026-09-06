@@ -37,6 +37,8 @@ namespace HelloServer
         [SerializeField] private PlayerController remotePrefab;
         private PlayerController localPlayer;
         [SerializeField] private Image staminaGauge;
+        [SerializeField] private GameObject up;
+        [SerializeField] private GameObject down;
 
         [Header("보내기")]
         // 초당 몇 번 내 위치를 보낼지.
@@ -303,6 +305,8 @@ namespace HelloServer
             remotes.TryGetValue(Me.Id, out PlayerController localPlayer);
             
             localPlayer.Body.StaminaGauge = staminaGauge;
+            localPlayer.Body.up = up;
+            localPlayer.Body.down = down;
             this.localPlayer = localPlayer;
             
             localPlayer.Setup(Me);
