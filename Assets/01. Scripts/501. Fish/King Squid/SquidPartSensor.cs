@@ -17,13 +17,13 @@ namespace WeGotOne
             manager = GetComponentInParent<FishStateManager>();
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        private void OnCollisionEnter2D(Collision2D other)
         {
             // 1. 다리(Tentacle) 센서: 플레이어 감지
             if (partType == SquidPartType.Tentacle)
             {
                 // 충돌체의 부모 계층에서 PlayerRoot 마커 컴포넌트 찾기
-                PlayerRoot targetPlayer = collision.GetComponentInParent<PlayerRoot>();
+                PlayerRoot targetPlayer = other.gameObject.GetComponentInParent<PlayerRoot>();
                 
                 if (targetPlayer != null)
                 {

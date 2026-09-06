@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -119,13 +120,13 @@ namespace WeGotOne.Fish_Interface
             Hunger = Random.Range(60f, 100f);
             lastEnteredWaterTime = -1;
             FishName = gameObject.name;
-            if (FishName.Contains("Squid"))
+            
+            switch (WorldItem.ItemId)
             {
-                AbductionDestination = GameObject.Find("Squid Destination").transform;
-            }
-            else if (FishName.Contains("Seahorse"))
-            {
-                AbductionDestination = GameObject.Find("Seahorse Destination").transform;
+                case 4: AbductionDestination = GameObject.Find("Squid Destination").transform;
+                    break;
+                case 9: AbductionDestination = GameObject.Find("Seahorse Destination").transform;
+                    break;
             }
 
             ObjectPool = FindFirstObjectByType<FishObjectPool>();
