@@ -94,6 +94,19 @@ namespace WeGotOne
         {
             IsPickUp = true;
             ResetTransformSnapshot();
+            if (TryGetComponent<Plank>(out _))
+            {
+                if (WorldItemRegistry.Instance.IsFixedWorldItem(WorldItemId))
+                {
+                    DeactivateFromSnapshot();
+                }
+                else
+                {
+                    FishObjectPool.Instance.ReleasePlank(this);
+                }
+                return;
+            }
+
             FishObjectPool.Instance.Release(this);
             gameObject.SetActive(false); // 나무가 사라지지 않아서 추가함
         }

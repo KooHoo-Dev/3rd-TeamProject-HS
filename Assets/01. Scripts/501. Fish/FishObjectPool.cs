@@ -8,9 +8,12 @@ namespace WeGotOne
     public sealed class FishObjectPool : SceneSingleton<FishObjectPool>
     {
         [SerializeField] private WorldItem[] fishPrefabs;
+        [SerializeField] private WorldItem[] plankPrefabs = Array.Empty<WorldItem>();
 
         private readonly Dictionary<int, Queue<WorldItem>> inactiveFishByItemId = new();
         private readonly HashSet<WorldItem> activeFish = new();
+        private readonly Dictionary<int, Queue<WorldItem>> inactivePlanksByItemId = new();
+        private readonly HashSet<WorldItem> activePlanks = new();
         private WorldItemRegistry worldItemRegistry;
 
         protected override void OnInitialize()
@@ -91,6 +94,80 @@ namespace WeGotOne
             {
                 Release(fish);
             }
+        }
+
+        public WorldItem GetPlank(int itemId)
+        {
+            if (inactivePlanksByItemId.TryGetValue(itemId, out Queue<WorldItem> inactivePlanks))
+            {
+                while (inactivePlanks.Count > 0)
+                {
+                    WorldItem pooledPlank = inactivePlanks.Dequeue();
+                    if (pooledPlank == null)
+                        continue;
+
+                    InitializePlank(pooledPlank);
+                    activePlanks.Add(pooledPlank);
+                    return pooledPlank;
+                }
+            }
+
+            WorldItem plank = Instantiate(FindPlankPrefab(itemId));
+            InitializePlank(plank);
+            activePlanks.Add(plank);
+            return plank;
+        }
+
+        public void ReleasePlank(WorldItem plank)
+        {
+            if (plank.TryGetComponent<Plank>(out _) == false ||
+                worldItemRegistry.IsFixedWorldItem(plank.WorldItemId))
+            {
+                throw new InvalidOperationException($"[FishObjectPool] 동적 Plank만 반환할 수 있습니다: {plank.name}");
+            }
+
+            plank.SetIsPickUp(false);
+            plank.DeactivateFromSnapshot();
+            if (plank.WorldItemId >= 0)
+            {
+                worldItemRegistry.UnregisterDynamic(plank.WorldItemId, out _);
+            }
+
+            activePlanks.Remove(plank);
+            if (inactivePlanksByItemId.TryGetValue(plank.ItemId, out Queue<WorldItem> inactivePlanks) == false)
+            {
+                inactivePlanks = new Queue<WorldItem>();
+                inactivePlanksByItemId.Add(plank.ItemId, inactivePlanks);
+            }
+
+            inactivePlanks.Enqueue(plank);
+        }
+
+        public void ReleaseAllActivePlanks()
+        {
+            var planks = new List<WorldItem>(activePlanks);
+            foreach (WorldItem plank in planks)
+            {
+                ReleasePlank(plank);
+            }
+        }
+
+        private WorldItem FindPlankPrefab(int itemId)
+        {
+            foreach (WorldItem prefab in plankPrefabs)
+            {
+                if (prefab.ItemId == itemId && prefab.TryGetComponent<Plank>(out _))
+                    return prefab;
+            }
+
+            throw new InvalidOperationException($"[FishObjectPool] ItemId {itemId}에 해당하는 Plank 프리팹을 찾을 수 없습니다.");
+        }
+
+        private void InitializePlank(WorldItem plank)
+        {
+            plank.ResetTransformSnapshot();
+            plank.SetIsPickUp(false);
+            plank.gameObject.SetActive(true);
         }
 
         private WorldItem FindFishPrefab(int itemId)

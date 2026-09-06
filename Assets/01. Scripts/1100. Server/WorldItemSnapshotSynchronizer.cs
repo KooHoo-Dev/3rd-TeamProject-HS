@@ -96,8 +96,15 @@ namespace WeGotOne
         private void ApplyFishes(FishState[] fishStates)
         {
             HashSet<int> receivedWorldItemIds = new();
-            HashSet<int> missingFishWorldItemIds = new HashSet<int>(worldItemRegistry.WorldItems.Keys);
-            missingFishWorldItemIds.ExceptWith(worldItemRegistry.FixedWorldItemIds);
+            HashSet<int> missingFishWorldItemIds = new();
+            foreach (WorldItem worldItem in worldItemRegistry.WorldItems.Values)
+            {
+                if (worldItem.TryGetComponent<Fish>(out _) &&
+                    worldItemRegistry.IsFixedWorldItem(worldItem.WorldItemId) == false)
+                {
+                    missingFishWorldItemIds.Add(worldItem.WorldItemId);
+                }
+            }
 
             foreach (FishState state in fishStates)
             {
@@ -147,6 +154,15 @@ namespace WeGotOne
         private void ApplyPlanks(PlankState[] plankStates)
         {
             HashSet<int> receivedWorldItemIds = new();
+            HashSet<int> missingPlankWorldItemIds = new();
+            foreach (WorldItem worldItem in worldItemRegistry.WorldItems.Values)
+            {
+                if (worldItem.TryGetComponent<Plank>(out _) &&
+                    worldItemRegistry.IsFixedWorldItem(worldItem.WorldItemId) == false)
+                {
+                    missingPlankWorldItemIds.Add(worldItem.WorldItemId);
+                }
+            }
 
             foreach (PlankState state in plankStates)
             {
@@ -155,26 +171,40 @@ namespace WeGotOne
 
                 if (worldItemRegistry.TryGetWorldItem(state.WorldItemId, out WorldItem worldItem) == false)
                 {
-                    Debug.LogWarning($"[WorldItemSnapshotSynchronizer] 고정 Plank WorldItemId를 찾을 수 없습니다: {state.WorldItemId}");
-                    continue;
+                    worldItem = FishObjectPool.Instance.GetPlank(state.ItemId);
+                    if (worldItemRegistry.RegisterDynamic(worldItem, state.WorldItemId) == false)
+                    {
+                        throw new InvalidOperationException($"[WorldItemSnapshotSynchronizer] 동적 Plank 등록에 실패했습니다: {state.WorldItemId}");
+                    }
                 }
 
                 if (worldItem.TryGetComponent(out Plank plank) == false)
                 {
-                    Debug.LogWarning($"[WorldItemSnapshotSynchronizer] WorldItemId가 Plank가 아닙니다: {state.WorldItemId}");
-                    continue;
+                    throw new InvalidOperationException($"[WorldItemSnapshotSynchronizer] WorldItemId가 Plank가 아닙니다: {state.WorldItemId}");
                 }
 
                 if (worldItem.ItemId != state.ItemId)
                 {
-                    Debug.LogWarning($"[WorldItemSnapshotSynchronizer] Plank ItemId가 일치하지 않습니다. WorldItemId={state.WorldItemId}, Local={worldItem.ItemId}, Remote={state.ItemId}");
-                    continue;
+                    throw new InvalidOperationException($"[WorldItemSnapshotSynchronizer] Plank ItemId가 일치하지 않습니다. WorldItemId={state.WorldItemId}, Local={worldItem.ItemId}, Remote={state.ItemId}");
                 }
 
                 bool wasActive = worldItem.gameObject.activeSelf;
                 worldItem.gameObject.SetActive(true);
+                if (worldItem.TryGetComponent(out Rigidbody2D rigidbody))
+                {
+                    rigidbody.bodyType = RigidbodyType2D.Kinematic;
+                    rigidbody.linearVelocity = Vector2.zero;
+                    rigidbody.angularVelocity = 0f;
+                }
                 plank.ApplySnapshot(state, wasActive == false);
                 receivedWorldItemIds.Add(state.WorldItemId);
+                missingPlankWorldItemIds.Remove(state.WorldItemId);
+            }
+
+            foreach (int worldItemId in missingPlankWorldItemIds)
+            {
+                worldItemRegistry.TryGetWorldItem(worldItemId, out WorldItem worldItem);
+                FishObjectPool.Instance.ReleasePlank(worldItem);
             }
 
             foreach (int worldItemId in worldItemRegistry.FixedWorldItemIds)
