@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &29252540 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4308768375793639637, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
+  m_PrefabInstance: {fileID: 150964412}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &54610531
 GameObject:
   m_ObjectHideFlags: 0
@@ -787,6 +792,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4308768375793639637, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4464772777405118100, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1096,6 +1105,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!1 &170255009 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 852106799000742700, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
+  m_PrefabInstance: {fileID: 150964412}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &181388781
 GameObject:
   m_ObjectHideFlags: 0
@@ -1457,9 +1471,17 @@ PrefabInstance:
       value: -2.7
       objectReference: {fileID: 0}
     - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: up
+      value: 
+      objectReference: {fileID: 170255009}
+    - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: url
       value: ws://34.50.63.204:5004/room
       objectReference: {fileID: 0}
+    - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: down
+      value: 
+      objectReference: {fileID: 29252540}
     - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: roomCode
       value: 1234
