@@ -28,6 +28,8 @@ namespace WeGotOne
             Content.sprite = shouldDisplay ? item.Icon : null;
             Content.enabled = shouldDisplay;
             ItemCountText.text = shouldDisplay ? count.ToString() : string.Empty;
+            Content.transform.DOKill();
+            Content.transform.localScale = Vector3.one;
             Content.transform.DOPunchScale(Vector3.one * 0.5f, 0.3f);
             ItemCountText.enabled = shouldDisplay;
         }
