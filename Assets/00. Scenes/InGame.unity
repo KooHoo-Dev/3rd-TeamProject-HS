@@ -3903,10 +3903,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3627117152060255483, guid: c1482c370817d47428f43be6b3d2cbf0, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1000
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6161,7 +6157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1efcb4b9cb440148a5556e9ec720aa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.EasyRoomClient
-  code: 1111
+  code: 123456
   who: 
 --- !u!4 &1679873783
 Transform:
