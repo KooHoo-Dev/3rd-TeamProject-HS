@@ -51,6 +51,8 @@ namespace WeGotOne
         private bool IsHost => RoomClient.Instance != null && 
                                RoomClient.Instance.Me != null && 
                                RoomClient.Instance.Me.IsHost;
+
+        public bool IsTargetChange = false;
         
         private GameObject[] CheckBoxes => new[]
         {
@@ -164,6 +166,7 @@ namespace WeGotOne
             //instructionText.text = "이제 힘을 합쳐 물고기와 나무를 건져서 육지로 향해야 한다!";
             currentStep = TutorialStep.Completed;
             arrivedIslandImage.SetActive(false); // 떨어진 후 바로 암전 끄기
+            GameManager.Instance.IsCamTargetChange = true;
             // 5초 뒤 UI 패널을 꺼줍니다.
             StartCoroutine(CloseTutorialUIPanel(5f));
         }
