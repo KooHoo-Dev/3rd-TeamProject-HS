@@ -4454,8 +4454,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1303722707}
   - component: {fileID: 1303722706}
+  - component: {fileID: 1303722708}
   m_Layer: 0
-  m_Name: NetworkDebugOnGUI
+  m_Name: IntegratedDebugUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4473,7 +4474,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da8da0f53e324e23ba4027edda7d9e5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HelloServer.NetworkDebugOnGUI
-  isDebugMode: 1
+--- !u!114 &1303722708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303722705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74c85642026b42f8a37ac290c356a921, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.IntegratedDebugUI
+  isDebug: 0
 --- !u!4 &1303722707
 Transform:
   m_ObjectHideFlags: 0

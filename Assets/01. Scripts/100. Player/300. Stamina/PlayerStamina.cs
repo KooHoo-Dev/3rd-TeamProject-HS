@@ -192,7 +192,8 @@ namespace WeGotOne
             if (CanRunLocalGameLogic == false) return;
 
             bool wasStarved = IsStarved;
-            currentStamina = Mathf.Min( currentStamina + amount, maxStamina);
+            // 디버그로 최대치를 넘긴 상태에서도 회복 때문에 스태미나가 줄지 않게 합니다.
+            currentStamina = Mathf.Min(currentStamina + amount, Mathf.Max(currentStamina, maxStamina));
             
             // 이전에 굶주린 상태였다가 회복이 되면
             if (wasStarved && IsStarved == false)
@@ -264,7 +265,8 @@ namespace WeGotOne
 
         public void ApplySnapshot(float snapshotCurrentStamina)
         {
-            currentStamina = Mathf.Clamp(snapshotCurrentStamina, 0f, maxStamina);
+            // 호스트가 설정한 최대치 초과 디버그 스태미나도 그대로 동기화합니다.
+            currentStamina = Mathf.Max(snapshotCurrentStamina, 0f);
             UpdateStamina();
         }
 
@@ -280,6 +282,18 @@ namespace WeGotOne
 
         // GameoverTester를 위한 테스트 메소드
         #region test methods
+
+        public void SetDebugStamina(float value)
+        {
+            if (CanRunLocalGameLogic == false) return;
+
+            bool wasStarved = IsStarved;
+            currentStamina = value;
+            if (wasStarved != IsStarved)
+                NotifyPlayerStarveStateChanged(IsStarved);
+
+            UpdateStamina();
+        }
 
         public void ResetStamina()
         {

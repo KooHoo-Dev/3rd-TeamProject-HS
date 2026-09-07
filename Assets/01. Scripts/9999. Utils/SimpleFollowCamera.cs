@@ -52,6 +52,12 @@ namespace WeGotOne
 
         private void SetFollowKey()
         {
+            if (IntegratedDebugUI.IsTeleportModeActive)
+            {
+                followedPlayerId = null;
+                return;
+            }
+
             if (RoomClient.IsInitialized == false 
                 || RoomClient.Instance.Me == null 
                 || RoomClient.Instance.SnapshotMessage == null)

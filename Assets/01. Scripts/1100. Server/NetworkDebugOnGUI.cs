@@ -10,7 +10,6 @@ namespace HelloServer
         private bool _showPlayerDetails;
         private bool _showFishDetails;
         private bool _showPlankDetails;
-        [SerializeField] private bool isDebugMode = true;
 
         private GUIStyle _labelStyle;
         private GUIStyle _headerStyle;
@@ -23,7 +22,7 @@ namespace HelloServer
             _labelStyle = new GUIStyle(GUI.skin.label)
             {
                 fontSize = 16,
-                wordWrap = false
+                wordWrap = true
             };
 
             _headerStyle = new GUIStyle(GUI.skin.label)
@@ -33,20 +32,18 @@ namespace HelloServer
             };
         }
 
-        private void OnGUI()
+        public void DrawPanel(Rect area)
         {
             InitStyles();
 
-            if (RoomClient.Instance == null)
+            if (!RoomClient.IsInitialized)
+            {
+                GUI.Box(area, "NETWORK DEBUG: RoomClient is not in this scene.");
                 return;
-            if (isDebugMode == false)
-                return;
-
-            float width = 600f;
-            float height = Screen.height - 40f;
+            }
 
             GUILayout.BeginArea(
-                new Rect(20, 20, width, height),
+                area,
                 GUI.skin.box
             );
 
