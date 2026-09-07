@@ -165,8 +165,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a100b9226d54193af72359219c7d097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.Electronic_Manta.ElectronicArea
-  duration: 2
+  paralysisDuration: 2
+  attackFalseDuration: 10
   stateManager: {fileID: 0}
+  electronicParticle: {fileID: 578475884373599875}
+  isAttack: 1
 --- !u!1 &8776392959758584489
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,7 +186,6 @@ GameObject:
   - component: {fileID: -2996254425505461127}
   - component: {fileID: -677358933537273645}
   - component: {fileID: -8931828668092451657}
-  - component: {fileID: 1702131265456152194}
   - component: {fileID: 8902882701052381400}
   - component: {fileID: 7367153974404243902}
   m_Layer: 6
@@ -303,7 +305,6 @@ MonoBehaviour:
   bulletPrefab: {fileID: 0}
   <AbductionDestination>k__BackingField: {fileID: 0}
   <PlayerAttachPosition>k__BackingField: {fileID: 0}
-  ElectronicParticle: {fileID: 2673784737444988017}
   IsAttack: 1
   FaintDuration: 0
   confusedParticle: {fileID: 53329325376203229}
@@ -383,20 +384,6 @@ MonoBehaviour:
   obstacleCheckSize: {x: 4, y: 4}
   obstacleCheckDistance: 5
   detectCooldown: 0.1
---- !u!114 &1702131265456152194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8776392959758584489}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60f9fa6142264d42b099ef8351606b7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishBaitCollider
-  fishStateManager: {fileID: 0}
-  detectingRange: {fileID: 0}
 --- !u!60 &8902882701052381400
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -716,14 +703,14 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b63f52eeb2e042448c2ed34a602b5d2, type: 3}
+--- !u!1 &578475884373599875 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5689866049215704285, guid: 5b63f52eeb2e042448c2ed34a602b5d2, type: 3}
+  m_PrefabInstance: {fileID: 5111972360147782238}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &951135653538577951 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5458999436981662785, guid: 5b63f52eeb2e042448c2ed34a602b5d2, type: 3}
-  m_PrefabInstance: {fileID: 5111972360147782238}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &2673784737444988017 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7199688775104745007, guid: 5b63f52eeb2e042448c2ed34a602b5d2, type: 3}
   m_PrefabInstance: {fileID: 5111972360147782238}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7571210159845770611
