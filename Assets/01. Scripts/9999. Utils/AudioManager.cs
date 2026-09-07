@@ -25,7 +25,9 @@ namespace WeGotOne
         Pulse = 0,
         PopGrab,
         PopRelease,
-        Confused
+        Confused,
+        GetItem,
+        BridgeBuild
     }
 
     public enum Bgm

@@ -61,7 +61,7 @@ PrefabInstance:
     - target: {fileID: 190988408655193050, guid: 1c9bdc02d6e458a488a733f0d5be844a, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 226215c560d7ca747a87c2de5948fa1b, type: 3}
+      objectReference: {fileID: 21300000, guid: 72017037b19b03e49b29f0aa86cdfcaa, type: 3}
     - target: {fileID: 3386227498907075715, guid: 1c9bdc02d6e458a488a733f0d5be844a, type: 3}
       propertyPath: m_Name
       value: Second Area Spawn Point 5
@@ -131,7 +131,7 @@ PrefabInstance:
     - target: {fileID: 190988408655193050, guid: 1c9bdc02d6e458a488a733f0d5be844a, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 56f7042ebf00a3a44855c4047c67e066, type: 3}
+      objectReference: {fileID: 21300000, guid: 72017037b19b03e49b29f0aa86cdfcaa, type: 3}
     - target: {fileID: 3386227498907075715, guid: 1c9bdc02d6e458a488a733f0d5be844a, type: 3}
       propertyPath: m_Name
       value: Second Area Spawn Point 2
@@ -201,7 +201,7 @@ PrefabInstance:
     - target: {fileID: 190988408655193050, guid: 1c9bdc02d6e458a488a733f0d5be844a, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: fd493036fae6c9c46910998d78175b6d, type: 3}
+      objectReference: {fileID: 21300000, guid: 72017037b19b03e49b29f0aa86cdfcaa, type: 3}
     - target: {fileID: 3386227498907075715, guid: 1c9bdc02d6e458a488a733f0d5be844a, type: 3}
       propertyPath: m_Name
       value: Second Area Spawn Point 4
@@ -271,7 +271,7 @@ PrefabInstance:
     - target: {fileID: 190988408655193050, guid: 1c9bdc02d6e458a488a733f0d5be844a, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 3f32751a69655b14aa267ab4c3ed5f67, type: 3}
+      objectReference: {fileID: 21300000, guid: 72017037b19b03e49b29f0aa86cdfcaa, type: 3}
     - target: {fileID: 3386227498907075715, guid: 1c9bdc02d6e458a488a733f0d5be844a, type: 3}
       propertyPath: m_Name
       value: Second Area Spawn Point 3
@@ -341,7 +341,7 @@ PrefabInstance:
     - target: {fileID: 190988408655193050, guid: 1c9bdc02d6e458a488a733f0d5be844a, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 3f32751a69655b14aa267ab4c3ed5f67, type: 3}
+      objectReference: {fileID: 21300000, guid: 72017037b19b03e49b29f0aa86cdfcaa, type: 3}
     - target: {fileID: 3386227498907075715, guid: 1c9bdc02d6e458a488a733f0d5be844a, type: 3}
       propertyPath: m_Name
       value: Second Area Spawn Point 6
@@ -411,7 +411,7 @@ PrefabInstance:
     - target: {fileID: 190988408655193050, guid: 1c9bdc02d6e458a488a733f0d5be844a, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1357370589685489666, guid: cbb54c62beab7184f87f03f38e96a4c7, type: 3}
+      objectReference: {fileID: 21300000, guid: 72017037b19b03e49b29f0aa86cdfcaa, type: 3}
     - target: {fileID: 3386227498907075715, guid: 1c9bdc02d6e458a488a733f0d5be844a, type: 3}
       propertyPath: m_Name
       value: Second Area Spawn Point 1
