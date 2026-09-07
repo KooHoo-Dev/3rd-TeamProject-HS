@@ -60,15 +60,14 @@ namespace WeGotOne
             if (Application.isPlaying)
                 GetComponent<SpriteRenderer>().enabled = false; 
             
-            worldItemRegistry = FindFirstObjectByType<WorldItemRegistry>();
-            
             waterArea = GameObject.Find("WaterBorderLine").GetComponent<Collider2D>();
         }
 
         private IEnumerator Start()
         {
-            yield return new WaitUntil(() => ItemManager.Instance.IsInitialized);
+            yield return new WaitUntil(() => ItemManager.Instance.IsInitialized && WorldItemRegistry.IsInitialized);
             fishItem = ItemManager.Instance.Get(itemId);
+            worldItemRegistry = WorldItemRegistry.Instance;
         }
 
         public void Spawn()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +15,11 @@ namespace WeGotOne
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            worldItemRegistry = GetComponent<WorldItemRegistry>();
+        }
+
+        private void Start()
+        {
+            worldItemRegistry = WorldItemRegistry.Instance;
         }
 
         public WorldItem Get(int itemId)

@@ -7,19 +7,17 @@ using WeGotOne.Fish_Interface;
 
 namespace WeGotOne
 {
-    public sealed class WorldItemSnapshotSynchronizer : MonoBehaviour
+    public sealed class WorldItemSnapshotSynchronizer : SceneSingleton<WorldItemSnapshotSynchronizer>
     {
         private WorldItemRegistry worldItemRegistry;
 
-        private void Awake()
-        {
-            worldItemRegistry = GetComponent<WorldItemRegistry>();
-        }
-
         private IEnumerator Start()
         {
-            yield return new WaitUntil(() => RoomClient.Instance != null && RoomClient.Instance.Me != null);
+            yield return new WaitUntil(() => RoomClient.Instance != null 
+                                             && RoomClient.Instance.Me != null 
+                                             && WorldItemRegistry.IsInitialized);
 
+            worldItemRegistry = WorldItemRegistry.Instance;
             if (RoomClient.Instance.Me.IsHost == false)
             {
                 LockFixedPlanksForGuest();

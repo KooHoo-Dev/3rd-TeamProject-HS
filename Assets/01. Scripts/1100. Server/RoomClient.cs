@@ -89,7 +89,6 @@ namespace HelloServer
             base.OnInitialize();
             // true로 해둬야 백그라운드에서도 데이터 수신 가능
             Application.runInBackground = true;
-            worldItemSynchronizer = FindFirstObjectByType<WorldItemSnapshotSynchronizer>();
         }
 
         private void OnDestroy()
@@ -254,11 +253,6 @@ namespace HelloServer
 
             foreach (PlayerState state in message.Players)
             {
-                // snapshot에 자기자신도 있어서 제거
-                // if (state.Id == Me.Id)
-                // {
-                //     localPlayer.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
-                // }
                 if (remotes.TryGetValue(state.Id, out PlayerController remote))
                 {
                     remote.ApplySnapshot(state, state.IsLeftGrab, state.IsRightGrab);
@@ -269,7 +263,11 @@ namespace HelloServer
             // 스냅샷의 다리 개수만큼 게스트의 다리 오브젝트 활성화
             // BridgeManager.Instance.BuildBridgeWithoutCost(message.CurrentBridgeCount);
             BridgeManager.Instance.ApplySnapshot(message.CurrentBridgeCount);
-            worldItemSynchronizer?.ApplySnapshot(message);
+            if (worldItemSynchronizer == null)
+            {
+                worldItemSynchronizer = WorldItemSnapshotSynchronizer.Instance;
+            }
+            worldItemSynchronizer.ApplySnapshot(message);
             
             GameManager.Instance.ApplySnapshot(message.ActivePlayerCount, message.ArrivedPlayerCount);
             InventoryItemDB.Instance.ApplySnapshot(message.InventoryEntries);
@@ -521,7 +519,11 @@ namespace HelloServer
                 var snapshot = new SnapshotMessage();
 
                 // 2. 월드 아이템은 Registry 기준으로 활성 객체만 패킹한다.
-                worldItemSynchronizer?.PackActiveWorldItems(snapshot);
+                if (worldItemSynchronizer == null)
+                {
+                    worldItemSynchronizer = WorldItemSnapshotSynchronizer.Instance;
+                }
+                worldItemSynchronizer.PackActiveWorldItems(snapshot);
 
                 // 3. [플레이어 상태 연동]: 나와 다른 게스트 플레이어들의 상태 채우기
                 var playerStates = new List<PlayerState>();
