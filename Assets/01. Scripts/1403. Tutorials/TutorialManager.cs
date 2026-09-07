@@ -28,6 +28,13 @@ namespace WeGotOne
         [SerializeField] private GameObject textBoxPanel;
         [SerializeField] private TMP_Text instructionText;
         
+        [Header("User Ready CheckBox UI")]
+        [SerializeField] private GameObject checkBoxUICanvas;
+        [SerializeField] private GameObject playerCheckBox_First;
+        [SerializeField] private GameObject playerCheckBox_Second;
+        [SerializeField] private GameObject playerCheckBox_Thrid;
+        [SerializeField] private GameObject playerCheckBox_Foruth;
+        
         [Header("World Elements")]
         [SerializeField] private GameObject floor; // Lobby Floor
         [SerializeField] private Collider2D landingZoneTrigger; // LandingZoneTrigger
@@ -63,6 +70,7 @@ namespace WeGotOne
             currentStep = TutorialStep.KeyboardGuide;
             
             tutorialCanvas.SetActive(true);
+            checkBoxUICanvas.SetActive(false);
             keyboardImage.SetActive(true);
             textBoxPanel.SetActive(true);
             
@@ -84,6 +92,7 @@ namespace WeGotOne
                     if (Keyboard.current.spaceKey.wasPressedThisFrame)
                     {
                         keyboardImage.SetActive(false);
+                        checkBoxUICanvas.SetActive(true);
                         
                         // 3. 텍스트 변경
                         instructionText.text = "플레이 준비가 완료되면 [F] 키를 꾹 눌러주세요.";
@@ -125,9 +134,12 @@ namespace WeGotOne
 
             // Storm 이미지 비활성화
             stormImage.SetActive(false);
+            textBoxPanel.SetActive(false);
+            arrivedIslandImage.SetActive(true);
 
             // 5. GameLobyArea의 Floor 비활성화 (낙하 유도)
             if (floor != null) floor.SetActive(false);
+            checkBoxUICanvas.SetActive(false);
             
             instructionText.text = "";
             currentStep = TutorialStep.Falling;
@@ -145,11 +157,11 @@ namespace WeGotOne
             {
                 if (boundary != null) boundary.SetActive(false);
             }
-
+            
             // 7. 땅에 떨어진 후 텍스트 문구 교체
             //instructionText.text = "이제 힘을 합쳐 물고기와 나무를 건져서 육지로 향해야 한다!";
             currentStep = TutorialStep.Completed;
-    
+            arrivedIslandImage.SetActive(false); // 떨어진 후 바로 암전 끄기
             // 5초 뒤 UI 패널을 꺼줍니다.
             StartCoroutine(CloseTutorialUIPanel(5f));
         }
