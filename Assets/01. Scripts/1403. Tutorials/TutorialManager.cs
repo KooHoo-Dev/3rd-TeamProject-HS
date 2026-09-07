@@ -187,7 +187,6 @@ namespace WeGotOne
             }
             
             isStartButtonPressed = isStartButtonPress;
-            Debug.Log($"isStartButtonPressed: {isStartButtonPressed}, {readyCount}/{totalCount}");
 
             if (currentStep == TutorialStep.WaitAllReady 
                 && isStartButtonPressed 
