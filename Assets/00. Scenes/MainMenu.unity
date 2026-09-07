@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 171323491}
   - component: {fileID: 171323492}
   m_Layer: 5
-  m_Name: GameStart
+  m_Name: GameStart(RoomClient)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -399,7 +399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 810bdfb19dcb94b4186121c042588960, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HelloServer.RoomClient
-  url: ws://localhost:5000/room
+  url: ws://34.50.63.204:5004/room
   nickName: "\uC774\uB984\uC5C6\uC74C"
   roomCode: ABCD
   playerColor: {r: 1, g: 1, b: 1, a: 1}
