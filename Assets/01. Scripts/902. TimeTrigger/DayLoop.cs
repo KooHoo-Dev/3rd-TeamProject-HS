@@ -26,6 +26,9 @@ namespace WeGotOne
         
         [Header("낮/밤 타이머 UI")]
         [SerializeField] public Image DayTimer;
+        [SerializeField] public Image TimeImage;
+        [SerializeField] public Sprite TimeDay;
+        [SerializeField] public Sprite TimeNight;
         
         private DayType currentDayType = DayType.Day;
         private float elapsedTime;
@@ -82,8 +85,6 @@ namespace WeGotOne
             Debug.Log($"[DayLoop] 밤낮 전환: {dayType}");
             OnDayChanged?.Invoke();
             PlayTransitionDayChange(dayType);
-            
-
         }
         
         // [게스트 전용] 스냅샷으로 수신한 IsDay 값을 로컬 상태에 반영
@@ -131,6 +132,8 @@ namespace WeGotOne
             float targetAlpha = dayType == DayType.Night ? 1f : 0f;
             float targetIntensity = dayType == DayType.Night ? 0.1f : 1f;
 
+            TimeImage.sprite = dayType == DayType.Night ? TimeNight : TimeDay;
+            
             DOTween.Sequence()
                 .Append(nightSprite.DOFade(targetAlpha, transitionTime))
                 .Join(
