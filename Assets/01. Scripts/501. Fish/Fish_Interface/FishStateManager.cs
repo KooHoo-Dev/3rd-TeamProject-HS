@@ -93,12 +93,16 @@ namespace WeGotOne.Fish_Interface
 
         // 기절 파티클용
         [SerializeField] public ParticleSystem confusedParticle;
-
+        [field: SerializeField] public GameObject RunawayParticle { get; set; }
+        
         public float StartPosY { get; set; }
+        
+        public Animator Animator { get; set; }
 
         private void Awake()
         {
             WorldItem = GetComponent<WorldItem>();
+            Animator = GetComponent<Animator>();
         }
 
         private void OnEnable()

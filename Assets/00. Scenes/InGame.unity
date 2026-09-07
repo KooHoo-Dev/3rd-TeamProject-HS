@@ -3714,6 +3714,10 @@ PrefabInstance:
       propertyPath: itemId
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1813238513343995071, guid: cfe5017191bab504ca272d8224157642, type: 3}
+      propertyPath: itemId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2204593070247582987, guid: cfe5017191bab504ca272d8224157642, type: 3}
       propertyPath: itemId
       value: 3
@@ -3862,6 +3866,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 3f32751a69655b14aa267ab4c3ed5f67, type: 3}
+    - target: {fileID: 8997677717323337478, guid: cfe5017191bab504ca272d8224157642, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 72017037b19b03e49b29f0aa86cdfcaa, type: 3}
     - target: {fileID: 9030490967593517787, guid: cfe5017191bab504ca272d8224157642, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -4356,7 +4364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1efcb4b9cb440148a5556e9ec720aa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.EasyRoomClient
-  code: 89745153
+  code: 156184945
   who: HiHi
 --- !u!4 &1679873783
 Transform:
@@ -5042,6 +5050,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 315a094ba5087f3468018c6576f8a4a2, type: 3}
   - {fileID: 8300000, guid: 474fc939759cbbb4687e40836c4d377f, type: 3}
   - {fileID: 8300000, guid: df389de434dd2094ebd2ee29db2502b8, type: 3}
+  - {fileID: 8300000, guid: 107214b9f92bdcf4ba69f57da01ada6e, type: 3}
   - {fileID: 8300000, guid: 107214b9f92bdcf4ba69f57da01ada6e, type: 3}
   sfxVolume: 1
   channels: 16
