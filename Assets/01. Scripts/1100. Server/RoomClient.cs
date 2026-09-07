@@ -249,6 +249,8 @@ namespace HelloServer
             {
                 return;
             }
+            
+            await UniTask.Yield(PlayerLoopTiming.PreLateUpdate);
 
             if (socket.State == WebSocketState.Open)
             {
