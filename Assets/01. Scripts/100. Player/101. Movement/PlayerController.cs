@@ -193,7 +193,7 @@ namespace WeGotOne
         {
             User = user;
 
-            nick.text = user.NickName;
+            // nick.text = user.NickName;
             
             Color playerColor = new Color(
                 user.R,

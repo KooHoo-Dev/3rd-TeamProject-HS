@@ -1,3 +1,4 @@
+using System;
 using HelloServer;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -42,6 +43,34 @@ namespace WeGotOne
         }
 
 
+        private void Update()
+        {
+            SetFollowKey();
+        }
+
+        private void SetFollowKey()
+        {
+            if (RoomClient.IsInitialized == false 
+                || RoomClient.Instance.Me == null 
+                || RoomClient.Instance.SnapshotMessage == null)
+            {
+                followedPlayerId = null;
+                return;
+            }
+            
+            Keyboard keyboard = Keyboard.current;
+            PlayerState[] players = RoomClient.Instance.SnapshotMessage?.Players;
+
+            for (int i = 0; i < players.Length; i++)
+            {
+                if (keyboard[FollowKeys[i]].wasPressedThisFrame)
+                {
+                    followKey = FollowKeys[i];
+                    followedPlayerId = players[i].Id;
+                }
+            }
+        }
+
         private void LateUpdate()
         {
             switch(State)
@@ -59,7 +88,8 @@ namespace WeGotOne
                     // =======================
                     // 아래의 보간내용은 (transform.position)을 (Target.position + offset)으로 초당 (lerpSpeed) 속도로
                     // 계속 가깝게 만드는 코드 입니다. Target.position이 멀다면 더 빨리, 가깝다면 느리게
-                    Vector3 lerpPos = Vector3.Lerp(Cam.transform.position, GetFollowPosition() + offset, lerpSpeed * Time.deltaTime);
+                    Vector3 targetPos = GetFollowPosition();
+                    Vector3 lerpPos = Vector3.Lerp(Cam.transform.position, targetPos + offset, lerpSpeed * Time.deltaTime);
                     lerpPos.z = Cam.transform.position.z; // 2D의 경우 z는 바뀌지 않습니다.
                     Cam.transform.position = lerpPos;
                     break;
@@ -68,29 +98,8 @@ namespace WeGotOne
 
         private Vector3 GetFollowPosition()
         {
-            // Instance 접근으로 오프라인 씬에 RoomClient가 생성되지 않도록 먼저 확인합니다.
-            if (!RoomClient.IsInitialized || RoomClient.Instance.Me == null)
-            {
-                followedPlayerId = null;
-                return Target.position;
-            }
-
             Keyboard keyboard = Keyboard.current;
             PlayerState[] players = RoomClient.Instance.SnapshotMessage?.Players;
-            if (keyboard == null || players == null)
-            {
-                followedPlayerId = null;
-                return Target.position;
-            }
-
-            for (int i = 0; i < FollowKeys.Length; i++)
-            {
-                if (keyboard[FollowKeys[i]].wasPressedThisFrame)
-                {
-                    followKey = FollowKeys[i];
-                    followedPlayerId = i < players.Length ? players[i].Id : null;
-                }
-            }
 
             if (followedPlayerId != null && keyboard[followKey].isPressed)
             {

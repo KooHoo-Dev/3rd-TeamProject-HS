@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
+using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -69,6 +70,7 @@ namespace HelloServer
         // SSG 커스텀 : 플레이어 맞춰서 편집
         private readonly Dictionary<string, PlayerController> remotes = new Dictionary<string, PlayerController>();
         private readonly HashSet<string> arrivedPlayerIds = new HashSet<string>();
+        private readonly List<string> cameraIdList = new List<string>();
 
         // 오간 말. 너무 쌓이지 않게 앞에서부터 버린다.
         private readonly List<string> chatLog = new List<string>();
@@ -300,9 +302,11 @@ namespace HelloServer
             // 호스트이면 즉시 반영
             // 게스트이면 호스트 스냅샷만 반영 (입력값 비활성화)
             if (Spawn(message.User)) GameManager.Instance.AddPlayer();
+            UpdateUserText(true, message.User.Id);
             foreach (User user in message.Users)
             {
                 if (Spawn(user)) GameManager.Instance.AddPlayer();
+                UpdateUserText(true, user.Id);
             }
 
             remotes.TryGetValue(Me.Id, out PlayerController localPlayer);
@@ -312,12 +316,14 @@ namespace HelloServer
             localPlayer.Body.down = down;
             this.localPlayer = localPlayer;
             
-            localPlayer.Setup(Me);
+            // Spawn할때 자동으로 해줘서 뺌
+            // localPlayer.Setup(Me);
         }
 
         private void OnJoin(JoinMessage message)
         {
             if (Spawn(message.User)) GameManager.Instance.AddPlayer();
+            UpdateUserText(true, message.User.Id);
             Debug.Log($"[방] {message.User.NickName}({message.User.Id}) 이(가) 들어왔다");
         }
 
@@ -337,6 +343,7 @@ namespace HelloServer
 
             remotes.Remove(message.Id);
             Destroy(remote.gameObject);
+            UpdateUserText(false, message.Id);
 
             // 씬 다시 로드하도록 설정
             if (message.Id == Me.Id)
@@ -345,6 +352,32 @@ namespace HelloServer
                 SceneManager.LoadScene(0);
             }
             Debug.Log($"[방] {message.Id} 이(가) 나갔다");
+        }
+
+        // Spawn, Leave시 플레이어 텍스트 업데이트
+        // 상당히 난잡함 (추후 리팩토링 필요)
+        private void UpdateUserText(bool isAdd, string userId)
+        {
+            string id = userId.Substring(1);
+            if (isAdd)
+            {
+                // Spawn될때
+                // OnWelcome이나 OnJoin시 스폰되면 Id에 추가
+                cameraIdList.Add(id);
+            }
+            else
+            {
+                // OnLeave시 플레이어가 나가면 Id에 없애기
+                cameraIdList.Remove(id);
+            }
+            cameraIdList.Sort((a, b) => int.Parse(a).CompareTo(int.Parse(b)));
+            for (int i = 0; i < cameraIdList.Count; i++)
+            {
+                string currentUserId = $"u{cameraIdList[i]}";
+                PlayerController player = remotes[currentUserId];
+                TMP_Text playerText = player.GetComponentInChildren<TMP_Text>();
+                playerText.SetText($"{i+1}. {player.User.NickName}");
+            }
         }
 
         public void SetPlayerArrived(string playerId, bool isArrived)
