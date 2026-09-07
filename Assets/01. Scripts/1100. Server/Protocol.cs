@@ -38,6 +38,7 @@ namespace HelloServer
         
         public bool IsLeftGrab { get; set; }
         public bool IsRightGrab { get; set; }
+        public bool IsFKeyPressed { get; set; }
     }
 
     public class PartState
@@ -136,6 +137,9 @@ namespace HelloServer
         public bool IsDay { get; set; }      // 흐른 시간 혹은 DayLoop 상태
         public int ActivePlayerCount { get; set; }
         public int ArrivedPlayerCount { get; set; }
+        public int TutorialReadyCount { get; set; }
+        public int TutorialTotalCount { get; set; }
+        public bool IsStartButtonPressed { get; set; }
     }
     
 

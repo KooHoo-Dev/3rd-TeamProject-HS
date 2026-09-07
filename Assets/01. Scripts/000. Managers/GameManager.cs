@@ -28,6 +28,9 @@ namespace WeGotOne
         [SerializeField] private int activePlayerCount;
         private readonly HashSet<string> arrivedPlayerIds = new HashSet<string>();
         private bool isGameFinished;
+
+        public bool IsCamTargetChange = false;
+        public GameObject[] CheckPoints;
         
         #region unity events
 

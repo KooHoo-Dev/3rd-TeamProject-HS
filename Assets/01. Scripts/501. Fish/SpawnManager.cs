@@ -70,6 +70,7 @@ namespace WeGotOne
                 return;
             }
 
+            GameManager.Instance.IsCamTargetChange = true;
             fishObjectPool.ReleaseAllActiveFish();
             currentStage = nextStage;
             currentGroupIndex = 0;

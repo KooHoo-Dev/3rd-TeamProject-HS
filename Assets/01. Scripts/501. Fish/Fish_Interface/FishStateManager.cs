@@ -86,9 +86,6 @@ namespace WeGotOne.Fish_Interface
         [field: SerializeField] public Transform PlayerAttachPosition { get; set; }
         public Transform PlayerRootPosition { get; set; }
 
-        [Header("감전 기믹 설정")] // 가오리 감전 설정
-        public ParticleSystem ElectronicParticle;
-
         [Header("공격 가능 여부")]
         public bool IsAttack = true;
         [Header("기절 쿨타임")]
@@ -96,12 +93,16 @@ namespace WeGotOne.Fish_Interface
 
         // 기절 파티클용
         [SerializeField] public ParticleSystem confusedParticle;
-
+        [field: SerializeField] public GameObject RunawayParticle { get; set; }
+        
         public float StartPosY { get; set; }
+        
+        public Animator Animator { get; set; }
 
         private void Awake()
         {
             WorldItem = GetComponent<WorldItem>();
+            Animator = GetComponent<Animator>();
         }
 
         private void OnEnable()
@@ -295,23 +296,6 @@ namespace WeGotOne.Fish_Interface
                 // 납치 상태로 전환
                 ChangeState(new AbductionState());
             }
-        }
-
-        #endregion
-
-        #region 가오리
-
-        public async UniTask ElectronicAttackActive(CancellationToken token)
-        {
-            Debug.Log("Task Enter" + FaintDuration);
-            ElectronicParticle.gameObject.SetActive(false);
-            IsAttack = false;
-
-            await UniTask.Delay(System.TimeSpan.FromSeconds(FaintDuration), cancellationToken: token);
-
-            Debug.Log("Task Exit");
-            ElectronicParticle.gameObject.SetActive(true);
-            IsAttack = true;
         }
 
         #endregion

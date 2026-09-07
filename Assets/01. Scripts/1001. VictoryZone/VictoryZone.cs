@@ -29,8 +29,8 @@ namespace WeGotOne
                 PlayerController playerController = other.GetComponentInParent<PlayerController>();
                 if (playerController == null || playerController.User == null) return;
 
-                RoomClient.Instance.SetPlayerArrived(playerController.User.Id, false);
-                GameManager.Instance.RemoveArrivedPlayerCount(playerController.User.Id);
+                RoomClient.Instance?.SetPlayerArrived(playerController.User.Id, false);
+                GameManager.Instance?.RemoveArrivedPlayerCount(playerController.User.Id);
             }
         }
 

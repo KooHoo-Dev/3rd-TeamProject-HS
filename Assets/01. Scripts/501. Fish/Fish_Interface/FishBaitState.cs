@@ -32,7 +32,6 @@ namespace WeGotOne.Fish_Interface
             
             Vector2 direction = (targetStateManager.transform.position - owner.transform.position).normalized;
             owner.FishMovement.Move(direction, baitSpeed);
-            Debug.Log(direction);
             
             float distance = Vector2.Distance(owner.transform.position, targetStateManager.transform.position);
             if (distance < waypointTolerance)
@@ -52,7 +51,6 @@ namespace WeGotOne.Fish_Interface
                 Debug.Log("Attack false");
                 owner.ObjectPool.Release(owner.BaitInfo.gameObject.GetComponent<WorldItem>());
                 owner.ChangeState(new FishFaintState());   
-                owner.ElectronicAttackActive(owner.destroyCancellationToken).Forget();
                 
             }
             else
