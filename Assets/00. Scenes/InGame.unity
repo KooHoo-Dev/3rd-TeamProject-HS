@@ -693,6 +693,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2307576398138914596, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2307576398138914596, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2307576398138914596, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2367522459392228913, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -929,6 +941,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4635826463020316687, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
+      propertyPath: m_Name
+      value: Time
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867395722103154140, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1456422079140348055, guid: abef6170f1db24d4c930cd7fc33f8f63, type: 3}
     - target: {fileID: 5400706451005396615, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -3490,6 +3510,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1404192090 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4867395722103154140, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
+  m_PrefabInstance: {fileID: 150964412}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1001 &1466134117
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5144,6 +5175,9 @@ MonoBehaviour:
   transitionTime: 1
   cycleDuration: 150
   DayTimer: {fileID: 150964414}
+  TimeImage: {fileID: 1404192090}
+  TimeDay: {fileID: -1456422079140348055, guid: abef6170f1db24d4c930cd7fc33f8f63, type: 3}
+  TimeNight: {fileID: 2355475221416841579, guid: a6b99defa4973b849b01e186a72c95cd, type: 3}
 --- !u!4 &2139654533
 Transform:
   m_ObjectHideFlags: 0
