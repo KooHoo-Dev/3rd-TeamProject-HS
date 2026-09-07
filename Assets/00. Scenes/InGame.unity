@@ -3189,7 +3189,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8080963686581137030, guid: c1482c370817d47428f43be6b3d2cbf0, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8742166810574589288, guid: c1482c370817d47428f43be6b3d2cbf0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3623,7 +3623,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1303722706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4459,7 +4459,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.EasyRoomClient
   code: 1515
-  who: HiHi
+  who: 
 --- !u!4 &1679873783
 Transform:
   m_ObjectHideFlags: 0
