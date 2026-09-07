@@ -1,4 +1,7 @@
+using System;
+using HelloServer;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace WeGotOne
 {
@@ -20,6 +23,10 @@ namespace WeGotOne
         private Camera Cam { get; set; }
         private States State { get; set; }
 
+        private static readonly Key[] FollowKeys = { Key.Digit1, Key.Digit2, Key.Digit3, Key.Digit4 };
+        private Key followKey;
+        private string followedPlayerId;
+
         private void Start()
         {
             Cam = Camera.main;
@@ -35,6 +42,34 @@ namespace WeGotOne
             }
         }
 
+
+        private void Update()
+        {
+            SetFollowKey();
+        }
+
+        private void SetFollowKey()
+        {
+            if (RoomClient.IsInitialized == false 
+                || RoomClient.Instance.Me == null 
+                || RoomClient.Instance.SnapshotMessage == null)
+            {
+                followedPlayerId = null;
+                return;
+            }
+            
+            Keyboard keyboard = Keyboard.current;
+            PlayerState[] players = RoomClient.Instance.SnapshotMessage?.Players;
+
+            for (int i = 0; i < players.Length; i++)
+            {
+                if (keyboard[FollowKeys[i]].wasPressedThisFrame)
+                {
+                    followKey = FollowKeys[i];
+                    followedPlayerId = players[i].Id;
+                }
+            }
+        }
 
         private void LateUpdate()
         {
@@ -53,11 +88,39 @@ namespace WeGotOne
                     // =======================
                     // 아래의 보간내용은 (transform.position)을 (Target.position + offset)으로 초당 (lerpSpeed) 속도로
                     // 계속 가깝게 만드는 코드 입니다. Target.position이 멀다면 더 빨리, 가깝다면 느리게
-                    Vector3 lerpPos = Vector3.Lerp(Cam.transform.position, Target.position + offset, lerpSpeed * Time.deltaTime);
+                    Vector3 targetPos = GetFollowPosition();
+                    Vector3 lerpPos = Vector3.Lerp(Cam.transform.position, targetPos + offset, lerpSpeed * Time.deltaTime);
                     lerpPos.z = Cam.transform.position.z; // 2D의 경우 z는 바뀌지 않습니다.
                     Cam.transform.position = lerpPos;
                     break;
             }
+        }
+
+        private Vector3 GetFollowPosition()
+        {
+            Keyboard keyboard = Keyboard.current;
+            PlayerState[] players = RoomClient.Instance.SnapshotMessage?.Players;
+
+            if (followedPlayerId != null && keyboard[followKey].isPressed)
+            {
+                // 배열 순서가 바뀌어도 누를 때 선택한 플레이어를 계속 따라갑니다.
+                foreach (PlayerState player in players)
+                {
+                    if (player.Id == followedPlayerId)
+                    {
+                        return new Vector3(player.Body.X, player.Body.Y, Target.position.z);
+                    }
+                }
+            }
+
+            // 키 해제 또는 대상 퇴장 시 기존 자신의 Target으로 복귀합니다.
+            followedPlayerId = null;
+            return Target.position;
+        }
+
+        private void OnDisable()
+        {
+            followedPlayerId = null;
         }
 
         public void ChangeState(States state)
@@ -69,6 +132,7 @@ namespace WeGotOne
             }
 
             State = state;
+            followedPlayerId = null;
         }
 
     }
