@@ -2117,6 +2117,7 @@ RectTransform:
   - {fileID: 811596672}
   - {fileID: 1552211795}
   - {fileID: 1326831988}
+  - {fileID: 910149499}
   m_Father: {fileID: 1301396094}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2929,13 +2930,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 910149498}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 161824732}
-  m_Father: {fileID: 1301396094}
+  m_Father: {fileID: 560290229}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2985,19 +2986,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 910149501}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1544721331}
-        m_TargetAssemblyTypeName: WeGotOne.TutorialManager, Assembly-CSharp
-        m_MethodName: HandleStartButton
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &910149501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4438,7 +4427,6 @@ RectTransform:
   m_Children:
   - {fileID: 560290229}
   - {fileID: 1201842729}
-  - {fileID: 910149499}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -6561,7 +6549,6 @@ SceneRoots:
   - {fileID: 121925465}
   - {fileID: 970589876}
   - {fileID: 1098127944}
-  - {fileID: 1301396094}
   - {fileID: 1393854046}
   - {fileID: 1107890025}
   - {fileID: 660525033}
@@ -6570,4 +6557,5 @@ SceneRoots:
   - {fileID: 2030178771}
   - {fileID: 1544721332}
   - {fileID: 1679873783}
+  - {fileID: 1301396094}
   - {fileID: 155681063}
