@@ -453,7 +453,6 @@ namespace HelloServer
                 
                 bool hostHolding = Keyboard.current != null && Keyboard.current.fKey.isPressed;
                 int guestHoldingCount = 0;
-
                 if (GuestInputGroupMessage != null)
                 {
                     foreach (var input in GuestInputGroupMessage.Inputs)
@@ -461,9 +460,8 @@ namespace HelloServer
                         if (input != null && input.IsBuildKeyHold) guestHoldingCount++;
                     }
                 }
-
                 snapshot.TutorialReadyCount = (hostHolding ? 1 : 0) + guestHoldingCount;
-                snapshot.TutorialTotalCount = RemoteCount + 1;
+                snapshot.TutorialTotalCount = RemoteCount;
                 
                 
                 if (DayLoop.Instance != null)

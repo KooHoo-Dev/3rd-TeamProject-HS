@@ -130,6 +130,8 @@ namespace HelloServer
         public bool IsDay { get; set; }      // 흐른 시간 혹은 DayLoop 상태
         public int ActivePlayerCount { get; set; }
         public int ArrivedPlayerCount { get; set; }
+        public int TutorialReadyCount { get; set; }
+        public int TutorialTotalCount { get; set; }
     }
     
 
