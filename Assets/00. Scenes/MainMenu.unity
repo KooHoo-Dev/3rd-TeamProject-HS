@@ -614,7 +614,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.GameStartOption
   nickName: "\uAF2C\uB9C8\uB3CC"
-  roomCode: 1234
+  roomCode: 123456
   joinButton: {fileID: 1527753753}
   joinButtonText: {fileID: 424768281}
   nameText: {fileID: 165298045}
@@ -2574,7 +2574,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: roomCode
-      value: 12345666
+      value: 12356423123
       objectReference: {fileID: 0}
     - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: remotePrefab
