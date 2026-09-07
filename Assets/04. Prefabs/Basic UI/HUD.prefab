@@ -48,7 +48,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9043771406167630768}
   m_Layer: 0
-  m_Name: Up
+  m_Name: Stamina Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1358,6 +1358,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3819697091826222718, guid: 1927cd707e62e0046b0fdb995396b2a0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1456422079140348055, guid: abef6170f1db24d4c930cd7fc33f8f63, type: 3}
+    - target: {fileID: 3953033756184255405, guid: 1927cd707e62e0046b0fdb995396b2a0, type: 3}
+      propertyPath: m_Name
+      value: Time
+      objectReference: {fileID: 0}
+    - target: {fileID: 6235256054867219590, guid: 1927cd707e62e0046b0fdb995396b2a0, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6235256054867219590, guid: 1927cd707e62e0046b0fdb995396b2a0, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6235256054867219590, guid: 1927cd707e62e0046b0fdb995396b2a0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7121128349115351703, guid: 1927cd707e62e0046b0fdb995396b2a0, type: 3}
       propertyPath: m_Name
       value: TimeUI
@@ -1387,6 +1407,18 @@ PrefabInstance:
     - target: {fileID: 3396057179552960036, guid: f97a7dd5ec88b0b4f9f7415d7cb150b1, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4681538610355503863, guid: f97a7dd5ec88b0b4f9f7415d7cb150b1, type: 3}
+      propertyPath: m_Name
+      value: Stamina Down
+      objectReference: {fileID: 0}
+    - target: {fileID: 4681538610355503863, guid: f97a7dd5ec88b0b4f9f7415d7cb150b1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751931607026650383, guid: f97a7dd5ec88b0b4f9f7415d7cb150b1, type: 3}
+      propertyPath: m_Name
+      value: Stamina Fill
       objectReference: {fileID: 0}
     - target: {fileID: 4973261303138163613, guid: f97a7dd5ec88b0b4f9f7415d7cb150b1, type: 3}
       propertyPath: m_Color.b
@@ -1518,7 +1550,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7806785253887664001, guid: f97a7dd5ec88b0b4f9f7415d7cb150b1, type: 3}
       propertyPath: m_Name
-      value: HungerUI
+      value: StaminaUI
       objectReference: {fileID: 0}
     - target: {fileID: 7811771417498761785, guid: f97a7dd5ec88b0b4f9f7415d7cb150b1, type: 3}
       propertyPath: m_FillAmount

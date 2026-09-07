@@ -18,7 +18,7 @@ namespace HelloServer
     // RoomClient가 서버와의 네트워크 작업을 담당한다.
     // 송신, 수신 등을 모두 처리하는 객체
     // 씬에 종속적이지 않음
-    public class RoomClient : SceneSingleton<RoomClient>
+    public class RoomClient : SingletonBase<RoomClient>
     {
         [Header("서버")]
         // 웹소켓 주소. http 가 아니라 ws로 시작.
@@ -39,9 +39,9 @@ namespace HelloServer
         // 남이 들어올 때마다 이걸로 하나씩 만든다.
         [SerializeField] private PlayerController remotePrefab;
         private PlayerController localPlayer;
-        [SerializeField] private Image staminaGauge;
-        [SerializeField] private GameObject up;
-        [SerializeField] private GameObject down;
+        private Image staminaGauge;
+        private GameObject up;
+        private GameObject down;
 
         [Header("보내기")]
         // 초당 몇 번 내 위치를 보낼지.
@@ -109,6 +109,11 @@ namespace HelloServer
 
             RunAsync().Forget();
         }
+
+        public void Join()
+        {
+            Join(roomCode, nickName, playerColor);
+        }
         
         public bool IsBusy { get; private set; }
 
@@ -143,6 +148,7 @@ namespace HelloServer
             }
 
             Debug.Log($"[방] {full} 에 접속.  : {nickName}");
+            await SceneManager.LoadSceneAsync(1).ToUniTask();
             // 첫 마디는 반드시 hello 다. 서버가 이걸 받아야 번호를 줌.
             await SendAsync(new HelloMessage { NickName = nickName , R = playerColor.r, G = playerColor.g, B = playerColor.b});
             // 보내기는 따로 돈다. 듣는 동안에도 계속 보내야함.
@@ -327,6 +333,7 @@ namespace HelloServer
         {
             Me = message.User;
             RoomCode = message.RoomCode;
+            
             GameManager.Instance.ResetNetworkPlayerCounts();
             arrivedPlayerIds.Clear();
 
@@ -344,7 +351,19 @@ namespace HelloServer
             }
 
             remotes.TryGetValue(Me.Id, out PlayerController localPlayer);
-            
+
+            if (staminaGauge == null)
+            {
+                staminaGauge = GameObject.Find("Stamina Fill").GetComponent<Image>();
+            }
+            if (up == null)
+            {
+                up = GameObject.Find("Stamina Up");
+            }
+            if (down == null)
+            {
+                down = GameObject.Find("Stamina Down");
+            }
             localPlayer.Body.StaminaGauge = staminaGauge;
             localPlayer.Body.up = up;
             localPlayer.Body.down = down;
@@ -439,6 +458,11 @@ namespace HelloServer
             // InputBranch X
             // 호스트 X / Me X
             // InputBranch X
+            // if (spawnPoint == null)
+            // {
+            //     spawnPoint = GameObject.FindGameObjectWithTag("Player Spawn Point").transform;
+            // }
+            Debug.Log($"[방] {user.NickName}({user.Id}) 이(가) 스폰한다");
             if (remotes.ContainsKey(user.Id)) return false;
 
             PlayerController remote = Instantiate(remotePrefab, spawnPoint.position, Quaternion.identity);

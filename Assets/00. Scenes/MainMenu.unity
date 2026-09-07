@@ -404,11 +404,7 @@ MonoBehaviour:
   roomCode: ABCD
   playerColor: {r: 1, g: 1, b: 1, a: 1}
   remotePrefab: {fileID: 0}
-  staminaGauge: {fileID: 0}
-  up: {fileID: 0}
-  down: {fileID: 0}
   sendPerSecond: 20
-  spawnPoint: {fileID: 0}
 --- !u!1 &181802075
 GameObject:
   m_ObjectHideFlags: 0
@@ -1408,6 +1404,87 @@ RectTransform:
   m_AnchoredPosition: {x: -125, y: 185}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &983702787
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 77250204946707768, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: m_Name
+      value: RoomClient
+      objectReference: {fileID: 0}
+    - target: {fileID: 6646491063213981602, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7758014116864251977, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7758014116864251977, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.38889
+      objectReference: {fileID: 0}
+    - target: {fileID: 7758014116864251977, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7758014116864251977, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7758014116864251977, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7758014116864251977, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7758014116864251977, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7758014116864251977, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7758014116864251977, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7758014116864251977, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: roomCode
+      value: 12345
+      objectReference: {fileID: 0}
+    - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+      propertyPath: remotePrefab
+      value: 
+      objectReference: {fileID: 4725110930171532697, guid: df2d511637c3aa44bb348d6b1ae70706, type: 3}
+    m_RemovedComponents:
+    - {fileID: 6646491063213981602, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+--- !u!114 &1012490783 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
+  m_PrefabInstance: {fileID: 983702787}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 810bdfb19dcb94b4186121c042588960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HelloServer.RoomClient
 --- !u!1 &1017615228
 GameObject:
   m_ObjectHideFlags: 0
@@ -3305,9 +3382,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 181802080}
-        m_TargetAssemblyTypeName: WeGotWon.ButtonManager, Assembly-CSharp
-        m_MethodName: OnMatching
+      - m_Target: {fileID: 1012490783}
+        m_TargetAssemblyTypeName: HelloServer.RoomClient, Assembly-CSharp
+        m_MethodName: Join
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4554,3 +4631,4 @@ SceneRoots:
   - {fileID: 1931068899}
   - {fileID: 181802079}
   - {fileID: 1781038677}
+  - {fileID: 983702787}
