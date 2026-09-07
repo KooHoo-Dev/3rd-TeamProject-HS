@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace WeGotWon
+namespace WeGotOne
 {
     public class NameTag : MonoBehaviour
     {

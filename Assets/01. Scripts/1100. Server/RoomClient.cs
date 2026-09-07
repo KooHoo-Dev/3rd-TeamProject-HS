@@ -153,6 +153,40 @@ namespace HelloServer
             IsBusy = false;
             Me = null;
         }
+        
+        private async UniTaskVoid EnterAsync()
+        {
+            IsBusy = true;
+
+            socket = new ClientWebSocket();
+
+            // 방 코드는 주소에 실어 보낸다.  ws://localhost:5000/room?code=ABCD
+            string full = $"{url}?code={UnityWebRequest.EscapeURL(roomCode)}";
+
+            try
+            {
+                // socket을 통해 해당 주소로 접속한다. UnitTask를 사용한다
+                await socket.ConnectAsync(new Uri(full), destroyCancellationToken).AsUniTask();
+            }
+            catch (Exception e)
+            {
+                // 서버가 안 켜져 있는 것은 오류가 아니라 흔한 일이다. 수업 중에 반드시 일어난다.
+                Debug.LogWarning($"[방] 접속하지 못했다. 서버가 켜져 있는지, 방 코드가 맞는지 확인 : {e.Message}");
+
+                IsBusy = false;
+                return;
+            }
+
+            Debug.Log($"[방] {full} 에 접속.  : {nickName}");
+            // 첫 마디는 반드시 hello 다. 서버가 이걸 받아야 번호를 줌.
+            await SendAsync(new HelloMessage { NickName = nickName , R = playerColor.r, G = playerColor.g, B = playerColor.b});
+            await ReceiveLoopAsync();
+
+            // 여기까지 오면 끊긴 것.
+            IsBusy = false;
+            Me = null;
+        }
+        
 
         #region 듣기
 
