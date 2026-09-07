@@ -79,9 +79,6 @@ namespace WeGotOne
                 Debug.LogError("[WorldItemSnapshotSynchronizer] 동기화에 필요한 참조가 없습니다.");
                 return;
             }
-            
-            Debug.Log(FishObjectPool.Instance == null);
-            Debug.Log(worldItemRegistry == null);
 
             ApplyFishes(snapshot.Fishes ?? Array.Empty<FishState>());
             ApplyPlanks(snapshot.Planks ?? Array.Empty<PlankState>());
