@@ -1,4 +1,7 @@
+using Cysharp.Threading.Tasks;
+using HelloServer;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace WeGotOne
 {
@@ -8,17 +11,25 @@ namespace WeGotOne
         [SerializeField] private GameObject gameCanvas;
         public void OnMatching()
         {
-            gameCanvas.SetActive(true);
+            if(gameCanvas != null)
+                gameCanvas.SetActive(true);
         }
         
         public void OnSettings()
         {
-            optionCanvas.SetActive(true);
+            if(optionCanvas != null)
+                optionCanvas.SetActive(true);
         }
         
         public void OnExit()
         {
             Application.Quit();
+        }
+        
+        public void OnMainMenu()
+        {
+            RoomClient.Instance.QuitGame().Forget();
+            SceneManager.LoadScene("MainMenu");
         }
     }
 }

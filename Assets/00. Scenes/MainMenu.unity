@@ -617,9 +617,9 @@ MonoBehaviour:
   roomCode: 1234
   joinButton: {fileID: 1527753753}
   joinButtonText: {fileID: 424768281}
-  nameText: {fileID: 0}
+  nameText: {fileID: 165298045}
   namePreText: {fileID: 281211523506438114}
-  roomText: {fileID: 0}
+  roomText: {fileID: 529538560}
   selectedColor: {r: 1, g: 1, b: 1, a: 1}
   circlePalette: {fileID: 1935538028}
   picker: {fileID: 265963278}
@@ -4555,7 +4555,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.OptionManager
   optionCanvas: {fileID: 600881325}
-  mainButton: {fileID: 0}
+  mainButton: {fileID: 1777287251}
 --- !u!114 &1931068896
 MonoBehaviour:
   m_ObjectHideFlags: 0
