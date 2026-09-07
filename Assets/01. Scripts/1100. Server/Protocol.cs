@@ -35,6 +35,7 @@ namespace HelloServer
         
         public bool IsLeftGrab { get; set; }
         public bool IsRightGrab { get; set; }
+        public bool IsFKeyPressed { get; set; }
     }
 
     public class PartState
