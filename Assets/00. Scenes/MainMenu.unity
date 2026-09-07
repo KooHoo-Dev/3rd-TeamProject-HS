@@ -617,9 +617,9 @@ MonoBehaviour:
   roomCode: 1234
   joinButton: {fileID: 1527753753}
   joinButtonText: {fileID: 424768281}
-  nameText: {fileID: 165298045}
+  nameText: {fileID: 0}
   namePreText: {fileID: 281211523506438114}
-  roomText: {fileID: 529538560}
+  roomText: {fileID: 0}
   selectedColor: {r: 1, g: 1, b: 1, a: 1}
   circlePalette: {fileID: 1935538028}
   picker: {fileID: 265963278}
@@ -2574,7 +2574,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: roomCode
-      value: 12345
+      value: 12345666
       objectReference: {fileID: 0}
     - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: remotePrefab
@@ -3224,6 +3224,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1159504570}
   m_CullTransparentMesh: 1
+--- !u!1001 &1182004579
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 699719290234973766, guid: 9bcc916aaad44574d9926679feb56cb5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 699719290234973766, guid: 9bcc916aaad44574d9926679feb56cb5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 699719290234973766, guid: 9bcc916aaad44574d9926679feb56cb5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 699719290234973766, guid: 9bcc916aaad44574d9926679feb56cb5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 699719290234973766, guid: 9bcc916aaad44574d9926679feb56cb5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 699719290234973766, guid: 9bcc916aaad44574d9926679feb56cb5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 699719290234973766, guid: 9bcc916aaad44574d9926679feb56cb5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 699719290234973766, guid: 9bcc916aaad44574d9926679feb56cb5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 699719290234973766, guid: 9bcc916aaad44574d9926679feb56cb5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 699719290234973766, guid: 9bcc916aaad44574d9926679feb56cb5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6733356166813313168, guid: 9bcc916aaad44574d9926679feb56cb5, type: 3}
+      propertyPath: m_Name
+      value: AudioManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9bcc916aaad44574d9926679feb56cb5, type: 3}
 --- !u!1 &1206502303
 GameObject:
   m_ObjectHideFlags: 0
@@ -4498,7 +4555,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.OptionManager
   optionCanvas: {fileID: 600881325}
-  mainButton: {fileID: 1777287251}
+  mainButton: {fileID: 0}
 --- !u!114 &1931068896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6239,3 +6296,4 @@ SceneRoots:
   - {fileID: 181802079}
   - {fileID: 1781038677}
   - {fileID: 983702787}
+  - {fileID: 1182004579}

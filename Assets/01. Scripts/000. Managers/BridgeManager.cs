@@ -34,9 +34,9 @@ namespace WeGotOne
 
         private async void Start()
         {
-            BridgeObjects = bridgeTransform.GetComponentsInChildren<Bridge>(true);
             try
             {
+                BridgeObjects = bridgeTransform.GetComponentsInChildren<Bridge>(true);
                 await UniTask.WaitUntil(() => ItemManager.Instance.IsInitialized);
                 bridgeTable = await BridgeTable.LoadAsync(ItemManager.Instance.Items);
             }

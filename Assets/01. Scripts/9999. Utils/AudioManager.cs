@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace WeGotOne
 {
-    public class AudioManager : SceneSingleton<AudioManager>
+    public class AudioManager : SingletonBase<AudioManager>
 {
     /*
      * 예전에 적어둔건데 돌려쓰고 있어서 긁어왓습니다.

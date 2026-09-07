@@ -19,6 +19,7 @@ namespace WeGotOne
             UnityEditor.EditorApplication.delayCall += UpdatePreviewAsync;
         }
 
+        // 에디터 전용이라 예외처리 안함
         private async void UpdatePreviewAsync()
         {
             if (this == null || Application.isPlaying || UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)

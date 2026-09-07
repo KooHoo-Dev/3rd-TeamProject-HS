@@ -35,6 +35,7 @@ namespace WeGotOne
             throw new KeyNotFoundException($"존재하지 않는 ItemId입니다: {itemId}");
         }
 
+        // tsv 로드 중에 예외나면 그냥 문제 있는 거임
         private async void LoadItemsAsync()
         {
             List<ItemDto> itemDtos = await TSVReader.ReadTableAsync<ItemDto>("ItemData", true);
