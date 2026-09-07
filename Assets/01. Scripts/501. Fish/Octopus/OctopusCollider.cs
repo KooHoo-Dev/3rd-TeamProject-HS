@@ -18,7 +18,8 @@ namespace WeGotOne
             if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 target = other.gameObject.GetComponentInParent<PlayerController>();
-                fishStateManager.ChangeState(new FishOctopusState(target.Body.transform));
+                if(fishStateManager.CurrentState is FishOctopusState == false)
+                    fishStateManager.ChangeState(new FishOctopusState(target.Body.transform));
             }
         }
 

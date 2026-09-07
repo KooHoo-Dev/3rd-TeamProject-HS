@@ -37,11 +37,9 @@ namespace WeGotOne
 
             if (target == null)
             {
-                owner.ChangeState(new FishIdleState());
+                Exit();
                 return;
             }
-
-            hasShot = false;
 
             ShootBullet();
         }
@@ -50,7 +48,7 @@ namespace WeGotOne
         {
             if (target == null)
             {
-                owner.ChangeState(new FishIdleState());
+                Exit();
                 return;
             }
 
@@ -64,6 +62,8 @@ namespace WeGotOne
 
         public void Exit()
         {
+            hasShot = false;
+            owner.ChangeState(new FishIdleState());
         }
 
         private void ShootBullet()
@@ -76,16 +76,17 @@ namespace WeGotOne
             
             if (owner.BulletPrefab == null)
             {
-                owner.ChangeState(new FishIdleState());
+                Exit();
             }
-            
+
             if (bulletInstance == null)
             {
                 bulletInstance = Object.Instantiate(owner.BulletPrefab);
 
                 bulletInstance.SetActive(false);
             }
-            
+            else return;
+
             bulletInstance.transform.position = owner.transform.position;
             bulletInstance.transform.rotation = Quaternion.identity;
 
@@ -114,7 +115,7 @@ namespace WeGotOne
 
             if (runawayTimer >= runawayDuration)
             {
-                owner.ChangeState(new FishIdleState());
+                Exit();
             }
         }
     }
