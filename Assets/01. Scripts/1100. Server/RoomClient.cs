@@ -227,8 +227,8 @@ namespace HelloServer
                 SnapshotMessage = message;
                 
                 // 호스트는 스냅샷을 만든 시점에 이미 값을 알고 있으니 즉시 UI 반영
-                if (tutorialManager != null)
-                    tutorialManager.UpdateReadyState(message.TutorialReadyCount, message.TutorialTotalCount);
+                // if (tutorialManager != null)
+                //     tutorialManager.UpdateReadyState(message.TutorialReadyCount, message.TutorialTotalCount);
 
                 
                 return;
@@ -261,8 +261,8 @@ namespace HelloServer
                 DayLoop.Instance.DayApplyFromNetwork(message.IsDay);
             }
             
-            if (tutorialManager != null)
-                tutorialManager.UpdateReadyState(message.TutorialReadyCount, message.TutorialTotalCount);
+            // if (tutorialManager != null)
+            //     tutorialManager.UpdateReadyState(message.TutorialReadyCount, message.TutorialTotalCount);
             Debug.Log(GetJson(message));
             SnapshotMessage = message;
         }
@@ -450,8 +450,8 @@ namespace HelloServer
                 }
 
                 snapshot.Players = playerStates.ToArray();
-                
-                bool hostHolding = Keyboard.current != null && Keyboard.current.fKey.isPressed;
+
+                bool hostHolding = localPlayer.IsBuild;
                 int guestHoldingCount = 0;
                 if (GuestInputGroupMessage != null)
                 {
@@ -462,6 +462,7 @@ namespace HelloServer
                 }
                 snapshot.TutorialReadyCount = (hostHolding ? 1 : 0) + guestHoldingCount;
                 snapshot.TutorialTotalCount = RemoteCount;
+                Debug.Log($"{snapshot.TutorialReadyCount}/{snapshot.TutorialTotalCount}");
                 
                 
                 if (DayLoop.Instance != null)

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -43,6 +44,7 @@ namespace WeGotOne
         private TutorialStep currentStep = TutorialStep.NotStarted;
         private bool isHost;
         private bool isStormCoroutineRunning = false;
+        private bool isStartButtonPressed = false;
 
         private bool IsHost => RoomClient.Instance != null && 
                                RoomClient.Instance.Me != null && 
@@ -100,6 +102,17 @@ namespace WeGotOne
             }
         }
 
+        private void LateUpdate()
+        {
+            if (RoomClient.IsInitialized
+                && RoomClient.Instance.Me != null
+                && RoomClient.Instance.SnapshotMessage != null)
+            {
+                SnapshotMessage snapshotMessage = RoomClient.Instance.SnapshotMessage;
+                UpdateReadyState(snapshotMessage.TutorialReadyCount, snapshotMessage.TutorialTotalCount);
+            }
+        }
+        
         // 2. [요청 사양] Storm 이미지 3초 작동 코루틴
         private IEnumerator PlayStormSequence()
         {
@@ -167,10 +180,18 @@ namespace WeGotOne
                 boxes[i].SetActive(i < readyCount);
             }
 
-            if (currentStep == TutorialStep.WaitAllReady && totalCount > 0 && readyCount >= totalCount)
+            if (currentStep == TutorialStep.WaitAllReady 
+                && isStartButtonPressed 
+                && totalCount > 0 
+                && readyCount >= totalCount)
             {
                 StartCoroutine(PlayStormSequence());
             }
+        }
+
+        public void HandleStartButton()
+        {
+            isStartButtonPressed = true;
         }
     }
 }
