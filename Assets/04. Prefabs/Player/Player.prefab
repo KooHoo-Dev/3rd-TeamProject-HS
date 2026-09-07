@@ -549,7 +549,6 @@ Transform:
   - {fileID: 1517081501488529322}
   - {fileID: 1627699194457586316}
   - {fileID: 1316996673529449918}
-  - {fileID: 8619711230360024755}
   m_Father: {fileID: 3406981031449218974}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4807226759339566173
@@ -1500,6 +1499,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6545353165074942946}
+  - {fileID: 8619711230360024755}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &528338847005338557
@@ -1546,6 +1546,7 @@ GameObject:
   - component: {fileID: 8619711230360024755}
   - component: {fileID: 1311119373562486864}
   - component: {fileID: 3074995230057644118}
+  - component: {fileID: 9221293475267493550}
   m_Layer: 10
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1565,7 +1566,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6545353165074942946}
+  m_Father: {fileID: 3406981031449218974}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1716,6 +1717,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 1311119373562486864}
   m_maskType: 0
+--- !u!114 &9221293475267493550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8876946171053164279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b63faa927ccde74e8789e4abc5eedc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotWon.NameTag
+  target: {fileID: 6545353165074942946}
+  offset: {x: 0, y: 1.5, z: 0}
 --- !u!1001 &865313416472630992
 PrefabInstance:
   m_ObjectHideFlags: 0
