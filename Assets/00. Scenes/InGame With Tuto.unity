@@ -2985,7 +2985,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 910149501}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1544721331}
+        m_TargetAssemblyTypeName: WeGotOne.TutorialManager, Assembly-CSharp
+        m_MethodName: HandleStartButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &910149501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6549,6 +6561,7 @@ SceneRoots:
   - {fileID: 121925465}
   - {fileID: 970589876}
   - {fileID: 1098127944}
+  - {fileID: 1301396094}
   - {fileID: 1393854046}
   - {fileID: 1107890025}
   - {fileID: 660525033}
@@ -6557,5 +6570,4 @@ SceneRoots:
   - {fileID: 2030178771}
   - {fileID: 1544721332}
   - {fileID: 1679873783}
-  - {fileID: 1301396094}
   - {fileID: 155681063}
