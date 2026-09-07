@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7758014116864251977}
-  - component: {fileID: 6646491063213981602}
   - component: {fileID: 8266702139256692037}
   m_Layer: 0
   m_Name: RoomClient
@@ -34,21 +33,6 @@ Transform:
   - {fileID: 8206142639208193814}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6646491063213981602
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 77250204946707768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 048741b19b0c4bd98b650d15f17e13d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HelloServer.RoomLobby
-  nickName: Host
-  roomCode: 4444
-  playerColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &8266702139256692037
 MonoBehaviour:
   m_ObjectHideFlags: 0

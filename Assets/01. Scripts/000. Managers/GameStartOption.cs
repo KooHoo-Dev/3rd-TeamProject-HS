@@ -9,15 +9,15 @@ namespace WeGotOne
     {
         [Header("처음 값")]
         [SerializeField] private string nickName = "꼬마돌";
-        [SerializeField] private string roomCode = "ABCD";
-        
-        private RoomClient client;
+        [SerializeField] private string roomCode = "1234";
         
         [SerializeField] private Button joinButton;
         [SerializeField] private TMP_Text joinButtonText;
         
-        [SerializeField] private TMP_Text nameText;
+        [SerializeField] private TMP_InputField nameText;
         [SerializeField] private TMP_Text namePreText;
+        
+        [SerializeField] private TMP_InputField roomText;
         
         // 컬러 피커 부분
         public Color selectedColor = Color.white;
@@ -28,14 +28,12 @@ namespace WeGotOne
         
         private void Awake()
         {
-            client = GetComponent<RoomClient>();
-            
             paletteCollider = circlePalette.GetComponent<CircleCollider2D>();
         }
         
         private void Update()
         {
-            bool canJoin = !client.IsBusy;
+            bool canJoin = !RoomClient.Instance.IsBusy;
 
             joinButton.interactable = canJoin;
 
@@ -44,16 +42,21 @@ namespace WeGotOne
         
         public void JoinRoom()
         {
-            if (client.IsBusy)
+            if (RoomClient.Instance.IsBusy)
                 return;
-
-            client.Join(roomCode, nickName, selectedColor);
+            
+            RoomClient.Instance.Join(roomCode, nickName, selectedColor);
         }
 
         public void SetName()
         {
             nickName = nameText.text;
             namePreText.text = nameText.text;
+        }
+
+        public void SetRoomCode()
+        {
+            roomCode = roomText.text;
         }
 
         # region 컬러 피커 함수

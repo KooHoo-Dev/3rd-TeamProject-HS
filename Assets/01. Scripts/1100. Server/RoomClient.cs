@@ -102,17 +102,12 @@ namespace HelloServer
         public void Join(string code, string who, Color color)
         {
             if (IsBusy) return;
-
+            
             roomCode = code;
             nickName = who;
             playerColor = color;
 
             RunAsync().Forget();
-        }
-
-        public void Join()
-        {
-            Join(roomCode, nickName, playerColor);
         }
         
         public bool IsBusy { get; private set; }
@@ -132,7 +127,7 @@ namespace HelloServer
 
             // 방 코드는 주소에 실어 보낸다.  ws://localhost:5000/room?code=ABCD
             string full = $"{url}?code={UnityWebRequest.EscapeURL(roomCode)}";
-
+            
             try
             {
                 // socket을 통해 해당 주소로 접속한다. UnitTask를 사용한다
@@ -248,6 +243,21 @@ namespace HelloServer
             }
         }
 
+        public async UniTask QuitGame()
+        {
+            if (socket == null)
+            {
+                return;
+            }
+
+            if (socket.State == WebSocketState.Open)
+            {
+                socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Leave Room", CancellationToken.None);
+            }
+            
+            IsBusy = false;
+        }
+
         // 받은 글자 하나를 종류에 따라 나눠 준다.
         private void Handle(string json)
         {
@@ -328,9 +338,33 @@ namespace HelloServer
 
             GuestInputGroupMessage = message;
         }
+        
+        private void ClearInfo()
+        {
+            for (int i = 0; i < cameraIdList.Count; i++)
+            {
+                string id = $"u{cameraIdList[i]}";
+
+                if (remotes.TryGetValue(id, out PlayerController player))
+                {
+                    if (player != null)
+                    {
+                        Destroy(player.gameObject);
+                    }
+                }
+            }
+
+            remotes.Clear();
+            cameraIdList.Clear();
+            arrivedPlayerIds.Clear();
+
+            localPlayer = null;
+        }
 
         private void OnWelcome(WelcomeMessage message)
         {
+            ClearInfo();
+            
             Me = message.User;
             RoomCode = message.RoomCode;
             

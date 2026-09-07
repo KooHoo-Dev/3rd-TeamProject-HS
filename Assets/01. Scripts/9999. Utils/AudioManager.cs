@@ -55,13 +55,13 @@ namespace WeGotOne
     {
         base.OnInitialize();
         Init();
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        //SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     protected override void OnDispose()
     {
         base.OnDispose();
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        //SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     // 플레이어 생성 부분인데 BGM은 한 씬당 하나만 나오면 되니까 채널 나눌 필요가 없는데,
