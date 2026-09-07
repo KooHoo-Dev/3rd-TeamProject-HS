@@ -35,6 +35,7 @@ namespace WeGotOne
         [SerializeField] private GameObject playerCheckBox_Second;
         [SerializeField] private GameObject playerCheckBox_Thrid;
         [SerializeField] private GameObject playerCheckBox_Foruth;
+        [SerializeField] private GameObject startButton;
         
         [Header("World Elements")]
         [SerializeField] private GameObject floor; // Lobby Floor
@@ -80,6 +81,7 @@ namespace WeGotOne
             
             tutorialCanvas.SetActive(true);
             checkBoxUICanvas.SetActive(false);
+            startButton.SetActive(false);
             keyboardImage.SetActive(true);
             textBoxPanel.SetActive(true);
             
@@ -98,6 +100,7 @@ namespace WeGotOne
             {
                 keyboardImage.SetActive(false);
                 checkBoxUICanvas.SetActive(true);
+                startButton.SetActive(true);
                 instructionText.text = "플레이 준비가 완료되면 [F] 키를 꾹 눌러주세요.";
                 currentStep = TutorialStep.WaitAllReady;
             }
@@ -124,6 +127,7 @@ namespace WeGotOne
             currentStep = TutorialStep.StormActive;
 
             // Storm 이미지 활성화
+            startButton.SetActive(false);
             stormImage.SetActive(true);
             instructionText.text = "폭풍이 몰아칩니다!";
 
