@@ -81,6 +81,8 @@ namespace HelloServer
         // 한 소켓에 동시에 두 번 보내면 안 된다.
         private readonly SemaphoreSlim sendLock = new SemaphoreSlim(1, 1);
         private WorldItemSnapshotSynchronizer worldItemSynchronizer;
+        
+        private TutorialManager tutorialManager; 
 
         #region unity method
 
@@ -90,6 +92,7 @@ namespace HelloServer
             // true로 해둬야 백그라운드에서도 데이터 수신 가능
             Application.runInBackground = true;
             worldItemSynchronizer = FindFirstObjectByType<WorldItemSnapshotSynchronizer>();
+            tutorialManager = FindObjectOfType<TutorialManager>();
         }
 
         private void OnDestroy()
@@ -261,6 +264,9 @@ namespace HelloServer
                 // 앞서 작성한 DayApplyFromNetwork 메서드를 호출해 상태가 다를 때만 연출을 깨웁니다.
                 DayLoop.Instance.DayApplyFromNetwork(message.IsDay);
             }
+            
+            if (tutorialManager != null)
+                tutorialManager.UpdateReadyState(message.TutorialReadyCount, message.TutorialTotalCount, message.IsStartButtonPressed);
             Debug.Log(GetJson(message));
             SnapshotMessage = message;
         }
@@ -316,8 +322,8 @@ namespace HelloServer
             localPlayer.Body.down = down;
             this.localPlayer = localPlayer;
             
-            // Spawn할때 자동으로 해줘서 뺌
-            // localPlayer.Setup(Me);
+            localPlayer.Setup(Me);
+            TutorialManager.Instance.StartTutorial(); // 들어오면 튜토리얼 시작
         }
 
         private void OnJoin(JoinMessage message)
@@ -481,6 +487,21 @@ namespace HelloServer
                 }
 
                 snapshot.Players = playerStates.ToArray();
+
+                bool hostHolding = localPlayer.IsBuild;
+                int guestHoldingCount = 0;
+                if (GuestInputGroupMessage != null)
+                {
+                    foreach (var input in GuestInputGroupMessage.Inputs)
+                    {
+                        if (input != null && input.IsBuildKeyHold) guestHoldingCount++;
+                    }
+                }
+                snapshot.TutorialReadyCount = (hostHolding ? 1 : 0) + guestHoldingCount;
+                snapshot.TutorialTotalCount = RemoteCount;
+                snapshot.IsStartButtonPressed = TutorialManager.Instance.IsStartButtonPressed;
+                
+                
                 if (DayLoop.Instance != null)
                 {
                     snapshot.IsDay = (DayLoop.Instance.CurrentDayType == DayLoop.DayType.Day);
