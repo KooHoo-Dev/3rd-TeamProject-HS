@@ -14,12 +14,6 @@ namespace WeGotOne
         [field: SerializeField] public Image Content { get; private set; }
         [field: SerializeField] public TMP_Text ItemCountText { get; private set; }
 
-        private RectTransform rectTransform;
-
-        private void Awake()
-        {
-            rectTransform = GetComponent<RectTransform>();
-        }
 
         public void Render(ItemRef item, int count)
         {
@@ -32,13 +26,6 @@ namespace WeGotOne
             Content.transform.localScale = Vector3.one;
             Content.transform.DOPunchScale(Vector3.one * 0.5f, 0.3f);
             ItemCountText.enabled = shouldDisplay;
-        }
-
-        // 외부에서 위치값을 입력받아서 Slot의 위치를 갱신합니다.
-        // Cursor 슬롯 전용 함수입니다.
-        public void SetPosition(Vector2 inputPosition)
-        {
-            rectTransform.anchoredPosition = inputPosition;
         }
     }
 }

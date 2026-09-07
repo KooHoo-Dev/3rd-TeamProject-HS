@@ -27,6 +27,8 @@ namespace WeGotOne
         private Key followKey;
         private string followedPlayerId;
 
+        private int currentPoint;
+
         private void Start()
         {
             Cam = Camera.main;
@@ -92,6 +94,13 @@ namespace WeGotOne
                     Vector3 lerpPos = Vector3.Lerp(Cam.transform.position, targetPos + offset, lerpSpeed * Time.deltaTime);
                     lerpPos.z = Cam.transform.position.z; // 2D의 경우 z는 바뀌지 않습니다.
                     Cam.transform.position = lerpPos;
+                    if (GameManager.Instance.IsCamTargetChange &&
+                        Mathf.Abs(Cam.transform.position.x - targetPos.x) <= 0.1f)
+                    {
+                        Debug.Log(Cam.transform.position);
+                        GameManager.Instance.IsCamTargetChange = false;
+                        currentPoint++;
+                    }
                     break;
             }
         }
@@ -101,6 +110,13 @@ namespace WeGotOne
             Keyboard keyboard = Keyboard.current;
             PlayerState[] players = RoomClient.Instance.SnapshotMessage?.Players;
 
+            if (GameManager.Instance.IsCamTargetChange)
+            {
+                Debug.Log(GameManager.Instance.CheckPoints[currentPoint].transform.position);
+                lerpSpeed = 1f;
+                return GameManager.Instance.CheckPoints[currentPoint].transform.position;
+            }
+            
             if (followedPlayerId != null && keyboard[followKey].isPressed)
             {
                 // 배열 순서가 바뀌어도 누를 때 선택한 플레이어를 계속 따라갑니다.
