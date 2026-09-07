@@ -225,6 +225,8 @@ MonoBehaviour:
   maxResistance: 15
   waterExitCooldown: 1
   obstacleSensor: {fileID: 0}
+  <CurrentResistance>k__BackingField: 0
+  <HitParticle>k__BackingField: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
   myType: 4
   baitType: 3

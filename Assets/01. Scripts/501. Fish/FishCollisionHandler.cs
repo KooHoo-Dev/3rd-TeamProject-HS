@@ -18,7 +18,7 @@ namespace WeGotOne
         private float minImpactThreshold = 5f;
         
         // 충격 강도 (relativeVelocity.magnitude) 를 외부에 전달할 이벤트
-        public event Action<float> OnTerrainSmashed;
+        public event Action<float, float> OnTerrainSmashed;
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
@@ -31,7 +31,22 @@ namespace WeGotOne
             // 단순 스침이 아닌 유의미한 충격일 때만 신호 발송
             if (impactStrengh >= minImpactThreshold)
             {
-                OnTerrainSmashed?.Invoke(impactStrengh);
+                switch (impactStrengh)
+                {
+                    case 5:
+                        OnTerrainSmashed?.Invoke(impactStrengh, 1.2f);
+                        break;
+                    case 10:
+                        OnTerrainSmashed?.Invoke(impactStrengh, 0.8f);
+                        break;
+                    case 15:
+                        OnTerrainSmashed?.Invoke(impactStrengh, 0.5f);
+                        break;
+                    default:
+                        OnTerrainSmashed?.Invoke(impactStrengh, 1);
+                        break;
+                }
+                
             }
         }
     }

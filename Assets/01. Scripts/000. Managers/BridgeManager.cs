@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using HelloServer;
@@ -14,7 +15,12 @@ namespace WeGotOne
         [SerializeField] private Transform bridgeTransform;
         
         private BridgeTable bridgeTable;
-
+        private int currentBridgeCount;
+        
+        [SerializeField] private float particleTime = 2.0f;
+        [SerializeField] private GameObject buildParticle;
+        
+        
         public bool IsEnd => CurrentBridgeCount() >= BridgeObjects.Length;
 
         // 게임 매니저나 나중에 다른 UI에게 전파하는 용도 델리게이트
@@ -72,7 +78,7 @@ namespace WeGotOne
         {
             if (IsEnd) return;
 
-            int currentBridgeCount = CurrentBridgeCount();
+            currentBridgeCount = CurrentBridgeCount();
             int nextBridgeIndex = currentBridgeCount + 1;
             if (bridgeTable.TryGet(nextBridgeIndex, out BridgeRef bridgeRef) == false)
             {
@@ -91,7 +97,7 @@ namespace WeGotOne
                 return;
             }
 
-            BridgeObjects[currentBridgeCount].gameObject.SetActive(true);
+            StartCoroutine(BuildParticle());
             OnBridgeBuild?.Invoke();
         }
 
@@ -113,11 +119,23 @@ namespace WeGotOne
 
                 if (InventoryItemDB.Instance.Add(item.ItemId, 1))
                 {
+                    AudioManager.Instance.PlaySfx(AudioManager.Sfx.GetItem);
                     holder.OnPickup();
                 }
             }
         }
 
+        private IEnumerator BuildParticle()
+        {
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.BridgeBuild);
+            buildParticle.transform.position = BridgeObjects[currentBridgeCount].transform.position;
+            buildParticle.SetActive(true);
+            
+            yield return new WaitForSeconds(particleTime);
+            
+            buildParticle.SetActive(false);
+            BridgeObjects[currentBridgeCount].gameObject.SetActive(true);
+        }
 
         #region test methods
 
