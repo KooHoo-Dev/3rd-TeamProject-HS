@@ -46,6 +46,7 @@ namespace WeGotOne
         private bool isStormCoroutineRunning = false;
         private bool isStartButtonPressed = false;
 
+        public bool IsStartButtonPressed => isStartButtonPressed;
         private bool IsHost => RoomClient.Instance != null && 
                                RoomClient.Instance.Me != null && 
                                RoomClient.Instance.Me.IsHost;
@@ -106,10 +107,11 @@ namespace WeGotOne
         {
             if (RoomClient.IsInitialized
                 && RoomClient.Instance.Me != null
+                && RoomClient.Instance.Me.IsHost
                 && RoomClient.Instance.SnapshotMessage != null)
             {
                 SnapshotMessage snapshotMessage = RoomClient.Instance.SnapshotMessage;
-                UpdateReadyState(snapshotMessage.TutorialReadyCount, snapshotMessage.TutorialTotalCount);
+                UpdateReadyState(snapshotMessage.TutorialReadyCount, snapshotMessage.TutorialTotalCount, snapshotMessage.IsStartButtonPressed);
             }
         }
         
@@ -171,7 +173,7 @@ namespace WeGotOne
         // 매 스냅샷마다 호출되어 체크박스를 채우고, 전원 준비 시 폭풍 연출을 시작합니다.
         // 호스트/게스트 모두 각자 로컬에서 동일하게 호출되어 독립적으로 진행합니다.
         // ==========================================
-        public void UpdateReadyState(int readyCount, int totalCount)
+        public void UpdateReadyState(int readyCount, int totalCount, bool isStartButtonPress)
         {
             var boxes = CheckBoxes;
             for (int i = 0; i < boxes.Length; i++)
@@ -179,6 +181,9 @@ namespace WeGotOne
                 if (boxes[i] == null) continue;
                 boxes[i].SetActive(i < readyCount);
             }
+            
+            isStartButtonPressed = isStartButtonPress;
+            Debug.Log($"isStartButtonPressed: {isStartButtonPressed}, {readyCount}/{totalCount}");
 
             if (currentStep == TutorialStep.WaitAllReady 
                 && isStartButtonPressed 
