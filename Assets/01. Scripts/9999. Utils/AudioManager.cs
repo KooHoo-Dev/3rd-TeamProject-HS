@@ -27,7 +27,8 @@ namespace WeGotOne
         PopRelease,
         Confused,
         GetItem,
-        BridgeBuild
+        BridgeBuild,
+        FishTerrainSmashed,
     }
 
     public enum Bgm

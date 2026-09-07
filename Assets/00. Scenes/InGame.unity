@@ -4356,7 +4356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1efcb4b9cb440148a5556e9ec720aa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.EasyRoomClient
-  code: 1515
+  code: 89745153
   who: HiHi
 --- !u!4 &1679873783
 Transform:
@@ -5042,6 +5042,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 315a094ba5087f3468018c6576f8a4a2, type: 3}
   - {fileID: 8300000, guid: 474fc939759cbbb4687e40836c4d377f, type: 3}
   - {fileID: 8300000, guid: df389de434dd2094ebd2ee29db2502b8, type: 3}
+  - {fileID: 8300000, guid: 107214b9f92bdcf4ba69f57da01ada6e, type: 3}
   sfxVolume: 1
   channels: 16
 --- !u!4 &2030178771

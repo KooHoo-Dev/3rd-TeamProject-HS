@@ -28,7 +28,7 @@ namespace WeGotOne
             Content.sprite = shouldDisplay ? item.Icon : null;
             Content.enabled = shouldDisplay;
             ItemCountText.text = shouldDisplay ? count.ToString() : string.Empty;
-            Content.transform.DOPunchScale(Vector3.one * 0.3f, 0.3f);
+            Content.transform.DOPunchScale(Vector3.one * 0.5f, 0.3f);
             ItemCountText.enabled = shouldDisplay;
         }
 

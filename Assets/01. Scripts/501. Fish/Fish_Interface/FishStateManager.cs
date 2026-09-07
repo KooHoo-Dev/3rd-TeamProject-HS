@@ -41,7 +41,8 @@ namespace WeGotOne.Fish_Interface
         // 물 탈출 피드백 함수 예외값을 위한 bool값.
         public bool IsGrabbed => CurrentState is FishCaughtState || CurrentState is FishExhaustedState;
         public float MaxResistance => maxResistance; // 저항도
-        public float CurrentResistance { get; private set; }
+        [field: SerializeField] public float CurrentResistance { get; private set; }
+        [field: SerializeField] public ParticleSystem HitParticle { get; private set; }
 
         public string CurrentStateName
         {

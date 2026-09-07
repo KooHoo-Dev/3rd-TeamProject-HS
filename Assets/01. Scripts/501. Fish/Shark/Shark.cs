@@ -85,10 +85,11 @@ namespace WeGotOne.Fish_Interface
             }
         }
 
-        private void HandleTerrainSmashed(float impactStrength)
+        private void HandleTerrainSmashed(float impactStrength, float sfxPitch)
         {
             if (owner == null) return;
             
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.FishTerrainSmashed, sfxPitch);
             float damageToResistance = impactStrength * collisionRatio; 
             owner.DecreaseResistance(damageToResistance);
             owner.FishMovement.StopMove();
