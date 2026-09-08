@@ -516,7 +516,7 @@ GameObject:
   - component: {fileID: 5172465518831420210}
   - component: {fileID: 8356818761192427128}
   - component: {fileID: 1491784439140830588}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: ShipBoundaryRightBottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -906,7 +906,7 @@ GameObject:
   - component: {fileID: 8908216449314481761}
   - component: {fileID: 3729307373327964894}
   - component: {fileID: 7246674181994886235}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: ShipBoundaryLeftBottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
