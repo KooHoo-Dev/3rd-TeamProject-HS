@@ -177,6 +177,7 @@ namespace WeGotOne
             //instructionText.text = "이제 힘을 합쳐 물고기와 나무를 건져서 육지로 향해야 한다!";
             currentStep = TutorialStep.Completed;
             arrivedIslandImage.SetActive(false); // 떨어진 후 바로 암전 끄기
+            IsTutorialEnd = true;
             GameManager.Instance.IsCamTargetChange = true;
             DayLoop.Instance.isStarted = true;
             // 5초 뒤 UI 패널을 꺼줍니다.
@@ -211,7 +212,6 @@ namespace WeGotOne
                 && totalCount > 0 
                 && readyCount >= totalCount) )
             {
-                IsTutorialEnd = true;
                 StartCoroutine(PlayStormSequence());
             }
         }
