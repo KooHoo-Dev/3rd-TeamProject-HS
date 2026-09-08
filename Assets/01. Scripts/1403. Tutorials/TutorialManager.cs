@@ -167,6 +167,7 @@ namespace WeGotOne
             currentStep = TutorialStep.Completed;
             arrivedIslandImage.SetActive(false); // 떨어진 후 바로 암전 끄기
             GameManager.Instance.IsCamTargetChange = true;
+            DayLoop.Instance.isStarted = true;
             // 5초 뒤 UI 패널을 꺼줍니다.
             StartCoroutine(CloseTutorialUIPanel(5f));
         }

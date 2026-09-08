@@ -33,6 +33,8 @@ namespace WeGotOne
         private DayType currentDayType = DayType.Day;
         private float elapsedTime;
         private bool isHost;
+        
+        public bool isStarted = false;
 
         public DayType CurrentDayType => currentDayType;
         
@@ -54,7 +56,10 @@ namespace WeGotOne
         
 
         private void Update()
-        {   
+        {
+            if (isStarted == false)
+                return;
+            
             elapsedTime += Time.deltaTime;
             
             // 오직 호스트만 "주기 끝에 다다랐을 때 밤낮을 바꾸는 물리적 판정"을 주도합니다.
@@ -72,8 +77,6 @@ namespace WeGotOne
             UpdateClockUI();
             
         }
-        
-        
         
         // [호스트 전용 진입] 시간 도달에 의해 낮/밤 을 전환
         public void SetDayType(DayType dayType)
