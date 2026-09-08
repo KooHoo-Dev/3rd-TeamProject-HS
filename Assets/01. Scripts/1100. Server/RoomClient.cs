@@ -597,7 +597,8 @@ namespace HelloServer
                 // 게스트는 자신의 키보드 입력을 전송
                 Vector2 input = SimpleInput.GetMoveAxisRaw();
                 Keyboard keyboard = Keyboard.current;
-                await SendInputMessages(input, keyboard.leftShiftKey.isPressed, keyboard.rightShiftKey.isPressed,
+                Mouse mouse = Mouse.current;
+                await SendInputMessages(input, mouse.leftButton.isPressed, mouse.rightButton.isPressed,
                     keyboard.fKey.isPressed);
             }
         }

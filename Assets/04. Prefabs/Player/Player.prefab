@@ -525,6 +525,7 @@ GameObject:
   - component: {fileID: 1836112645504577546}
   - component: {fileID: 6291487196056199621}
   - component: {fileID: 7086020965851340501}
+  - component: {fileID: 3127322141933450857}
   m_Layer: 10
   m_Name: Body
   m_TagString: Player
@@ -726,6 +727,18 @@ MonoBehaviour:
   <Target>k__BackingField: {fileID: 6545353165074942946}
   lerpSpeed: 10
   offset: {x: 0, y: 0, z: 0}
+--- !u!114 &3127322141933450857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4563297617465103818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cf36af3bfac4737b89da85b2ef7200d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.SoundController
 --- !u!1 &4634323389783299864
 GameObject:
   m_ObjectHideFlags: 0
@@ -1534,6 +1547,11 @@ MonoBehaviour:
   nick: {fileID: 3074995230057644118}
   defaultArmForce: 15
   highArmForce: 35
+  partJoint:
+  - {fileID: 425272060853108967}
+  - {fileID: 616341206406153676}
+  - {fileID: 5190216333834068254}
+  - {fileID: 4919972634069384344}
   IsParalysis: 0
 --- !u!1 &8876946171053164279
 GameObject:

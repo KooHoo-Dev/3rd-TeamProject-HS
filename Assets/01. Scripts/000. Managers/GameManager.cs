@@ -31,6 +31,7 @@ namespace WeGotOne
 
         public bool IsCamTargetChange = false;
         public GameObject[] CheckPoints;
+        public bool IsGameOver => activePlayerCount == 0;
         
         #region unity events
 
@@ -77,10 +78,9 @@ namespace WeGotOne
         {
             if (isGameFinished) return;
 
-            bool isGameOver = activePlayerCount == 0;
             bool isGameWon = IsBridgeComplete && IsAllPlayerArrivedAtLand;
 
-            if (isGameOver && isGameWon)
+            if (IsGameOver && isGameWon)
             {
                 Debug.LogError("게임 오버와 승리 조건이 동시에 충족되었습니다. 게임 오버로 처리합니다.");
                 gameOverUI.gameObject.SetActive(true);
@@ -88,7 +88,7 @@ namespace WeGotOne
                 return;
             }
 
-            if (isGameOver)
+            if (IsGameOver)
             {
                 gameOverUI.gameObject.SetActive(true);
                 isGameFinished = true;

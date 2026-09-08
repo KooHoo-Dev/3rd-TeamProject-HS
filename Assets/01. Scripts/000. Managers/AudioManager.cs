@@ -30,6 +30,9 @@ namespace WeGotOne
         BridgeBuild,
         FishTerrainSmashed,
         Thunder,
+        PulseEnd,
+        SplashWater,
+        HitRock,
     }
 
     public enum Bgm

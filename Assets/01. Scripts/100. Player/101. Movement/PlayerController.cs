@@ -1,7 +1,10 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using HelloServer;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace WeGotOne
 {
@@ -40,6 +43,15 @@ namespace WeGotOne
         [SerializeField] private float highArmForce = 35f;
         public float HighArmForce => highArmForce;
         
+        private float deathMin = 500f;
+        private float deathMax = 1000f;
+        private float respawnTime = 5f;
+        private bool isDead;
+        private int deadBodyLayer;
+        private Rigidbody2D[] bodyPart;
+        [SerializeField] private HingeJoint2D[] partJoint;
+        private int defaultLayer;
+        
         private float currentArmForce;
         public float CurrentArmForce => currentArmForce;
         
@@ -71,6 +83,76 @@ namespace WeGotOne
                 part.angularVelocity = 0f;
             }
         }
+        
+        private bool CanRunLocalGameLogic
+        {
+            get
+            {
+                return RoomClient.IsInitialized == false ||
+                       RoomClient.Instance.Me == null ||
+                       RoomClient.Instance.Me.IsHost;
+            }
+        }
+        
+        public IEnumerator Death()
+        {
+            isDead = true;
+            
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.PulseEnd);
+
+            ClearArmDirections();
+
+            HandleGrab(false, false);
+            
+            for (int i = 0; i < partJoint.Length; i++)
+            {
+                partJoint[i].enabled = false;
+            }
+
+            for (int i = 0; i < bodyPart.Length; i++)
+            {
+                bodyPart[i].gameObject.layer = deadBodyLayer;
+                
+                Vector2 randomDirection = UnityEngine.Random.insideUnitCircle.normalized;
+                float randomForce = UnityEngine.Random.Range(deathMin, deathMax);
+                bodyPart[i].AddForce(randomDirection * randomForce);
+                
+                float randomTorque = UnityEngine.Random.Range(-10f, 10f);
+                bodyPart[i].AddTorque(randomTorque);
+            }
+
+            yield return new WaitForSeconds(respawnTime);
+
+            if (GameManager.Instance.IsGameOver)
+            {
+                RespawnPlayer();
+                isDead = false;
+            }
+        }
+        
+        private void RespawnPlayer()
+        {
+            ClearArmDirections();
+            HandleGrab(false, false);
+
+            body.GoSpawnPoint();
+
+            RestoreToInitialPose(InitialPlayerState);
+
+            for (int i = 0; i < bodyPart.Length; i++)
+            {
+                bodyPart[i].linearVelocity = Vector2.zero;
+                bodyPart[i].angularVelocity = 0f;
+                bodyPart[i].gameObject.layer = defaultLayer;
+            }
+
+            for (int i = 0; i < partJoint.Length; i++)
+            {
+                partJoint[i].enabled = true;
+            }
+
+            body.ResetStamina();
+        }
 
         #region Ai추가
 
@@ -78,6 +160,10 @@ namespace WeGotOne
 
         private void Start()
         {
+            deadBodyLayer = LayerMask.NameToLayer("DeadBody");
+            defaultLayer = LayerMask.NameToLayer("Player");
+            bodyPart = GetComponentsInChildren<Rigidbody2D>();
+            
             currentArmForce = defaultArmForce;
             // 게임 시작 시 자신의 첫 온전한 자세를 스스로 캡처해서 저장
             InitialPlayerState = CaptureCurrentPlayerState();

@@ -219,7 +219,7 @@ namespace WeGotOne
             // 만약 이전에 굶주리지 않았다가 이번 스태미나 감소시 굶주리게 되었다면
             if (wasStarved == false && IsStarved)
             {
-                transform.position = spawnPosition;
+                StartCoroutine(playerController.Death());
                 
                 // 델리게이트로 게임매니저로 통지
                 NotifyPlayerStarveStateChanged( true);
