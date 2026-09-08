@@ -57,7 +57,7 @@ namespace WeGotOne
             bridgeManager.OnBridgeBuild += HandleBridgeBuild;
             dayLoop.OnDayChanged += HandleDayChanged;
 
-            currentStage = FindStage(bridgeManager.CurrentBridgeCount());
+            currentStage = FindStage(bridgeManager.CurrentBridgeCount);
             currentGroupIndex = 0;
             SpawnCurrentGroup();
         }
@@ -77,7 +77,7 @@ namespace WeGotOne
 
         private void HandleBridgeBuild()
         {
-            StageEntry nextStage = FindStage(bridgeManager.CurrentBridgeCount());
+            StageEntry nextStage = FindStage(bridgeManager.CurrentBridgeCount);
             if (nextStage == currentStage)
             {
                 return;
