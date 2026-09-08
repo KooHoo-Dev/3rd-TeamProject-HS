@@ -94,7 +94,8 @@ namespace WeGotOne
             {
                 for (int i = currentBridgeCount; i < messageCurrentBridgeCount; i++)
                 {
-                    BridgeObjects[i].gameObject.SetActive(true);
+                    // BridgeObjects[i].gameObject.SetActive(true);
+                    StartCoroutine(BuildParticle(i));
                 }
                 OnBridgeBuild?.Invoke();
             }
