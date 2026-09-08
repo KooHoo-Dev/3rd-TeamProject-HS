@@ -26,14 +26,10 @@ namespace WeGotOne.Fish_Interface
             runawayDirection = Random.insideUnitCircle.normalized;
             runawayTimer = 0;
             // AudioManager.Instance.PlaySfx(AudioManager.Sfx.FishRunaway);
-            if (owner.RunawayParticle != null)
-            {
+            if (owner.RunawayParticle)
                 owner.RunawayParticle.SetActive(true);
-            }
-            if (owner.Animator != null)
-            {
+            if (owner.Animator)
                 owner.Animator.speed = 20;
-            }
         }
 
         public void Tick()
@@ -52,7 +48,8 @@ namespace WeGotOne.Fish_Interface
                     owner.Animator.speed = 1;
                 }
 
-                owner.RunawayParticle.SetActive(false);
+                if (owner.RunawayParticle)
+                    owner.RunawayParticle.SetActive(false);
                 owner.ChangeState(new FishIdleState());
             }
         }
@@ -66,7 +63,8 @@ namespace WeGotOne.Fish_Interface
                     owner.Animator.speed = 1;
                 }
 
-                owner.RunawayParticle.SetActive(false);
+                if (owner.RunawayParticle)
+                    owner.RunawayParticle.SetActive(false);
                 owner.FishMovement.StopMove();
             }
         }
