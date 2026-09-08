@@ -1761,7 +1761,6 @@ MonoBehaviour:
   activePlayerCount: 0
   IsCamTargetChange: 0
   CheckPoints:
-  - {fileID: 1222394592}
   - {fileID: 823366028}
   - {fileID: 890426539}
   - {fileID: 1185439934}
