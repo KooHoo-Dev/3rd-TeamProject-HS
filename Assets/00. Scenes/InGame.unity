@@ -914,6 +914,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1682943535265470491, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1682943535265470491, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
+      propertyPath: m_Color.g
+      value: 0.9672488
+      objectReference: {fileID: 0}
+    - target: {fileID: 1682943535265470491, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
+      propertyPath: m_Color.r
+      value: 0.5896226
+      objectReference: {fileID: 0}
     - target: {fileID: 2307576398138914596, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
       propertyPath: m_SizeDelta.x
       value: 100
@@ -1218,6 +1230,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5657144351957153594, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1935083779452269832, guid: fde5d2de2c012e940861a33931063dec, type: 3}
     - target: {fileID: 6027581297238653213, guid: 1e1324345f5881043848d6f3e8328bd1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -8348,6 +8364,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: df389de434dd2094ebd2ee29db2502b8, type: 3}
   - {fileID: 8300000, guid: 107214b9f92bdcf4ba69f57da01ada6e, type: 3}
   - {fileID: 8300000, guid: 29bb764f841054f57af42b6b1b4037cb, type: 3}
+  - {fileID: 8300000, guid: c04ce27c1b3156348be41aa571e8e2fb, type: 3}
+  - {fileID: 8300000, guid: 3114f1807b5274346882c90bad1eee69, type: 3}
+  - {fileID: 8300000, guid: 0a19bf6755e26b542b7eb839e64fda26, type: 3}
   sfxVolume: 1
   channels: 16
 --- !u!4 &2030178771
