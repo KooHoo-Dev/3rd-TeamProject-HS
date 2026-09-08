@@ -29,7 +29,7 @@ namespace WeGotOne
         GetItem,
         BridgeBuild,
         FishTerrainSmashed,
-        FishRunaway
+        Thunder,
     }
 
     public enum Bgm
