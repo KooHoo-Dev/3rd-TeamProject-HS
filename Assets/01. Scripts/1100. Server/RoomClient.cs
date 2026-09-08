@@ -366,7 +366,9 @@ namespace HelloServer
             localPlayer.Body.up = up;
             localPlayer.Body.down = down;
             this.localPlayer = localPlayer;
-            
+
+            TutorialManager.Instance.StartTutorial();
+
             // Spawn할때 자동으로 해줘서 뺌
             // localPlayer.Setup(Me);
         }
@@ -539,6 +541,21 @@ namespace HelloServer
                         AddPlayerState(playerStates, pair.Key);
                     }
                 }
+                
+                snapshot.Players = playerStates.ToArray();
+
+                bool hostHolding = localPlayer.IsBuild;
+                int guestHoldingCount = 0;
+                if (GuestInputGroupMessage != null)
+                {
+                    foreach (var input in GuestInputGroupMessage.Inputs)
+                    {
+                        if (input != null && input.IsBuildKeyHold) guestHoldingCount++;
+                    }
+                }
+                snapshot.TutorialReadyCount = (hostHolding ? 1 : 0) + guestHoldingCount;
+                snapshot.TutorialTotalCount = RemoteCount;
+                snapshot.IsStartButtonPressed = TutorialManager.Instance.IsStartButtonPressed;
 
                 snapshot.Players = playerStates.ToArray();
                 if (DayLoop.Instance != null)
