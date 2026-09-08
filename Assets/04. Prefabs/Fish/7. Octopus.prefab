@@ -331,7 +331,7 @@ MonoBehaviour:
   IsAttack: 1
   FaintDuration: 0
   confusedParticle: {fileID: 7265750452708233293}
-  <RunawayParticle>k__BackingField: {fileID: 0}
+  <RunawayParticle>k__BackingField: {fileID: 5017339700038884619}
 --- !u!114 &8287304691859933930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -695,6 +695,11 @@ PrefabInstance:
 --- !u!4 &4409346675524891625 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7201394878902416175, guid: 99ad0f664c0d4d447aa4e818640ad735, type: 3}
+  m_PrefabInstance: {fileID: 6827838618552123590}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5017339700038884619 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1972700690882371021, guid: 99ad0f664c0d4d447aa4e818640ad735, type: 3}
   m_PrefabInstance: {fileID: 6827838618552123590}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8269476694047565228
