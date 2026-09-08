@@ -137,6 +137,13 @@ namespace WeGotOne
 
             body.GoSpawnPoint();
 
+            body.transform.rotation = new Quaternion(
+                InitialPlayerState.Body.Rotation.X,
+                InitialPlayerState.Body.Rotation.Y,
+                InitialPlayerState.Body.Rotation.Z,
+                InitialPlayerState.Body.Rotation.W
+            );
+            
             RestoreToInitialPose(InitialPlayerState);
 
             for (int i = 0; i < bodyPart.Length; i++)
