@@ -53,7 +53,9 @@ namespace WeGotOne
                                RoomClient.Instance.Me.IsHost;
 
         public bool IsTargetChange = false;
-        
+        private int readyCount;
+        private int totalCount;
+
         private GameObject[] CheckBoxes => new[]
         {
             playerCheckBox_First, playerCheckBox_Second, playerCheckBox_Thrid, playerCheckBox_Foruth
@@ -191,6 +193,8 @@ namespace WeGotOne
             }
             
             isStartButtonPressed = isStartButtonPress;
+            this.readyCount = readyCount;
+            this.totalCount = totalCount;
 
             if (currentStep == TutorialStep.WaitAllReady 
                 && isStartButtonPressed 
@@ -204,6 +208,7 @@ namespace WeGotOne
         public void HandleStartButton()
         {
             isStartButtonPressed = true;
+            UpdateReadyState(readyCount, totalCount, isStartButtonPressed);
         }
     }
 }
