@@ -97,13 +97,13 @@ namespace WeGotOne
             textBoxPanel.SetActive(true);
             
             // 1. 텍스트 문장 보여줌
-            instructionText.text = "좌, 우 Shift 로 벽을 집고 W,S,A,D 으로 \n팔 방향을 조정하여 이동 할 수 있습니다. ";
+            instructionText.text = "마우스 좌, 우 클릭으로 벽을 집고 W,S,A,D 으로 \n팔 방향을 조정하여 이동 할 수 있습니다. ";
         }
         
         private void Update()
         {
-            if(IsTutorialEnd)
-                tutorialCanvas.SetActive(false);
+            //if(IsTutorialEnd)
+                //tutorialCanvas.SetActive(false);
             
             if (currentStep == TutorialStep.NotStarted || currentStep == TutorialStep.Completed) return;
 
@@ -115,7 +115,7 @@ namespace WeGotOne
                 keyboardImage.SetActive(false);
                 checkBoxUICanvas.SetActive(true);
                 if(isHost) startButton.SetActive(true);
-                instructionText.text = "플레이 준비가 완료되면 [F] 키를 꾹 눌러주세요.";
+                instructionText.text = "출발할 준비가 완료되면 [F] 키를 꾹 눌러주세요.";
                 currentStep = TutorialStep.WaitAllReady;
             }
             
@@ -151,21 +151,21 @@ namespace WeGotOne
             if(AudioManager.Instance.sfxClips[(int)AudioManager.Sfx.Thunder])
                 AudioManager.Instance.PlaySfx(AudioManager.Sfx.Thunder);
             stormImage.SetActive(true);
-            instructionText.text = "폭풍이 몰아칩니다!";
+            instructionText.text = "갑자기 폭풍이 몰아칩니다!";
             
             // 3초 대기
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(5f);
 
             // Storm 이미지 비활성화
             stormImage.SetActive(false);
-            textBoxPanel.SetActive(false);
+            //textBoxPanel.SetActive(false);
             arrivedIslandImage.SetActive(true);
 
             // 5. GameLobyArea의 Floor 비활성화 (낙하 유도)
             if (floor != null) floor.SetActive(false);
             checkBoxUICanvas.SetActive(false);
             
-            instructionText.text = "";
+            instructionText.text = "아 안돼..! 꼬마!";
             currentStep = TutorialStep.Falling;
             
             isStormCoroutineRunning = false;
@@ -183,7 +183,7 @@ namespace WeGotOne
             }
             
             // 7. 땅에 떨어진 후 텍스트 문구 교체
-            //instructionText.text = "이제 힘을 합쳐 물고기와 나무를 건져서 육지로 향해야 한다!";
+            
             currentStep = TutorialStep.Completed;
             arrivedIslandImage.SetActive(false); // 떨어진 후 바로 암전 끄기
             IsTutorialEnd = true;
@@ -194,8 +194,13 @@ namespace WeGotOne
         }
 
         private IEnumerator CloseTutorialUIPanel(float delay)
-        {
+        {   
+            instructionText.text = "여긴 어디야..? 꼬마..?";
+            yield return new WaitForSeconds(10f);
+            
+            instructionText.text = "낚시하기 딱 좋은 날이군..! 꼬마!";
             yield return new WaitForSeconds(delay);
+            
             tutorialCanvas.SetActive(false);
         }
 

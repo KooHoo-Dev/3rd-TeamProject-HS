@@ -4359,7 +4359,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2823838568841336431, guid: 0a0c710deb94c4275949572a3164cf02, type: 3}
+  m_Sprite: {fileID: 2239635233936127252, guid: 3544a9030f7e66a48a19528036f0e7ff, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7259,7 +7259,7 @@ MonoBehaviour:
   - {fileID: 1866798504}
   - {fileID: 1866798503}
   IsTargetChange: 0
-  IsTutorialCanvasOpen: 1
+  IsTutorialEnd: 0
 --- !u!4 &1741673855
 Transform:
   m_ObjectHideFlags: 0
