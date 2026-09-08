@@ -6886,12 +6886,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1773449821}
   m_Layer: 0
-  m_Name: Debug
+  m_Name: Tester
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1773449821
 Transform:
   m_ObjectHideFlags: 0
@@ -10308,7 +10308,6 @@ SceneRoots:
   - {fileID: 1146012734}
   - {fileID: 1863929588}
   - {fileID: 1961354790}
-  - {fileID: 1773449821}
   - {fileID: 1135309631}
   - {fileID: 696515073}
   - {fileID: 1498978659}
@@ -10336,3 +10335,4 @@ SceneRoots:
   - {fileID: 1393854046}
   - {fileID: 1303722707}
   - {fileID: 1661108131}
+  - {fileID: 1773449821}
