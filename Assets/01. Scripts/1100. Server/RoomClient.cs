@@ -58,6 +58,12 @@ namespace HelloServer
         public int RemoteCount => remotes.Count;
         public PlayerController Local => localPlayer;
 
+        // 이름표에 표시하는 번호와 같은 입장 순서로 조회합니다 (1부터 시작).
+        public PlayerController GetPlayerByNumber(int playerNumber)
+        {
+            return remotes[$"u{cameraIdList[playerNumber - 1]}"];
+        }
+
         public GuestInputGroupMessage GuestInputGroupMessage { get; private set; }
         public GuestInputMessage GuestInputMessage { get; private set; }
         public SnapshotMessage SnapshotMessage { get; private set; }
