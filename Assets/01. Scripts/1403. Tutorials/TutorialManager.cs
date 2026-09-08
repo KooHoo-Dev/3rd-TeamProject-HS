@@ -139,7 +139,8 @@ namespace WeGotOne
 
             // Storm 이미지 활성화
             startButton.SetActive(false);
-            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Thunder);
+            if(AudioManager.Instance.sfxClips[(int)AudioManager.Sfx.Thunder])
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.Thunder);
             stormImage.SetActive(true);
             instructionText.text = "폭풍이 몰아칩니다!";
             

@@ -45,13 +45,14 @@ namespace WeGotOne.Electronic_Manta
         private IEnumerator ElectronicAttackActive()
         {
             Debug.Log("Attack false");
-            electronicParticle.SetActive(false);
+            if(electronicParticle)
+                electronicParticle.SetActive(false);
             isAttack = false;
 
             yield return new WaitForSeconds(attackFalseDuration);
 
-            Debug.Log("Attack true");
-            electronicParticle.gameObject.SetActive(true);
+            if(electronicParticle)
+                electronicParticle.gameObject.SetActive(true);
             isAttack = true;
         }
         

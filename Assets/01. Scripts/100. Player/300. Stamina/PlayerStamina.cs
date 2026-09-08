@@ -127,7 +127,8 @@ namespace WeGotOne
             staminaSoundTimer = 0f;
             
             StaminaGauge.transform.parent.DOPunchScale(Vector3.one * 0.2f, 0.3f);
-            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Pulse);
+            if(AudioManager.Instance.sfxClips[(int)AudioManager.Sfx.Pulse])
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.Pulse);
         }
         
         private void UpdateStaminaDirection(float beforeStamina)

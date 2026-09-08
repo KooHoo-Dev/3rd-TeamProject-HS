@@ -120,13 +120,16 @@ namespace WeGotOne
 
         private IEnumerator BuildParticle(int currentBridgeCnt)
         {
-            AudioManager.Instance.PlaySfx(AudioManager.Sfx.BridgeBuild);
+            if(AudioManager.Instance.sfxClips[(int)AudioManager.Sfx.BridgeBuild])
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.BridgeBuild);
             buildParticle.transform.position = BridgeObjects[currentBridgeCnt].transform.position;
-            buildParticle.SetActive(true);
+            if(buildParticle)
+                buildParticle.SetActive(true);
             
             yield return new WaitForSeconds(particleTime);
             
-            buildParticle.SetActive(false);
+            if(buildParticle) 
+                buildParticle.SetActive(false);
             BridgeObjects[currentBridgeCnt].gameObject.SetActive(true);
         }
 
