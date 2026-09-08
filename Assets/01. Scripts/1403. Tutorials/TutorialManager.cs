@@ -54,7 +54,8 @@ namespace WeGotOne
 
         public bool IsTargetChange = false;
         
-        public bool IsTutorialCanvasOpen = true;
+        public bool IsTutorialEnd = false;
+        public int ReadyCount => readyCount;
         
         private int readyCount;
         private int totalCount;
@@ -86,7 +87,7 @@ namespace WeGotOne
         {
             currentStep = TutorialStep.KeyboardGuide;
             
-            if(IsTutorialCanvasOpen)
+            if(IsTutorialEnd == false)
                 tutorialCanvas.SetActive(true);
             
             checkBoxUICanvas.SetActive(false);
@@ -100,7 +101,7 @@ namespace WeGotOne
         
         private void Update()
         {
-            if(IsTutorialCanvasOpen == false)
+            if(IsTutorialEnd)
                 tutorialCanvas.SetActive(false);
             
             if (currentStep == TutorialStep.NotStarted || currentStep == TutorialStep.Completed) return;
@@ -116,20 +117,27 @@ namespace WeGotOne
                 instructionText.text = "플레이 준비가 완료되면 [F] 키를 꾹 눌러주세요.";
                 currentStep = TutorialStep.WaitAllReady;
             }
-        }
-
-        private void LateUpdate()
-        {
+            
             if (RoomClient.IsInitialized
                 && RoomClient.Instance.Me != null
                 && RoomClient.Instance.Me.IsHost
                 && RoomClient.Instance.SnapshotMessage != null)
             {
                 SnapshotMessage snapshotMessage = RoomClient.Instance.SnapshotMessage;
-                UpdateReadyState(snapshotMessage.TutorialReadyCount, snapshotMessage.TutorialTotalCount, snapshotMessage.IsStartButtonPressed, snapshotMessage.IsTutorialEnd);
+                bool hostHolding = RoomClient.Instance.LocalPlayer.IsBuild;
+                int guestHoldingCount = 0;
+                if (RoomClient.Instance.GuestInputGroupMessage != null)
+                {
+                    foreach (var input in RoomClient.Instance.GuestInputGroupMessage.Inputs)
+                    {
+                        if (input != null && input.IsBuildKeyHold) guestHoldingCount++;
+                    }
+                }
+                readyCount = (hostHolding ? 1 : 0) + guestHoldingCount;
+                UpdateReadyState(readyCount, snapshotMessage.TutorialTotalCount, IsStartButtonPressed, IsTutorialEnd);
             }
         }
-        
+
         // 2. [요청 사양] Storm 이미지 3초 작동 코루틴
         private IEnumerator PlayStormSequence()
         {
@@ -177,6 +185,7 @@ namespace WeGotOne
             //instructionText.text = "이제 힘을 합쳐 물고기와 나무를 건져서 육지로 향해야 한다!";
             currentStep = TutorialStep.Completed;
             arrivedIslandImage.SetActive(false); // 떨어진 후 바로 암전 끄기
+            IsTutorialEnd = true;
             GameManager.Instance.IsCamTargetChange = true;
             DayLoop.Instance.isStarted = true;
             // 5초 뒤 UI 패널을 꺼줍니다.
@@ -186,7 +195,6 @@ namespace WeGotOne
         private IEnumerator CloseTutorialUIPanel(float delay)
         {
             yield return new WaitForSeconds(delay);
-            IsTutorialCanvasOpen = false;
             tutorialCanvas.SetActive(false);
         }
 
@@ -203,23 +211,23 @@ namespace WeGotOne
             }
             
             isStartButtonPressed = isStartButtonPress;
-            IsTutorialCanvasOpen = isTutorialEnd;
+            IsTutorialEnd = isTutorialEnd;
             this.readyCount = readyCount;
             this.totalCount = totalCount;
 
-            if (currentStep == TutorialStep.WaitAllReady 
-                && isStartButtonPressed 
+            if (IsTutorialEnd || (currentStep == TutorialStep.WaitAllReady 
+                && isStartButtonPressed
                 && totalCount > 0 
-                && readyCount >= totalCount)
+                && readyCount >= totalCount) )
             {
                 StartCoroutine(PlayStormSequence());
             }
         }
 
-        public void HandleStartButton()
+        public async void HandleStartButton()
         {
             isStartButtonPressed = true;
-            UpdateReadyState(readyCount, totalCount, isStartButtonPressed, IsTutorialCanvasOpen);
+            UpdateReadyState(readyCount, totalCount, isStartButtonPressed, IsTutorialEnd);
         }
     }
 }
