@@ -16,7 +16,6 @@ namespace WeGotOne.Fish_Interface
         private Collider2D fishCollider;
         
         private Vector3 interval = new(3.5f, 6f);
-        private float floorDistance = 0.5f;
         
         private Transform targetPosition;
         private float destinationTolerance = 1.0f;

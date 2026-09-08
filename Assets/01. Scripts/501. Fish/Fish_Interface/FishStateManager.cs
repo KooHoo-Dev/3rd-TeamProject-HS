@@ -31,9 +31,6 @@ namespace WeGotOne.Fish_Interface
         [Header("저항도(Resistance) 설정")] [SerializeField]
         private float maxResistance = 20f;
 
-        [Header("물 출입 쿨타임")] [SerializeField] [Tooltip("물속에 들어온 직후 다시 물밖으로 나가는 감지를 무시할 시간")]
-        private float waterExitCooldown = 1.0f;
-
         // 물 감지 센서
         [SerializeField] private FishObstacleSensor obstacleSensor;
         public FishObstacleSensor ObstacleSensor => obstacleSensor;
@@ -77,8 +74,6 @@ namespace WeGotOne.Fish_Interface
         [SerializeField] private GameObject bulletPrefab;
         public GameObject BulletPrefab => bulletPrefab;
 
-        private float lastEnteredWaterTime; // 마지막에 물에 들어온 시각
-
         [Header("납치 기믹 설정")] // 납치 상태 설정
         // 납치 할 장소
         [field: SerializeField] public Transform AbductionDestination { get; set; } 
@@ -116,11 +111,9 @@ namespace WeGotOne.Fish_Interface
 
             ResetResistance();
             StopConfusedParticle();
-            waterExitCooldown = 0f;
             TargetPosition = Vector3.zero;
             BaitInfo = null;
             Hunger = Random.Range(60f, 100f);
-            lastEnteredWaterTime = -1;
             FishName = gameObject.name;
             
             switch (WorldItem.ItemId)

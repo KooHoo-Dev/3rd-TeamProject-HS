@@ -6,7 +6,6 @@ namespace WeGotOne
     {
         protected static T instance;
         private static readonly object lockObj = new object();
-        private static bool applicationIsQuitting = false;
         private static bool isInitialized = false;
 
         public static bool IsInitialized => isInitialized && instance != null;
@@ -34,7 +33,6 @@ namespace WeGotOne
         // (게임 종료 시 유니티가 OnDestroy 보다 먼저 불러 준다)
         protected virtual void OnApplicationQuit()
         {
-            applicationIsQuitting = true;
         }
 
         protected virtual void OnDestroy()
@@ -76,7 +74,6 @@ namespace WeGotOne
 #endif
                 instance = null;
                 isInitialized = false;
-                applicationIsQuitting = false;
             }
         }
     }

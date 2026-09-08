@@ -14,7 +14,6 @@ namespace WeGotOne
     {
         [Header("넉백 설정")]
         [SerializeField] private float knockbackForce = 15f;
-        [SerializeField] private ForceMode2D forceMode = ForceMode2D.Impulse;
 
         [Header("재사용 쿨타임")]
         [SerializeField] private float cooldown = 1.0f;

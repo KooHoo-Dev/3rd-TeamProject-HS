@@ -60,7 +60,6 @@ namespace WeGotOne
         private float baseScaleX; // 물고기 스케일 절대 값
         
         private bool goingToPatrol; // 현재 patrolPoint 로 가는 중인지
-        private bool isEvading = false; // 장애물 회피 이동 중인지 여부
         
         private void Awake()
         {   
@@ -93,8 +92,6 @@ namespace WeGotOne
             this.spawnPosition = startPos;
             transform.position = startPos;
             
-            isEvading = false; 
-            
             // 새로운 무작위 목표 지점을 정하고 순찰 시작
             CalculateNewPatrolRoute();
             StartPatrol();
@@ -109,7 +106,6 @@ namespace WeGotOne
         private void StartPatrol()
         {
             StopMove();
-            isEvading = false;
             goingToPatrol = true;
             
             ApplyingFacing(patrolPosition.x - spawnPosition.x);
@@ -153,7 +149,6 @@ namespace WeGotOne
             Debug.LogWarning($"{name} : 전방에 장애물 [{obstacleLayer.value}] 감지! 즉시 회피 및 반대 방향으로 복귀합니다.");
             
             StopMove();
-            isEvading = true;
 
             // 가던 방향 상태를 강제 토글
             goingToPatrol = !goingToPatrol;
