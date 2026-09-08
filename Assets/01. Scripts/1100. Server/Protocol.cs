@@ -144,6 +144,7 @@ namespace HelloServer
         public int TutorialReadyCount { get; set; }
         public int TutorialTotalCount { get; set; }
         public bool IsStartButtonPressed { get; set; }
+        public bool IsTutorialEnd { get; set; }
     }
     
 

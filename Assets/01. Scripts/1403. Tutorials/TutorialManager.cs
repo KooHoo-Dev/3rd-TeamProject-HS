@@ -54,6 +54,8 @@ namespace WeGotOne
 
         public bool IsTargetChange = false;
         
+        public bool IsTutorialCanvasOpen = true;
+        
         private GameObject[] CheckBoxes => new[]
         {
             playerCheckBox_First, playerCheckBox_Second, playerCheckBox_Thrid, playerCheckBox_Foruth
@@ -81,7 +83,9 @@ namespace WeGotOne
         {
             currentStep = TutorialStep.KeyboardGuide;
             
-            tutorialCanvas.SetActive(true);
+            if(IsTutorialCanvasOpen)
+                tutorialCanvas.SetActive(true);
+            
             checkBoxUICanvas.SetActive(false);
             startButton.SetActive(false);
             keyboardImage.SetActive(true);
@@ -93,6 +97,9 @@ namespace WeGotOne
         
         private void Update()
         {
+            if(IsTutorialCanvasOpen == false)
+                tutorialCanvas.SetActive(false);
+            
             if (currentStep == TutorialStep.NotStarted || currentStep == TutorialStep.Completed) return;
 
             // 키보드 상태 감지 (새 인풋 시스템)
@@ -116,7 +123,7 @@ namespace WeGotOne
                 && RoomClient.Instance.SnapshotMessage != null)
             {
                 SnapshotMessage snapshotMessage = RoomClient.Instance.SnapshotMessage;
-                UpdateReadyState(snapshotMessage.TutorialReadyCount, snapshotMessage.TutorialTotalCount, snapshotMessage.IsStartButtonPressed);
+                UpdateReadyState(snapshotMessage.TutorialReadyCount, snapshotMessage.TutorialTotalCount, snapshotMessage.IsStartButtonPressed, snapshotMessage.IsTutorialEnd);
             }
         }
         
@@ -132,7 +139,7 @@ namespace WeGotOne
             startButton.SetActive(false);
             stormImage.SetActive(true);
             instructionText.text = "폭풍이 몰아칩니다!";
-
+            
             // 3초 대기
             yield return new WaitForSeconds(3f);
 
@@ -175,13 +182,14 @@ namespace WeGotOne
         private IEnumerator CloseTutorialUIPanel(float delay)
         {
             yield return new WaitForSeconds(delay);
+            IsTutorialCanvasOpen = false;
             tutorialCanvas.SetActive(false);
         }
 
         // 매 스냅샷마다 호출되어 체크박스를 채우고, 전원 준비 시 폭풍 연출을 시작합니다.
         // 호스트/게스트 모두 각자 로컬에서 동일하게 호출되어 독립적으로 진행합니다.
         // ==========================================
-        public void UpdateReadyState(int readyCount, int totalCount, bool isStartButtonPress)
+        public void UpdateReadyState(int readyCount, int totalCount, bool isStartButtonPress, bool isTutorialEnd)
         {
             var boxes = CheckBoxes;
             for (int i = 0; i < boxes.Length; i++)
@@ -191,6 +199,7 @@ namespace WeGotOne
             }
             
             isStartButtonPressed = isStartButtonPress;
+            IsTutorialCanvasOpen = isTutorialEnd;
 
             if (currentStep == TutorialStep.WaitAllReady 
                 && isStartButtonPressed 
