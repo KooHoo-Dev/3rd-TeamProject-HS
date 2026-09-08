@@ -19,8 +19,8 @@ namespace WeGotOne
             
             // 호스트는 직접 키보드 입력으로 계산
             Vector2 moveInput = SimpleInput.GetMoveAxisRaw();
-            bool leftGrab = SimpleInput.GetKey(Key.LeftShift);
-            bool rightGrab = SimpleInput.GetKey(Key.RightShift);
+            bool leftGrab = SimpleInput.GetMouseButton(SimpleInput.MouseButton.Left);
+            bool rightGrab = SimpleInput.GetMouseButton(SimpleInput.MouseButton.Right);
             bool buildKey = !IntegratedDebugUI.IsTeleportModeActive && SimpleInput.GetKey(Key.F);
                 
             controller.ApplyInput(moveInput, leftGrab, rightGrab, buildKey);
