@@ -55,5 +55,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 474fc939759cbbb4687e40836c4d377f, type: 3}
   - {fileID: 8300000, guid: df389de434dd2094ebd2ee29db2502b8, type: 3}
   - {fileID: 8300000, guid: 107214b9f92bdcf4ba69f57da01ada6e, type: 3}
+  - {fileID: 8300000, guid: 29bb764f841054f57af42b6b1b4037cb, type: 3}
+  - {fileID: 8300000, guid: c04ce27c1b3156348be41aa571e8e2fb, type: 3}
+  - {fileID: 8300000, guid: 3114f1807b5274346882c90bad1eee69, type: 3}
+  - {fileID: 8300000, guid: 0a19bf6755e26b542b7eb839e64fda26, type: 3}
   sfxVolume: 1
   channels: 16
