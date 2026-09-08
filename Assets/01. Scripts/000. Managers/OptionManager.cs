@@ -9,6 +9,7 @@ namespace WeGotOne
     {
         [SerializeField] private GameObject optionCanvas;
         [SerializeField] private GameObject mainButton;
+        [SerializeField] private GameObject respawnButton;
         
         public float BgmVolume { get; private set; }
         public float SfxVolume { get; private set; }
@@ -82,6 +83,12 @@ namespace WeGotOne
         public void QuitGame()
         {
             Application.Quit();
+        }
+        
+        public void RespawnButton()
+        {
+            StartCoroutine(RoomClient.Instance.LocalPlayer.Death());
+            optionCanvas.SetActive(false);
         }
         
         private void UpdateMainButton()
