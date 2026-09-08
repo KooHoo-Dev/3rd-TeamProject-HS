@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using HelloServer;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -75,14 +76,23 @@ namespace WeGotOne
 
         public void MainMenu()
         {
+            // await RoomClient.Instance.QuitGame();
             RoomClient.Instance.QuitGame().Forget();
             SceneManager.LoadScene(menu);
             optionCanvas.SetActive(false);
         }
         
-        public void QuitGame()
+        public async void QuitGame()
         {
-            Application.Quit();
+            try
+            {
+                await RoomClient.Instance.QuitGame();
+                Application.Quit();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("QuitGame Failed", e);
+            }
         }
         
         public void RespawnButton()

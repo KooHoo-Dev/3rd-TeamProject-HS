@@ -198,10 +198,15 @@ namespace HelloServer
                     Debug.LogWarning("[방] 연결이 끊겼다");
                     // 나가기 메시지를 받지 못했는데 먼저 예외처리되면 OnLeave 실행해주기
                     // OnLeave(new LeaveMessage { Id = Me.Id });
+                    SceneManager.LoadScene(0);
                     return;
                 }
 
-                if (result.MessageType == WebSocketMessageType.Close) return;
+                if (result.MessageType == WebSocketMessageType.Close)
+                {
+                    socket.Dispose();
+                    return;
+                }
 
                 builder.Append(Encoding.UTF8.GetString(buffer, 0, result.Count));
 
@@ -222,11 +227,10 @@ namespace HelloServer
                 return;
             }
             
-            await UniTask.Yield(PlayerLoopTiming.PreLateUpdate);
-
             if (socket.State == WebSocketState.Open)
             {
-                await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Leave Room", CancellationToken.None);
+                await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Leave Room", CancellationToken.None);
+                socket.Dispose();
             }
 
             ClearInfo();
@@ -407,12 +411,6 @@ namespace HelloServer
             Destroy(remote.gameObject);
             UpdateUserText(false, message.Id);
 
-            // 씬 다시 로드하도록 설정
-            if (message.Id == Me.Id)
-            {
-                // 자기 자신이 나갔다면 씬 재로드
-                SceneManager.LoadScene(0);
-            }
             Debug.Log($"[방] {message.Id} 이(가) 나갔다");
         }
 
