@@ -54,6 +54,24 @@ namespace WeGotOne
         public BottomArmController RightBottomArm => rightBottomArm;
         public PlayerStamina Body => body;
 
+        public void DebugTeleport(Vector2 position)
+        {
+            // 손의 외부 고정을 먼저 풀고 몸통/팔의 상대 위치를 유지한 채 이동합니다.
+            HandleGrab(false, false);
+            foreach (BottomArmController arm in FindObjectsByType<BottomArmController>(FindObjectsSortMode.None))
+            {
+                if (arm.GrabbedTarget != null && arm.GrabbedTarget.transform.IsChildOf(transform))
+                    arm.Release();
+            }
+            Vector2 offset = position - (Vector2)body.transform.position;
+            foreach (Rigidbody2D part in GetComponentsInChildren<Rigidbody2D>())
+            {
+                part.position += offset;
+                part.linearVelocity = Vector2.zero;
+                part.angularVelocity = 0f;
+            }
+        }
+
         #region Ai추가
 
         public PlayerState InitialPlayerState { get; private set; }
