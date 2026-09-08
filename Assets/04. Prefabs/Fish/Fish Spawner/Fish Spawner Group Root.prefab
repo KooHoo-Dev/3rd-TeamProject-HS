@@ -82,14 +82,14 @@ PrefabInstance:
     - target: {fileID: 3137777513514744970, guid: a5fba1976bea3b44f821f2d1d023ab9e, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: f612e1309aaa3884085ed8b9b6c2ed5d, type: 3}
+      objectReference: {fileID: 21300000, guid: 3f32751a69655b14aa267ab4c3ed5f67, type: 3}
     - target: {fileID: 4785796982406212080, guid: a5fba1976bea3b44f821f2d1d023ab9e, type: 3}
       propertyPath: m_Name
       value: Fish Spawner Final Group
       objectReference: {fileID: 0}
     - target: {fileID: 5655508354616618803, guid: a5fba1976bea3b44f821f2d1d023ab9e, type: 3}
       propertyPath: itemId
-      value: 9
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7067639836286056230, guid: a5fba1976bea3b44f821f2d1d023ab9e, type: 3}
       propertyPath: m_LocalPosition.x

@@ -584,7 +584,7 @@ namespace HelloServer
 
                 snapshot.InventoryEntries = inventoryEntries.ToArray();
 
-                snapshot.CurrentBridgeCount = BridgeManager.Instance.CurrentBridgeCount();
+                snapshot.CurrentBridgeCount = BridgeManager.Instance.CurrentBridgeCount;
                 snapshot.ActivePlayerCount = GameManager.Instance.ActivePlayerCount;
                 snapshot.ArrivedPlayerCount = GameManager.Instance.ArrivedPlayerCount;
 

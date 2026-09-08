@@ -36,20 +36,22 @@ public class ShrimpPunch : MonoBehaviour
             Rigidbody2D bodyRb = other.transform.GetComponent<Rigidbody2D>();
             bool isRight = transform.GetComponentInParent<Transform>().position.x - other.transform.position.x < 0;
             knockbackForce = isRight ? knockbackForce : -knockbackForce;
-            StartCoroutine(PlayConfusedParticle());
+            StartCoroutine(PlayPunchParticle());
             bodyRb.AddForce(new Vector2(direction.x, 0) * knockbackForce, ForceMode2D.Impulse);
         }
     }
 
-    private IEnumerator PlayConfusedParticle()
+    private IEnumerator PlayPunchParticle()
     {
         if (punchParticle == null)
             yield return null;
         if (punchParticle.isPlaying)
             yield return null;
 
-        punchParticle.gameObject.SetActive(true);
+        if(punchParticle)
+            punchParticle.gameObject.SetActive(true);
         yield return new WaitForSeconds(punchTime);
-        punchParticle.gameObject.SetActive(false);
+        if(punchParticle)
+            punchParticle.gameObject.SetActive(false);
     }
 }

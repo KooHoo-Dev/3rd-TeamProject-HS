@@ -112,7 +112,7 @@ namespace WeGotOne
             {
                 keyboardImage.SetActive(false);
                 checkBoxUICanvas.SetActive(true);
-                startButton.SetActive(true);
+                if(isHost) startButton.SetActive(true);
                 instructionText.text = "플레이 준비가 완료되면 [F] 키를 꾹 눌러주세요.";
                 currentStep = TutorialStep.WaitAllReady;
             }
@@ -133,14 +133,14 @@ namespace WeGotOne
         // 2. [요청 사양] Storm 이미지 3초 작동 코루틴
         private IEnumerator PlayStormSequence()
         {
-            if (isStormCoroutineRunning) yield break;
             isStormCoroutineRunning = true;
             
             currentStep = TutorialStep.StormActive;
 
             // Storm 이미지 활성화
             startButton.SetActive(false);
-            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Thunder);
+            if(AudioManager.Instance.sfxClips[(int)AudioManager.Sfx.Thunder])
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.Thunder);
             stormImage.SetActive(true);
             instructionText.text = "폭풍이 몰아칩니다!";
             

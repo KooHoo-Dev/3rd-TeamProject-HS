@@ -137,8 +137,8 @@ namespace WeGotOne
             
             // 1. 상위 팔(ArmController)의 추가 힘 연산을 위한 이벤트 알림
             Grabbed?.Invoke(grabbedTarget);
-
-            AudioManager.Instance.PlaySfx(AudioManager.Sfx.PopGrab);
+            if(AudioManager.Instance.sfxClips[(int)AudioManager.Sfx.PopGrab])
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.PopGrab);
             
             if (grabbedTarget != null && grabbedTarget.TryGetComponent<ICatchable>(out var catchable))
             {
@@ -184,7 +184,8 @@ namespace WeGotOne
             
             // 2. 상위 팔(ArmController)의 물리 힘 복원을 위한 이벤트 알림
             Released?.Invoke();
-            AudioManager.Instance.PlaySfx(AudioManager.Sfx.PopRelease);
+            if(AudioManager.Instance.sfxClips[(int)AudioManager.Sfx.PopRelease])
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.PopRelease);
         }
 
 #endregion
