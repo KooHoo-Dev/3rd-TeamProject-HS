@@ -44,7 +44,6 @@ namespace WeGotOne
         
         private TutorialStep currentStep = TutorialStep.NotStarted;
         private bool isHost;
-        private bool isStormCoroutineRunning = false;
         private bool isStartButtonPressed = false;
 
         public bool IsStartButtonPressed => isStartButtonPressed;
@@ -142,8 +141,6 @@ namespace WeGotOne
         // 2. [요청 사양] Storm 이미지 3초 작동 코루틴
         private IEnumerator PlayStormSequence()
         {
-            isStormCoroutineRunning = true;
-            
             currentStep = TutorialStep.StormActive;
 
             // Storm 이미지 활성화
@@ -167,8 +164,6 @@ namespace WeGotOne
             
             instructionText.text = "아 안돼..! 꼬마!";
             currentStep = TutorialStep.Falling;
-            
-            isStormCoroutineRunning = false;
         }
 
         // 3. [요청 사양] 호스트 컴퓨터에서만 낙하 트리거 판정

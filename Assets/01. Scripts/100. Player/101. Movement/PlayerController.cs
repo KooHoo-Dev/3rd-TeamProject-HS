@@ -46,7 +46,7 @@ namespace WeGotOne
         private float deathMin = 500f;
         private float deathMax = 1000f;
         private float respawnTime = 5f;
-        private bool isDead;
+        
         private int deadBodyLayer;
         private Rigidbody2D[] bodyPart;
         [SerializeField] private HingeJoint2D[] partJoint;
@@ -96,8 +96,6 @@ namespace WeGotOne
         
         public IEnumerator Death()
         {
-            isDead = true;
-            
             AudioManager.Instance.PlaySfx(AudioManager.Sfx.PulseEnd);
 
             ClearArmDirections();
@@ -126,7 +124,6 @@ namespace WeGotOne
             if (GameManager.Instance.IsGameOver == false)
             {
                 RespawnPlayer();
-                isDead = false;
             }
         }
         
