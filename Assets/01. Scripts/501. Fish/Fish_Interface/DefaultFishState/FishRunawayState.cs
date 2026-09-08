@@ -25,7 +25,7 @@ namespace WeGotOne.Fish_Interface
             // 도망칠 방향 계산 (예시: 플레이어의 반대 방향이나 랜덤 방향)
             runawayDirection = Random.insideUnitCircle.normalized;
             runawayTimer = 0;
-            AudioManager.Instance.PlaySfx(AudioManager.Sfx.FishRunaway);
+            // AudioManager.Instance.PlaySfx(AudioManager.Sfx.FishRunaway);
             owner.RunawayParticle.SetActive(true);
             if (owner.Animator != null)
             {
