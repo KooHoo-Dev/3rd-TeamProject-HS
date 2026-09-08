@@ -86,7 +86,7 @@ namespace WeGotOne
         {
             currentStep = TutorialStep.KeyboardGuide;
             
-            if(IsTutorialEnd)
+            if(IsTutorialEnd == false)
                 tutorialCanvas.SetActive(true);
             
             checkBoxUICanvas.SetActive(false);
