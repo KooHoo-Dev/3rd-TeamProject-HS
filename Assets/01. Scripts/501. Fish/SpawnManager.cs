@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using HelloServer;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace WeGotOne
@@ -17,13 +19,17 @@ namespace WeGotOne
             public FishSpawnerGroup[] Groups => groups;
         }
 
-        [SerializeField] private StageEntry[] stages;
+        [SerializeField] private List<StageEntry> stages;
+        private Transform barricadeGroup;
+        private List<Transform> barricades = new List<Transform>();
 
         private BridgeManager bridgeManager;
         private DayLoop dayLoop;
         private FishObjectPool fishObjectPool;
         private StageEntry currentStage;
         private int currentGroupIndex;
+        
+        private bool IsLastStage(StageEntry entry) => stages.IndexOf(entry) == stages.Count - 1;
 
         private IEnumerator Start()
         {
@@ -38,6 +44,14 @@ namespace WeGotOne
             bridgeManager = BridgeManager.Instance;
             dayLoop = DayLoop.Instance;
             fishObjectPool = FishObjectPool.Instance;
+            
+            // 바리케이드 정보 초기화
+            barricadeGroup = GameObject.Find("Barricade Group").transform;
+            foreach (Transform child in barricadeGroup)
+            {
+                barricades.Add(child);
+            }
+            barricades[0].gameObject.SetActive(true);
 
             ValidateStages();
 
@@ -71,10 +85,21 @@ namespace WeGotOne
             }
 
             GameManager.Instance.IsCamTargetChange = true;
+            ChangeBarricade(currentStage, nextStage);
+
             fishObjectPool.ReleaseAllActiveFish();
             currentStage = nextStage;
             currentGroupIndex = 0;
             SpawnCurrentGroup();
+        }
+
+        private void ChangeBarricade(StageEntry currentStage, StageEntry nextStage)
+        {
+            barricades[FindStageIndex(currentStage)].gameObject.SetActive(false);
+            
+            // 마지막 스테이지가 아니면 다음 바리케이드 활성화
+            if (IsLastStage(nextStage) == false)
+                barricades[FindStageIndex(nextStage)].gameObject.SetActive(true);
         }
 
         private void HandleDayChanged()
@@ -111,14 +136,24 @@ namespace WeGotOne
             return selectedStage;
         }
 
+        private int FindStageIndex(StageEntry entry)
+        {
+            return stages.IndexOf(entry);
+        }
+
         private void ValidateStages()
         {
-            if (stages == null || stages.Length == 0)
+            if (stages == null || stages.Count == 0)
             {
                 throw new InvalidOperationException("Fish Spawn Stage가 설정되지 않았습니다.");
             }
 
-            for (int i = 0; i < stages.Length; i++)
+            if (stages.Count - 1 != barricades.Count)
+            {
+                throw new InvalidOperationException($"바리케이드 개수가 유효하지 않습니다. 바리케이드 개수가 스테이지 개수보다 1개 적어야함. 스테이지 수({stages.Count}), 바리케이드 수({barricades.Count})");
+            }
+
+            for (int i = 0; i < stages.Count; i++)
             {
                 StageEntry stage = stages[i];
                 if (stage == null || stage.MinBridgeCount < 0 ||
@@ -144,7 +179,9 @@ namespace WeGotOne
                             $"중복된 MinBridgeCount가 있습니다: {stage.MinBridgeCount}");
                     }
                 }
+                
             }
         }
+
     }
 }
