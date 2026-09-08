@@ -564,7 +564,7 @@ namespace HelloServer
                 snapshot.TutorialReadyCount = (hostHolding ? 1 : 0) + guestHoldingCount;
                 snapshot.TutorialTotalCount = RemoteCount;
                 snapshot.IsStartButtonPressed = TutorialManager.Instance.IsStartButtonPressed;
-                snapshot.IsTutorialEnd = TutorialManager.Instance.IsTutorialCanvasOpen;
+                snapshot.IsTutorialEnd = TutorialManager.Instance.IsTutorialEnd;
 
                 snapshot.Players = playerStates.ToArray();
                 if (DayLoop.Instance != null)

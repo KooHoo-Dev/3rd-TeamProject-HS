@@ -54,7 +54,7 @@ namespace WeGotOne
 
         public bool IsTargetChange = false;
         
-        public bool IsTutorialCanvasOpen = true;
+        public bool IsTutorialEnd = false;
         
         private int readyCount;
         private int totalCount;
@@ -86,7 +86,7 @@ namespace WeGotOne
         {
             currentStep = TutorialStep.KeyboardGuide;
             
-            if(IsTutorialCanvasOpen)
+            if(IsTutorialEnd)
                 tutorialCanvas.SetActive(true);
             
             checkBoxUICanvas.SetActive(false);
@@ -100,7 +100,7 @@ namespace WeGotOne
         
         private void Update()
         {
-            if(IsTutorialCanvasOpen == false)
+            if(IsTutorialEnd)
                 tutorialCanvas.SetActive(false);
             
             if (currentStep == TutorialStep.NotStarted || currentStep == TutorialStep.Completed) return;
@@ -186,7 +186,6 @@ namespace WeGotOne
         private IEnumerator CloseTutorialUIPanel(float delay)
         {
             yield return new WaitForSeconds(delay);
-            IsTutorialCanvasOpen = false;
             tutorialCanvas.SetActive(false);
         }
 
@@ -203,15 +202,16 @@ namespace WeGotOne
             }
             
             isStartButtonPressed = isStartButtonPress;
-            IsTutorialCanvasOpen = isTutorialEnd;
+            IsTutorialEnd = isTutorialEnd;
             this.readyCount = readyCount;
             this.totalCount = totalCount;
 
-            if (currentStep == TutorialStep.WaitAllReady 
-                && isStartButtonPressed 
+            if (IsTutorialEnd || (currentStep == TutorialStep.WaitAllReady 
+                && isStartButtonPressed
                 && totalCount > 0 
-                && readyCount >= totalCount)
+                && readyCount >= totalCount) )
             {
+                IsTutorialEnd = true;
                 StartCoroutine(PlayStormSequence());
             }
         }
@@ -219,7 +219,7 @@ namespace WeGotOne
         public void HandleStartButton()
         {
             isStartButtonPressed = true;
-            UpdateReadyState(readyCount, totalCount, isStartButtonPressed, IsTutorialCanvasOpen);
+            UpdateReadyState(readyCount, totalCount, isStartButtonPressed, IsTutorialEnd);
         }
     }
 }
