@@ -4624,19 +4624,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3971148503425627309, guid: e281bc9225aa7c54e9be98a70979ed52, type: 3}
       propertyPath: m_Size.x
-      value: 2.4148893
+      value: 5.975755
       objectReference: {fileID: 0}
     - target: {fileID: 3971148503425627309, guid: e281bc9225aa7c54e9be98a70979ed52, type: 3}
       propertyPath: m_Size.y
-      value: 2.785902
+      value: 5.41714
       objectReference: {fileID: 0}
     - target: {fileID: 3971148503425627309, guid: e281bc9225aa7c54e9be98a70979ed52, type: 3}
       propertyPath: m_Offset.x
-      value: 0.20901704
+      value: 1.9894507
       objectReference: {fileID: 0}
     - target: {fileID: 3971148503425627309, guid: e281bc9225aa7c54e9be98a70979ed52, type: 3}
       propertyPath: m_Offset.y
-      value: 0.89295125
+      value: 2.20857
       objectReference: {fileID: 0}
     - target: {fileID: 5782479096039645167, guid: e281bc9225aa7c54e9be98a70979ed52, type: 3}
       propertyPath: m_IsActive
@@ -4645,10 +4645,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5782479096039645167, guid: e281bc9225aa7c54e9be98a70979ed52, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e281bc9225aa7c54e9be98a70979ed52, type: 3}
 --- !u!1 &1146012733
 GameObject:
