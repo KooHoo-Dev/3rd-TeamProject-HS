@@ -23,7 +23,7 @@ namespace WeGotOne
 
         private IEnumerator Start()
         {
-            yield return new WaitUntil(() => InventoryItemDB.Instance.IsInitialized);
+            yield return new WaitUntil(() => InventoryItemDB.Instance.IsInitialized && BridgeManager.IsInitialized && ItemManager.Instance.IsInitialized);
 
             inventoryItemDB = InventoryItemDB.Instance;
             bridgeManager = BridgeManager.Instance;
