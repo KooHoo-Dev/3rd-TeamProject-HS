@@ -224,7 +224,7 @@ namespace WeGotOne
             }
         }
 
-        public async void HandleStartButton()
+        public void HandleStartButton()
         {
             isStartButtonPressed = true;
             UpdateReadyState(readyCount, totalCount, isStartButtonPressed, IsTutorialEnd);
