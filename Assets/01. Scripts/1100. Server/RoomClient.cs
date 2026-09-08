@@ -221,7 +221,8 @@ namespace HelloServer
             {
                 await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Leave Room", CancellationToken.None);
             }
-            
+
+            ClearInfo();
             IsBusy = false;
         }
 
