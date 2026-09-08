@@ -94,8 +94,12 @@ namespace WeGotOne
         {
             IsPickUp = true;
             ResetTransformSnapshot();
-            FishObjectPool.Instance.Release(this);
+            if (IsFishItemIndex)
+                FishObjectPool.Instance.Release(this);
+            
             gameObject.SetActive(false); // 나무가 사라지지 않아서 추가함
         }
+
+        private bool IsFishItemIndex => itemId > 0 && itemId < 100;
     }
 }
