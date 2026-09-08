@@ -59,6 +59,7 @@ namespace WeGotOne
         
         private int readyCount;
         private int totalCount;
+        private bool oneShotBool = false;
 
         private GameObject[] CheckBoxes => new[]
         {
@@ -203,6 +204,7 @@ namespace WeGotOne
         // ==========================================
         public void UpdateReadyState(int readyCount, int totalCount, bool isStartButtonPress, bool isTutorialEnd)
         {
+            if (oneShotBool) return;
             var boxes = CheckBoxes;
             for (int i = 0; i < boxes.Length; i++)
             {
@@ -215,11 +217,13 @@ namespace WeGotOne
             this.readyCount = readyCount;
             this.totalCount = totalCount;
 
-            if (IsTutorialEnd || (currentStep == TutorialStep.WaitAllReady 
+            if ((IsTutorialEnd && currentStep == TutorialStep.WaitAllReady )
+                || (currentStep == TutorialStep.WaitAllReady 
                 && isStartButtonPressed
                 && totalCount > 0 
                 && readyCount >= totalCount) )
             {
+                oneShotBool = true;
                 StartCoroutine(PlayStormSequence());
             }
         }
