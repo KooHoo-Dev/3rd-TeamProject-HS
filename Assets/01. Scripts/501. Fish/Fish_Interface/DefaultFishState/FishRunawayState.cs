@@ -14,7 +14,7 @@ namespace WeGotOne.Fish_Interface
         private Vector2 runawayDirection;
         private float runawaySpeed = 6.0f;
         private float runawayDuration = 3.0f;
-        
+
         private float runawayTimer;
 
         public void Enter(FishStateManager owner)
@@ -26,7 +26,10 @@ namespace WeGotOne.Fish_Interface
             runawayDirection = Random.insideUnitCircle.normalized;
             runawayTimer = 0;
             // AudioManager.Instance.PlaySfx(AudioManager.Sfx.FishRunaway);
-            owner.RunawayParticle.SetActive(true);
+            if (owner.RunawayParticle != null)
+            {
+                owner.RunawayParticle.SetActive(true);
+            }
             if (owner.Animator != null)
             {
                 owner.Animator.speed = 20;
@@ -36,18 +39,19 @@ namespace WeGotOne.Fish_Interface
         public void Tick()
         {
             if (owner == null || owner.FishMovement == null) return;
-            
+
             // 매 프레임 모터(Movement)에 도망 지시
             owner.FishMovement.Move(runawayDirection, runawaySpeed);
-            
+
             runawayTimer += Time.deltaTime;
-            
+
             if (runawayTimer >= runawayDuration)
             {
                 if (owner.Animator != null)
                 {
                     owner.Animator.speed = 1;
                 }
+
                 owner.RunawayParticle.SetActive(false);
                 owner.ChangeState(new FishIdleState());
             }
@@ -61,6 +65,7 @@ namespace WeGotOne.Fish_Interface
                 {
                     owner.Animator.speed = 1;
                 }
+
                 owner.RunawayParticle.SetActive(false);
                 owner.FishMovement.StopMove();
             }
