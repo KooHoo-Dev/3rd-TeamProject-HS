@@ -91,9 +91,10 @@ namespace HelloServer
             Application.runInBackground = true;
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             socket?.Dispose();
+            base.OnDestroy();
         }
 
         #endregion
@@ -218,7 +219,7 @@ namespace HelloServer
 
             if (socket.State == WebSocketState.Open)
             {
-                socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Leave Room", CancellationToken.None);
+                await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Leave Room", CancellationToken.None);
             }
             
             IsBusy = false;

@@ -48,7 +48,7 @@ namespace WeGotOne
         [ContextMenu("Set Total Player Count")]
         public void SetTotalPlayerCount()
         {
-            playerList = new List<PlayerStamina>(FindObjectsOfType<PlayerStamina>());
+            playerList = new List<PlayerStamina>(FindObjectsByType<PlayerStamina>(FindObjectsSortMode.None));
             GameManager.Instance.SetTotalPlayerCount(playerList.Count);
         }
     }
