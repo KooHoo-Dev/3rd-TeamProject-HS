@@ -133,7 +133,6 @@ namespace WeGotOne
         // 2. [요청 사양] Storm 이미지 3초 작동 코루틴
         private IEnumerator PlayStormSequence()
         {
-            if (isStormCoroutineRunning) yield break;
             isStormCoroutineRunning = true;
             
             currentStep = TutorialStep.StormActive;
