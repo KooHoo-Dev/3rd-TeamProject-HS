@@ -4610,9 +4610,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1943328504104264958, guid: c1482c370817d47428f43be6b3d2cbf0, type: 3}
+      propertyPath: delayBeforeButton
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1943328504104264958, guid: c1482c370817d47428f43be6b3d2cbf0, type: 3}
+      propertyPath: titleDropDuration
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3627117152060255483, guid: c1482c370817d47428f43be6b3d2cbf0, type: 3}
       propertyPath: m_SortingOrder
       value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 5995531738671459417, guid: c1482c370817d47428f43be6b3d2cbf0, type: 3}
+      propertyPath: delayAfterMonster
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5995531738671459417, guid: c1482c370817d47428f43be6b3d2cbf0, type: 3}
+      propertyPath: delayBetweenTexts
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7049,7 +7065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1efcb4b9cb440148a5556e9ec720aa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.EasyRoomClient
-  code: 123456
+  code: 2894651
   who: 
 --- !u!4 &1679873783
 Transform:
@@ -7212,6 +7228,7 @@ MonoBehaviour:
   - {fileID: 1866798504}
   - {fileID: 1866798503}
   IsTargetChange: 0
+  IsTutorialCanvasOpen: 1
 --- !u!4 &1741673855
 Transform:
   m_ObjectHideFlags: 0
@@ -7333,7 +7350,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1773449821
 Transform:
   m_ObjectHideFlags: 0
@@ -7720,7 +7737,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1854665568
 RectTransform:
   m_ObjectHideFlags: 0
