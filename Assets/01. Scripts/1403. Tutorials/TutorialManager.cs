@@ -112,7 +112,7 @@ namespace WeGotOne
             {
                 keyboardImage.SetActive(false);
                 checkBoxUICanvas.SetActive(true);
-                startButton.SetActive(true);
+                if(isHost) startButton.SetActive(true);
                 instructionText.text = "플레이 준비가 완료되면 [F] 키를 꾹 눌러주세요.";
                 currentStep = TutorialStep.WaitAllReady;
             }
