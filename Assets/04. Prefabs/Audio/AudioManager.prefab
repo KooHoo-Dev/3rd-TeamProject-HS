@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6733356166813313168
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 699719290234973766}
+  - component: {fileID: 7506947685849972696}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &699719290234973766
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6733356166813313168}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 18.0295, y: 2.08082, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7506947685849972696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6733356166813313168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e23a2857f4da19a488f5cef61aac14bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.AudioManager
+  bgmClips:
+  - {fileID: 8300000, guid: e103e48eda7dd134bb42a10d9d070a2d, type: 3}
+  bgmVolume: 1
+  sfxClips:
+  - {fileID: 8300000, guid: ef4376a6c29119e4eb3db92c69e4e04a, type: 3}
+  - {fileID: 8300000, guid: b6523e063a1b12f4aadf9e1689f282ee, type: 3}
+  - {fileID: 8300000, guid: 909f9c49590d75c409fb6456365799cb, type: 3}
+  - {fileID: 8300000, guid: 315a094ba5087f3468018c6576f8a4a2, type: 3}
+  - {fileID: 8300000, guid: 474fc939759cbbb4687e40836c4d377f, type: 3}
+  - {fileID: 8300000, guid: df389de434dd2094ebd2ee29db2502b8, type: 3}
+  - {fileID: 8300000, guid: 107214b9f92bdcf4ba69f57da01ada6e, type: 3}
+  sfxVolume: 1
+  channels: 16

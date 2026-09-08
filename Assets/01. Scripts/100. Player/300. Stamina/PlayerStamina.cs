@@ -39,8 +39,8 @@ namespace WeGotOne
         public float CurrentStamina => currentStamina;
         public float MaxStamina => maxStamina;
         private float staminaSoundTimer;
-        [SerializeField] public GameObject up;
-        [SerializeField] public GameObject down;
+        public GameObject up;
+        public GameObject down;
         
         
         // 움직임 제어용

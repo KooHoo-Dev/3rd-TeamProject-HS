@@ -30,13 +30,13 @@ namespace WeGotOne
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            BridgeObjects = bridgeTransform.GetComponentsInChildren<Bridge>(true);
         }
 
         private async void Start()
         {
             try
             {
+                BridgeObjects = bridgeTransform.GetComponentsInChildren<Bridge>(true);
                 await UniTask.WaitUntil(() => ItemManager.Instance.IsInitialized);
                 bridgeTable = await BridgeTable.LoadAsync(ItemManager.Instance.Items);
             }

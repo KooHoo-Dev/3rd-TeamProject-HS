@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using HelloServer;
 
 namespace WeGotOne
@@ -39,14 +40,27 @@ namespace WeGotOne
             gameOverUI.gameObject.SetActive(false);
             gameWinUI.gameObject.SetActive(false);
         }
-        
-        private void OnEnable()
+
+        private async void OnEnable()
         {
-            BridgeManager.Instance.OnBridgeBuild += CheckPlayerWin;
+            try
+            {
+                if (CanRunLocalGameLogic == false) return;
+
+                await UniTask.WaitUntil(() => BridgeManager.IsInitialized);
+                BridgeManager.Instance.OnBridgeBuild += CheckPlayerWin;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("GameManager OnEnable() Failed", e);
+            }
         }
 
         private void OnDisable()
         {
+            if (CanRunLocalGameLogic == false) return;
+            if (BridgeManager.Instance == null) return;
+            
             BridgeManager.Instance.OnBridgeBuild -= CheckPlayerWin;
         }
 

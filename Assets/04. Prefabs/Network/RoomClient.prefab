@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7758014116864251977}
-  - component: {fileID: 6646491063213981602}
   - component: {fileID: 8266702139256692037}
   m_Layer: 0
   m_Name: RoomClient
@@ -81,8 +80,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8206142639208193814}
   m_Layer: 0
-  m_Name: SpawnPoint
-  m_TagString: Untagged
+  m_Name: Player Spawn Point
+  m_TagString: Player Spawn Point
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

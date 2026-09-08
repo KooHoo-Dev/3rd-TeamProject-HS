@@ -18,7 +18,7 @@ namespace HelloServer
     // RoomClient가 서버와의 네트워크 작업을 담당한다.
     // 송신, 수신 등을 모두 처리하는 객체
     // 씬에 종속적이지 않음
-    public class RoomClient : SceneSingleton<RoomClient>
+    public class RoomClient : SingletonBase<RoomClient>
     {
         [Header("서버")]
         // 웹소켓 주소. http 가 아니라 ws로 시작.
@@ -39,9 +39,9 @@ namespace HelloServer
         // 남이 들어올 때마다 이걸로 하나씩 만든다.
         [SerializeField] private PlayerController remotePrefab;
         private PlayerController localPlayer;
-        [SerializeField] private Image staminaGauge;
-        [SerializeField] private GameObject up;
-        [SerializeField] private GameObject down;
+        private Image staminaGauge;
+        private GameObject up;
+        private GameObject down;
 
         [Header("보내기")]
         // 초당 몇 번 내 위치를 보낼지.
@@ -81,8 +81,6 @@ namespace HelloServer
         // 한 소켓에 동시에 두 번 보내면 안 된다.
         private readonly SemaphoreSlim sendLock = new SemaphoreSlim(1, 1);
         private WorldItemSnapshotSynchronizer worldItemSynchronizer;
-        
-        private TutorialManager tutorialManager; 
 
         #region unity method
 
@@ -91,8 +89,6 @@ namespace HelloServer
             base.OnInitialize();
             // true로 해둬야 백그라운드에서도 데이터 수신 가능
             Application.runInBackground = true;
-            worldItemSynchronizer = FindFirstObjectByType<WorldItemSnapshotSynchronizer>();
-            tutorialManager = FindObjectOfType<TutorialManager>();
         }
 
         private void OnDestroy()
@@ -105,7 +101,7 @@ namespace HelloServer
         public void Join(string code, string who, Color color)
         {
             if (IsBusy) return;
-
+            
             roomCode = code;
             nickName = who;
             playerColor = color;
@@ -130,7 +126,7 @@ namespace HelloServer
 
             // 방 코드는 주소에 실어 보낸다.  ws://localhost:5000/room?code=ABCD
             string full = $"{url}?code={UnityWebRequest.EscapeURL(roomCode)}";
-
+            
             try
             {
                 // socket을 통해 해당 주소로 접속한다. UnitTask를 사용한다
@@ -146,6 +142,7 @@ namespace HelloServer
             }
 
             Debug.Log($"[방] {full} 에 접속.  : {nickName}");
+            await SceneManager.LoadSceneAsync(1).ToUniTask();
             // 첫 마디는 반드시 hello 다. 서버가 이걸 받아야 번호를 줌.
             await SendAsync(new HelloMessage { NickName = nickName , R = playerColor.r, G = playerColor.g, B = playerColor.b});
             // 보내기는 따로 돈다. 듣는 동안에도 계속 보내야함.
@@ -156,7 +153,7 @@ namespace HelloServer
             IsBusy = false;
             Me = null;
         }
-
+        
         #region 듣기
 
         // 끊길 때까지 계속 듣는다.
@@ -192,8 +189,7 @@ namespace HelloServer
                 {
                     Debug.LogWarning("[방] 연결이 끊겼다");
                     // 나가기 메시지를 받지 못했는데 먼저 예외처리되면 OnLeave 실행해주기
-                    // 자기 자신이 나갔다면 씬 재로드
-                    OnLeave(new LeaveMessage { Id = Me.Id });
+                    // OnLeave(new LeaveMessage { Id = Me.Id });
                     return;
                 }
 
@@ -209,6 +205,23 @@ namespace HelloServer
 
                 Handle(json);
             }
+        }
+
+        public async UniTask QuitGame()
+        {
+            if (socket == null)
+            {
+                return;
+            }
+            
+            await UniTask.Yield(PlayerLoopTiming.PreLateUpdate);
+
+            if (socket.State == WebSocketState.Open)
+            {
+                socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Leave Room", CancellationToken.None);
+            }
+            
+            IsBusy = false;
         }
 
         // 받은 글자 하나를 종류에 따라 나눠 준다.
@@ -240,11 +253,6 @@ namespace HelloServer
 
             foreach (PlayerState state in message.Players)
             {
-                // snapshot에 자기자신도 있어서 제거
-                // if (state.Id == Me.Id)
-                // {
-                //     localPlayer.ApplyPosition(state, state.IsLeftGrab, state.IsRightGrab);
-                // }
                 if (remotes.TryGetValue(state.Id, out PlayerController remote))
                 {
                     remote.ApplySnapshot(state, state.IsLeftGrab, state.IsRightGrab);
@@ -255,7 +263,11 @@ namespace HelloServer
             // 스냅샷의 다리 개수만큼 게스트의 다리 오브젝트 활성화
             // BridgeManager.Instance.BuildBridgeWithoutCost(message.CurrentBridgeCount);
             BridgeManager.Instance.ApplySnapshot(message.CurrentBridgeCount);
-            worldItemSynchronizer?.ApplySnapshot(message);
+            if (worldItemSynchronizer == null)
+            {
+                worldItemSynchronizer = WorldItemSnapshotSynchronizer.Instance;
+            }
+            worldItemSynchronizer.ApplySnapshot(message);
             
             GameManager.Instance.ApplySnapshot(message.ActivePlayerCount, message.ArrivedPlayerCount);
             InventoryItemDB.Instance.ApplySnapshot(message.InventoryEntries);
@@ -264,10 +276,6 @@ namespace HelloServer
                 // 앞서 작성한 DayApplyFromNetwork 메서드를 호출해 상태가 다를 때만 연출을 깨웁니다.
                 DayLoop.Instance.DayApplyFromNetwork(message.IsDay);
             }
-            
-            if (tutorialManager != null)
-                tutorialManager.UpdateReadyState(message.TutorialReadyCount, message.TutorialTotalCount, message.IsStartButtonPressed);
-            Debug.Log(GetJson(message));
             SnapshotMessage = message;
         }
 
@@ -294,11 +302,36 @@ namespace HelloServer
 
             GuestInputGroupMessage = message;
         }
+        
+        private void ClearInfo()
+        {
+            for (int i = 0; i < cameraIdList.Count; i++)
+            {
+                string id = $"u{cameraIdList[i]}";
+
+                if (remotes.TryGetValue(id, out PlayerController player))
+                {
+                    if (player != null)
+                    {
+                        Destroy(player.gameObject);
+                    }
+                }
+            }
+
+            remotes.Clear();
+            cameraIdList.Clear();
+            arrivedPlayerIds.Clear();
+
+            localPlayer = null;
+        }
 
         private void OnWelcome(WelcomeMessage message)
         {
+            ClearInfo();
+            
             Me = message.User;
             RoomCode = message.RoomCode;
+            
             GameManager.Instance.ResetNetworkPlayerCounts();
             arrivedPlayerIds.Clear();
 
@@ -316,14 +349,26 @@ namespace HelloServer
             }
 
             remotes.TryGetValue(Me.Id, out PlayerController localPlayer);
-            
+
+            if (staminaGauge == null)
+            {
+                staminaGauge = GameObject.Find("Stamina Fill").GetComponent<Image>();
+            }
+            if (up == null)
+            {
+                up = GameObject.Find("Stamina Up");
+            }
+            if (down == null)
+            {
+                down = GameObject.Find("Stamina Down");
+            }
             localPlayer.Body.StaminaGauge = staminaGauge;
             localPlayer.Body.up = up;
             localPlayer.Body.down = down;
             this.localPlayer = localPlayer;
             
-            localPlayer.Setup(Me);
-            TutorialManager.Instance.StartTutorial(); // 들어오면 튜토리얼 시작
+            // Spawn할때 자동으로 해줘서 뺌
+            // localPlayer.Setup(Me);
         }
 
         private void OnJoin(JoinMessage message)
@@ -340,11 +385,11 @@ namespace HelloServer
             if (Me.IsHost)
             {
                 bool wasArrived = arrivedPlayerIds.Remove(message.Id);
-                GameManager.Instance.RemovePlayer(message.Id, remote.Body.IsStarved, wasArrived);
+                GameManager.Instance?.RemovePlayer(message.Id, remote.Body.IsStarved, wasArrived);
             }
             else
             {
-                GameManager.Instance.RemovePlayer();
+                GameManager.Instance?.RemovePlayer();
             }
 
             remotes.Remove(message.Id);
@@ -411,6 +456,11 @@ namespace HelloServer
             // InputBranch X
             // 호스트 X / Me X
             // InputBranch X
+            // if (spawnPoint == null)
+            // {
+            //     spawnPoint = GameObject.FindGameObjectWithTag("Player Spawn Point").transform;
+            // }
+            Debug.Log($"[방] {user.NickName}({user.Id}) 이(가) 스폰한다");
             if (remotes.ContainsKey(user.Id)) return false;
 
             PlayerController remote = Instantiate(remotePrefab, spawnPoint.position, Quaternion.identity);
@@ -469,7 +519,11 @@ namespace HelloServer
                 var snapshot = new SnapshotMessage();
 
                 // 2. 월드 아이템은 Registry 기준으로 활성 객체만 패킹한다.
-                worldItemSynchronizer?.PackActiveWorldItems(snapshot);
+                if (worldItemSynchronizer == null)
+                {
+                    worldItemSynchronizer = WorldItemSnapshotSynchronizer.Instance;
+                }
+                worldItemSynchronizer.PackActiveWorldItems(snapshot);
 
                 // 3. [플레이어 상태 연동]: 나와 다른 게스트 플레이어들의 상태 채우기
                 var playerStates = new List<PlayerState>();
@@ -487,21 +541,6 @@ namespace HelloServer
                 }
 
                 snapshot.Players = playerStates.ToArray();
-
-                bool hostHolding = localPlayer.IsBuild;
-                int guestHoldingCount = 0;
-                if (GuestInputGroupMessage != null)
-                {
-                    foreach (var input in GuestInputGroupMessage.Inputs)
-                    {
-                        if (input != null && input.IsBuildKeyHold) guestHoldingCount++;
-                    }
-                }
-                snapshot.TutorialReadyCount = (hostHolding ? 1 : 0) + guestHoldingCount;
-                snapshot.TutorialTotalCount = RemoteCount;
-                snapshot.IsStartButtonPressed = TutorialManager.Instance.IsStartButtonPressed;
-                
-                
                 if (DayLoop.Instance != null)
                 {
                     snapshot.IsDay = (DayLoop.Instance.CurrentDayType == DayLoop.DayType.Day);

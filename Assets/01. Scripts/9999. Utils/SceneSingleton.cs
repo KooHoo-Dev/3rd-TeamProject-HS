@@ -10,43 +10,8 @@ namespace WeGotOne
         private static bool isInitialized = false;
 
         public static bool IsInitialized => isInitialized && instance != null;
-        
-        public static T Instance
-        {
-            get
-            {
-                lock (lockObj)
-                {
-                    // 이미 살아 있는 인스턴스라면 종료 중이라도 그대로 돌려준다.
-                    // OnDestroy에서 구독을 해제하는 것 같은 "정리 작업"이 이걸 필요로 한다.
-                    if (instance != null) return instance;
 
-                    // 여기부터는 "새로 만들어야 하는" 상황이다.
-                    // 종료 중에 새로 만들면 파괴된 오브젝트가 되살아나 씬에 남으므로 막는다.
-                    if (applicationIsQuitting)
-                    {
-                        Debug.LogWarning($"[Singleton] {typeof(T)} 생성 시도됨: 애플리케이션 종료 중");
-                        return null;
-                    }
-
-                    // 씬에 이미 놓여 있는지 먼저 찾아보고, 없으면 그때 만든다.
-                    instance = FindAnyObjectByType<T>();
-
-                    if (instance == null)
-                    {
-                        var singletonObject = new GameObject(typeof(T).Name);
-                        instance = singletonObject.AddComponent<T>();
-                        // SingletonBase에서 DontDestroyOnLoad 뺀 버전
-                        // DontDestroyOnLoad(singletonObject);
-                    }
-
-                    (instance as SceneSingleton<T>)?.OnInitialize();
-                    isInitialized = true;
-
-                    return instance;
-                }
-            }
-        }
+        public static T Instance => instance;
 
         protected virtual void Awake()
         {

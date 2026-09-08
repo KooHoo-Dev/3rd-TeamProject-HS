@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 
 namespace WeGotOne
 {
-    public class TutorialManager : SingletonBase<TutorialManager>
+    public class TutorialManager : SceneSingleton<TutorialManager>
     {   
         public enum TutorialStep
         {
