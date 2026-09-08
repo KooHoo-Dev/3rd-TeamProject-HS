@@ -122,8 +122,8 @@ namespace WeGotOne
             }
 
             yield return new WaitForSeconds(respawnTime);
-
-            if (GameManager.Instance.IsGameOver)
+            
+            if (GameManager.Instance.IsGameOver == false)
             {
                 RespawnPlayer();
                 isDead = false;
