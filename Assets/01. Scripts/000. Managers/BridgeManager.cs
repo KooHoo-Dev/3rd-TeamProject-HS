@@ -90,10 +90,15 @@ namespace WeGotOne
 
         public void ApplySnapshot(int messageCurrentBridgeCount)
         {
-            for (int i = 0; i < messageCurrentBridgeCount; i++)
+            if (messageCurrentBridgeCount > CurrentBridgeCount)
             {
-                BridgeObjects[i].gameObject.SetActive(true);
+                for (int i = currentBridgeCount; i < messageCurrentBridgeCount; i++)
+                {
+                    BridgeObjects[i].gameObject.SetActive(true);
+                }
+                OnBridgeBuild?.Invoke();
             }
+            currentBridgeCount = messageCurrentBridgeCount;
         }
         
         public void HandleItemPickup(Collision2D other)
