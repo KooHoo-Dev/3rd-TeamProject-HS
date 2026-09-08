@@ -28,6 +28,7 @@ namespace WeGotOne
         private string followedPlayerId;
 
         private int currentPoint;
+        public float ChangeWaitTime { get; private set; }
 
         private void Start()
         {
@@ -94,11 +95,11 @@ namespace WeGotOne
                     Vector3 lerpPos = Vector3.Lerp(Cam.transform.position, targetPos + offset, lerpSpeed * Time.deltaTime);
                     lerpPos.z = Cam.transform.position.z; // 2D의 경우 z는 바뀌지 않습니다.
                     Cam.transform.position = lerpPos;
-                    if (GameManager.Instance.IsCamTargetChange &&
-                        Mathf.Abs(Cam.transform.position.x - targetPos.x) <= 0.1f)
+                    if (GameManager.Instance.IsCamTargetChange && Mathf.Abs(Cam.transform.position.x -
+                                                                            GameManager.Instance.CheckPoints[currentPoint].transform.position.x) <= 0.1f)
                     {
-                        Debug.Log(Cam.transform.position);
                         GameManager.Instance.IsCamTargetChange = false;
+                        ChangeWaitTime = 0.0f;
                         currentPoint++;
                     }
                     break;
@@ -112,9 +113,12 @@ namespace WeGotOne
 
             if (GameManager.Instance.IsCamTargetChange)
             {
-                Debug.Log(GameManager.Instance.CheckPoints[currentPoint].transform.position);
-                lerpSpeed = 1f;
-                return GameManager.Instance.CheckPoints[currentPoint].transform.position;
+                ChangeWaitTime += Time.deltaTime;
+                if (ChangeWaitTime >= 1.0f)
+                {
+                    lerpSpeed = 1f;
+                    return GameManager.Instance.CheckPoints[currentPoint].transform.position;   
+                }
             }
             
             if (followedPlayerId != null && keyboard[followKey].isPressed)
