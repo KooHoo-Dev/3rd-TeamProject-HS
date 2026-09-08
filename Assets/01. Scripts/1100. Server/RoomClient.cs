@@ -123,6 +123,7 @@ namespace HelloServer
 
         // 방에서 오간 말. 로비가 그대로 그린다.
         public IReadOnlyList<string> ChatLog => chatLog;
+        public PlayerController LocalPlayer => localPlayer;
 
         // 접속하고, 이름을 알리고, 끊길 때까지 듣는다.
         private async UniTaskVoid RunAsync()
@@ -552,16 +553,17 @@ namespace HelloServer
                 
                 snapshot.Players = playerStates.ToArray();
 
-                bool hostHolding = localPlayer.IsBuild;
-                int guestHoldingCount = 0;
-                if (GuestInputGroupMessage != null)
-                {
-                    foreach (var input in GuestInputGroupMessage.Inputs)
-                    {
-                        if (input != null && input.IsBuildKeyHold) guestHoldingCount++;
-                    }
-                }
-                snapshot.TutorialReadyCount = (hostHolding ? 1 : 0) + guestHoldingCount;
+                // bool hostHolding = localPlayer.IsBuild;
+                // int guestHoldingCount = 0;
+                // if (GuestInputGroupMessage != null)
+                // {
+                //     foreach (var input in GuestInputGroupMessage.Inputs)
+                //     {
+                //         if (input != null && input.IsBuildKeyHold) guestHoldingCount++;
+                //     }
+                // }
+                // snapshot.TutorialReadyCount = (hostHolding ? 1 : 0) + guestHoldingCount;
+                snapshot.TutorialReadyCount = TutorialManager.Instance.ReadyCount;
                 snapshot.TutorialTotalCount = RemoteCount;
                 snapshot.IsStartButtonPressed = TutorialManager.Instance.IsStartButtonPressed;
                 snapshot.IsTutorialEnd = TutorialManager.Instance.IsTutorialEnd;

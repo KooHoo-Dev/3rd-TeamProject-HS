@@ -55,6 +55,7 @@ namespace WeGotOne
         public bool IsTargetChange = false;
         
         public bool IsTutorialEnd = false;
+        public int ReadyCount => readyCount;
         
         private int readyCount;
         private int totalCount;
@@ -116,20 +117,27 @@ namespace WeGotOne
                 instructionText.text = "플레이 준비가 완료되면 [F] 키를 꾹 눌러주세요.";
                 currentStep = TutorialStep.WaitAllReady;
             }
-        }
-
-        private void LateUpdate()
-        {
+            
             if (RoomClient.IsInitialized
                 && RoomClient.Instance.Me != null
                 && RoomClient.Instance.Me.IsHost
                 && RoomClient.Instance.SnapshotMessage != null)
             {
                 SnapshotMessage snapshotMessage = RoomClient.Instance.SnapshotMessage;
-                UpdateReadyState(snapshotMessage.TutorialReadyCount, snapshotMessage.TutorialTotalCount, snapshotMessage.IsStartButtonPressed, snapshotMessage.IsTutorialEnd);
+                bool hostHolding = RoomClient.Instance.LocalPlayer.IsBuild;
+                int guestHoldingCount = 0;
+                if (RoomClient.Instance.GuestInputGroupMessage != null)
+                {
+                    foreach (var input in RoomClient.Instance.GuestInputGroupMessage.Inputs)
+                    {
+                        if (input != null && input.IsBuildKeyHold) guestHoldingCount++;
+                    }
+                }
+                readyCount = (hostHolding ? 1 : 0) + guestHoldingCount;
+                UpdateReadyState(readyCount, snapshotMessage.TutorialTotalCount, IsStartButtonPressed, IsTutorialEnd);
             }
         }
-        
+
         // 2. [요청 사양] Storm 이미지 3초 작동 코루틴
         private IEnumerator PlayStormSequence()
         {
@@ -216,7 +224,7 @@ namespace WeGotOne
             }
         }
 
-        public void HandleStartButton()
+        public async void HandleStartButton()
         {
             isStartButtonPressed = true;
             UpdateReadyState(readyCount, totalCount, isStartButtonPressed, IsTutorialEnd);
