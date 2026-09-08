@@ -47,6 +47,10 @@ namespace HelloServer
         public float Y { get; set; }
         
         public Rotation Rotation { get; set; }
+        
+        public int TutorialReadyCount { get; set; }
+        public int TutorialTotalCount { get; set; }
+        public bool IsStartButtonPressed { get; set; }
     }
 
     public class Rotation

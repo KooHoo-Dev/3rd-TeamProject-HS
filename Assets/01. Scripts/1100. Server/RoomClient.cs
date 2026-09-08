@@ -276,6 +276,9 @@ namespace HelloServer
                 // 앞서 작성한 DayApplyFromNetwork 메서드를 호출해 상태가 다를 때만 연출을 깨웁니다.
                 DayLoop.Instance.DayApplyFromNetwork(message.IsDay);
             }
+            
+            if (TutorialManager.Instance != null)
+                TutorialManager.Instance.UpdateReadyState(message.TutorialReadyCount, message.TutorialTotalCount, message.IsStartButtonPressed);
             SnapshotMessage = message;
         }
 
@@ -367,10 +370,8 @@ namespace HelloServer
             localPlayer.Body.down = down;
             this.localPlayer = localPlayer;
 
+            localPlayer.Setup(Me);
             TutorialManager.Instance.StartTutorial();
-
-            // Spawn할때 자동으로 해줘서 뺌
-            // localPlayer.Setup(Me);
         }
 
         private void OnJoin(JoinMessage message)
