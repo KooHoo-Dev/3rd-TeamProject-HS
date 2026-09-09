@@ -128,7 +128,7 @@ namespace WeGotOne
                 if (ChangeWaitTime >= 1.0f)
                 {
                     lerpSpeed = 1f;
-                    if (currentPoint <= GameManager.Instance.CheckPoints.Length)
+                    if (currentPoint < GameManager.Instance.CheckPoints.Length)
                     {
                         return GameManager.Instance.CheckPoints[currentPoint].transform.position;    
                     }
