@@ -99,6 +99,7 @@ namespace WeGotOne
                     Debug.LogError($"[WorldItemRegistry] 고정 Plank에 WorldItem이 없습니다: {child.name}");
                     nextFixedWorldItemId++;
                 }
+                RegisterFixedPlanksRecursively(child, ref nextFixedWorldItemId);
             }
         }
     }
