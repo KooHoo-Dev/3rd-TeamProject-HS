@@ -144,7 +144,7 @@ namespace WeGotOne
             {
                 grabbedTarget.gameObject.GetComponent<FishStateManager>().PlayerRootPosition = transform.root;
                 grabbedTarget.gameObject.GetComponent<FishStateManager>().TargetInfo = transform.GetComponentInParent<PlayerController>();
-                catchable.OnGrabbed();
+                catchable.OnGrabbed(this);
             }
             
             if (currentTarget.CompareTag("Fish"))
@@ -177,7 +177,7 @@ namespace WeGotOne
             // 1. 잡고 있던 대상에게 놓아주었음을 먼저 통보
             if (grabbedTarget != null && grabbedTarget.TryGetComponent<ICatchable>(out var catchable))
             {
-                catchable.OnReleased();
+                catchable.OnReleased(this);
             }
             
             grabbedTarget = null;
