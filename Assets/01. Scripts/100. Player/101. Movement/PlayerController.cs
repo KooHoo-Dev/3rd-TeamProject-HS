@@ -360,6 +360,7 @@ namespace WeGotOne
             if (isPressRespawn)
             {
                 StartCoroutine(Death());
+                RoomClient.Instance.isRespawn = false;
                 return;
             }
             
