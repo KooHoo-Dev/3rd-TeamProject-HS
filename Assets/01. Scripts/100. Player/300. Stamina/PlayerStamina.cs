@@ -265,10 +265,14 @@ namespace WeGotOne
             OnPlayerStarveStateChanged?.Invoke(isStarved);
         }
 
-        public void ApplySnapshot(float snapshotCurrentStamina)
+        public void ApplySnapshot(float snapshotCurrentStamina, bool respawnRequest)
         {
             // 호스트가 설정한 최대치 초과 디버그 스태미나도 그대로 동기화합니다.
             currentStamina = Mathf.Max(snapshotCurrentStamina, 0f);
+            
+            if(respawnRequest)
+                StartCoroutine(playerController.Death());
+            
             UpdateStamina();
         }
 

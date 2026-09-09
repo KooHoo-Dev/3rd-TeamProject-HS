@@ -18,6 +18,8 @@ namespace WeGotOne
         public int CurrentWidth { get; private set; }
         public int CurrentHeight { get; private set; }
 
+        public bool RespawnRequest = false;
+
         private string menu = "MainMenu";
         
         private void Start()
@@ -97,7 +99,7 @@ namespace WeGotOne
         
         public void RespawnButton()
         {
-            StartCoroutine(RoomClient.Instance.LocalPlayer.Death());
+            RespawnRequest = true;
             optionCanvas.SetActive(false);
         }
         

@@ -364,7 +364,7 @@ namespace WeGotOne
 
         public void ApplySnapshot(PlayerState position, bool leftGrab, bool rightGrab)
         {
-            body.ApplySnapshot(position.CurrentHunger);
+            body.ApplySnapshot(position.CurrentHunger, position.IsRespawnPressed);
             
             // 서버에서 들어온 값 저장
             Vector2 newBodyPosition = ToVector2(position.Body);

@@ -96,7 +96,7 @@ namespace WeGotOne.Editor
             Check(stamina.CurrentStamina == 9990f, "Debug stamina still consumes normally");
             stamina.SetDebugStamina(stamina.MaxStamina);
             Check(stamina.CurrentStamina == stamina.MaxStamina, "Restore exactly maxStamina");
-            stamina.ApplySnapshot(10000f);
+            stamina.ApplySnapshot(10000f, false);
             Check(stamina.CurrentStamina == 10000f, "Snapshot preserves 10000 stamina on a guest");
 
             Rigidbody2D[] parts = player.GetComponentsInChildren<Rigidbody2D>();
