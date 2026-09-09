@@ -53,7 +53,9 @@ namespace WeGotOne
         private int defaultLayer;
         
         private float currentArmForce;
+        private bool isRespawning;
         public float CurrentArmForce => currentArmForce;
+        public bool IsRespawning => isRespawning;
         
         public bool IsBuild { get; private set; }
         public bool IsParalysis = false; // 마비 상태인지 판단
@@ -96,6 +98,7 @@ namespace WeGotOne
         
         public IEnumerator Death()
         {
+            isRespawning = true;
             AudioManager.Instance.PlaySfx(AudioManager.Sfx.PulseEnd);
 
             ClearArmDirections();
@@ -124,7 +127,18 @@ namespace WeGotOne
             if (GameManager.Instance.IsGameOver == false)
             {
                 RespawnPlayer();
+                isRespawning = false;
             }
+        }
+
+        public void StartRespawn()
+        {
+            if (isRespawning)
+            {
+                return;
+            }
+
+            StartCoroutine(Death());
         }
         
         private void RespawnPlayer()
@@ -359,8 +373,7 @@ namespace WeGotOne
 
             if (isPressRespawn)
             {
-                StartCoroutine(Death());
-                RoomClient.Instance.isRespawn = false;
+                StartRespawn();
                 return;
             }
             

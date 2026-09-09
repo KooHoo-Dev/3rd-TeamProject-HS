@@ -24,7 +24,8 @@ namespace WeGotOne
             bool rightGrab = SimpleInput.GetMouseButton(SimpleInput.MouseButton.Right);
             bool buildKey = !IntegratedDebugUI.IsTeleportModeActive && SimpleInput.GetKey(Key.F);
                 
-            controller.ApplyInput(moveInput, leftGrab, rightGrab, buildKey, RoomClient.Instance.isRespawn);
+            controller.ApplyInput(moveInput, leftGrab, rightGrab, buildKey,
+                RoomClient.Instance.ConsumeLocalRespawnRequest());
         }
     }
 }

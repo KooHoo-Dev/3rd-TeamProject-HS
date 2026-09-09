@@ -52,7 +52,7 @@ namespace HelloServer
 
         [SerializeField] private Transform spawnPoint;
 
-        public bool isRespawn = false;
+        private bool isRespawn;
         // 서버가 정해 준 내 정보. welcome 을 받기 전에는 비어 있다.
         public User Me { get; private set; }
 
@@ -126,6 +126,22 @@ namespace HelloServer
         // 방에서 오간 말. 로비가 그대로 그린다.
         public IReadOnlyList<string> ChatLog => chatLog;
         public PlayerController LocalPlayer => localPlayer;
+
+        public void RequestRespawn()
+        {
+            isRespawn = true;
+        }
+
+        public bool ConsumeLocalRespawnRequest()
+        {
+            if (isRespawn == false)
+            {
+                return false;
+            }
+
+            isRespawn = false;
+            return true;
+        }
 
         // 접속하고, 이름을 알리고, 끊길 때까지 듣는다.
         private async UniTaskVoid RunAsync()
@@ -268,6 +284,11 @@ namespace HelloServer
 
             foreach (PlayerState state in message.Players)
             {
+                if (state.Id == Me.Id && state.IsRespawnPressed)
+                {
+                    isRespawn = false;
+                }
+
                 if (remotes.TryGetValue(state.Id, out PlayerController remote))
                 {
                     remote.ApplySnapshot(state, state.IsLeftGrab, state.IsRightGrab);
@@ -614,7 +635,6 @@ namespace HelloServer
                 Mouse mouse = Mouse.current;
                 await SendInputMessages(input, mouse.leftButton.isPressed, mouse.rightButton.isPressed,
                     keyboard.fKey.isPressed, isRespawn);
-                isRespawn = false;
             }
         }
 
@@ -692,6 +712,7 @@ namespace HelloServer
             {
                 Id = playerId,
                 CurrentHunger = remotes[playerId].Body.CurrentStamina,
+                IsRespawnPressed = remotes[playerId].IsRespawning,
                 Body = new PartState
                 {
                     X = remotes[playerId].Body.transform.position.x,
