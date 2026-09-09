@@ -6,12 +6,13 @@ namespace WeGotOne.Fish_Interface
     {
         private FishStateManager owner;
         private Vector2 startPosition;
-        private float returnSpeed = 2.0f;
+        private float returnSpeed = 3.0f;
 
         public void Enter(FishStateManager owner)
         {
             this.owner = owner;
             startPosition = owner.StartPosition;
+            Debug.Log("returning");
         }
 
         public void Tick()
