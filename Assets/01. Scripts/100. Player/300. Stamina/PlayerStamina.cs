@@ -3,6 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using HelloServer;
+using Unity.Cinemachine;
 
 namespace WeGotOne
 {
@@ -103,7 +104,7 @@ namespace WeGotOne
 
         public void SetSpawnPoint(Transform spawnPoint)
         {
-            spawnPosition = spawnPoint.position;
+            spawnPosition = new Vector3(spawnPoint.position.x, spawnPoint.position.y + 5f, spawnPoint.position.z);
         }
 
         public void GoSpawnPoint()

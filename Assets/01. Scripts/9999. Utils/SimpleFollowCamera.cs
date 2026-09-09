@@ -106,6 +106,8 @@ namespace WeGotOne
                     {
                         GameManager.Instance.IsCamTargetChange = false;
                         ChangeWaitTime = 0.0f;
+                        GameManager.Instance.spawnPointIndex = currentPoint;
+                        GameManager.Instance.UpdateSpawnPoint();
                         currentPoint++;
                     }
                     break;
