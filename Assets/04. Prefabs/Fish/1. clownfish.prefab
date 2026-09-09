@@ -151,7 +151,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 54.4, y: -6.9, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 6.6666665}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3502967335382876135}
@@ -305,7 +305,7 @@ MonoBehaviour:
   <FishName>k__BackingField: 
   ObjectPool: {fileID: 0}
   fishMovement: {fileID: 7288073790878514883}
-  maxResistance: 100
+  maxResistance: 5
   obstacleSensor: {fileID: 0}
   <CurrentResistance>k__BackingField: 0
   <HitParticle>k__BackingField: {fileID: 6503798154358984368}
