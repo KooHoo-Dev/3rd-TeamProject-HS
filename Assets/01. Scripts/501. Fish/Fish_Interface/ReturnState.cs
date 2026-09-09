@@ -18,6 +18,7 @@ namespace WeGotOne.Fish_Interface
         public void Tick()
         {
             owner.FishMovement.Move(startPosition,returnSpeed);
+            Debug.Log($"시작 위치: {startPosition}, 속도: {returnSpeed}");
 
             if (Vector2.Distance(startPosition, owner.transform.position) < 1.0f)
             {
