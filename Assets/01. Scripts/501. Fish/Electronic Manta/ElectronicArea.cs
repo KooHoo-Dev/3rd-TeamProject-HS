@@ -28,6 +28,7 @@ namespace WeGotOne.Electronic_Manta
             {
                 Debug.Log("Paralysis Enter");
                 PlayerParalysisAsync(other).Forget();
+                other.GetComponentInChildren<BottomArmController>().Release();
                 StartCoroutine(ElectronicAttackActive());
             }
         }
