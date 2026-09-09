@@ -455,6 +455,18 @@ namespace HelloServer
                 arrivedPlayerIds.Remove(playerId);
             }
         }
+        
+        public void AllRelease()
+        {
+            localPlayer.LeftBottomArm.Release();
+            localPlayer.RightBottomArm.Release();
+
+            foreach (var player in remotes)
+            {
+                player.Value.LeftBottomArm.Release();
+                player.Value.RightBottomArm.Release();
+            }
+        }
 
         private bool Spawn(User user)
         {

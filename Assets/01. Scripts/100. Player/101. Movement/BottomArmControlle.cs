@@ -36,17 +36,6 @@ namespace WeGotOne
             // 잡기 Joint 활성화
             grabJoint.enabled = true;
         }
-
-        // [수정]: 이벤트를 보낸 손(hand)을 받도록 수정
-        protected override void OnReleased()
-        {
-            // 잡기 Joint 해제
-            grabJoint.enabled = false;
-            grabJoint.connectedBody = null;
-
-            // 상태 초기화
-            base.OnReleased();
-        }
         
         public void Grab()
         {
@@ -55,6 +44,10 @@ namespace WeGotOne
 
         public void Release()
         {
+            // 잡기 Joint 해제
+            grabJoint.enabled = false;
+            grabJoint.connectedBody = null;
+            
             Hand.Release();
         }
     }

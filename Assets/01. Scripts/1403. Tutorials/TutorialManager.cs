@@ -160,6 +160,7 @@ namespace WeGotOne
 
             // 5. GameLobyArea의 Floor 비활성화 (낙하 유도)
             if (floor != null) floor.SetActive(false);
+            RoomClient.Instance.AllRelease();
             checkBoxUICanvas.SetActive(false);
             
             instructionText.text = "아 안돼..! 꼬마!";
