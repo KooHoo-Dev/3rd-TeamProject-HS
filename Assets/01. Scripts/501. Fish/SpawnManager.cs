@@ -78,6 +78,7 @@ namespace WeGotOne
         private void HandleBridgeBuild()
         {
             StageEntry nextStage = FindStage(bridgeManager.CurrentBridgeCount);
+            currentStage = nextStage;
             if (nextStage == currentStage)
             {
                 return;
@@ -91,7 +92,7 @@ namespace WeGotOne
             ChangeBarricade(currentStage, nextStage);
 
             fishObjectPool.ReleaseAllActiveFish();
-            currentStage = nextStage;
+            
             currentGroupIndex = 0;
             SpawnCurrentGroup();
         }
