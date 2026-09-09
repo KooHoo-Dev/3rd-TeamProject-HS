@@ -32,6 +32,7 @@ Transform:
   - {fileID: 309187229745497804}
   - {fileID: 5183628646705767215}
   - {fileID: 6111260849986359746}
+  - {fileID: 4033926811316988165}
   - {fileID: 7133786085022609760}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -609,6 +610,68 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7405848700459449600, guid: 1c9bdc02d6e458a488a733f0d5be844a, type: 3}
   m_PrefabInstance: {fileID: 2485326723650842621}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3372103400039302841
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3671919204306712592}
+    m_Modifications:
+    - target: {fileID: 1817058563798069180, guid: 1ac33e4136c3a8b4e845ba27427f0a70, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 65.87677
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817058563798069180, guid: 1ac33e4136c3a8b4e845ba27427f0a70, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -11.95921
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817058563798069180, guid: 1ac33e4136c3a8b4e845ba27427f0a70, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817058563798069180, guid: 1ac33e4136c3a8b4e845ba27427f0a70, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817058563798069180, guid: 1ac33e4136c3a8b4e845ba27427f0a70, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817058563798069180, guid: 1ac33e4136c3a8b4e845ba27427f0a70, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817058563798069180, guid: 1ac33e4136c3a8b4e845ba27427f0a70, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817058563798069180, guid: 1ac33e4136c3a8b4e845ba27427f0a70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817058563798069180, guid: 1ac33e4136c3a8b4e845ba27427f0a70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817058563798069180, guid: 1ac33e4136c3a8b4e845ba27427f0a70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4819706161756207379, guid: 1ac33e4136c3a8b4e845ba27427f0a70, type: 3}
+      propertyPath: m_Name
+      value: Fish Spawner Stage 2 Group 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1ac33e4136c3a8b4e845ba27427f0a70, type: 3}
+--- !u!4 &4033926811316988165 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1817058563798069180, guid: 1ac33e4136c3a8b4e845ba27427f0a70, type: 3}
+  m_PrefabInstance: {fileID: 3372103400039302841}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6342554778525113055
 PrefabInstance:
