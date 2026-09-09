@@ -99,6 +99,8 @@ namespace WeGotOne
 
         private void ChangeBarricade(StageEntry currentStage, StageEntry nextStage)
         {
+            if (IsLastStage(currentStage))
+                return;
             barricades[FindStageIndex(currentStage)].gameObject.SetActive(false);
             
             // 마지막 스테이지가 아니면 다음 바리케이드 활성화
