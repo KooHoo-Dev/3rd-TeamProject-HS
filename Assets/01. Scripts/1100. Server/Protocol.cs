@@ -113,6 +113,7 @@ namespace HelloServer
         public bool IsLeftShiftHold { get; set; }
         public bool IsRightShiftHold { get; set; }
         public bool IsBuildKeyHold { get; set; } // 아직 건설 키 확정이 아니라 명시는 안 함
+        public bool IsPressRespawn { get; set; }
     }
 
     public class GuestInputGroupMessage

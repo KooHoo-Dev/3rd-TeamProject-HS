@@ -99,7 +99,7 @@ namespace WeGotOne
         
         public void RespawnButton()
         {
-            RespawnRequest = true;
+            RoomClient.Instance.isRespawn = true;
             optionCanvas.SetActive(false);
         }
         

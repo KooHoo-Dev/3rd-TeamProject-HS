@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using HelloServer;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace WeGotOne
@@ -23,7 +24,7 @@ namespace WeGotOne
             bool rightGrab = SimpleInput.GetMouseButton(SimpleInput.MouseButton.Right);
             bool buildKey = !IntegratedDebugUI.IsTeleportModeActive && SimpleInput.GetKey(Key.F);
                 
-            controller.ApplyInput(moveInput, leftGrab, rightGrab, buildKey);
+            controller.ApplyInput(moveInput, leftGrab, rightGrab, buildKey, RoomClient.Instance.isRespawn);
         }
     }
 }

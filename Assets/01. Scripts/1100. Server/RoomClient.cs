@@ -51,6 +51,8 @@ namespace HelloServer
         private float sendPerSecond = 20f;
 
         [SerializeField] private Transform spawnPoint;
+
+        public bool isRespawn = false;
         // 서버가 정해 준 내 정보. welcome 을 받기 전에는 비어 있다.
         public User Me { get; private set; }
 
@@ -312,7 +314,7 @@ namespace HelloServer
                 }
                 
                 if (remotes.TryGetValue(input.Id, out PlayerController remote) == false) continue;
-                remote.ApplyInput(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold, input.IsBuildKeyHold);
+                remote.ApplyInput(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold, input.IsBuildKeyHold, input.IsPressRespawn);
             }
 
             GuestInputGroupMessage = message;
@@ -611,12 +613,13 @@ namespace HelloServer
                 Keyboard keyboard = Keyboard.current;
                 Mouse mouse = Mouse.current;
                 await SendInputMessages(input, mouse.leftButton.isPressed, mouse.rightButton.isPressed,
-                    keyboard.fKey.isPressed);
+                    keyboard.fKey.isPressed, isRespawn);
+                isRespawn = false;
             }
         }
 
 
-        private async UniTask SendInputMessages(Vector2 input, bool leftGrab, bool rightGrab, bool buildKey)
+        private async UniTask SendInputMessages(Vector2 input, bool leftGrab, bool rightGrab, bool buildKey, bool  pressRespawn)
         {
             // 플레이어 스스로의 입력 넣기
             GuestInputMessage = new GuestInputMessage
@@ -627,6 +630,7 @@ namespace HelloServer
                 IsLeftShiftHold = leftGrab,
                 IsRightShiftHold = rightGrab,
                 IsBuildKeyHold = buildKey,
+                IsPressRespawn = pressRespawn,
             };
             await SendAsync(GuestInputMessage);
         }

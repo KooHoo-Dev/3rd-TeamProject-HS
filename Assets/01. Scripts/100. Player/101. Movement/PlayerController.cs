@@ -349,11 +349,17 @@ namespace WeGotOne
             return highestForce;
         }
 
-        public void ApplyInput(Vector2 moveInput, bool leftGrab, bool rightGrab, bool isBuildKeyHold)
+        public void ApplyInput(Vector2 moveInput, bool leftGrab, bool rightGrab, bool isBuildKeyHold, bool isPressRespawn)
         {
             if (IsParalysis)
             {
                 Debug.Log("IsParalysis");
+                return;
+            }
+
+            if (isPressRespawn)
+            {
+                StartCoroutine(Death());
                 return;
             }
             
