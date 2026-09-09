@@ -13,6 +13,7 @@ namespace WeGotOne
         public int OutOfEnergyPlayerCount => totalPlayerCount - activePlayerCount;
         public int ActivePlayerCount => activePlayerCount;
         public int ArrivedPlayerCount => arrivedPlayerCount;
+        public GameResultState GameResult { get; private set; }
         
         // 플레이어 상태 변화
         [SerializeField] private RectTransform gameOverUI;
@@ -90,22 +91,19 @@ namespace WeGotOne
             if (IsGameOver && isGameWon)
             {
                 Debug.LogError("게임 오버와 승리 조건이 동시에 충족되었습니다. 게임 오버로 처리합니다.");
-                gameOverUI.gameObject.SetActive(true);
-                isGameFinished = true;
+                ApplyGameResult(GameResultState.GameOver);
                 return;
             }
 
             if (IsGameOver)
             {
-                gameOverUI.gameObject.SetActive(true);
-                isGameFinished = true;
+                ApplyGameResult(GameResultState.GameOver);
                 return;
             }
 
             if (isGameWon)
             {
-                gameWinUI.gameObject.SetActive(true);
-                isGameFinished = true;
+                ApplyGameResult(GameResultState.GameWin);
             }
         }
 
@@ -123,6 +121,7 @@ namespace WeGotOne
             arrivedPlayerCount = 0;
             arrivedPlayerIds.Clear();
             isGameFinished = false;
+            GameResult = GameResultState.None;
             
             if (gameOverUI != null)
             {
@@ -164,12 +163,15 @@ namespace WeGotOne
             EvaluateGameEnd();
         }
 
-        public void ApplySnapshot(int snapshotActivePlayerCount, int snapshotArrivedPlayerCount)
+        public void ApplySnapshot(
+            int snapshotActivePlayerCount,
+            int snapshotArrivedPlayerCount,
+            GameResultState snapshotGameResult)
         {
             activePlayerCount = snapshotActivePlayerCount;
             arrivedPlayerCount = snapshotArrivedPlayerCount;
 
-            EvaluateGameEnd();
+            ApplyGameResult(snapshotGameResult);
         }
 
         public void AddArrivedPlayerCount(string playerId)
@@ -222,6 +224,25 @@ namespace WeGotOne
             }
 
             EvaluateGameEnd();
+        }
+
+        private void ApplyGameResult(GameResultState gameResult)
+        {
+            if (gameResult == GameResultState.None || isGameFinished)
+            {
+                return;
+            }
+
+            GameResult = gameResult;
+            isGameFinished = true;
+
+            if (gameResult == GameResultState.GameOver)
+            {
+                gameOverUI.gameObject.SetActive(true);
+                return;
+            }
+
+            gameWinUI.gameObject.SetActive(true);
         }
 
         private bool CanRunLocalGameLogic

@@ -281,7 +281,10 @@ namespace HelloServer
             }
             worldItemSynchronizer.ApplySnapshot(message);
             
-            GameManager.Instance.ApplySnapshot(message.ActivePlayerCount, message.ArrivedPlayerCount);
+            GameManager.Instance.ApplySnapshot(
+                message.ActivePlayerCount,
+                message.ArrivedPlayerCount,
+                message.GameResult);
             InventoryItemDB.Instance.ApplySnapshot(message.InventoryEntries);
             if (DayLoop.Instance != null)
             {
@@ -599,6 +602,7 @@ namespace HelloServer
                 snapshot.CurrentBridgeCount = BridgeManager.Instance.CurrentBridgeCount;
                 snapshot.ActivePlayerCount = GameManager.Instance.ActivePlayerCount;
                 snapshot.ArrivedPlayerCount = GameManager.Instance.ArrivedPlayerCount;
+                snapshot.GameResult = GameManager.Instance.GameResult;
 
                 // 5. 서버로 패킷 전송
                 SnapshotMessage = snapshot;
