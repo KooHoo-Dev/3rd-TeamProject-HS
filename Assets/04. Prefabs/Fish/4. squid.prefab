@@ -339,8 +339,9 @@ MonoBehaviour:
   ObjectPool: {fileID: 0}
   fishMovement: {fileID: 0}
   maxResistance: 15
-  waterExitCooldown: 1
   obstacleSensor: {fileID: 0}
+  <CurrentResistance>k__BackingField: 0
+  <HitParticle>k__BackingField: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
   myType: 4
   baitType: 3
@@ -352,10 +353,10 @@ MonoBehaviour:
   bulletPrefab: {fileID: 0}
   <AbductionDestination>k__BackingField: {fileID: 0}
   <PlayerAttachPosition>k__BackingField: {fileID: 2089818971686721203}
-  ElectronicParticle: {fileID: 0}
   IsAttack: 1
   FaintDuration: 0
   confusedParticle: {fileID: 7758530654669745787}
+  <RunawayParticle>k__BackingField: {fileID: 1972700690882371021, guid: 99ad0f664c0d4d447aa4e818640ad735, type: 3}
 --- !u!114 &5252592357397533843
 MonoBehaviour:
   m_ObjectHideFlags: 0

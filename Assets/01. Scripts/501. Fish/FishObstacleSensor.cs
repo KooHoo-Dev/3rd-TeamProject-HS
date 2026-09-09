@@ -54,19 +54,43 @@ namespace WeGotOne
             if (moveDirection == Vector2.zero)
                 return;
 
+            // 여기에서 fish layer만 빼야하고
             RaycastHit2D obstacleHit = Physics2D.BoxCast(transform.position, obstacleCheckSize, 0f, 
                 moveDirection, obstacleCheckDistance, obstacleLayer);
+            // 여기에서 fish layer 포함해서 overlap
+            Vector2 checkPosition =
+                (Vector2)transform.position
+                + moveDirection.normalized * obstacleCheckDistance;
+
+            LayerMask fishLayerMask = LayerMask.GetMask("Fish");
+            Collider2D[] hits = Physics2D.OverlapBoxAll(
+                checkPosition,
+                obstacleCheckSize,
+                0f,
+                fishLayerMask
+            );
+
+            Collider2D myCollider = GetComponent<Collider2D>();
+
+            bool hasOtherFish = false;
+
+            for (int i = 0; i < hits.Length; i++)
+            {
+                if (hits[i] == myCollider)
+                    continue;
+
+                hasOtherFish = true;
+                break;
+            } 
+            // 새 코드 영역 끝
 
             bool hasObstacle = obstacleHit.collider != null;
             
-
-            Vector2 checkPosition = (Vector2)transform.position + moveDirection * obstacleCheckDistance;
-
             Collider2D waterCollider = Physics2D.OverlapPoint(checkPosition, waterLayer);
 
             bool isOutsideWater = waterCollider == null;
 
-            bool isBlocked = hasObstacle || isOutsideWater;
+            bool isBlocked = hasObstacle || isOutsideWater || hasOtherFish;
 
             if (isBlocked == false)
                 return;

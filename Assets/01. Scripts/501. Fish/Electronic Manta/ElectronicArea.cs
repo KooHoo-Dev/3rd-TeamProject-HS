@@ -17,6 +17,8 @@ namespace WeGotOne.Electronic_Manta
         private void OnEnable()
         {
             stateManager = GetComponentInParent<FishStateManager>();
+            if(electronicParticle)
+                electronicParticle.gameObject.SetActive(true);
             isAttack = true;
         }
 
@@ -25,21 +27,30 @@ namespace WeGotOne.Electronic_Manta
             if (other.CompareTag("Player") && isAttack)
             {
                 Debug.Log("Paralysis Enter");
-                StartCoroutine(PlayerParalysis(other));
+                PlayerParalysisAsync(other).Forget();
                 StartCoroutine(ElectronicAttackActive());
             }
         }
         
-        private IEnumerator PlayerParalysis(Collider2D other)
+        private async UniTaskVoid PlayerParalysisAsync(Collider2D other)
         {
             PlayerController player = other.GetComponentInParent<PlayerController>();
-            
-            player.IsParalysis = true;
-            
-            yield return new WaitForSeconds(paralysisDuration);
+            if (player == null) return;
 
-            player.IsParalysis = false;
-            Debug.Log(player.IsParalysis);
+            player.IsParalysis = true;
+
+            // 오브젝트 비활성화와 무관하게 동작하며, Time.timeScale의 영향도 정상적으로 받습니다.
+            // player가 도중에 파괴되면 작업이 안전하게 취소되도록 토큰을 연결합니다.
+            await UniTask.Delay(
+                System.TimeSpan.FromSeconds(paralysisDuration), 
+                cancellationToken: player.destroyCancellationToken
+            );
+
+            if (player != null)
+            {
+                player.IsParalysis = false;
+                Debug.Log(player.IsParalysis);
+            }
         }
         
         private IEnumerator ElectronicAttackActive()

@@ -31,6 +31,7 @@ namespace WeGotOne
 
         public bool IsCamTargetChange = false;
         public GameObject[] CheckPoints;
+        public int spawnPointIndex = 0;
         public bool IsGameOver => activePlayerCount == 0;
         
         #region unity events
@@ -66,6 +67,12 @@ namespace WeGotOne
         }
 
         #endregion
+
+        public void UpdateSpawnPoint()
+        {
+            if(0 < spawnPointIndex)
+                RoomClient.Instance.LocalPlayer.Body.SetSpawnPoint(CheckPoints[spawnPointIndex-1].transform); 
+        }
 
         private void CheckPlayerWin()
         {

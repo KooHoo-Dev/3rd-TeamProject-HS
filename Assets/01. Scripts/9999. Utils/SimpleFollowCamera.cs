@@ -106,6 +106,8 @@ namespace WeGotOne
                     {
                         GameManager.Instance.IsCamTargetChange = false;
                         ChangeWaitTime = 0.0f;
+                        GameManager.Instance.spawnPointIndex = currentPoint;
+                        GameManager.Instance.UpdateSpawnPoint();
                         currentPoint++;
                     }
                     break;
@@ -123,7 +125,12 @@ namespace WeGotOne
                 if (ChangeWaitTime >= 1.0f)
                 {
                     lerpSpeed = 1f;
-                    return GameManager.Instance.CheckPoints[currentPoint].transform.position;   
+                    if (currentPoint <= GameManager.Instance.CheckPoints.Length)
+                    {
+                        return GameManager.Instance.CheckPoints[currentPoint].transform.position;    
+                    }
+
+                    return Target.position;
                 }
             }
             
