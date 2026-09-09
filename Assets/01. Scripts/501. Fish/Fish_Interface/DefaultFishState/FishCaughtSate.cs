@@ -17,6 +17,7 @@ namespace WeGotOne.Fish_Interface
         public void Enter(FishStateManager owner)
         {
             this.owner = owner;
+            
             Debug.Log($"{owner.name} : 힘겨루기 상태(Caught) 진입.");
 
             SetNewStruggleDirection();
