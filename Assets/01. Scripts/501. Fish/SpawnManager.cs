@@ -99,6 +99,8 @@ namespace WeGotOne
         private void ChangeBarricade(StageEntry currentStage, StageEntry nextStage)
         {
             if (RoomClient.Instance.Me.IsHost == false)
+                return;
+            
             if (IsLastStage(currentStage))
                 return;
             barricades[FindStageIndex(currentStage)].gameObject.SetActive(false);
