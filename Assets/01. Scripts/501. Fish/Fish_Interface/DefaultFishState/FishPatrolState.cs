@@ -7,7 +7,7 @@ namespace WeGotOne.Fish_Interface
         private const int MaxTryCount = 20;
         private FishStateManager owner;
         private Vector2 targetPosition;
-        private float patrolSpeed = 3.0f;
+        private float patrolSpeed = 0.0f;
         private float waypointTolerance = 0.5f;
         private float vericalRangeForLinearWaypoint = 0.5f;
         private float horizontalRangeForLinearWaypoint = 15f;
