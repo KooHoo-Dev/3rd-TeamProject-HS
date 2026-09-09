@@ -52,7 +52,7 @@ namespace HelloServer
 
         [SerializeField] private Transform spawnPoint;
 
-        public bool isRespawn = false;
+        private bool isRespawn;
         // 서버가 정해 준 내 정보. welcome 을 받기 전에는 비어 있다.
         public User Me { get; private set; }
 
@@ -78,6 +78,7 @@ namespace HelloServer
         // SSG 커스텀 : 플레이어 맞춰서 편집
         private readonly Dictionary<string, PlayerController> remotes = new Dictionary<string, PlayerController>();
         private readonly HashSet<string> arrivedPlayerIds = new HashSet<string>();
+        private readonly HashSet<string> respawnRequestingPlayerIds = new HashSet<string>();
         private readonly List<string> cameraIdList = new List<string>();
 
         // 오간 말. 너무 쌓이지 않게 앞에서부터 버린다.
@@ -126,6 +127,22 @@ namespace HelloServer
         // 방에서 오간 말. 로비가 그대로 그린다.
         public IReadOnlyList<string> ChatLog => chatLog;
         public PlayerController LocalPlayer => localPlayer;
+
+        public void RequestRespawn()
+        {
+            isRespawn = true;
+        }
+
+        public bool ConsumeLocalRespawnRequest()
+        {
+            if (isRespawn == false)
+            {
+                return false;
+            }
+
+            isRespawn = false;
+            return true;
+        }
 
         // 접속하고, 이름을 알리고, 끊길 때까지 듣는다.
         private async UniTaskVoid RunAsync()
@@ -268,6 +285,11 @@ namespace HelloServer
 
             foreach (PlayerState state in message.Players)
             {
+                if (state.Id == Me.Id && state.IsRespawnPressed)
+                {
+                    isRespawn = false;
+                }
+
                 if (remotes.TryGetValue(state.Id, out PlayerController remote))
                 {
                     remote.ApplySnapshot(state, state.IsLeftGrab, state.IsRightGrab);
@@ -313,8 +335,14 @@ namespace HelloServer
                     continue;
                 }
                 
+                if (input.IsPressRespawn == false)
+                {
+                    respawnRequestingPlayerIds.Remove(input.Id);
+                }
+
                 if (remotes.TryGetValue(input.Id, out PlayerController remote) == false) continue;
-                remote.ApplyInput(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold, input.IsBuildKeyHold, input.IsPressRespawn);
+                bool isNewRespawnRequest = input.IsPressRespawn && respawnRequestingPlayerIds.Add(input.Id);
+                remote.ApplyInput(new Vector2(input.X, input.Y), input.IsLeftShiftHold, input.IsRightShiftHold, input.IsBuildKeyHold, isNewRespawnRequest);
             }
 
             GuestInputGroupMessage = message;
@@ -338,6 +366,7 @@ namespace HelloServer
             remotes.Clear();
             cameraIdList.Clear();
             arrivedPlayerIds.Clear();
+            respawnRequestingPlayerIds.Clear();
 
             localPlayer = null;
         }
@@ -612,9 +641,14 @@ namespace HelloServer
                 Vector2 input = SimpleInput.GetMoveAxisRaw();
                 Keyboard keyboard = Keyboard.current;
                 Mouse mouse = Mouse.current;
+                bool isPressRespawn = isRespawn;
                 await SendInputMessages(input, mouse.leftButton.isPressed, mouse.rightButton.isPressed,
-                    keyboard.fKey.isPressed, isRespawn);
-                isRespawn = false;
+                    keyboard.fKey.isPressed, isPressRespawn);
+
+                if (isPressRespawn)
+                {
+                    isRespawn = false;
+                }
             }
         }
 
@@ -692,6 +726,7 @@ namespace HelloServer
             {
                 Id = playerId,
                 CurrentHunger = remotes[playerId].Body.CurrentStamina,
+                IsRespawnPressed = remotes[playerId].IsRespawning,
                 Body = new PartState
                 {
                     X = remotes[playerId].Body.transform.position.x,

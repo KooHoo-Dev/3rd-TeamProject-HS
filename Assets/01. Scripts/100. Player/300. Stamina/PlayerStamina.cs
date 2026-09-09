@@ -383,8 +383,8 @@ namespace WeGotOne
                 0f
             );
             
-            if(respawnRequest)
-                StartCoroutine(playerController.Death());
+            if (respawnRequest)
+                playerController.StartRespawn();
 
             UpdateStamina();
         }
