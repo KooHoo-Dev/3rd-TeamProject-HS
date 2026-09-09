@@ -1,10 +1,5 @@
-using System;
-using System.Globalization;
-using System.Linq;
-using System.Threading;
-using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace WeGotOne.Fish_Interface
@@ -97,6 +92,8 @@ namespace WeGotOne.Fish_Interface
         public float StartPosY { get; set; }
         
         public Animator Animator { get; set; }
+        
+        private readonly HashSet<HandControllerV2> grabbingHands = new HashSet<HandControllerV2>();
 
         private void Awake()
         {
@@ -106,6 +103,8 @@ namespace WeGotOne.Fish_Interface
 
         private void OnEnable()
         {
+            grabbingHands.Clear();
+            
             fishMovement = GetComponent<FishMovement>();
             obstacleSensor = GetComponent<FishObstacleSensor>();
             if (obstacleSensor != null)
@@ -213,52 +212,61 @@ namespace WeGotOne.Fish_Interface
 
         #region ICatchable 인터페이스 구현 (손 주도 상호작용)
 
-        public void OnGrabbed()
+        public void OnGrabbed(HandControllerV2 hand) // 시그니처 수정
         {
+            if (hand != null)
+            {
+                grabbingHands.Add(hand); // 추가: 잡은 손 등록
+            }
+
             if (FishName.Contains("Seahorse"))
             {
-                ChangeState(new AbductionState());
+                if (!(CurrentState is AbductionState))
+                {
+                    ChangeState(new AbductionState());
+                }
                 return;
             }
 
-            // [기믹 반영]: 물고기가 물 위에서 기절(Faint)해 있을 때 다시 잡으면,
-            // 저항 없이 즉시 탈진(Exhausted) 상태로 파지되게 처리합니다.
+            // 이미 잡혀서 힘겨루기/탈진 중이라면 다른 손이 추가로 잡아도 상태 재진입 방지
+            if (CurrentState is FishCaughtState || CurrentState is FishExhaustedState)
+                return;
+
             if (CurrentState is FishFaintState)
             {
                 TransitionTo(new FishExhaustedState());
             }
             else
             {
-                // 정상 상태에서 잡으면 힘겨루기(Caught) 시작
                 TransitionTo(new FishCaughtState());
             }
         }
 
-        public void OnReleased()
+        public void OnReleased(HandControllerV2 hand) // 시그니처 수정
         {
-            if (TargetInfo.IsLeftGrab && TargetInfo.IsRightGrab)
+            if (hand != null)
+            {
+                grabbingHands.Remove(hand); // 추가: 놓은 손 제거
+            }
+
+            // [핵심]: 아직 다른 손(본인의 반대 손이든, 다른 플레이어의 손이든)이 잡고 있다면 즉시 리턴
+            if (grabbingHands.Count > 0)
                 return;
-            
+
+            // --- 아래는 모든 손이 완전히 놓였을 때(grabbingHands.Count == 0)만 실행 ---
+
             if (FishName.Contains("Seahorse"))
             {
                 CurrentState.Exit();
                 return;
             }
-            
+
             float resistanceRatio = CurrentResistance / maxResistance;
 
-            // 1. 저항력이 30% 미만으로 떨어진 상태에서 놓친 경우 (Exhausted 상태 포함)
             if (resistanceRatio < 0.3f)
             {
-                // 물 위에서 일정 시간 누워있는 기절 상태로 돌입!
                 TransitionTo(new FishFaintState());
             }
-            // 2. 저항력이 아직 생생한 상태(60% 이상)에서 아쉽게 놓친 경우
-            else if (resistanceRatio >= 0.6f)
-            {
-                TransitionTo(new FishRunawayState());
-            }
-            // 3. 회색 영역 (30% ~ 60%)
             else
             {
                 TransitionTo(new FishRunawayState());
