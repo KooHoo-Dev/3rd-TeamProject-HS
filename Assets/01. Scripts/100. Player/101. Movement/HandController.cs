@@ -143,6 +143,7 @@ namespace WeGotOne
             if (grabbedTarget != null && grabbedTarget.TryGetComponent<ICatchable>(out var catchable))
             {
                 grabbedTarget.gameObject.GetComponent<FishStateManager>().PlayerRootPosition = transform.root;
+                grabbedTarget.gameObject.GetComponent<FishStateManager>().TargetInfo = transform.GetComponentInParent<PlayerController>();
                 catchable.OnGrabbed();
             }
             

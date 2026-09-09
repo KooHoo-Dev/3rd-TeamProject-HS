@@ -25,7 +25,7 @@ namespace WeGotOne.Fish_Interface
             // 도망칠 방향 계산 (예시: 플레이어의 반대 방향이나 랜덤 방향)
             runawayDirection = Random.insideUnitCircle.normalized;
             runawayTimer = 0;
-            // AudioManager.Instance.PlaySfx(AudioManager.Sfx.FishRunaway);
+            
             if (owner.RunawayParticle)
                 owner.RunawayParticle.SetActive(true);
             if (owner.Animator)
@@ -43,13 +43,10 @@ namespace WeGotOne.Fish_Interface
 
             if (runawayTimer >= runawayDuration)
             {
-                if (owner.Animator != null)
-                {
-                    owner.Animator.speed = 1;
-                }
-
                 if (owner.RunawayParticle)
                     owner.RunawayParticle.SetActive(false);
+                if (owner.Animator)
+                    owner.Animator.speed = 1;
                 owner.ChangeState(new FishIdleState());
             }
         }
@@ -58,13 +55,10 @@ namespace WeGotOne.Fish_Interface
         {
             if (owner != null && owner.FishMovement != null)
             {
-                if (owner.Animator != null)
-                {
-                    owner.Animator.speed = 1;
-                }
-
                 if (owner.RunawayParticle)
                     owner.RunawayParticle.SetActive(false);
+                if (owner.Animator)
+                    owner.Animator.speed = 1;
                 owner.FishMovement.StopMove();
             }
         }

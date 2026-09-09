@@ -1,9 +1,11 @@
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace WeGotOne.Fish_Interface
 {
@@ -28,7 +30,8 @@ namespace WeGotOne.Fish_Interface
         public WorldItem WorldItem { get; private set; }
         public FishMovement FishMovement => fishMovement;
 
-        [Header("저항도(Resistance) 설정")] [SerializeField]
+        [Header("저항도(Resistance) 설정")]
+        [SerializeField]
         private float maxResistance = 20f;
 
         // 물 감지 센서
@@ -38,6 +41,7 @@ namespace WeGotOne.Fish_Interface
         // 물 탈출 피드백 함수 예외값을 위한 bool값.
         public bool IsGrabbed => CurrentState is FishCaughtState || CurrentState is FishExhaustedState;
         public float MaxResistance => maxResistance; // 저항도
+        [Header("현재 저항도")]
         [field: SerializeField] public float CurrentResistance { get; private set; }
         [field: SerializeField] public ParticleSystem HitParticle { get; private set; }
 
@@ -126,6 +130,7 @@ namespace WeGotOne.Fish_Interface
 
             ObjectPool = FindFirstObjectByType<FishObjectPool>();
             ChangeState(new FishIdleState());
+            
         }
 
         private void Start()
@@ -137,6 +142,11 @@ namespace WeGotOne.Fish_Interface
         {
             DecreaseFishHunger();
             CurrentState?.Tick();
+        }
+
+        private void OnDisable()
+        {
+            CurrentState.Exit();
         }
 
         private void HandleWaterBoundary(RaycastHit2D obstacleHit)
@@ -226,12 +236,15 @@ namespace WeGotOne.Fish_Interface
 
         public void OnReleased()
         {
+            if (TargetInfo.IsLeftGrab && TargetInfo.IsRightGrab)
+                return;
+            
             if (FishName.Contains("Seahorse"))
             {
                 CurrentState.Exit();
                 return;
             }
-
+            
             float resistanceRatio = CurrentResistance / maxResistance;
 
             // 1. 저항력이 30% 미만으로 떨어진 상태에서 놓친 경우 (Exhausted 상태 포함)

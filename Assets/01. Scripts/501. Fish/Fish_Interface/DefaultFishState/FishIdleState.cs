@@ -20,6 +20,10 @@ namespace WeGotOne.Fish_Interface
         public void Enter(FishStateManager owner)
         {
             this.owner = owner;
+            if (owner.RunawayParticle)
+                owner.RunawayParticle.SetActive(false);
+            if (owner.Animator)
+                owner.Animator.speed = 1;
         }
 
         public void Tick()
