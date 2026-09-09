@@ -97,9 +97,9 @@ namespace WeGotOne
                     // BridgeObjects[i].gameObject.SetActive(true);
                     StartCoroutine(BuildParticle(i));
                 }
+                currentBridgeCount = messageCurrentBridgeCount;
                 OnBridgeBuild?.Invoke();
             }
-            currentBridgeCount = messageCurrentBridgeCount;
         }
         
         public void HandleItemPickup(Collision2D other)
