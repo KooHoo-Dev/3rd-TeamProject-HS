@@ -2698,6 +2698,8 @@ MonoBehaviour:
     - {fileID: 1498978663}
   - minBridgeCount: 4
     groups:
+    - {fileID: 1498978662}
+    - {fileID: 1498978661}
     - {fileID: 1498978664}
   - minBridgeCount: 10
     groups:
@@ -6105,6 +6107,28 @@ PrefabInstance:
 --- !u!114 &1498978660 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2725931972382745905, guid: cfe5017191bab504ca272d8224157642, type: 3}
+  m_PrefabInstance: {fileID: 1498978659}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ce177a33a5143a28b9576630b8f21c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishSpawnerGroup
+--- !u!114 &1498978661 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5933864008035570730, guid: cfe5017191bab504ca272d8224157642, type: 3}
+  m_PrefabInstance: {fileID: 1498978659}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ce177a33a5143a28b9576630b8f21c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.FishSpawnerGroup
+--- !u!114 &1498978662 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 219840838638808513, guid: cfe5017191bab504ca272d8224157642, type: 3}
   m_PrefabInstance: {fileID: 1498978659}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
