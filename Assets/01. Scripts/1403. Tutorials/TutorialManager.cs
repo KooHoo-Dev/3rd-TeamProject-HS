@@ -146,7 +146,6 @@ namespace WeGotOne
         // 2. [요청 사양] Storm 이미지 3초 작동 코루틴
         private IEnumerator PlayStormSequence()
         {
-            isStormCoroutineRunning = true;
             IsTutorialEnd = true;
             
             currentStep = TutorialStep.StormActive;
@@ -173,7 +172,6 @@ namespace WeGotOne
             
             instructionText.text = "아 안돼..! 꼬마!";
             
-            isStormCoroutineRunning = false;
             currentStep = TutorialStep.Falling;
         }
 
