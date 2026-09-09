@@ -20,7 +20,7 @@ namespace WeGotOne.Fish_Interface
         {
             if (owner == null || owner.FishMovement == null) return;
 
-            if (owner.Hunger > owner.HungerLimit) return;
+            if (owner.Hunger > owner.HungerLimit) owner.ChangeState(new FishPatrolState());
             
             if(owner.BaitInfo == null)
             {
@@ -51,7 +51,6 @@ namespace WeGotOne.Fish_Interface
                 Debug.Log("Attack false");
                 owner.ObjectPool.Release(owner.BaitInfo.gameObject.GetComponent<WorldItem>());
                 owner.ChangeState(new FishFaintState());   
-                
             }
             else
                 owner.ChangeState(new FishIdleState());
