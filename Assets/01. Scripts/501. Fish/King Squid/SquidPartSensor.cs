@@ -25,7 +25,7 @@ namespace WeGotOne
                 // 충돌체의 부모 계층에서 PlayerRoot 마커 컴포넌트 찾기
                 PlayerRoot targetPlayer = other.gameObject.GetComponentInParent<PlayerRoot>();
                 
-                if (targetPlayer != null)
+                if (targetPlayer != null && (manager.CurrentStateName != "Exhausted" && manager.CurrentStateName != "Faint"))
                 {
                     // 매니저에게 플레이어를 잡았다고 알림
                     manager.OnPlayerCaught(targetPlayer.transform);
