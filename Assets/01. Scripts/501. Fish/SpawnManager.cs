@@ -51,8 +51,8 @@ namespace WeGotOne
             foreach (Transform child in barricadeGroup)
             {
                 barricades.Add(child);
+                child.gameObject.SetActive(true);
             }
-            barricades[0].gameObject.SetActive(true);
 
             ValidateStages();
 
@@ -78,6 +78,7 @@ namespace WeGotOne
         private void HandleBridgeBuild()
         {
             StageEntry nextStage = FindStage(bridgeManager.CurrentBridgeCount);
+            
             if (nextStage == currentStage)
             {
                 return;
@@ -104,10 +105,6 @@ namespace WeGotOne
             if (IsLastStage(currentStage))
                 return;
             barricades[FindStageIndex(currentStage)].gameObject.SetActive(false);
-            
-            // 마지막 스테이지가 아니면 다음 바리케이드 활성화
-            if (IsLastStage(nextStage) == false)
-                barricades[FindStageIndex(nextStage)].gameObject.SetActive(true);
         }
 
         private void HandleDayChanged()
@@ -126,12 +123,12 @@ namespace WeGotOne
         {
             StageEntry selectedStage = null;
 
-            foreach (StageEntry stage in stages)
+            for (int i = stages.Count - 1; i >= 0; i--)
             {
-                if (stage.MinBridgeCount <= bridgeCount &&
-                    (selectedStage == null || stage.MinBridgeCount > selectedStage.MinBridgeCount))
+                if (stages[i].MinBridgeCount <= bridgeCount)
                 {
-                    selectedStage = stage;
+                    selectedStage = stages[i];
+                    break;
                 }
             }
 
@@ -140,7 +137,7 @@ namespace WeGotOne
                 throw new InvalidOperationException(
                     $"BridgeCount {bridgeCount}에 해당하는 Fish Spawn Stage가 없습니다.");
             }
-
+            
             return selectedStage;
         }
 

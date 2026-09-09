@@ -3080,6 +3080,13 @@ MonoBehaviour:
   - minBridgeCount: 10
     groups:
     - {fileID: 1498978660}
+  - minBridgeCount: 14
+    groups:
+    - {fileID: 1498978663}
+    - {fileID: 1498978662}
+    - {fileID: 1498978661}
+    - {fileID: 1498978664}
+    - {fileID: 1498978660}
 --- !u!4 &569276766
 Transform:
   m_ObjectHideFlags: 0
@@ -4179,6 +4186,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2124898254611917361, guid: 2ebba676f2252e740bae055931d6a6d1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3251648082447196985, guid: 2ebba676f2252e740bae055931d6a6d1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6895961810002433348, guid: 2ebba676f2252e740bae055931d6a6d1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6934977958361298261, guid: 2ebba676f2252e740bae055931d6a6d1, type: 3}
       propertyPath: m_Name
       value: Barricade Group
