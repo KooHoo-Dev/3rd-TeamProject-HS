@@ -59,7 +59,6 @@ namespace WeGotOne
         
         private int readyCount;
         private int totalCount;
-        private bool oneShotBool = false;
 
         private GameObject[] CheckBoxes => new[]
         {
@@ -87,15 +86,16 @@ namespace WeGotOne
         public void StartTutorial()
         {
             currentStep = TutorialStep.KeyboardGuide;
-            
-            if(IsTutorialEnd == false)
+
+            if (IsTutorialEnd == false)
+            {
                 tutorialCanvas.SetActive(true);
-            
-            checkBoxUICanvas.SetActive(false);
-            startButton.SetActive(false);
-            keyboardImage.SetActive(true);
+                checkBoxUICanvas.SetActive(false);
+                startButton.SetActive(false);
+                keyboardImage.SetActive(true);
+            }
             textBoxPanel.SetActive(true);
-            
+        
             // 1. 텍스트 문장 보여줌
             instructionText.text = "마우스 좌, 우 클릭으로 벽을 집고 W,S,A,D 으로 \n팔 방향을 조정하여 이동 할 수 있습니다. ";
         }
@@ -143,6 +143,7 @@ namespace WeGotOne
         private IEnumerator PlayStormSequence()
         {
             isStormCoroutineRunning = true;
+            IsTutorialEnd = true;
             
             currentStep = TutorialStep.StormActive;
 
@@ -186,7 +187,6 @@ namespace WeGotOne
             
             currentStep = TutorialStep.Completed;
             arrivedIslandImage.SetActive(false); // 떨어진 후 바로 암전 끄기
-            IsTutorialEnd = true;
             GameManager.Instance.IsCamTargetChange = true;
             DayLoop.Instance.isStarted = true;
             // 5초 뒤 UI 패널을 꺼줍니다.
@@ -209,7 +209,6 @@ namespace WeGotOne
         // ==========================================
         public void UpdateReadyState(int readyCount, int totalCount, bool isStartButtonPress, bool isTutorialEnd)
         {
-            if (oneShotBool) return;
             var boxes = CheckBoxes;
             for (int i = 0; i < boxes.Length; i++)
             {
@@ -228,7 +227,6 @@ namespace WeGotOne
                 && totalCount > 0 
                 && readyCount >= totalCount) )
             {
-                oneShotBool = true;
                 StartCoroutine(PlayStormSequence());
             }
         }
