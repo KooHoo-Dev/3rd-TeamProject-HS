@@ -226,7 +226,7 @@ MonoBehaviour:
   maxResistance: 15
   obstacleSensor: {fileID: 0}
   <CurrentResistance>k__BackingField: 0
-  <HitParticle>k__BackingField: {fileID: 0}
+  <HitParticle>k__BackingField: {fileID: 3726325848954634064, guid: add3384580870485c85ba8243fad43c6, type: 3}
   TargetPosition: {x: 0, y: 0, z: 0}
   myType: 3
   baitType: 1

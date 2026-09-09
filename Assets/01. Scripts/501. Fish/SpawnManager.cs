@@ -84,13 +84,15 @@ namespace WeGotOne
             }
             
             GameManager.Instance.IsCamTargetChange = true;
+            currentStage = nextStage;
+            
             if (RoomClient.Instance.Me.IsHost == false)
                 return;
 
             ChangeBarricade(currentStage, nextStage);
 
             fishObjectPool.ReleaseAllActiveFish();
-            currentStage = nextStage;
+            
             currentGroupIndex = 0;
             SpawnCurrentGroup();
         }
