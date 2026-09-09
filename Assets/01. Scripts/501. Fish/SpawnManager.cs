@@ -84,6 +84,7 @@ namespace WeGotOne
             }
             
             GameManager.Instance.IsCamTargetChange = true;
+            
             if (RoomClient.Instance.Me.IsHost == false)
                 return;
 
