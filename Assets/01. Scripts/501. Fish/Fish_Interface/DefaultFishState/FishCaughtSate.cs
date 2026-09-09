@@ -71,9 +71,11 @@ namespace WeGotOne.Fish_Interface
         private void HandleTerrainSmashed(float impactStrength, float sfxPitch)
         {
             if (owner == null) return;
-            
-            owner.HitParticle.Play();
-            AudioManager.Instance.PlaySfx(AudioManager.Sfx.FishTerrainSmashed, sfxPitch);
+
+            if(owner.HitParticle)
+                owner.HitParticle.Play();
+            if(AudioManager.Instance.sfxClips[(int)AudioManager.Sfx.FishTerrainSmashed])
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.FishTerrainSmashed, sfxPitch);
             float damageToResistance = impactStrength * collisionRatio;
             owner.DecreaseResistance(damageToResistance);
             Debug.Log($"지형 충돌! 저항도 {owner.name} :{damageToResistance:F1} 감소.");

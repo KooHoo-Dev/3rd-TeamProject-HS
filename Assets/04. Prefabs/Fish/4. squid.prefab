@@ -147,7 +147,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -296,7 +296,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &8740194484935905598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,7 +405,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 136
   obstacleCheckSize: {x: 12, y: 17}
-  obstacleCheckDistance: 3
+  obstacleCheckDistance: 11.96
   detectCooldown: 0.1
 --- !u!1 &3992350321855781542
 GameObject:
