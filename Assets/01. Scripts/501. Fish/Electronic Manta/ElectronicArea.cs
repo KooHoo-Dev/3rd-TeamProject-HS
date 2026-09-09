@@ -17,6 +17,8 @@ namespace WeGotOne.Electronic_Manta
         private void OnEnable()
         {
             stateManager = GetComponentInParent<FishStateManager>();
+            if(electronicParticle)
+                electronicParticle.gameObject.SetActive(true);
             isAttack = true;
         }
 
