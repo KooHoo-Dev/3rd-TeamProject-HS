@@ -101,6 +101,9 @@ namespace WeGotOne
                     Vector3 lerpPos = Vector3.Lerp(Cam.transform.position, targetPos + offset, lerpSpeed * Time.deltaTime);
                     lerpPos.z = Cam.transform.position.z; // 2D의 경우 z는 바뀌지 않습니다.
                     Cam.transform.position = lerpPos;
+                    
+                    if(currentPoint >= GameManager.Instance.CheckPoints.Length) return;
+                    
                     if (GameManager.Instance.IsCamTargetChange && Mathf.Abs(Cam.transform.position.x -
                                                                             GameManager.Instance.CheckPoints[currentPoint].transform.position.x) <= 0.1f)
                     {
