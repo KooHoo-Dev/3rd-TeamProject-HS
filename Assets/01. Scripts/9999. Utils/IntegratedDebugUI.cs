@@ -174,6 +174,8 @@ namespace WeGotOne
                 SetAllStamina(false);
             if (GUILayout.Button("All stamina = maxStamina", buttonStyle))
                 SetAllStamina(true);
+            if (GUILayout.Button("All items +10", buttonStyle))
+                AddAllItemsToInventory();
 
             GUILayout.Space(14);
             if (GUILayout.Button("Toggle day / night", buttonStyle))
@@ -207,6 +209,12 @@ namespace WeGotOne
         {
             foreach (PlayerStamina stamina in FindObjectsByType<PlayerStamina>(FindObjectsSortMode.None))
                 stamina.SetDebugStamina(restoreMaximum ? stamina.MaxStamina : 10000f);
+        }
+
+        private void AddAllItemsToInventory()
+        {
+            foreach (ItemRef item in ItemManager.Instance.Items)
+                InventoryItemDB.Instance.Add(item.ItemId, 10);
         }
 
         private void SpawnFish(int itemId)

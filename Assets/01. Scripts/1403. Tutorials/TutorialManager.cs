@@ -58,7 +58,6 @@ namespace WeGotOne
         
         private int readyCount;
         private int totalCount;
-        private bool oneShotBool = false;
 
         private GameObject[] CheckBoxes => new[]
         {
@@ -86,15 +85,16 @@ namespace WeGotOne
         public void StartTutorial()
         {
             currentStep = TutorialStep.KeyboardGuide;
-            
-            if(IsTutorialEnd == false)
+
+            if (IsTutorialEnd == false)
+            {
                 tutorialCanvas.SetActive(true);
-            
-            checkBoxUICanvas.SetActive(false);
-            startButton.SetActive(false);
-            keyboardImage.SetActive(true);
+                checkBoxUICanvas.SetActive(false);
+                startButton.SetActive(false);
+                keyboardImage.SetActive(true);
+            }
             textBoxPanel.SetActive(true);
-            
+        
             // 1. 텍스트 문장 보여줌
             instructionText.text = "마우스 좌, 우 클릭으로 벽을 집고 W,S,A,D 으로 \n팔 방향을 조정하여 이동 할 수 있습니다. ";
         }
@@ -111,11 +111,7 @@ namespace WeGotOne
 
             if (currentStep == TutorialStep.KeyboardGuide && Keyboard.current.spaceKey.wasPressedThisFrame)
             {
-                keyboardImage.SetActive(false);
-                checkBoxUICanvas.SetActive(true);
-                if(isHost) startButton.SetActive(true);
-                instructionText.text = "출발할 준비가 완료되면 [F] 키를 꾹 눌러주세요.";
-                currentStep = TutorialStep.WaitAllReady;
+                SetWaitAllReady();
             }
             
             if (RoomClient.IsInitialized
@@ -138,9 +134,21 @@ namespace WeGotOne
             }
         }
 
+        private void SetWaitAllReady()
+        {
+            keyboardImage.SetActive(false);
+            checkBoxUICanvas.SetActive(true);
+            if(isHost) startButton.SetActive(true);
+            instructionText.text = "출발할 준비가 완료되면 [F] 키를 꾹 눌러주세요.";
+            currentStep = TutorialStep.WaitAllReady;
+        }
+
         // 2. [요청 사양] Storm 이미지 3초 작동 코루틴
         private IEnumerator PlayStormSequence()
         {
+            isStormCoroutineRunning = true;
+            IsTutorialEnd = true;
+            
             currentStep = TutorialStep.StormActive;
 
             // Storm 이미지 활성화
@@ -149,6 +157,7 @@ namespace WeGotOne
                 AudioManager.Instance.PlaySfx(AudioManager.Sfx.Thunder);
             stormImage.SetActive(true);
             instructionText.text = "갑자기 폭풍이 몰아칩니다!";
+            currentStep = TutorialStep.Falling;
             
             // 3초 대기
             yield return new WaitForSeconds(5f);
@@ -163,6 +172,8 @@ namespace WeGotOne
             checkBoxUICanvas.SetActive(false);
             
             instructionText.text = "아 안돼..! 꼬마!";
+            
+            isStormCoroutineRunning = false;
             currentStep = TutorialStep.Falling;
         }
 
@@ -181,7 +192,6 @@ namespace WeGotOne
             
             currentStep = TutorialStep.Completed;
             arrivedIslandImage.SetActive(false); // 떨어진 후 바로 암전 끄기
-            IsTutorialEnd = true;
             GameManager.Instance.IsCamTargetChange = true;
             DayLoop.Instance.isStarted = true;
             // 5초 뒤 UI 패널을 꺼줍니다.
@@ -204,7 +214,6 @@ namespace WeGotOne
         // ==========================================
         public void UpdateReadyState(int readyCount, int totalCount, bool isStartButtonPress, bool isTutorialEnd)
         {
-            if (oneShotBool) return;
             var boxes = CheckBoxes;
             for (int i = 0; i < boxes.Length; i++)
             {
@@ -216,14 +225,18 @@ namespace WeGotOne
             IsTutorialEnd = isTutorialEnd;
             this.readyCount = readyCount;
             this.totalCount = totalCount;
+            if (currentStep == TutorialStep.KeyboardGuide && isTutorialEnd)
+            {
+                // 첫 튜토리얼 바로 비활성화
+                SetWaitAllReady();
+            }
 
-            if ((IsTutorialEnd && currentStep == TutorialStep.WaitAllReady )
+            if ( (IsTutorialEnd && currentStep == TutorialStep.WaitAllReady )
                 || (currentStep == TutorialStep.WaitAllReady 
                 && isStartButtonPressed
                 && totalCount > 0 
                 && readyCount >= totalCount) )
             {
-                oneShotBool = true;
                 StartCoroutine(PlayStormSequence());
             }
         }
