@@ -84,7 +84,9 @@ namespace WeGotOne
                 return;
             }
             
-            GameManager.Instance.IsCamTargetChange = true;
+            if(IsLastStage(currentStage) == false)
+                GameManager.Instance.IsCamTargetChange = true;
+            
             ChangeBarricade(currentStage, nextStage);
             currentStage = nextStage;
             
