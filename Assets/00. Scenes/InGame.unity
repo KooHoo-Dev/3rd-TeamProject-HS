@@ -171,6 +171,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: FullMap_V5
       objectReference: {fileID: 0}
+    - target: {fileID: 6578741374691813053, guid: abbd2d7641d79b84aab426de0b185b04, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6859599540056448336, guid: abbd2d7641d79b84aab426de0b185b04, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158411686552897806, guid: abbd2d7641d79b84aab426de0b185b04, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
