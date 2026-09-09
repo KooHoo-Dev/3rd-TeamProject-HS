@@ -42,6 +42,7 @@ namespace WeGotOne
         [SerializeField] private Collider2D landingZoneTrigger; // LandingZoneTrigger
         [SerializeField] private GameObject[] shipBoundaries; // 진입 장벽 콜라이더들
         
+        public TutorialStep CurrentStep => currentStep;
         private TutorialStep currentStep = TutorialStep.NotStarted;
         private bool isHost;
         private bool isStartButtonPressed = false;

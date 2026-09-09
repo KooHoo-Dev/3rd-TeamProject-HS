@@ -11,12 +11,15 @@ namespace WeGotOne
             
             // 부딪힌 대상이 플레이어인지 확인합니다
             PlayerController player = other.GetComponentInParent<PlayerController>();
-            if (other.CompareTag("Player") || player != null && player.User.Id == RoomClient.Instance.Me.Id)
+            if (TutorialManager.Instance.CurrentStep >= TutorialManager.TutorialStep.StormActive && 
+                (other.CompareTag("Player") || (player != null && player.User.Id == RoomClient.Instance.Me.Id)))
             {
                 // 싱글톤인 TutorialManager에게 "플레이어 착지 완료!"라고 신호를 보냅니다.
                 if (TutorialManager.Instance != null )
                 {
                     TutorialManager.Instance.OnPlayerLanded();
+                    
+                    Debug.Log("튜토리얼 끝");
                     
                     // 한 번 작동한 트리거는 중복 작동하지 않도록 스스로 비활성화합니다.
                     gameObject.SetActive(false); 
