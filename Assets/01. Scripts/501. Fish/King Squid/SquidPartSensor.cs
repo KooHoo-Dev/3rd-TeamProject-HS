@@ -17,7 +17,7 @@ namespace WeGotOne
             manager = GetComponentInParent<FishStateManager>();
         }
 
-        private void OnCollisionEnter2D(Collision2D other)
+        private void OnTriggerEnter2D(Collider2D other)
         {
             // 1. 다리(Tentacle) 센서: 플레이어 감지
             if (partType == SquidPartType.Tentacle)
@@ -31,11 +31,11 @@ namespace WeGotOne
                     manager.OnPlayerCaught(targetPlayer.transform);
                 }
             }
-            // 2. 몸통(Body) 센서: 바닥 감지
-            else if (partType == SquidPartType.Body)
-            {
+        }
 
-            }
+        private void OnCollisionEnter2D(Collision2D other)
+        {
+            
         }
     }
 }

@@ -4159,7 +4159,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &960140900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5558,7 +5558,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1303722706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6086,6 +6086,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 106955540823177298, guid: cfe5017191bab504ca272d8224157642, type: 3}
+      propertyPath: itemId
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3671919204306712592, guid: cfe5017191bab504ca272d8224157642, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6126,12 +6130,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7245233636762069995, guid: cfe5017191bab504ca272d8224157642, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e0c4c6237459be24d9ad5388becf1986, type: 3}
     - target: {fileID: 7862698700970638565, guid: cfe5017191bab504ca272d8224157642, type: 3}
       propertyPath: m_Name
       value: Fish Spawner Group Root
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6272261968241225660, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 6896288424263372649, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 3936357753924331633, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 3664139498582361927, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 2707109186500837521, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 8394805579924795861, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 8506828650079307517, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 5160113541198037089, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 145622063381291734, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 3279868261467888876, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 901824405858577278, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 6064869597054916396, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 4846377461942106196, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 6032870595942734883, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 4997108017995808141, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 3743888796543063158, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 4469281068684544040, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 6471803243670034862, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 2511942218444750220, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 2705420244888511752, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 8008420622095109318, guid: cfe5017191bab504ca272d8224157642, type: 3}
+    - {fileID: 4807529579974143808, guid: cfe5017191bab504ca272d8224157642, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfe5017191bab504ca272d8224157642, type: 3}
@@ -7019,7 +7049,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1661108130
 MonoBehaviour:
   m_ObjectHideFlags: 0

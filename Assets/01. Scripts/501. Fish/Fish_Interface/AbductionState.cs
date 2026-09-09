@@ -17,7 +17,6 @@ namespace WeGotOne.Fish_Interface
         
         private Vector3 interval = new(3.5f, 6f);
         
-        private Transform targetPosition;
         private float destinationTolerance = 1.0f;
 
         public void Enter(FishStateManager owner)
@@ -77,8 +76,7 @@ namespace WeGotOne.Fish_Interface
             {
                 caughtPlayer.position = owner.PlayerAttachPosition.position;
             }
-            
-            Debug.Log(distance);
+
             if (distance < destinationTolerance)
             {
                 Exit();
@@ -130,7 +128,7 @@ namespace WeGotOne.Fish_Interface
             
             Debug.Log("Exit");
             caughtPlayer = null;
-            owner.ChangeState(new FishPatrolState());
+            owner.ChangeState(new ReturnState());
         }
     }
 }

@@ -79,6 +79,7 @@ namespace WeGotOne.Fish_Interface
         // 플레이어를 어디에 달고 다닐지
         [field: SerializeField] public Transform PlayerAttachPosition { get; set; }
         public Transform PlayerRootPosition { get; set; }
+        public Vector2 StartPosition { get; set; }
 
         [Header("공격 가능 여부")]
         public bool IsAttack = true;
@@ -104,7 +105,8 @@ namespace WeGotOne.Fish_Interface
         private void OnEnable()
         {
             grabbingHands.Clear();
-            
+
+            StartPosition = transform.position;
             fishMovement = GetComponent<FishMovement>();
             obstacleSensor = GetComponent<FishObstacleSensor>();
             if (obstacleSensor != null)
