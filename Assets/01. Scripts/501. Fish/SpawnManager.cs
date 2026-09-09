@@ -35,12 +35,14 @@ namespace WeGotOne
             yield return new WaitUntil(() => ItemManager.Instance.IsInitialized);
             yield return new WaitUntil(() => RoomClient.Instance != null && RoomClient.Instance.Me != null);
 
+            bridgeManager = BridgeManager.Instance;
+            bridgeManager.OnBridgeBuild += HandleBridgeBuild;
+            currentStage = FindStage(bridgeManager.CurrentBridgeCount);
             if (RoomClient.Instance.Me.IsHost == false)
             {
                 yield break;
             }
 
-            bridgeManager = BridgeManager.Instance;
             dayLoop = DayLoop.Instance;
             fishObjectPool = FishObjectPool.Instance;
             
@@ -54,10 +56,8 @@ namespace WeGotOne
 
             ValidateStages();
 
-            bridgeManager.OnBridgeBuild += HandleBridgeBuild;
             dayLoop.OnDayChanged += HandleDayChanged;
 
-            currentStage = FindStage(bridgeManager.CurrentBridgeCount);
             currentGroupIndex = 0;
             SpawnCurrentGroup();
         }
@@ -82,8 +82,11 @@ namespace WeGotOne
             {
                 return;
             }
-
+            
             GameManager.Instance.IsCamTargetChange = true;
+            if (RoomClient.Instance.Me.IsHost == false)
+                return;
+
             ChangeBarricade(currentStage, nextStage);
 
             fishObjectPool.ReleaseAllActiveFish();
