@@ -295,10 +295,10 @@ MonoBehaviour:
   <CurrentResistance>k__BackingField: 0
   <HitParticle>k__BackingField: {fileID: 6531563179416517155}
   TargetPosition: {x: 0, y: 0, z: 0}
-  myType: 4
-  baitType: 3
+  myType: 3
+  baitType: 1
   Hunger: 0
-  HungerLimit: 1000000
+  HungerLimit: 25
   HungerAmount: 0
   BaitInfo: {fileID: 0}
   TargetInfo: {fileID: 0}

@@ -347,7 +347,7 @@ MonoBehaviour:
   baitType: 0
   Hunger: 0
   HungerLimit: 0
-  HungerAmount: 0
+  HungerAmount: 50
   BaitInfo: {fileID: 0}
   TargetInfo: {fileID: 0}
   bulletPrefab: {fileID: 0}
