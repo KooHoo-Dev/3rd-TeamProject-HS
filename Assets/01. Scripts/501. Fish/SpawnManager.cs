@@ -78,13 +78,13 @@ namespace WeGotOne
         private void HandleBridgeBuild()
         {
             StageEntry nextStage = FindStage(bridgeManager.CurrentBridgeCount);
-            currentStage = nextStage;
             if (nextStage == currentStage)
             {
                 return;
             }
             
             GameManager.Instance.IsCamTargetChange = true;
+            currentStage = nextStage;
             
             if (RoomClient.Instance.Me.IsHost == false)
                 return;
