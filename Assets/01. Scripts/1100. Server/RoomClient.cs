@@ -32,6 +32,7 @@ namespace HelloServer
         [SerializeField] private string roomCode = "ABCD";
         
         [SerializeField] private Color playerColor = Color.white;
+        [SerializeField] private bool isRunPrivate;
 
         [Header("장면")]
         // 내가 조종하는 캐릭터. 씬에 미리 놓아 둔다.
@@ -98,6 +99,8 @@ namespace HelloServer
             base.OnInitialize();
             // true로 해둬야 백그라운드에서도 데이터 수신 가능
             Application.runInBackground = true;
+            if (isRunPrivate)
+                Join("1234", "황선빈", Color.white);
         }
 
         protected override void OnDestroy()
@@ -116,7 +119,7 @@ namespace HelloServer
             nickName = who;
             playerColor = color;
 
-            RunAsync().Forget();
+            RunPrivateAsync().Forget();
         }
         
         public bool IsBusy { get; private set; }
@@ -179,6 +182,15 @@ namespace HelloServer
             // 여기까지 오면 끊긴 것.
             IsBusy = false;
             Me = null;
+        }
+        
+        private async UniTaskVoid RunPrivateAsync()
+        {
+            IsBusy = true;
+
+            await SceneManager.LoadSceneAsync(1).ToUniTask();
+            
+            OnWelcome(new WelcomeMessage{RoomCode = "1234", User = new User(){Id = "12", IsHost = true, NickName = "황선빈", R = 1f, G = 1f, B = 1f}});
         }
         
         #region 듣기
@@ -388,10 +400,13 @@ namespace HelloServer
             // 게스트이면 호스트 스냅샷만 반영 (입력값 비활성화)
             if (Spawn(message.User)) GameManager.Instance.AddPlayer();
             UpdateUserText(true, message.User.Id);
-            foreach (User user in message.Users)
+            if (message.Users != null)
             {
-                if (Spawn(user)) GameManager.Instance.AddPlayer();
-                UpdateUserText(true, user.Id);
+                foreach (User user in message.Users)
+                {
+                    if (Spawn(user)) GameManager.Instance.AddPlayer();
+                    UpdateUserText(true, user.Id);
+                }
             }
 
             remotes.TryGetValue(Me.Id, out PlayerController localPlayer);
@@ -449,7 +464,7 @@ namespace HelloServer
         // 상당히 난잡함 (추후 리팩토링 필요)
         private void UpdateUserText(bool isAdd, string userId)
         {
-            string id = userId.Substring(1);
+            string id = (isRunPrivate) ? userId : userId.Substring(1);
             if (isAdd)
             {
                 // Spawn될때
@@ -464,7 +479,7 @@ namespace HelloServer
             cameraIdList.Sort((a, b) => int.Parse(a).CompareTo(int.Parse(b)));
             for (int i = 0; i < cameraIdList.Count; i++)
             {
-                string currentUserId = $"u{cameraIdList[i]}";
+                string currentUserId = isRunPrivate ? cameraIdList[i] : $"u{cameraIdList[i]}";
                 PlayerController player = remotes[currentUserId];
                 TMP_Text playerText = player.GetComponentInChildren<TMP_Text>();
                 playerText.SetText($"{i+1}. {player.User.NickName}");
