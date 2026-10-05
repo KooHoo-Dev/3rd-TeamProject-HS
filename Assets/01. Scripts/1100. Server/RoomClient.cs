@@ -188,7 +188,16 @@ namespace HelloServer
         {
             IsBusy = true;
 
-            await SceneManager.LoadSceneAsync(1).ToUniTask();
+            if (isRunPrivate)
+            {
+                await SceneManager.LoadSceneAsync(0).ToUniTask();
+                
+            }
+            else
+            {
+                await SceneManager.LoadSceneAsync(1).ToUniTask();
+                
+            }
             
             OnWelcome(new WelcomeMessage{RoomCode = "1234", User = new User(){Id = "12", IsHost = true, NickName = "황선빈", R = 1f, G = 1f, B = 1f}});
         }
