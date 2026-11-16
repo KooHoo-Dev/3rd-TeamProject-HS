@@ -514,30 +514,22 @@ namespace WeGotOne
             }
             else
             {
-                currentArmForce = defaultArmForce;
-
-                PlayerController leftTargetPlayer = GetTargetPlayer(leftBottomArm.GrabbedTarget);
-
-                if (leftTargetPlayer != null && leftTargetPlayer.CurrentArmForce == leftTargetPlayer.HighArmForce)
-                {
-                    currentArmForce = highArmForce;
-                }
-
-                if (currentArmForce != highArmForce)
-                {
-                    PlayerController rightTargetPlayer = GetTargetPlayer(rightBottomArm.GrabbedTarget);
-
-                    if (rightTargetPlayer != null && rightTargetPlayer.CurrentArmForce == rightTargetPlayer.HighArmForce)
-                    {
-                        currentArmForce = highArmForce;
-                    }
-                }
+                // 왼팔을 먼저 보고, 왼팔이 강한 힘을 받지 못했을 때만 오른팔을 확인
+                bool receivesHighForce = IsHoldingHighForcePlayer(leftBottomArm) || IsHoldingHighForcePlayer(rightBottomArm);
+                currentArmForce = receivesHighForce ? highArmForce : defaultArmForce;
             }
 
             leftUpperArm.SetCurrentForce(currentArmForce);
             rightUpperArm.SetCurrentForce(currentArmForce);
             leftBottomArm.SetCurrentForce(currentArmForce);
             rightBottomArm.SetCurrentForce(currentArmForce);
+
+            // 이 팔이 잡은 대상이 강한 힘을 쓰고 있는 플레이어인지
+            bool IsHoldingHighForcePlayer(BottomArmController arm)
+            {
+                PlayerController targetPlayer = GetTargetPlayer(arm.GrabbedTarget);
+                return targetPlayer != null && targetPlayer.CurrentArmForce == targetPlayer.HighArmForce;
+            }
         }
         
         #region Snapshot 보간 유틸
