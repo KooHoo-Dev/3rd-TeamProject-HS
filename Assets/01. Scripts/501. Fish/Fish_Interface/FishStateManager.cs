@@ -220,15 +220,7 @@ namespace WeGotOne.Fish_Interface
             {
                 grabbingHands.Add(hand); // 추가: 잡은 손 등록
             }
-
-            if (FishName.Contains("Seahorse"))
-            {
-                if (!(CurrentState is AbductionState))
-                {
-                    ChangeState(new AbductionState());
-                }
-                return;
-            }
+            
 
             // 이미 잡혀서 힘겨루기/탈진 중이라면 다른 손이 추가로 잡아도 상태 재진입 방지
             if (CurrentState is FishCaughtState || CurrentState is FishExhaustedState)
@@ -240,7 +232,8 @@ namespace WeGotOne.Fish_Interface
             }
             else
             {
-                TransitionTo(new FishCaughtState());
+                if (WorldItem.ItemId != 9)
+                    TransitionTo(new FishCaughtState());
             }
         }
 

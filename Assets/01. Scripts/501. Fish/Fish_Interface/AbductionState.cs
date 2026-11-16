@@ -15,8 +15,6 @@ namespace WeGotOne.Fish_Interface
         private Collider2D[] playerColliders;
         private Collider2D fishCollider;
         
-        private Vector3 interval = new(3.5f, 6f);
-        
         private float destinationTolerance = 1.0f;
 
         public void Enter(FishStateManager owner)

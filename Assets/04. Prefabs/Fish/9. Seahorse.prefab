@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 5981077509093271822}
   - component: {fileID: 5822293520149872469}
   - component: {fileID: 2683312444320732614}
+  - component: {fileID: 1734235340274978282}
   m_Layer: 6
   m_Name: 9. Seahorse
   m_TagString: Fish
@@ -257,8 +258,9 @@ MonoBehaviour:
   ObjectPool: {fileID: 0}
   fishMovement: {fileID: 0}
   maxResistance: 10
-  waterExitCooldown: 1
   obstacleSensor: {fileID: 0}
+  <CurrentResistance>k__BackingField: 0
+  <HitParticle>k__BackingField: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
   myType: 0
   baitType: 4
@@ -270,10 +272,10 @@ MonoBehaviour:
   bulletPrefab: {fileID: 0}
   <AbductionDestination>k__BackingField: {fileID: 0}
   <PlayerAttachPosition>k__BackingField: {fileID: 8839746954131865371}
-  ElectronicParticle: {fileID: 0}
   IsAttack: 1
   FaintDuration: 0
   confusedParticle: {fileID: 604363907335751732}
+  <RunawayParticle>k__BackingField: {fileID: 0}
 --- !u!114 &6893504519318531557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,7 +376,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 15
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
@@ -388,7 +390,22 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
+--- !u!114 &1734235340274978282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9218924052347507054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad487e11790842ddbf3bb838797e98a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeGotOne.SeaHorse
+  manager: {fileID: 0}
+  playerHand: {fileID: 0}
+  moveSpeed: 10
 --- !u!1001 &2194683974269140437
 PrefabInstance:
   m_ObjectHideFlags: 0
