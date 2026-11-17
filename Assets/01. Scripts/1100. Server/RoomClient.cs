@@ -33,6 +33,10 @@ namespace HelloServer
         
         [SerializeField] private Color playerColor = Color.white;
 
+        [Header("싱글 플레이")]
+        // 서버에 붙지 않고 이 씬으로 이동해 혼자 호스트로 플레이한다.
+        [SerializeField] private string singlePlaySceneName = "InGame";
+
         [Header("장면")]
         // 내가 조종하는 캐릭터. 씬에 미리 놓아 둔다.
         // 8/28 수정 : 예시 플레이어인 LocalPlayer를 제거하고 프로젝트에서 사용하는 플레이어 컨트롤러로 변경
@@ -118,8 +122,24 @@ namespace HelloServer
 
             RunAsync().Forget();
         }
-        
+
+        // 서버 접속 없이 씬 이동만으로 혼자 플레이한다. 나는 항상 호스트다.
+        public void StartSinglePlay(string who, Color color)
+        {
+            if (IsBusy) return;
+
+            nickName = who;
+            playerColor = color;
+
+            RunSinglePlayAsync().Forget();
+        }
+
         public bool IsBusy { get; private set; }
+
+        // 서버 없이 혼자 플레이 중인지. 튜토리얼이 레디/스타트 단계를 건너뛸 때 본다.
+        public bool IsSinglePlay { get; private set; }
+
+        private CancellationTokenSource singlePlayCts;
 
         // 서버가 다듬어 알려 준 방 코드. abcd 로 쳐도 ABCD 가 옴.
         public string RoomCode { get; private set; }
@@ -173,12 +193,50 @@ namespace HelloServer
             // 첫 마디는 반드시 hello 다. 서버가 이걸 받아야 번호를 줌.
             await SendAsync(new HelloMessage { NickName = nickName , R = playerColor.r, G = playerColor.g, B = playerColor.b});
             // 보내기는 따로 돈다. 듣는 동안에도 계속 보내야함.
-            SendLoop().Forget();
+            SendLoop(destroyCancellationToken).Forget();
             await ReceiveLoopAsync();
 
             // 여기까지 오면 끊긴 것.
             IsBusy = false;
             Me = null;
+        }
+
+        private async UniTaskVoid RunSinglePlayAsync()
+        {
+            IsBusy = true;
+            IsSinglePlay = true;
+
+            await SceneManager.LoadSceneAsync(singlePlaySceneName).ToUniTask();
+
+            // 서버가 주던 welcome을 직접 만든다. Id는 서버 규칙("u" + 번호)을 따른다.
+            OnWelcome(new WelcomeMessage
+            {
+                RoomCode = "SOLO",
+                User = new User
+                {
+                    Id = "u1", NickName = nickName, IsHost = true,
+                    R = playerColor.r, G = playerColor.g, B = playerColor.b,
+                },
+                Users = Array.Empty<User>(),
+            });
+
+            // 소켓이 없으니 전송은 일어나지 않고, 호스트 스냅샷만 매 주기 갱신된다.
+            // (튜토리얼, 카메라 등이 SnapshotMessage를 기준으로 돈다)
+            singlePlayCts = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
+            SendLoop(singlePlayCts.Token).Forget();
+        }
+
+        private void EndSinglePlay()
+        {
+            singlePlayCts.Cancel();
+            singlePlayCts.Dispose();
+            singlePlayCts = null;
+
+            ClearInfo();
+            Me = null;
+            SnapshotMessage = null;
+            IsSinglePlay = false;
+            IsBusy = false;
         }
         
         #region 듣기
@@ -241,6 +299,12 @@ namespace HelloServer
 
         public async UniTask QuitGame()
         {
+            if (IsSinglePlay)
+            {
+                EndSinglePlay();
+                return;
+            }
+
             if (socket == null)
             {
                 return;
@@ -541,10 +605,9 @@ namespace HelloServer
 
         #region 보내기
 
-        private async UniTaskVoid SendLoop()
+        private async UniTaskVoid SendLoop(CancellationToken token)
         {
             int delay = (int)(1000f / sendPerSecond);
-            var token = destroyCancellationToken;
 
             while (token.IsCancellationRequested == false)
             {

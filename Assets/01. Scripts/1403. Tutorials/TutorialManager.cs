@@ -112,7 +112,11 @@ namespace WeGotOne
 
             if (currentStep == TutorialStep.KeyboardGuide && Keyboard.current.spaceKey.wasPressedThisFrame)
             {
-                SetWaitAllReady();
+                // 싱글 플레이는 기다릴 사람이 없으니 레디(F)/스타트 단계를 건너뛰고 바로 폭풍 연출로 간다.
+                if (RoomClient.Instance.IsSinglePlay)
+                    StartCoroutine(PlayStormSequence());
+                else
+                    SetWaitAllReady();
             }
             
             if (RoomClient.IsInitialized
