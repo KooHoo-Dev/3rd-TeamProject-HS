@@ -2574,10 +2574,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
-      propertyPath: url
-      value: ws://localhost:5203/room
-      objectReference: {fileID: 0}
-    - target: {fileID: 8266702139256692037, guid: 1179272e8db082246a799a863e2d4027, type: 3}
       propertyPath: roomCode
       value: 12356423123
       objectReference: {fileID: 0}
@@ -4953,7 +4949,6 @@ MonoBehaviour:
   optionCanvas: {fileID: 600881325}
   mainButton: {fileID: 1777287251}
   respawnButton: {fileID: 0}
-  RespawnRequest: 0
 --- !u!114 &1931068896
 MonoBehaviour:
   m_ObjectHideFlags: 0
