@@ -36,6 +36,8 @@ namespace HelloServer
         [Header("싱글 플레이")]
         // 서버에 붙지 않고 이 씬으로 이동해 혼자 호스트로 플레이한다.
         [SerializeField] private string singlePlaySceneName = "InGame";
+        // 싱글 플레이는 배(로비)를 건너뛰고 섬에서 바로 시작한다. (월드 좌표)
+        [SerializeField] private Vector2 singlePlaySpawnPosition = new Vector2(-92.9f, 5.7f);
 
         [Header("장면")]
         // 내가 조종하는 캐릭터. 씬에 미리 놓아 둔다.
@@ -478,7 +480,10 @@ namespace HelloServer
             this.localPlayer = localPlayer;
 
             localPlayer.Setup(Me);
-            TutorialManager.Instance.StartTutorial();
+            if (IsSinglePlay)
+                TutorialManager.Instance.SkipForSinglePlay();
+            else
+                TutorialManager.Instance.StartTutorial();
         }
 
         private void OnJoin(JoinMessage message)
@@ -579,7 +584,8 @@ namespace HelloServer
             Debug.Log($"[방] {user.NickName}({user.Id}) 이(가) 스폰한다");
             if (remotes.ContainsKey(user.Id)) return false;
 
-            PlayerController remote = Instantiate(remotePrefab, spawnPoint.position, Quaternion.identity);
+            Vector3 spawnPosition = IsSinglePlay ? (Vector3)singlePlaySpawnPosition : spawnPoint.position;
+            PlayerController remote = Instantiate(remotePrefab, spawnPosition, Quaternion.identity);
             if (Me.IsHost == false || (user.IsHost == false && Me.IsHost))
             {
                 remote.GetComponentInChildren<PlayerInputBranch>().enabled = false;

@@ -100,6 +100,26 @@ namespace WeGotOne
             instructionText.text = "마우스 좌, 우 클릭으로 벽을 집고 W,S,A,D 으로 \n팔 방향을 조정하여 이동 할 수 있습니다. ";
         }
         
+        // [싱글 플레이] 튜토리얼(배 로비, 레디/스타트, 폭풍·낙하 연출)을 건너뛰고 섬에서 바로 시작한다.
+        // 씬의 원본 오브젝트는 그대로 두고, 이번 플레이에서만 꺼 둔다.
+        public void SkipForSinglePlay()
+        {
+            IsTutorialEnd = true;
+            currentStep = TutorialStep.Completed;
+
+            tutorialCanvas.SetActive(false);
+            checkBoxUICanvas.SetActive(false);
+
+            // floor, landingZoneTrigger, shipBoundaries는 모두 GameLobyArea(배 로비) 아래에 있다.
+            // 로비 전체를 꺼서 바닥, 맵을 막던 경계 콜라이더, 착지 트리거, 배 배경을 한 번에 비활성화한다.
+            floor.transform.parent.gameObject.SetActive(false);
+
+            // 착지 후(OnPlayerLanded)와 같은 게임 진행 상태를 만든다.
+            // 카메라 체크포인트 순서가 이 플래그로 한 칸 넘어가므로 그대로 켜 둔다.
+            GameManager.Instance.IsCamTargetChange = true;
+            DayLoop.Instance.isStarted = true;
+        }
+
         private void Update()
         {
             //if(IsTutorialEnd)
@@ -112,11 +132,7 @@ namespace WeGotOne
 
             if (currentStep == TutorialStep.KeyboardGuide && Keyboard.current.spaceKey.wasPressedThisFrame)
             {
-                // 싱글 플레이는 기다릴 사람이 없으니 레디(F)/스타트 단계를 건너뛰고 바로 폭풍 연출로 간다.
-                if (RoomClient.Instance.IsSinglePlay)
-                    StartCoroutine(PlayStormSequence());
-                else
-                    SetWaitAllReady();
+                SetWaitAllReady();
             }
             
             if (RoomClient.IsInitialized
